@@ -1,6 +1,7 @@
-﻿using ExcelShopSync.Properties;
+﻿using ExcelShopSync.Modules;
+using ExcelShopSync.Properties;
 using ExcelShopSync.Services.Base;
-using static ExcelShopSync.Properties.ShopBase.ColumnKeys;
+using static ExcelShopSync.Modules.ColumnKeys;
 
 namespace ExcelShopSync.Services.Price
 {
@@ -15,7 +16,7 @@ namespace ExcelShopSync.Services.Price
                 {
                     if (page == null || page.Headers == null ||
                         !page.Headers.TryGetValue(Article, out int articleC) ||
-                        !page.Headers.TryGetValue(ShopBase.ColumnKeys.Price, out int priceC))
+                        !page.Headers.TryGetValue(ColumnKeys.Price, out int priceC))
                         continue;
                     var worksheet = page.ExcelWorksheet;
                     foreach (int row in Enumerable.Range(worksheet.Dimension.Start.Row + 1, worksheet.Dimension.End.Row - worksheet.Dimension.Start.Row))
@@ -43,7 +44,7 @@ namespace ExcelShopSync.Services.Price
                 {
                     if (page == null || page.Headers == null ||
                         !page.Headers.TryGetValue(Article, out int articleC) ||
-                        !page.Headers.TryGetValue(ShopBase.ColumnKeys.Price, out int priceC))
+                        !page.Headers.TryGetValue(ColumnKeys.Price, out int priceC))
                         continue;
 
                     var worksheet = page.ExcelWorksheet;

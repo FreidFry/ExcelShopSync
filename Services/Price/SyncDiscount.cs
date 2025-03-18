@@ -1,6 +1,6 @@
 ﻿using ExcelShopSync.Services.Base;
 using static ExcelShopSync.Properties.Settings;
-using static ExcelShopSync.Properties.ShopBase.ColumnKeys;
+using static ExcelShopSync.Modules.ColumnKeys;
 using static ExcelShopSync.Properties.DataFormats;
 
 namespace ExcelShopSync.Services.Price

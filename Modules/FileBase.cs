@@ -1,6 +1,8 @@
-﻿using OfficeOpenXml;
+﻿using ExcelShopSync.Services.Base;
+using OfficeOpenXml;
 using System.IO;
 
+using static ExcelShopSync.Services.Base.IdentifyShop;
 namespace ExcelShopSync.Modules
 {
     class FileBase
@@ -10,16 +12,15 @@ namespace ExcelShopSync.Modules
         public ExcelPackage ExcelPackage { get; set; }
         public List<PageBase> Pages { get; set; } = [];
 
-
         public FileBase(string path)
         {
             FileName = Path.GetFileName(path);
-            //ShopName = shopName;
             ExcelPackage = new ExcelPackage(path);
             foreach(var page in ExcelPackage.Workbook.Worksheets)
             {
                 Pages.Add(new PageBase(page));
             }
+            ShopName = IdentifyShopByProbability(Pages);
         }
     }
 
