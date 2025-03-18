@@ -1,0 +1,26 @@
+﻿<Window x:Class="ExcelShopSync.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExcelShopSync"
+        mc:Ignorable="d"
+        Title="MainWindow" WindowState="Normal" SizeToContent="WidthAndHeight">
+    <Grid Height="436" Width="805">
+        <Button x:Name="GetTarget" Content="select a file to modify" HorizontalAlignment="Right" Margin="0,20,653,0" VerticalAlignment="Top" Width="130" Click="GetTarget_Click" />
+        <Button x:Name="GetSource" Content="select source file" HorizontalAlignment="Right" Margin="0,45,653,0" VerticalAlignment="Top" Width="130" Click="GetSource_Click"/>
+        <Label x:Name="TargetFileName" Content="" HorizontalAlignment="Left" Margin="162,17,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="SourceFileName" Content="" HorizontalAlignment="Left" Margin="162,42,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="GetPrice" Content="Price transfer" HorizontalAlignment="Right" Margin="0,70,694,0" VerticalAlignment="Top" Checked="GetPrice_Checked"/>
+        <Button x:Name="Start" Content="Start" Margin="695,406,10,0" VerticalAlignment="Top" Click="Start_Click"/>
+        <CheckBox x:Name="GetQuantity" Content="Quantity transfer" HorizontalAlignment="Right" Margin="0,90,674,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="SetFakeDiscount" Content="Fake discount Percent" HorizontalAlignment="Right" Margin="0,110,648,0" VerticalAlignment="Top" Checked="SetFakeDiscount_Checked" Unchecked="SetFakeDiscount_Unchecked" />
+        <TextBox x:Name="SetFakeDiscount_TextBox" HorizontalAlignment="Right" Margin="0,109,598,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="40" IsEnabled="False" Visibility="Visible"/>
+        <CheckBox x:Name="SynchronizeRealDiscount" Content="Synchronize discount" HorizontalAlignment="Right" Margin="0,130,651,0" VerticalAlignment="Top" Checked="SynchronizeRealDiscount_Checked"/>
+        <DatePicker x:Name="DiscountFrom" Margin="0,150,665,0" VerticalAlignment="Top" SelectedDateFormat="Short" HorizontalAlignment="Right" Width="115"/>
+        <DatePicker x:Name="DiscountTo" HorizontalAlignment="Right" Margin="0,150,545,0" VerticalAlignment="Top" Width="115"/>
+        <xctk:TimePicker x:Name="timePicker" Format="Custom" FormatString="HH:mm" ShowButtonSpinner="False" Margin="265,152,460,264"/>
+        <CheckBox x:Name="Discount_IgnoreManual" Content="Transfer dates from a file" HorizontalAlignment="Left" Margin="167,132,0,0" VerticalAlignment="Top" Checked="Discount_IgnoreManual_Checked" Unchecked="Discount_IgnoreManual_Unchecked" IsChecked="True"/>
+    </Grid>
+</Window>
