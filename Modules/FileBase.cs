@@ -1,5 +1,4 @@
-﻿using ExcelShopSync.Services.Base;
-using OfficeOpenXml;
+﻿using OfficeOpenXml;
 using System.IO;
 
 using static ExcelShopSync.Services.Base.IdentifyShop;
@@ -23,6 +22,4 @@ namespace ExcelShopSync.Modules
             ShopName = IdentifyShopByProbability(Pages);
         }
     }
-
-
 }
