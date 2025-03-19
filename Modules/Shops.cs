@@ -6,5 +6,7 @@
         public const string Prom = "Prom";
         public const string Rozetka = "Rozetka";
         public const string Epicenter = "Epicenter";
+
+        public const string Unknown = "Unknown";
     }
 }

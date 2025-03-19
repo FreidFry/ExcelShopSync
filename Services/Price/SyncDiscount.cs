@@ -2,6 +2,8 @@
 using static ExcelShopSync.Properties.Settings;
 using static ExcelShopSync.Modules.ColumnKeys;
 using static ExcelShopSync.Properties.DataFormats;
+using System.Windows;
+using ExcelShopSync.Modules;
 
 namespace ExcelShopSync.Services.Price
 {
@@ -55,7 +57,7 @@ namespace ExcelShopSync.Services.Price
         {
             foreach (var target in FileManager.Target)
             {
-                if (from == null || to == null) throw new ArgumentException("Invalid date range");
+                if (from == null || to == null) break;
                 ParseDate(target.ShopName, (DateTime)from, (DateTime)to, time, out string? resultFrom, out string? resultTo);
                 foreach (var page in target.Pages)
                 {
@@ -127,16 +129,16 @@ namespace ExcelShopSync.Services.Price
 
         static void ParseDate(string shopname, DateTime from, DateTime to, string? time, out string? resultFrom, out string? resultTo)
         {
-            if (to < from) throw new ArgumentException("Invalid date range");
+            if (to < from)
+            {
+                MessageBox.Show("Invalid date range");
+                resultTo = from.ToString(formats[Shops.Unknown]);
+            }
 
             if (TimeSpan.TryParse(time, out TimeSpan parsedTime))
             {
                 from = from.Date.Add(parsedTime);
                 to = to.Date.Add(parsedTime);
-            }
-            else
-            {
-                throw new ArgumentException("Invalid time format");
             }
 
             string format = formats[shopname];
@@ -150,10 +152,6 @@ namespace ExcelShopSync.Services.Price
             if (TimeSpan.TryParse(time, out TimeSpan parsedTime))
             {
                 date = date.Date.Add(parsedTime);
-            }
-            else
-            {
-                throw new ArgumentException("Invalid time format");
             }
 
             string format = formats[shopname];

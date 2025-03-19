@@ -1,6 +1,7 @@
 ﻿using OfficeOpenXml;
 
 using ExcelShopSync.Modules;
+using System.Windows;
 
 namespace ExcelShopSync.Services.Base
 {
@@ -17,13 +18,15 @@ namespace ExcelShopSync.Services.Base
                 List<string> headers = [];
                 for (int col = worksheet.Dimension.Start.Column; col <= worksheet.Dimension.End.Column; col++)
                 {
-                    headers.Add(worksheet.Cells[worksheet.Dimension.Start.Row, col].Value?.ToString() ?? string.Empty);
+                    string cell = worksheet.Cells[worksheet.Dimension.Start.Row, col].Text;
+                    if (cell != null)
+                        headers.Add(worksheet.Cells[worksheet.Dimension.Start.Row, col].Text);
                 }
 
                 foreach (var shop in ShopTemplate.Shops)
                 {
                     var matchCount = headers.Intersect(shop.Value).Count();
-                    double matchPercentage = (double)matchCount * shop.Value.Count / 100;
+                    double matchPercentage = (double)matchCount / shop.Value.Count * 100;
 
                     if (matchPercentage > highestMatchPercentage)
                     {
@@ -36,6 +39,7 @@ namespace ExcelShopSync.Services.Base
             {
                 return "Unknown";
             }
+            MessageBox.Show($"Best match: {bestMatch} ({highestMatchPercentage.ToString(".##")}%)");
             return bestMatch;
         }
     }

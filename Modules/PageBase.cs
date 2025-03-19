@@ -19,12 +19,14 @@ namespace ExcelShopSync.Modules
 
         private Dictionary<string, int>? GetHeaders(ExcelWorksheet worksheet)
         {
-            var ShopTemplate = new ShopBase().Columns;
-            if (worksheet == null)
+            if (worksheet == null || worksheet.Dimension == null)
             {
-                throw new Exception("Worksheet is null");
+                MessageBox.Show("Worksheet is null");
+                return new Dictionary<string, int> { { string.Empty, 1 } };
             }
+            var ShopTemplate = new ShopBase().Columns;
             Dictionary<string, int> headers = [];
+
             int row = worksheet.Dimension.Start.Row;
             for (int col = worksheet.Dimension.Start.Column; col <= worksheet.Dimension.End.Column; col++)
             {

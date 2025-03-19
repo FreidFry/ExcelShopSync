@@ -1,6 +1,5 @@
 ﻿using static ExcelShopSync.Modules.ColumnKeys;
 
-
 namespace ExcelShopSync.Properties
 {
     class ShopBase

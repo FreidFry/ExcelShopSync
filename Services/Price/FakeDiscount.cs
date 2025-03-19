@@ -1,5 +1,4 @@
 ﻿using ExcelShopSync.Modules;
-using ExcelShopSync.Properties;
 using ExcelShopSync.Services.Base;
 using static ExcelShopSync.Modules.ColumnKeys;
 
