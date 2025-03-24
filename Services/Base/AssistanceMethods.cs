@@ -31,7 +31,6 @@ namespace ExcelShopSync.Services.Base
             {
                 strValue = strValue.Replace(" ", "").Replace(',', '.').Trim();
 
-                // Преобразуем строку в число, если это возможно
                 if (typeof(T) == typeof(double))
                 {
                     if (double.TryParse(strValue, NumberStyles.Any, culture, out double doubleValue))
@@ -62,7 +61,6 @@ namespace ExcelShopSync.Services.Base
                 }
             }
 
-            // Если значение не строка или преобразование не удалось, возвращаем исходное значение
             return (T)value;
         }
 

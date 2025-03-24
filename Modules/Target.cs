@@ -1,6 +1,6 @@
 ﻿namespace ExcelShopSync.Modules
 {
-    class Target: FileBase
+    public class Target: FileBase
     {
         public Target(string path) : base(path)
         {

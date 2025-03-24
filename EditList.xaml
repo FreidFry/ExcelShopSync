@@ -1,0 +1,35 @@
+﻿<Window x:Class="ExcelShopSync.EditList"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExcelShopSync"
+        mc:Ignorable="d"
+        Title="EditList"
+        SizeToContent="WidthAndHeight"
+        Height="Auto" Width="Auto"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="0">
+        <ListBox x:Name="FileListBox" HorizontalAlignment="Left" MinHeight="200" Margin="10" 
+                 VerticalAlignment="Top" MinWidth="200" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="{Binding FIleAndShopName}" VerticalAlignment="Center" TextWrapping="Wrap" Width="Auto"/>
+
+                        <Button Content="i" Width="20" Height="20" Margin="10,0,0,0"
+                                VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Click="ShowInfo_Click"
+                                DataContext="{Binding}"/>
+
+                        <Button Content="X" Width="20" Height="20" Margin="10,0,0,0" 
+                                VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Click="DeleteButton_Click" 
+                                DataContext="{Binding}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </Grid>
+</Window>

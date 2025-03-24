@@ -6,8 +6,10 @@ namespace ExcelShopSync.Properties
     {
         public Dictionary<string, List<string>> Columns = new()
         {
-            { Article, new List<string> { "Артикул", "Код_товару", "Артикул*" } },
-            { Price, new List<string> { "Цена", "Ціна", "Ціна*" } },
+            { Article, new List<string> { "Артикул", "Код_товару", "Артикул*", "Article" } },
+            { Price, new List<string> { "Цена", "Ціна", "Ціна*", "Price" } },
+            { CompectArticle, new List<string> { "артикул комплекту", "ArticleComplect" } },
+            { CompectPrice, new List<string> { "ціна комплекту", "PriceComplect" } },
             { PriceOld, new List<string> { "Старая цена", "Стара ціна" } },
             { Quantity, new List<string> { "Количество", "Кількість", "Залишки" } },
             { Availability, new List<string> { "Наличие", "Наявність", "Наявність*" } },

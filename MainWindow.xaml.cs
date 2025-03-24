@@ -8,9 +8,6 @@ using static ExcelShopSync.Properties.Settings;
 
 namespace ExcelShopSync;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow : Window
 {
     public MainWindow()
@@ -22,20 +19,54 @@ public partial class MainWindow : Window
         timePicker.Value = DateTime.Today.Add(DefaultTime.ToTimeSpan());
 
         SetFakeDiscount_TextBox.Text = DefaultFakeDiscount.ToString();
+
+        EditTargetList.Visibility = Visibility.Hidden;
+        EditSourceList.Visibility = Visibility.Hidden;
     }
 
     private void GetTarget_Click(object sender, RoutedEventArgs e)
     {
-        var target = GetFile.Get<Target>(TargetFileName);
+        var targets = GetFile.Get<Target>(TargetFileName);
 
-        if (target != null) FileManager.Target.Add(target);
+        if (targets != null)
+        {
+            foreach (var target in targets)
+            {
+                if (target != null && !FileManager.Target.Any(t => t.FileName == target.FileName))
+                {
+                    FileManager.Target.Add(target);
+                }
+            }
+        }
+
+        if (FileManager.Target.Count > 1)
+        {
+            EditTargetList.Visibility = Visibility.Visible;
+            TargetFileName.Visibility = Visibility.Hidden;
+        }
     }
+
 
     private void GetSource_Click(object sender, RoutedEventArgs e)
     {
-        var source = GetFile.Get<Source>(SourceFileName);
+        var sources = GetFile.Get<Source>(SourceFileName);
 
-        if (source != null) FileManager.Source.Add(source);
+        if (sources != null)
+        {
+            foreach (var source in sources)
+            {
+                if (source != null && !FileManager.Source.Any(t => t.FileName == source.FileName))
+                {
+                    FileManager.Source.Add(source);
+                }
+            }
+        }
+
+        if (FileManager.Source.Count > 1)
+        {
+            EditSourceList.Visibility = Visibility;
+            SourceFileName.Visibility = Visibility.Hidden;
+        }
     }
 
     private void Start_Click(object sender, RoutedEventArgs e)
@@ -125,10 +156,21 @@ public partial class MainWindow : Window
         DiscountTo.IsEnabled = false;
         timePicker.IsEnabled = false;
     }
+
     private void Discount_IgnoreManual_Unchecked(object sender, RoutedEventArgs e)
     {
         DiscountFrom.IsEnabled = true;
         DiscountTo.IsEnabled = true;
         timePicker.IsEnabled = true;
+    }
+
+    private void EditTargetList_Click(object sender, RoutedEventArgs e)
+    {
+        EditFilesForChanges.OpenChanges(FileManager.Target);
+    }
+
+    private void EditSourceList_Click(object sender, RoutedEventArgs e)
+    {
+        EditFilesForChanges.OpenChanges( FileManager.Source);
     }
 }

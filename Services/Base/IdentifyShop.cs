@@ -1,7 +1,6 @@
 ﻿using OfficeOpenXml;
 
 using ExcelShopSync.Modules;
-using System.Windows;
 
 namespace ExcelShopSync.Services.Base
 {
@@ -11,10 +10,17 @@ namespace ExcelShopSync.Services.Base
         {
             string? bestMatch = null;
             double highestMatchPercentage = 0;
-
+            if(Pages.Count == 0)
+            {
+                return "Unknown";
+            }
             foreach (var page in Pages)
             {
                 ExcelWorksheet worksheet = page.ExcelWorksheet;
+                if (worksheet == null || worksheet.Dimension == null)
+                {
+                    return "Unknown";
+                }
                 List<string> headers = [];
                 for (int col = worksheet.Dimension.Start.Column; col <= worksheet.Dimension.End.Column; col++)
                 {
@@ -39,7 +45,6 @@ namespace ExcelShopSync.Services.Base
             {
                 return "Unknown";
             }
-            MessageBox.Show($"Best match: {bestMatch} ({highestMatchPercentage.ToString(".##")}%)");
             return bestMatch;
         }
     }

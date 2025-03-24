@@ -1,7 +1,7 @@
 ﻿using ExcelShopSync.Modules;
-using ExcelShopSync.Properties;
 using ExcelShopSync.Services.Base;
 using static ExcelShopSync.Modules.ColumnKeys;
+using static ExcelShopSync.Modules.AvailabilityKeys;
 
 namespace ExcelShopSync.Services.Quantity
 {
@@ -28,14 +28,14 @@ namespace ExcelShopSync.Services.Quantity
                         {
                             continue;
                         }
-                        
+
                         Quatnities[article] = quantity;
                     }
                 }
             }
         }
 
-        public void Transfer()
+        public void Transfer(double readyToGo = double.MaxValue)
         {
             foreach (var target in FileManager.Target)
             {
@@ -45,6 +45,7 @@ namespace ExcelShopSync.Services.Quantity
                         !page.Headers.TryGetValue(Article, out int articleC) ||
                         !page.Headers.TryGetValue(ColumnKeys.Quantity, out int quantityC))
                         continue;
+                    page.Headers.TryGetValue(Availability, out int availabilityC);
 
                     var worksheet = page.ExcelWorksheet;
                     foreach (int row in Enumerable.Range(worksheet.Dimension.Start.Row + 1, worksheet.Dimension.End.Row - worksheet.Dimension.Start.Row))
@@ -53,6 +54,12 @@ namespace ExcelShopSync.Services.Quantity
                         if (article == null || !Quatnities.ContainsKey(article)) continue;
 
                         AssistanceMethods.FillCell(worksheet, row, quantityC, Quatnities[article]);
+                        if (availabilityC != 0)
+                        {
+                            AssistanceMethods.FillCell(worksheet, row, availabilityC, double.Parse(Quatnities[article]) > readyToGo
+                                ? ShopTemplate.AvaibilityPref[target.ShopName][ReadyToGo]
+                                : ShopTemplate.AvaibilityPref[target.ShopName][InStock]);
+                        }
                     }
                 }
             }

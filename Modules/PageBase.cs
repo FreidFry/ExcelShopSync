@@ -4,7 +4,7 @@ using System.Windows;
 
 namespace ExcelShopSync.Modules
 {
-    class PageBase
+    public class PageBase
     {
         public string PageName { get; }
         public ExcelWorksheet ExcelWorksheet { get; }
@@ -24,7 +24,7 @@ namespace ExcelShopSync.Modules
                 MessageBox.Show("Worksheet is null");
                 return new Dictionary<string, int> { { string.Empty, 1 } };
             }
-            var ShopTemplate = new ShopBase().Columns;
+            var shops = new ShopBase().Columns;
             Dictionary<string, int> headers = [];
 
             int row = worksheet.Dimension.Start.Row;
@@ -33,11 +33,10 @@ namespace ExcelShopSync.Modules
                 string? head = worksheet.Cells[row, col].Value?.ToString();
                 if (head != null)
                 {
-                    string key = ShopTemplate.FirstOrDefault(kv => kv.Value.Contains(head)).Key;
+                    string key = shops.FirstOrDefault(kv => kv.Value.Contains(head)).Key;
                     if (!string.IsNullOrEmpty(key)) headers.Add(key, col);
                 }
             }
-            MessageBox.Show(string.Join(", ", headers.Select(kv => $"{kv.Key}: {kv.Value}")));
             return headers.Count > 0 ? headers : null;
         }
     }
