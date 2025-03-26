@@ -7,24 +7,25 @@
         xmlns:local="clr-namespace:ExcelShopSync"
         mc:Ignorable="d"
         Title="MainWindow" WindowState="Normal" SizeToContent="WidthAndHeight"
-        WindowStartupLocation="CenterScreen">
-    <Grid Height="436" Width="805">
-        <Button x:Name="GetTarget" Content="select a file to modify" HorizontalAlignment="Right" Margin="0,20,653,0" VerticalAlignment="Top" Width="130" Click="GetTarget_Click" ToolTip="Select the file in which the changes will be made" />
-        <Button x:Name="GetSource" Content="select source file" HorizontalAlignment="Right" Margin="0,45,653,0" VerticalAlignment="Top" Width="130" Click="GetSource_Click" ToolTip="Select the file from which the data for changes will be taken"/>
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize">
+    <Grid Height="258" Width="591">
+        <Button x:Name="GetTarget" Content="select a file to modify" Margin="22,20,0,0" Click="GetTarget_Click" ToolTip="Select the file in which the changes will be made" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130" />
+        <Button x:Name="GetSource" Content="select source file" Margin="22,45,0,0" Click="GetSource_Click" ToolTip="Select the file from which the data for changes will be taken" HorizontalAlignment="Left" Width="130" Height="20" VerticalAlignment="Top"/>
         <Label x:Name="TargetFileName" Content="" HorizontalAlignment="Left" Margin="162,17,0,0" VerticalAlignment="Top"/>
         <Label x:Name="SourceFileName" Content="" HorizontalAlignment="Left" Margin="162,42,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="GetPrice" Content="Price transfer" HorizontalAlignment="Right" Margin="0,70,694,0" VerticalAlignment="Top" Checked="GetPrice_Checked" ToolTip="synchronises prices from the source file with the target file"/>
-        <CheckBox x:Name="GetQuantity" Content="Quantity transfer" HorizontalAlignment="Right" Margin="0,90,674,0" VerticalAlignment="Top" ToolTip="synchronises the quantity of goods from the source file with the target file"/>
-        <CheckBox x:Name="SetFakeDiscount" Content="Fake discount Percent" HorizontalAlignment="Right" Margin="0,110,648,0" VerticalAlignment="Top" Checked="SetFakeDiscount_Checked" Unchecked="SetFakeDiscount_Unchecked" ToolTip="sets a non-real discount if the shop supports it (not related to the real one, but can replace it)"/>
-        <TextBox x:Name="SetFakeDiscount_TextBox" HorizontalAlignment="Right" Margin="0,109,598,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="40" IsEnabled="False" Visibility="Visible"/>
-        <CheckBox x:Name="SynchronizeRealDiscount" Content="Synchronize discount" HorizontalAlignment="Right" Margin="0,130,651,0" VerticalAlignment="Top" Checked="SynchronizeRealDiscount_Checked" ToolTip="synchronises the discount from source to target if the shop supports it. (it is possible to specify your own start/end dates)"/>
-        <DatePicker x:Name="DiscountFrom" Margin="0,150,665,0" VerticalAlignment="Top" SelectedDateFormat="Short" HorizontalAlignment="Right" Width="115"/>
-        <DatePicker x:Name="DiscountTo" HorizontalAlignment="Right" Margin="0,150,545,0" VerticalAlignment="Top" Width="115"/>
-        <xctk:TimePicker x:Name="timePicker" Format="Custom" FormatString="HH:mm" ShowButtonSpinner="False" Margin="265,152,460,264"/>
-        <CheckBox x:Name="Discount_IgnoreManual" Content="Transfer dates from a file" HorizontalAlignment="Left" Margin="167,132,0,0" VerticalAlignment="Top" Checked="Discount_IgnoreManual_Checked" Unchecked="Discount_IgnoreManual_Unchecked" IsChecked="True"/>
+        <CheckBox x:Name="GetPrice" Content="Price transfer" Margin="22,70,0,0" Checked="GetPrice_Checked" ToolTip="synchronises prices from the source file with the target file" HorizontalAlignment="Left" Width="89" Height="15" VerticalAlignment="Top"/>
+        <CheckBox x:Name="GetQuantity" Content="Quantity transfer" Margin="22,90,0,0" ToolTip="synchronises the quantity of goods from the source file with the target file" HorizontalAlignment="Left" Width="109" Height="15" VerticalAlignment="Top"/>
+        <CheckBox x:Name="SetFakeDiscount" Content="Fake discount Percent" Margin="22,110,0,0" Checked="SetFakeDiscount_Checked" Unchecked="SetFakeDiscount_Unchecked" ToolTip="sets a non-real discount if the shop supports it (not related to the real one, but can replace it)" Height="15" VerticalAlignment="Top" HorizontalAlignment="Left" Width="135"/>
+        <TextBox x:Name="SetFakeDiscount_TextBox" Margin="167,109,0,0" TextWrapping="Wrap" Text="" IsEnabled="False" Visibility="Visible" HorizontalAlignment="Left" Width="40" Height="18" VerticalAlignment="Top"/>
+        <CheckBox x:Name="SynchronizeRealDiscount" Content="Synchronize discount" Margin="22,130,0,0" Checked="SynchronizeRealDiscount_Checked" ToolTip="synchronises the discount from source to target if the shop supports it. (it is possible to specify your own start/end dates)" HorizontalAlignment="Left" Width="132" Height="15" VerticalAlignment="Top"/>
+        <DatePicker x:Name="DiscountFrom" Margin="25,150,0,0" SelectedDateFormat="Short" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="115"/>
+        <DatePicker x:Name="DiscountTo" HorizontalAlignment="Left" Margin="145,150,0,0" Width="115" Height="24" VerticalAlignment="Top"/>
+        <xctk:TimePicker x:Name="timePicker" Format="Custom" FormatString="HH:mm" ShowButtonSpinner="False" Margin="265,152,460,264" HorizontalAlignment="Left" Width="80" Height="20" VerticalAlignment="Top"/>
+        <CheckBox x:Name="Discount_IgnoreManual" Content="Transfer dates from a file" Margin="167,132,0,0" Checked="Discount_IgnoreManual_Checked" Unchecked="Discount_IgnoreManual_Unchecked" IsChecked="True" Height="15" VerticalAlignment="Top" HorizontalAlignment="Left" Width="151"/>
         <Button x:Name="EditTargetList" Content="..." HorizontalAlignment="Left" Margin="157,20,0,0" VerticalAlignment="Top" Width="30" Click="EditTargetList_Click"/>
         <Button x:Name="EditSourceList" Content="..." HorizontalAlignment="Left" Margin="157,45,0,0" VerticalAlignment="Top" Width="30" Click="EditSourceList_Click"/>
-        
-        <Button x:Name="Start" Content="Start" Margin="695,406,10,0" VerticalAlignment="Top" Click="Start_Click"/>
+
+        <Button x:Name="Start" Content="Start" Margin="481,228,0,0" Click="Start_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100"/>
     </Grid>
 </Window>

@@ -173,4 +173,9 @@ public partial class MainWindow : Window
     {
         EditFilesForChanges.OpenChanges( FileManager.Source);
     }
+
+    private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+
+    }
 }
