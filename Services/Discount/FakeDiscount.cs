@@ -1,8 +1,9 @@
-﻿using ExcelShopSync.Modules;
+﻿using ExcelShopSync.Core.Static;
+using ExcelShopSync.Infrastructure.Persistence;
 using ExcelShopSync.Services.Base;
-using static ExcelShopSync.Modules.ColumnKeys;
+using static ExcelShopSync.Core.Static.ColumnKeys;
 
-namespace ExcelShopSync.Services.Price
+namespace ExcelShopSync.Services.Discount
 {
     class FakeDiscount
     {
@@ -14,7 +15,7 @@ namespace ExcelShopSync.Services.Price
             }
             else
             {
-                AssistanceMethods.warning(priceIncreasePercentage >= 200, $"Are you sure you want a {priceIncreasePercentage}% increase?");
+                AssistanceMethodsExtend.warning(priceIncreasePercentage >= 200, $"Are you sure you want a {priceIncreasePercentage}% increase?");
                 priceIncreasePercentage /= 100;
             }
 
@@ -36,9 +37,9 @@ namespace ExcelShopSync.Services.Price
 
                         if (article == null || price == null) continue;
 
-                        double? priceValue = AssistanceMethods.PrepareExcelValue<double>(price) * priceIncreasePercentage;
+                        double? priceValue = AssistanceMethodsExtend.PrepareExcelValue<double>(price) * priceIncreasePercentage;
                         if (priceValue.HasValue)
-                        AssistanceMethods.FillCell(worksheet, row, priceOldC, priceValue);
+                        AssistanceMethodsExtend.FillCell(worksheet, row, priceOldC, priceValue);
                     }
                 }
             }

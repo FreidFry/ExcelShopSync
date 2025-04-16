@@ -1,4 +1,4 @@
-﻿using static ExcelShopSync.Modules.Shops;
+﻿using static ExcelShopSync.Core.Static.Shops;
 
 namespace ExcelShopSync.Properties
 {

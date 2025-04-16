@@ -1,11 +1,12 @@
 ﻿using ExcelShopSync.Services.Base;
 using static ExcelShopSync.Properties.Settings;
-using static ExcelShopSync.Modules.ColumnKeys;
+using static ExcelShopSync.Core.Static.ColumnKeys;
 using static ExcelShopSync.Properties.DataFormats;
 using System.Windows;
-using ExcelShopSync.Modules;
+using ExcelShopSync.Infrastructure.Persistence;
+using ExcelShopSync.Core.Static;
 
-namespace ExcelShopSync.Services.Price
+namespace ExcelShopSync.Services.Discount
 {
     class SyncDiscount
     {
@@ -18,7 +19,7 @@ namespace ExcelShopSync.Services.Price
                 {
                     if (page == null || page.Headers == null ||
                         !page.Headers.TryGetValue(Article, out int articleC) ||
-                        !page.Headers.TryGetValue(Discount, out int discountC))
+                        !page.Headers.TryGetValue(ColumnKeys.Discount, out int discountC))
                         continue;
                     page.Headers.TryGetValue(DiscountFrom, out int discountFromC);
                     page.Headers.TryGetValue(DiscountTo, out int discountToC);
@@ -33,7 +34,7 @@ namespace ExcelShopSync.Services.Price
                         {
                             continue;
                         }
-                        DiscountPrices[article] = new() { { Discount, discount } };
+                        DiscountPrices[article] = new() { { ColumnKeys.Discount, discount } };
 
                         if (discountFromC != 0)
                         {
@@ -63,7 +64,7 @@ namespace ExcelShopSync.Services.Price
                 {
                     if (page == null || page.Headers == null ||
                         !page.Headers.TryGetValue(Article, out int articleC) ||
-                        !page.Headers.TryGetValue(Discount, out int discountC))
+                        !page.Headers.TryGetValue(ColumnKeys.Discount, out int discountC))
                         continue;
                     page.Headers.TryGetValue(DiscountFrom, out int discountFromC);
                     page.Headers.TryGetValue(DiscountTo, out int discountToC);
@@ -74,14 +75,14 @@ namespace ExcelShopSync.Services.Price
                         string? article = worksheet.Cells[row, articleC].Value?.ToString();
                         if (article == null || !DiscountPrices.ContainsKey(article)) continue;
 
-                        AssistanceMethods.FillCell(worksheet, row, discountC, DiscountPrices[article][Discount]);
+                        AssistanceMethodsExtend.FillCell(worksheet, row, discountC, DiscountPrices[article][ColumnKeys.Discount]);
                         if(discountFromC != 0)
                         {
-                            AssistanceMethods.FillCell(worksheet, row, discountFromC, DiscountPrices[article][DiscountFrom]);
+                            AssistanceMethodsExtend.FillCell(worksheet, row, discountFromC, DiscountPrices[article][DiscountFrom]);
                         }
                         if (discountToC != 0)
                         {
-                            AssistanceMethods.FillCell(worksheet, row, discountToC, DiscountPrices[article][DiscountTo]);
+                            AssistanceMethodsExtend.FillCell(worksheet, row, discountToC, DiscountPrices[article][DiscountTo]);
                         }
                     }
                 }
@@ -96,7 +97,7 @@ namespace ExcelShopSync.Services.Price
                 {
                     if (page == null || page.Headers == null ||
                         !page.Headers.TryGetValue(Article, out int articleC) ||
-                        !page.Headers.TryGetValue(Discount, out int discountC))
+                        !page.Headers.TryGetValue(ColumnKeys.Discount, out int discountC))
                         continue;
                     page.Headers.TryGetValue(DiscountFrom, out int discountFromC);
                     page.Headers.TryGetValue(DiscountTo, out int discountToC);
@@ -107,11 +108,11 @@ namespace ExcelShopSync.Services.Price
                         string? article = worksheet.Cells[row, articleC].Value?.ToString();
                         if (article == null || !DiscountPrices.ContainsKey(article)) continue;
 
-                        AssistanceMethods.FillCell(worksheet, row, discountC, DiscountPrices[article][Discount]);
+                        AssistanceMethodsExtend.FillCell(worksheet, row, discountC, DiscountPrices[article][ColumnKeys.Discount]);
                         if (discountFromC != 0)
                         {
                             ParseDate(target.ShopName, DiscountPrices[article][DiscountFrom], out string? result);
-                            AssistanceMethods.FillCell(worksheet, row, discountFromC, result ?? DateTime.Now.ToString(formats[target.ShopName]));
+                            AssistanceMethodsExtend.FillCell(worksheet, row, discountFromC, result ?? DateTime.Now.ToString(formats[target.ShopName]));
                         }
                         if (discountToC != 0)
                         {
@@ -119,7 +120,7 @@ namespace ExcelShopSync.Services.Price
                             DateTime date = DateTime.Now;
                             date.AddDays(DefaultTimeOffset);
                             string ifEmpty = DateTime.Now.ToString(formats[target.ShopName]);
-                            AssistanceMethods.FillCell(worksheet, row, discountToC, result ?? ifEmpty);
+                            AssistanceMethodsExtend.FillCell(worksheet, row, discountToC, result ?? ifEmpty);
                         }
                     }
                 }

@@ -6,7 +6,7 @@ using OfficeOpenXml.Style;
 
 namespace ExcelShopSync.Services.Base
 {
-    class AssistanceMethods
+    class AssistanceMethodsExtend
     {
         public static void FillCell(ExcelWorksheet worksheet, int row, int column, object value)
         {

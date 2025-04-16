@@ -3,9 +3,9 @@ using System.IO;
 using System.Windows;
 using static ExcelShopSync.Services.Base.IdentifyShop;
 
-namespace ExcelShopSync.Modules
+namespace ExcelShopSync.Core.Models
 {
-    public class FileBase
+    public class FileBase : IFileBase
     {
         public string FileName { get; set; }
         public string ShopName { get; set; }
@@ -17,7 +17,7 @@ namespace ExcelShopSync.Modules
         {
             FileName = Path.GetFileName(path);
             ExcelPackage = new ExcelPackage(path);
-            foreach(var page in ExcelPackage.Workbook.Worksheets)
+            foreach (var page in ExcelPackage.Workbook.Worksheets)
             {
                 Pages.Add(new PageBase(page));
             }
@@ -26,7 +26,7 @@ namespace ExcelShopSync.Modules
 
         public void ShowInfo()
         {
-            foreach(var page in Pages)
+            foreach (var page in Pages)
             {
                 if (page.Headers != null)
                 {

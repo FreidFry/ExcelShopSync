@@ -1,4 +1,4 @@
-﻿namespace ExcelShopSync.Modules
+﻿namespace ExcelShopSync.Core.Models
 {
     public class Source : FileBase
     {

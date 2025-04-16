@@ -1,7 +1,8 @@
-﻿using ExcelShopSync.Modules;
-using ExcelShopSync.Services.Base;
-using static ExcelShopSync.Modules.ColumnKeys;
-using static ExcelShopSync.Modules.AvailabilityKeys;
+﻿using ExcelShopSync.Services.Base;
+using static ExcelShopSync.Core.Static.ColumnKeys;
+using static ExcelShopSync.Core.Static.AvailabilityKeys;
+using ExcelShopSync.Core.Static;
+using ExcelShopSync.Infrastructure.Persistence;
 
 namespace ExcelShopSync.Services.Quantity
 {
@@ -53,10 +54,10 @@ namespace ExcelShopSync.Services.Quantity
                         string? article = worksheet.Cells[row, articleC].Value?.ToString();
                         if (article == null || !Quatnities.ContainsKey(article)) continue;
 
-                        AssistanceMethods.FillCell(worksheet, row, quantityC, Quatnities[article]);
+                        AssistanceMethodsExtend.FillCell(worksheet, row, quantityC, Quatnities[article]);
                         if (availabilityC != 0)
                         {
-                            AssistanceMethods.FillCell(worksheet, row, availabilityC, double.Parse(Quatnities[article]) > readyToGo
+                            AssistanceMethodsExtend.FillCell(worksheet, row, availabilityC, double.Parse(Quatnities[article]) > readyToGo
                                 ? ShopTemplate.AvaibilityPref[target.ShopName][ReadyToGo]
                                 : ShopTemplate.AvaibilityPref[target.ShopName][InStock]);
                         }

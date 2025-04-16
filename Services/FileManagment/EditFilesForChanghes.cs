@@ -1,6 +1,7 @@
-﻿using ExcelShopSync.Modules;
+﻿using ExcelShopSync.Core.Models;
+using ExcelShopSync.Infrastructure.Persistence;
 
-namespace ExcelShopSync.Services.Base
+namespace ExcelShopSync.Services.FileManagment
 {
     public static class EditFilesForChanges
     {

@@ -1,6 +1,8 @@
 ﻿using System.Windows;
-using ExcelShopSync.Modules;
-using ExcelShopSync.Services.Base;
+using ExcelShopSync.Core.Models;
+using ExcelShopSync.Infrastructure.Persistence;
+using ExcelShopSync.Services.Discount;
+using ExcelShopSync.Services.FileManagment;
 using ExcelShopSync.Services.Price;
 using ExcelShopSync.Services.Quantity;
 
@@ -86,6 +88,7 @@ public partial class MainWindow : Window
         if (FileManager.Source.Count > 0)
         {
             if (GetPrice.IsChecked == true) new TransferPrice().Transfer();
+            if (GetPrice.IsChecked == true && TransferFromPrice.IsChecked == true) new PriceWithPriceList(GetQuantity.IsChecked.Value).Transfer();
             if (GetQuantity.IsChecked == true) new TransferQuantity().Transfer();
             if (SynchronizeRealDiscount.IsChecked == true)
             {
@@ -172,10 +175,5 @@ public partial class MainWindow : Window
     private void EditSourceList_Click(object sender, RoutedEventArgs e)
     {
         EditFilesForChanges.OpenChanges( FileManager.Source);
-    }
-
-    private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-    {
-
     }
 }

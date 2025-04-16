@@ -1,6 +1,7 @@
-﻿using ExcelShopSync.Modules;
+﻿using ExcelShopSync.Core.Static;
+using ExcelShopSync.Infrastructure.Persistence;
 using ExcelShopSync.Services.Base;
-using static ExcelShopSync.Modules.ColumnKeys;
+using static ExcelShopSync.Core.Static.ColumnKeys;
 
 namespace ExcelShopSync.Services.Price
 {
@@ -52,7 +53,7 @@ namespace ExcelShopSync.Services.Price
                         string? article = worksheet.Cells[row, articleC].Value?.ToString();
                         if (article == null || !Prices.ContainsKey(article)) continue;
                         
-                        AssistanceMethods.FillCell(worksheet, row, priceC, Prices[article]);
+                        AssistanceMethodsExtend.FillCell(worksheet, row, priceC, Prices[article]);
                     }
                 }
             }

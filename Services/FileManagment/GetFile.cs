@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using Microsoft.Win32;
 using System.Windows.Controls;
-using ExcelShopSync.Modules;
+using ExcelShopSync.Core.Models;
 
-namespace ExcelShopSync.Services.Base
+namespace ExcelShopSync.Services.FileManagment
 {
     class GetFile
     {

@@ -1,10 +1,10 @@
-﻿using static ExcelShopSync.Modules.ColumnKeys;
+﻿using static ExcelShopSync.Core.Static.ColumnKeys;
 
-namespace ExcelShopSync.Properties
+namespace ExcelShopSync.Core.Static
 {
-    class ShopBase
+    public static class ShopBase
     {
-        public Dictionary<string, List<string>> Columns = new()
+        static public Dictionary<string, List<string>> Columns = new()
         {
             { Article, new List<string> { "Артикул", "Код_товару", "Артикул*", "Article" } },
             { Price, new List<string> { "Цена", "Ціна", "Ціна*", "Price" } },

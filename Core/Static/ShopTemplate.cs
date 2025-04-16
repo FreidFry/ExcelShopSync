@@ -1,7 +1,7 @@
-﻿using static ExcelShopSync.Modules.Shops;
-using static ExcelShopSync.Modules.AvailabilityKeys;
+﻿using static ExcelShopSync.Core.Static.Shops;
+using static ExcelShopSync.Core.Static.AvailabilityKeys;
 
-namespace ExcelShopSync.Modules
+namespace ExcelShopSync.Core.Static
 {
     class ShopTemplate
     {
@@ -187,48 +187,48 @@ namespace ExcelShopSync.Modules
                     "Набір атрибутів*",
                     "id (не редагується)",
                     "Статус (не редагується)"
-                } 
+                }
             }
         };
 
         public static Dictionary<string, Dictionary<string, string>> AvaibilityPref = new()
         {
             {
-            Horoshop, new Dictionary<string, string>()
-                      {
-                          { InStock, "В наявності" },
-                          //{ OnOrder, "" },
-                          { OutOfStock, "" },
-                          { ReadyToGo, "" }
-                      }
+                Horoshop, new Dictionary<string, string>()
+                {
+                    { InStock, "В наявності" },
+                    //{ OnOrder, "" },
+                    { OutOfStock, "Не в наявності" },
+                    { ReadyToGo, "в наявності" }
+                }
             },
             {
                 Prom, new Dictionary<string, string>()
-                      {
-                          { InStock, "+" },
-                          //{ OnOrder, Settings.DefaultTimeOffset.ToString() },
-                          { OutOfStock, "-" },
-                          { ReadyToGo, "!" }
-                      }
+                {
+                    { InStock, "+" },
+                    //{ OnOrder, Settings.DefaultTimeOffset.ToString() },
+                    { OutOfStock, "-" },
+                    { ReadyToGo, "!" }
+                }
             },
             {
                 Rozetka, new Dictionary<string, string>()
-                      {
-                          { InStock, "В наявності" },
-                          { OutOfStock, "Не в наявності" },
-                          //{ OnOrder, "Под заказ" },
-                          { ReadyToGo, "Готов к отправке" }
-                      }
+                {
+                    { InStock, "В наявності" },
+                    { OutOfStock, "Не в наявності" },
+                    //{ OnOrder, "Под заказ" },
+                    { ReadyToGo, "Готов к отправке" }
+                }
             },
-                        {
+            {
                 Epicenter, new Dictionary<string, string>()
-                      {
-                          { InStock, "в наявності" },
-                          { OutOfStock, "немає в наявності" },
-                          //{ OnOrder, "в наявності" },
-                          { ReadyToGo, "в наявності" },
+                {
+                    { InStock, "в наявності" },
+                    { OutOfStock, "немає в наявності" },
+                    //{ OnOrder, "в наявності" },
+                    { ReadyToGo, "в наявності" },
 
-                      }
+                }
             },
         };
     }

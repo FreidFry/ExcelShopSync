@@ -1,6 +1,6 @@
-﻿using ExcelShopSync.Modules;
+﻿using ExcelShopSync.Core.Models;
 
-namespace ExcelShopSync.Services.Base
+namespace ExcelShopSync.Infrastructure.Persistence
 {
     class FileManager
     {

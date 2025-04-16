@@ -1,6 +1,6 @@
 ﻿using OfficeOpenXml;
-
-using ExcelShopSync.Modules;
+using ExcelShopSync.Core.Models;
+using ExcelShopSync.Core.Static;
 
 namespace ExcelShopSync.Services.Base
 {

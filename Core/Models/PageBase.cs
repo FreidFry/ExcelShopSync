@@ -1,10 +1,11 @@
-﻿using ExcelShopSync.Properties;
+﻿using static ExcelShopSync.Core.Static.Shops;
 using OfficeOpenXml;
 using System.Windows;
+using ExcelShopSync.Core.Static;
 
-namespace ExcelShopSync.Modules
+namespace ExcelShopSync.Core.Models
 {
-    public class PageBase
+    public class PageBase : IPageBase
     {
         public string PageName { get; }
         public ExcelWorksheet ExcelWorksheet { get; }
@@ -24,7 +25,6 @@ namespace ExcelShopSync.Modules
                 MessageBox.Show("Worksheet is null");
                 return new Dictionary<string, int> { { string.Empty, 1 } };
             }
-            var shops = new ShopBase().Columns;
             Dictionary<string, int> headers = [];
 
             int row = worksheet.Dimension.Start.Row;
@@ -33,7 +33,7 @@ namespace ExcelShopSync.Modules
                 string? head = worksheet.Cells[row, col].Value?.ToString();
                 if (head != null)
                 {
-                    string key = shops.FirstOrDefault(kv => kv.Value.Contains(head)).Key;
+                    string key = ShopBase.Columns.FirstOrDefault(kv => kv.Value.Contains(head)).Key;
                     if (!string.IsNullOrEmpty(key)) headers.Add(key, col);
                 }
             }

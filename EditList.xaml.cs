@@ -1,5 +1,5 @@
-﻿using ExcelShopSync.Modules;
-using ExcelShopSync.Services.Base;
+﻿using ExcelShopSync.Core.Models;
+using ExcelShopSync.Services.FileManagment;
 using System.Windows;
 using System.Windows.Controls;
 
