@@ -6,27 +6,125 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExcelShopSync"
         mc:Ignorable="d"
-        Title="MainWindow" WindowState="Normal" SizeToContent="WidthAndHeight"
+        Title="ExcelShopSync" WindowState="Normal" SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize">
     <Grid Height="258" Width="591">
-        <Button x:Name="GetTarget" Content="Файл для изменений" Margin="22,20,0,0" Click="GetTarget_Click" ToolTip="Select the file in which the changes will be made" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130" />
-        <Button x:Name="GetSource" Content="Файл источник" Margin="22,45,0,0" Click="GetSource_Click" ToolTip="Select the file from which the data for changes will be taken" HorizontalAlignment="Left" Width="130" Height="20" VerticalAlignment="Top"/>
+        <Button x:Name="GetTarget" Content="Файл для изменений" Margin="22,20,0,0" Click="GetTarget_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130">
+            <Button.ToolTip>
+                <ToolTip MaxWidth="200">
+                    <TextBlock TextWrapping="Wrap">Выбрать файл для изменений. Можно выбрать много файлов.</TextBlock>
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+
+        <Button x:Name="GetSource" Content="Файл источник" Margin="22,45,0,0" Click="GetSource_Click" HorizontalAlignment="Left" Width="130" Height="20" VerticalAlignment="Top">
+            <Button.ToolTip>
+                <ToolTip MaxWidth="200">
+                    <TextBlock TextWrapping="Wrap">Выбрать файл из которого будут браться данные. При изменении файла после его загрузки сюда - Ваши изменения не будут применены. Загрузите файл по новой что бы учитывались изменения</TextBlock>
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+
         <Label x:Name="TargetFileName" Content="" HorizontalAlignment="Left" Margin="162,17,0,0" VerticalAlignment="Top"/>
         <Label x:Name="SourceFileName" Content="" HorizontalAlignment="Left" Margin="162,42,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="EditTargetList" Content="..." HorizontalAlignment="Left" Margin="157,20,0,0" VerticalAlignment="Top" Width="30" Click="EditTargetList_Click"/>
-        <Button x:Name="EditSourceList" Content="..." HorizontalAlignment="Left" Margin="157,45,0,0" VerticalAlignment="Top" Width="30" Click="EditSourceList_Click"/>
-        <CheckBox x:Name="GetPrice" Content="Перенести цены" Margin="22,70,0,0" Checked="GetPrice_Checked" ToolTip="synchronises prices from the source file with the target file" HorizontalAlignment="Left" Width="118" Height="15" VerticalAlignment="Top"/>
-        <CheckBox x:Name="GetQuantity" Content="Перенести количество" Margin="22,90,0,0" ToolTip="synchronises the quantity of goods from the source file with the target file" HorizontalAlignment="Left" Width="150" Height="15" VerticalAlignment="Top"/>
-        <CheckBox x:Name="SetFakeDiscount" Content="Установить визуальную скидку" Margin="22,110,0,0" Checked="SetFakeDiscount_Checked" Unchecked="SetFakeDiscount_Unchecked" ToolTip="sets a non-real discount if the shop supports it (not related to the real one, but can replace it)" Height="15" VerticalAlignment="Top" HorizontalAlignment="Left" Width="201" RenderTransformOrigin="0.5,0.5" />
-        <TextBox x:Name="SetFakeDiscount_TextBox" Margin="232,109,0,0" TextWrapping="Wrap" Text="" IsEnabled="False" Visibility="Visible" HorizontalAlignment="Left" Width="40" Height="18" VerticalAlignment="Top"/>
-        <CheckBox x:Name="SynchronizeRealDiscount" Content="Перенести скидку" Margin="22,130,0,0" Checked="SynchronizeRealDiscount_Checked" ToolTip="synchronises the discount from source to target if the shop supports it. (it is possible to specify your own start/end dates)" HorizontalAlignment="Left" Width="132" Height="15" VerticalAlignment="Top"/>
-        <DatePicker x:Name="DiscountFrom" Margin="25,150,0,0" SelectedDateFormat="Short" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="115"/>
-        <DatePicker x:Name="DiscountTo" HorizontalAlignment="Left" Margin="145,150,0,0" Width="115" Height="24" VerticalAlignment="Top"/>
+
+        <Button x:Name="EditTargetList" Content="..." HorizontalAlignment="Left" Margin="157,20,0,0" VerticalAlignment="Top" Width="30" Click="EditTargetList_Click">
+            <Button.ToolTip>
+                <ToolTip MaxWidth="200">
+                    <TextBlock TextWrapping="Wrap">Для получения информации о найденых колонках и так же удалению файлов из списка взаимодействия</TextBlock>
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+
+        <Button x:Name="EditSourceList" Content="..." HorizontalAlignment="Left" Margin="157,45,0,0" VerticalAlignment="Top" Width="30" Click="EditSourceList_Click">
+            <Button.ToolTip>
+                <ToolTip MaxWidth="200">
+                    <TextBlock TextWrapping="Wrap">Для получения информации о найденых колонках и так же удалению файлов из списка взаимодействия</TextBlock>
+                </ToolTip>
+            </Button.ToolTip>
+        </Button>
+
+        <CheckBox x:Name="GetPrice" Content="Перенести цены" Margin="22,70,0,0" Checked="GetPrice_Checked" HorizontalAlignment="Left" Width="118" Height="15" VerticalAlignment="Top">
+            <CheckBox.ToolTip>
+                <ToolTip MaxWidth="200">
+                    <TextBlock TextWrapping="Wrap">Переносит цены из другого магазина.</TextBlock>
+                </ToolTip>
+            </CheckBox.ToolTip>
+        </CheckBox>
+
+        <CheckBox x:Name="GetAvailability" Content="Перенести наличие" Margin="22,90,0,0" HorizontalAlignment="Left" Width="132" Height="15" VerticalAlignment="Top">
+            <CheckBox.ToolTip>
+                <ToolTip MaxWidth="200">
+                    <TextBlock TextWrapping="Wrap">Переносит ТОЛЬКО наличие товара</TextBlock>
+                </ToolTip>
+            </CheckBox.ToolTip>
+        </CheckBox>
+
+        <CheckBox x:Name="SetFakeDiscount" Content="Установить визуальную скидку" Margin="24,140,0,0" Checked="SetFakeDiscount_Checked" Unchecked="SetFakeDiscount_Unchecked" Height="15" VerticalAlignment="Top" HorizontalAlignment="Left" Width="201" RenderTransformOrigin="0.5,0.5">
+            <CheckBox.ToolTip>
+                <ToolTip MaxWidth="200">
+                    <TextBlock TextWrapping="Wrap">Устанавливает визуальную (Не реальную) скидку на товар. Работает при наличии в магазине старой цены, куда и записывает значение. Работает в % при указании в пределах от 1 до 100 - добавит такой процент. при значении больше 100 спросит у вас о правильности введёного значения. Если правильное - увеличит цену на соответствующий процент. Пример:цена товара 100грн. 110% увеличение цены - укажется старая цена 210 грн. при 10% увеличения - 110 грн</TextBlock>
+                </ToolTip>
+            </CheckBox.ToolTip>
+        </CheckBox>
+
+        <TextBox x:Name="SetFakeDiscount_TextBox" Margin="230,137,0,0" TextWrapping="Wrap" Text="" IsEnabled="False" Visibility="Visible" HorizontalAlignment="Left" Width="40" Height="18" VerticalAlignment="Top">
+            <TextBox.ToolTip>
+                <ToolTip MaxWidth="200">
+                    <TextBlock TextWrapping="Wrap">Устанавливает визуальную (Не реальную) скидку на товар. Работает при наличии в магазине старой цены, куда и записывает значение. Работает в % при указании в пределах от 1 до 100 - добавит такой процент. при значении больше 100 спросит у вас о правильности введёного значения. Если правильное - увеличит цену на соответствующий процент. Пример:цена товара 100грн. 110% увеличение цены - укажется старая цена 210 грн. при 10% увеличения - 110 грн</TextBlock>
+                </ToolTip>
+            </TextBox.ToolTip>
+        </TextBox>
+
+        <CheckBox x:Name="SynchronizeRealDiscount" Content="Перенести скидку" Margin="24,160,0,0" Checked="SynchronizeRealDiscount_Checked" HorizontalAlignment="Left" Width="130" Height="15" VerticalAlignment="Top">
+            <CheckBox.ToolTip>
+                <ToolTip MaxWidth="200">
+                    <TextBlock TextWrapping="Wrap">Переносит РЕАЛЬНУЮ скидку из магазина в другой. Можно указать собственные начало и конец скидки. если это поддерживается магазином. По этому держите в голове что в каком-то магазине скидка начнёт работать даже если указаное начало стоит через неделю. всё зависит от магазина где это указывается.</TextBlock>
+                </ToolTip>
+            </CheckBox.ToolTip>
+        </CheckBox>
+
+        <DatePicker x:Name="DiscountFrom" Margin="27,180,0,0" SelectedDateFormat="Short" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="115"/>
+        <DatePicker x:Name="DiscountTo" HorizontalAlignment="Left" Margin="147,180,0,0" Width="115" Height="24" VerticalAlignment="Top"/>
+
         <xctk:TimePicker x:Name="timePicker" Format="Custom" FormatString="HH:mm" ShowButtonSpinner="False" Margin="265,152,460,264" HorizontalAlignment="Left" Width="80" Height="20" VerticalAlignment="Top"/>
-        <CheckBox x:Name="Discount_IgnoreManual" Content="Перенести даты из файла" Margin="167,132,0,0" Checked="Discount_IgnoreManual_Checked" Unchecked="Discount_IgnoreManual_Unchecked" IsChecked="True" Height="15" VerticalAlignment="Top" HorizontalAlignment="Left" Width="178"/>
+
+        <CheckBox x:Name="Discount_IgnoreManual" Content="Перенести даты из файла" Margin="169,160,0,0" Checked="Discount_IgnoreManual_Checked" Unchecked="Discount_IgnoreManual_Unchecked" IsChecked="True" Height="15" VerticalAlignment="Top" HorizontalAlignment="Left" Width="178"/>
 
         <Button x:Name="Start" Content="Старт" Margin="481,228,0,0" Click="Start_Click" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100"/>
-        <CheckBox x:Name="TransferFromPrice" Content="Из прайса" HorizontalAlignment="Left" Margin="157,70,0,0" VerticalAlignment="Top"/>
+
+        <CheckBox x:Name="TransferFromPrice" Content="Из прайса" HorizontalAlignment="Left" Margin="157,70,0,0" VerticalAlignment="Top">
+            <CheckBox.ToolTip>
+                <ToolTip MaxWidth="200">
+                    <TextBlock TextWrapping="Wrap">Для переноса данных из прайслиста. При включении будет работать только с прайс листом!</TextBlock>
+                </ToolTip>
+            </CheckBox.ToolTip>
+        </CheckBox>
+
+        <CheckBox x:Name="TransferQuantity" Content="И количество" HorizontalAlignment="Left" Margin="157,90,0,0" VerticalAlignment="Top">
+            <CheckBox.ToolTip>
+                <ToolTip MaxWidth="200">
+                    <TextBlock TextWrapping="Wrap">Если включено - переносит так же и количество товара, если оно указано (НЕ РАБОТАЕТ С ПРАЙС ЛИСТОМ)</TextBlock>
+                </ToolTip>
+            </CheckBox.ToolTip>
+        </CheckBox>
+
+        <TextBox x:Name="ReadyToGoTextBox" HorizontalAlignment="Left" Margin="394,114,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="60">
+            <TextBox.ToolTip>
+                <ToolTip MaxWidth="200">
+                    <TextBlock TextWrapping="Wrap">При указании значения и включенных выше галочек будет ставить готовность к отправке начиная со значения указаным здесь</TextBlock>
+                </ToolTip>
+            </TextBox.ToolTip>
+        </TextBox>
+
+        <Label Content="Если количество больше указаного - ставить &quot;готово к отправке&quot;" HorizontalAlignment="Left" Margin="22,110,0,0" VerticalAlignment="Top" Width="367">
+            <Label.ToolTip>
+                <ToolTip MaxWidth="200">
+                    <TextBlock TextWrapping="Wrap">При указании значения и включенных выше галочек будет ставить готовность к отправке начиная со значения указаным здесь</TextBlock>
+                </ToolTip>
+            </Label.ToolTip>
+        </Label>
     </Grid>
+
 </Window>

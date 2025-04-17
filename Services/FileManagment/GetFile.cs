@@ -17,7 +17,7 @@ namespace ExcelShopSync.Services.FileManagment
 
             if (fileDialog.ShowDialog() == false || fileDialog.FileNames.Length == 0)
             {
-                return new List<T?>();
+                return [];
             }
 
             label.Content = Path.GetFileName(fileDialog.FileName);
@@ -25,10 +25,10 @@ namespace ExcelShopSync.Services.FileManagment
 
             foreach (var fileName in fileDialog.FileNames)
             {
-                var constructor = typeof(T).GetConstructor(new[] { typeof(string) });
+                var constructor = typeof(T).GetConstructor([typeof(string)]);
                 if (constructor != null)
                 {
-                    var instance = (T?)constructor.Invoke(new object[] { fileName });
+                    var instance = (T?)constructor.Invoke([fileName]);
                     result.Add(instance);
                 }
             }

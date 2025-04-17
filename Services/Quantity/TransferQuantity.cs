@@ -9,8 +9,11 @@ namespace ExcelShopSync.Services.Quantity
     class TransferQuantity
     {
         readonly Dictionary<string, string> Quatnities = [];
-        public TransferQuantity()
+        private bool _QuantityToo;
+        public TransferQuantity(bool quantityToo)
         {
+            _QuantityToo = quantityToo;
+
             foreach (var source in FileManager.Source)
             {
                 foreach (var page in source.Pages)
@@ -34,6 +37,7 @@ namespace ExcelShopSync.Services.Quantity
                     }
                 }
             }
+
         }
 
         public void Transfer(double readyToGo = double.MaxValue)
@@ -43,18 +47,19 @@ namespace ExcelShopSync.Services.Quantity
                 foreach (var page in target.Pages)
                 {
                     if (page == null || page.Headers == null ||
-                        !page.Headers.TryGetValue(Article, out int articleC) ||
-                        !page.Headers.TryGetValue(ColumnKeys.Quantity, out int quantityC))
+                        !page.Headers.TryGetValue(Article, out int articleC))
                         continue;
+                    page.Headers.TryGetValue(ColumnKeys.Quantity, out int quantityC);
                     page.Headers.TryGetValue(Availability, out int availabilityC);
 
                     var worksheet = page.ExcelWorksheet;
-                    foreach (int row in Enumerable.Range(worksheet.Dimension.Start.Row + 1, worksheet.Dimension.End.Row - worksheet.Dimension.Start.Row))
+                    foreach (int row in Enumerable.Range(worksheet.Dimension.Start.Row, worksheet.Dimension.End.Row - worksheet.Dimension.Start.Row))
                     {
                         string? article = worksheet.Cells[row, articleC].Value?.ToString();
                         if (article == null || !Quatnities.ContainsKey(article)) continue;
+                        if (_QuantityToo && Quatnities.ContainsKey(article) && quantityC != 0)
+                            AssistanceMethodsExtend.FillCell(worksheet, row, quantityC, Quatnities[article]);
 
-                        AssistanceMethodsExtend.FillCell(worksheet, row, quantityC, Quatnities[article]);
                         if (availabilityC != 0)
                         {
                             AssistanceMethodsExtend.FillCell(worksheet, row, availabilityC, double.Parse(Quatnities[article]) > readyToGo

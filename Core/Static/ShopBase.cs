@@ -6,7 +6,7 @@ namespace ExcelShopSync.Core.Static
     {
         static public Dictionary<string, List<string>> Columns = new()
         {
-            { Article, new List<string> { "Артикул", "Код_товару", "Артикул*", "Article" } },
+            { Article, new List<string> { "Артикул", "Код_товару", "Артикул*", "Article", "Артикул" } },
             { Price, new List<string> { "Цена", "Ціна", "Ціна*", "Price" } },
             { CompectArticle, new List<string> { "артикул комплекту", "ArticleComplect" } },
             { CompectPrice, new List<string> { "ціна комплекту", "PriceComplect" } },

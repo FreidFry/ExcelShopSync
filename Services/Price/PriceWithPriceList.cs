@@ -145,7 +145,5 @@ namespace ExcelShopSync.Services.Price
                     }
                 }
         }
-
-
     }
 }

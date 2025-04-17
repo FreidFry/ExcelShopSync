@@ -5,11 +5,11 @@
         public static Dictionary<string, List<string>> pricelistTemplate = new()
         {
             { "Article", new List<string> {"Article", "Артикул" } },
-            { "Price", new List<string> {"Price", "РРЦ, грн" } },
-            { "ArticleComlect", new List <string> { "ArticleComlect", "Артикул комплекта" } },
-            { "PriceComlect", new List <string> { "PriceComlect", "Цена комплекта" } },
+            { "Price", new List<string> {"Price", "РРЦ, грн", "РРЦ грн", "Ціна" } },
+            { "ArticleComlect", new List <string> { "Article Comlect", "Артикул комплекта" } },
+            { "PriceComlect", new List <string> { "Price Comlect", "Ціна комплекта" } },
             { "Availability", new List <string> { "Availability", "Наличие" }},
-            { "AvailabilityComlect", new List <string> { "AvailabilityComlect", "Наличие комплекта" }},
+            { "AvailabilityComplet", new List <string> { "Availability Complet", "Наличие комплекта" }},
         };
     }
 }

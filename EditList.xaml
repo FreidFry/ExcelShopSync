@@ -18,14 +18,27 @@
                         <TextBlock Text="{Binding FIleAndShopName}" VerticalAlignment="Center" TextWrapping="Wrap" Width="Auto"/>
 
                         <Button Content="i" Width="20" Height="20" Margin="10,0,0,0"
-                                VerticalAlignment="Center" HorizontalAlignment="Center"
-                                Click="ShowInfo_Click"
-                                DataContext="{Binding}"/>
+        VerticalAlignment="Center" HorizontalAlignment="Center"
+        Click="ShowInfo_Click"
+        DataContext="{Binding}">
+                            <Button.ToolTip>
+                                <ToolTip MaxWidth="200">
+                                    <TextBlock TextWrapping="Wrap">Показать подробную информацию об элементе</TextBlock>
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
 
                         <Button Content="X" Width="20" Height="20" Margin="10,0,0,0" 
-                                VerticalAlignment="Center" HorizontalAlignment="Center"
-                                Click="DeleteButton_Click" 
-                                DataContext="{Binding}"/>
+        VerticalAlignment="Center" HorizontalAlignment="Center"
+        Click="DeleteButton_Click" 
+        DataContext="{Binding}">
+                            <Button.ToolTip>
+                                <ToolTip MaxWidth="200">
+                                    <TextBlock TextWrapping="Wrap">Удалить элемент из списка</TextBlock>
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

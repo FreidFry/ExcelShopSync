@@ -88,8 +88,10 @@ public partial class MainWindow : Window
         if (FileManager.Source.Count > 0)
         {
             if (GetPrice.IsChecked == true) new TransferPrice().Transfer();
-            if (GetPrice.IsChecked == true && TransferFromPrice.IsChecked == true) new PriceWithPriceList(GetQuantity.IsChecked.Value).Transfer();
-            if (GetQuantity.IsChecked == true) new TransferQuantity().Transfer();
+            if (GetPrice.IsChecked == true && TransferFromPrice.IsChecked == true) new PriceWithPriceList(GetAvailability.IsChecked.Value).Transfer();
+            double res = double.MaxValue;
+            double.TryParse(ReadyToGoTextBox.Text, out res);
+            if (GetAvailability.IsChecked == true) new TransferQuantity(TransferQuantity.IsChecked.Value).Transfer(res);
             if (SynchronizeRealDiscount.IsChecked == true)
             {
                 if (Discount_IgnoreManual.IsChecked == true)
@@ -119,9 +121,21 @@ public partial class MainWindow : Window
 
             foreach (var target in FileManager.Target)
             {
-                target.ExcelPackage.Save();
-            }
+                bool success = false;
 
+                while (!success)
+                {
+                    try
+                    {
+                        target.ExcelPackage.Save();
+                        success = true;
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show($"Закройте файл, в котором происходят изменения, и нажмите ОК. ({target.FileName})");
+                    }
+                }
+            }
             MessageBox.Show("Done");
         }
     }
@@ -174,6 +188,6 @@ public partial class MainWindow : Window
 
     private void EditSourceList_Click(object sender, RoutedEventArgs e)
     {
-        EditFilesForChanges.OpenChanges( FileManager.Source);
+        EditFilesForChanges.OpenChanges(FileManager.Source);
     }
 }
