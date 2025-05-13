@@ -6,7 +6,7 @@ using OfficeOpenXml.Style;
 
 namespace ExcelShopSync.Services.Base
 {
-    class AssistanceMethodsExtend
+    public static class AssistanceMethodsExtend
     {
         public static void FillCell(ExcelWorksheet worksheet, int row, int column, object value)
         {
@@ -81,6 +81,26 @@ namespace ExcelShopSync.Services.Base
                 {
                     return;
                 }
+            }
+        }
+
+        public static string GetCellValue(this ExcelWorksheet worksheet, int row, int column)
+        {
+            var cell = worksheet.Cells[row, column]; // любая ячейка из объединённого диапазона
+
+            if (cell.Merge)
+            {
+                // Получаем адрес объединённого диапазона, например "B2:D2"
+                string mergedAddress = worksheet.MergedCells[cell.Start.Row, cell.Start.Column];
+
+                // Получаем первую ячейку из диапазона
+                var firstCell = worksheet.Cells[new ExcelAddress(mergedAddress).Start.Row, new ExcelAddress(mergedAddress).Start.Column];
+
+                return firstCell.Value?.ToString();
+            }
+            else
+            {
+                return cell.Value?.ToString();
             }
         }
     }

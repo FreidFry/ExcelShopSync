@@ -1,6 +1,7 @@
 ﻿using ExcelShopSync.Core.Static;
 using ExcelShopSync.Infrastructure.Persistence;
 using ExcelShopSync.Services.Base;
+using static OfficeOpenXml.ExcelErrorValue;
 
 namespace ExcelShopSync.Services.Price
 {
@@ -33,7 +34,7 @@ namespace ExcelShopSync.Services.Price
 
                         for (int col = worksheet.Dimension.Start.Column; col <= worksheet.Dimension.End.Column; col++)
                         {
-                            string? cellValue = worksheet.Cells[row, col].Value?.ToString()?.Trim();
+                            string? cellValue = worksheet.Cells[row, col].FirstOrDefault()?.Value?.ToString()?.Trim();
 
                             if (string.IsNullOrWhiteSpace(cellValue))
                                 continue;
@@ -65,7 +66,7 @@ namespace ExcelShopSync.Services.Price
                                             AvailabilityColumn = col;
                                             headerFound = true;
                                             break;
-                                        case "AvailabilityComlect":
+                                        case "AvailabilityComplet":
                                             AvailabilityComplectColumn = col;
                                             headerFound = true;
                                             break;
@@ -79,32 +80,45 @@ namespace ExcelShopSync.Services.Price
 
                             if (articleColumn != null && priceColumn != null)
                             {
-                                string? article = worksheet.Cells[row, (int)articleColumn].Value?.ToString();
-                                string? price = worksheet.Cells[row, (int)priceColumn].Value?.ToString();
+                                string? article = AssistanceMethodsExtend.GetCellValue(worksheet, row, (int)articleColumn);
+                                string? price = AssistanceMethodsExtend.GetCellValue(worksheet, row, (int)priceColumn);
 
                                 if (!string.IsNullOrEmpty(article) && !Prices.ContainsKey(article) && !string.IsNullOrEmpty(price))
-                                    Prices[article] = price;
+                                {
+                                    if (!decimal.TryParse(price.Replace(',', '.'), out decimal priceValue)) continue;
+                                        decimal DecDecimalPrice = Math.Ceiling(priceValue);
+
+                                    Prices[article] = DecDecimalPrice.ToString();
+                                }
                                 if (AvailabilityToo)
                                     if (!string.IsNullOrEmpty(AvailabilityColumn.ToString()))
                                     {
-                                        string? availability = worksheet.Cells[row, (int)AvailabilityColumn].Value?.ToString();
-                                        if (!string.IsNullOrEmpty(availability))
-                                            Availability[article] = availability;
+                                        string? availability = AssistanceMethodsExtend.GetCellValue(worksheet, row, (int)AvailabilityColumn);
+                                        if (!string.IsNullOrEmpty(availability) && !string.IsNullOrEmpty(article))
+                                                Availability[article] = availability;
                                     }
                             }
 
                             if (articleComplectColumn != null && priceComplectColumn != null)
                             {
-                                string? articleComplect = worksheet.Cells[row, articleComplectColumn.Value].Value?.ToString();
-                                string? priceComplect = worksheet.Cells[row, priceComplectColumn.Value].Value?.ToString();
+                                string? articleComplect = AssistanceMethodsExtend.GetCellValue(worksheet, row, (int)articleComplectColumn);
+                                string? priceComplect = AssistanceMethodsExtend.GetCellValue(worksheet, row, (int)priceComplectColumn);
 
-                                if (!string.IsNullOrEmpty(articleComplect) && !Prices.ContainsKey(articleComplect) && !string.IsNullOrEmpty(priceComplect))
-                                    Prices[articleComplect] = priceComplect;
+                                if(articleComplect == "АПТ-10 Б")
+                                {
+                                    Console.WriteLine("Debug");
+                                }
+
+                                if (!string.IsNullOrEmpty(articleComplect) && !Prices.ContainsKey(articleComplect) && !string.IsNullOrEmpty(priceComplect)) {
+                                    if (!decimal.TryParse(priceComplect.Replace(',', '.'), out decimal priceValue)) continue;
+                                    decimal DecDecimalPrice = Math.Ceiling(priceValue);
+                                    Prices[articleComplect] = DecDecimalPrice.ToString();
+                                }
                                 if (AvailabilityToo)
                                     if (!string.IsNullOrEmpty(AvailabilityComplectColumn.ToString()))
                                     {
-                                        string? availability = worksheet.Cells[row, (int)AvailabilityComplectColumn].Value?.ToString();
-                                        if (!string.IsNullOrEmpty(availability))
+                                        string? availability = AssistanceMethodsExtend.GetCellValue(worksheet, row, (int)AvailabilityComplectColumn);
+                                        if (!string.IsNullOrEmpty(availability) && !string.IsNullOrEmpty(articleComplect))
                                             Availability[articleComplect] = availability;
                                     }
                             }

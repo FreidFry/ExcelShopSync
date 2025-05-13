@@ -1,5 +1,6 @@
 ﻿using static ExcelShopSync.Core.Static.Shops;
 using static ExcelShopSync.Core.Static.AvailabilityKeys;
+using ExcelShopSync.Properties;
 
 namespace ExcelShopSync.Core.Static
 {
@@ -204,7 +205,23 @@ namespace ExcelShopSync.Core.Static
                     "id (не редагується)",
                     "Статус (не редагується)"
                 }
-            }
+            },
+            {
+                Ibud, new List<string>
+                {
+                    "id",
+                    "article",
+                    "name",
+                    "price",
+                    "sale_price",
+                    "currency",
+                    "measure",
+                    "availability",
+                    "min_order",
+                    "max_order",
+                    "producer"
+                }
+            },
         };
 
         public static Dictionary<string, Dictionary<string, string>> AvaibilityPref = new()
@@ -213,7 +230,7 @@ namespace ExcelShopSync.Core.Static
                 Horoshop, new Dictionary<string, string>()
                 {
                     { InStock, "В наявності" },
-                    //{ OnOrder, "" },
+                    { OnOrder, "Під замовлення" },
                     { OutOfStock, "Не в наявності" },
                     { ReadyToGo, "в наявності" }
                 }
@@ -222,7 +239,7 @@ namespace ExcelShopSync.Core.Static
                 Prom, new Dictionary<string, string>()
                 {
                     { InStock, "+" },
-                    //{ OnOrder, Settings.DefaultTimeOffset.ToString() },
+                    { OnOrder, Settings.DefaultTimeOffset.ToString() },
                     { OutOfStock, "-" },
                     { ReadyToGo, "!" }
                 }
@@ -232,7 +249,7 @@ namespace ExcelShopSync.Core.Static
                 {
                     { InStock, "В наявності" },
                     { OutOfStock, "Не в наявності" },
-                    //{ OnOrder, "Под заказ" },
+                    { OnOrder, "Под заказ" },
                     { ReadyToGo, "Готов к отправке" }
                 }
             },
@@ -241,7 +258,17 @@ namespace ExcelShopSync.Core.Static
                 {
                     { InStock, "в наявності" },
                     { OutOfStock, "немає в наявності" },
-                    //{ OnOrder, "в наявності" },
+                    { OnOrder, "в наявності" },
+                    { ReadyToGo, "в наявності" },
+
+                }
+            },
+            {
+                Ibud, new Dictionary<string, string>()
+                {
+                    { InStock, "В наличии" },
+                    { OutOfStock, "Нет в наличии" },
+                    { OnOrder, "Под заказ" },
                     { ReadyToGo, "в наявності" },
 
                 }
