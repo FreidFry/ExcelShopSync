@@ -11,7 +11,6 @@
         <Button x:Name="GetSourceFile" Content="Button" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="96" Click="GetSourceFile_Click" Height="20"/>
         <Label x:Name="GetSourceFileLable" Content="Label" HorizontalAlignment="Left" Margin="126,32,0,0" VerticalAlignment="Top" Width="111" Height="26"/>
         <Label x:Name="GetTargetFileLable" Content="Label" HorizontalAlignment="Left" Margin="126,7,0,0" VerticalAlignment="Top" Width="111" Height="26"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="341,0,0,0" VerticalAlignment="Center" Width="242" Click="Button_Click"/>
 
     </Grid>
 </Window>
