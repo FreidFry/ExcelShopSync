@@ -1,0 +1,33 @@
+﻿using ExcelShSy.Infrastracture.Persistance.Interfaces;
+using OfficeOpenXml;
+using System.IO;
+
+namespace ExcelShSy.Infrastracture.Persistance.Model
+{
+    public class ExcelFile : IExcelFile
+    {
+        public string FilePath { get; set; }
+        public string FileName { get; set; }
+        public string ShopName { get; set; }
+        public string Language { get; set; }
+        public ExcelPackage ExcelPackage { get; set; }
+        public List<IExcelPage> Pages { get; set; } = [];
+
+        public ExcelFile(string path)
+        {
+            FilePath = path;
+            FileName = Path.GetFileName(path);
+            ShopName = "Shop";
+            Language = "ua";
+            ExcelPackage = new ExcelPackage(path);
+
+            ShowInfo();
+        }
+
+        public void ShowInfo()
+        {
+            foreach (var page in Pages)
+                page.ShowInfo();
+        }
+    }
+}

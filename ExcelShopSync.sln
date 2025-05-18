@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShopSyncOld", "ExcelShopSyncOld.csproj", "{A3F79E1C-95E6-417D-9305-0A2801C36E00}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShopSyncOld", "ExcelShopSyncOld\ExcelShopSyncOld.csproj", "{A3F79E1C-95E6-417D-9305-0A2801C36E00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy", "..\ExcelShSy\ExcelShSy.csproj", "{1111CB76-D0CE-4420-87A1-BB83382F3E4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy", "ExcelShSy\ExcelShSy.csproj", "{1111CB76-D0CE-4420-87A1-BB83382F3E4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
