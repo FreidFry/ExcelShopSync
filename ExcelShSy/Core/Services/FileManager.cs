@@ -1,9 +1,8 @@
 ﻿using ExcelShSy.Core.Interfaces;
-using ExcelShSy.Features.Interfaces;
 using System.IO;
 using System.Windows.Controls;
 
-namespace ExcelShSy.Features.Services
+namespace ExcelShSy.Core.Services
 {
     public class FileManager : IFileManager
     {
@@ -31,6 +30,12 @@ namespace ExcelShSy.Features.Services
             var files = _fileProvider.GetFiles(SourcePath);
             if (files != null)
                 _fileStorage.AddSource(files);
+        }
+
+        public void InitializeFiles()
+        {
+            AddTargetFiles();
+            AddSourceFiles();
         }
 
         public void AddSourceFilesPath(Label label)

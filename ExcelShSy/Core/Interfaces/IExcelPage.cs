@@ -1,14 +1,16 @@
 ﻿using OfficeOpenXml;
 
-namespace ExcelShSy.Infrastracture.Persistance.Interfaces
+namespace ExcelShSy.Core.Interfaces
 {
     public interface IExcelPage
     {
         string PageName { get; set; }
-        //ExcelWorksheet ExcelWorksheet { get; set; }
+        ExcelWorksheet ExcelWorksheet { get; set; }
 
+        List<string> UndefindedHeaders { get; set; }
         Dictionary<string, int> Headers { get; set; }
 
         void ShowInfo();
+
     }
 }

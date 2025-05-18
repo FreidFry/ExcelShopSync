@@ -1,5 +1,4 @@
 ﻿using ExcelShSy.Core.Interfaces;
-using ExcelShSy.Infrastracture.Persistance.Interfaces;
 
 namespace ExcelShSy.Infrastracture
 {

@@ -1,4 +1,4 @@
-﻿using ExcelShSy.Infrastracture.Persistance.Interfaces;
+﻿using ExcelShSy.Core.Interfaces;
 using OfficeOpenXml;
 using System.IO;
 
@@ -11,7 +11,7 @@ namespace ExcelShSy.Infrastracture.Persistance.Model
         public string ShopName { get; set; }
         public string Language { get; set; }
         public ExcelPackage ExcelPackage { get; set; }
-        public List<IExcelPage> Pages { get; set; } = [];
+        public List<IExcelPage> Pages { get; set; }
 
         public ExcelFile(string path)
         {
@@ -20,8 +20,7 @@ namespace ExcelShSy.Infrastracture.Persistance.Model
             ShopName = "Shop";
             Language = "ua";
             ExcelPackage = new ExcelPackage(path);
-
-            ShowInfo();
+            Pages = GetPages(ExcelPackage);
         }
 
         public void ShowInfo()
@@ -29,5 +28,20 @@ namespace ExcelShSy.Infrastracture.Persistance.Model
             foreach (var page in Pages)
                 page.ShowInfo();
         }
+
+        List<IExcelPage> GetPages(ExcelPackage package)
+        {
+            ExcelWorkbook workbook = package.Workbook;
+            if (workbook == null)
+                return [];
+            List<IExcelPage> pages = [];
+            foreach (var page in workbook.Worksheets)
+            {
+                pages.Add(new ExcelPage(page));
+            }
+            return pages;
+        }
+
+        
     }
 }

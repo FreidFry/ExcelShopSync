@@ -1,6 +1,4 @@
-﻿using ExcelShSy.Infrastracture.Persistance.Interfaces;
-
-namespace ExcelShSy.Core.Interfaces
+﻿namespace ExcelShSy.Core.Interfaces
 {
     public interface IFileStorage
     {

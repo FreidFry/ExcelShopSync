@@ -14,4 +14,33 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Resources\Buttons.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Buttons.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Buttons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Buttons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrastracture\Persistance\ShopData\Epicenter\" />
+    <Folder Include="Infrastracture\Persistance\ShopData\Horoshop\" />
+    <Folder Include="Infrastracture\Persistance\ShopData\Ibud\" />
+    <Folder Include="Infrastracture\Persistance\ShopData\Rozetka\" />
+    <Folder Include="Infrastracture\Persistance\ShopData\Prom\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

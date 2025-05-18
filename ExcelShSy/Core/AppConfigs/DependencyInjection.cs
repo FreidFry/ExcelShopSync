@@ -1,8 +1,6 @@
 ﻿using ExcelShSy.Core.Interfaces;
-using ExcelShSy.Features.Interfaces;
-using ExcelShSy.Features.Services;
+using ExcelShSy.Core.Services;
 using ExcelShSy.Infrastracture;
-using ExcelShSy.Infrastracture.Persistance.Interfaces;
 using ExcelShSy.Infrastracture.Persistance.Model;
 using Microsoft.Extensions.DependencyInjection;
 

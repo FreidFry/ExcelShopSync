@@ -1,10 +1,9 @@
-﻿using ExcelShSy.Features.Interfaces;
-using ExcelShSy.Infrastracture.Persistance.Interfaces;
+﻿using ExcelShSy.Core.Interfaces;
 using ExcelShSy.Infrastracture.Persistance.Model;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 
-namespace ExcelShSy.Features.Services
+namespace ExcelShSy.Core.Services
 {
     public class FileProvider : IFileProvider
     {

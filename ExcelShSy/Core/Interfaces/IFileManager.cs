@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace ExcelShSy.Features.Interfaces
+namespace ExcelShSy.Core.Interfaces
 {
     public interface IFileManager
     {
@@ -9,6 +9,9 @@ namespace ExcelShSy.Features.Interfaces
 
         void AddSourceFiles();
         void AddTargetFiles();
+
+        void InitializeFiles();
+
         void AddSourceFilesPath(Label label);
         void AddTargetFilesPath(Label label);
 

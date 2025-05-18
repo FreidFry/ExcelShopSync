@@ -1,4 +1,4 @@
-﻿using ExcelShSy.Features.Interfaces;
+﻿using ExcelShSy.Core.Interfaces;
 using System.Windows;
 
 namespace ExcelShSy
@@ -23,10 +23,10 @@ namespace ExcelShSy
             _fileManager.AddSourceFilesPath(GetSourceFileLable);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ExecuteTasks_Click(object sender, RoutedEventArgs e)
         {
-            _fileManager.AddSourceFiles();
-            _fileManager.AddTargetFiles();
+            _fileManager.InitializeFiles();
+
         }
     }
 }
