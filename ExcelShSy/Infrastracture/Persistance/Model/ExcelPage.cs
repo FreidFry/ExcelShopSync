@@ -1,5 +1,6 @@
 ﻿using ExcelShSy.Core.Interfaces;
 using ExcelShSy.Infrastracture.Persistance.Helpers;
+using ExcelShSy.Infrastracture.Persistance.ShopData;
 using OfficeOpenXml;
 using System.Windows;
 
@@ -10,15 +11,15 @@ namespace ExcelShSy.Infrastracture.Persistance.Model
         
         public string PageName { get; set; }
         public ExcelWorksheet ExcelWorksheet { get; set; }
-        public List<string> UndefindedHeaders { get; set; }
+        public List<string> UndefinedHeaders { get; set; }
         public Dictionary<string, int> Headers { get; set; } = [];
 
         public ExcelPage(ExcelWorksheet worksheet)
         {
             PageName = worksheet.Name;
             ExcelWorksheet = worksheet;
-            UndefindedHeaders = GetHeaders(worksheet);
-            ShowInfo();
+            UndefinedHeaders = GetHeaders(worksheet);
+            //ShowInfo();
         }
 
         public void ShowInfo()
@@ -28,8 +29,8 @@ namespace ExcelShSy.Infrastracture.Persistance.Model
             else
                 MessageBox.Show($"{PageName}\n\nHeaders is null.");
 
-            if (UndefindedHeaders != null)
-                MessageBox.Show($"{PageName}\n\n{string.Join("\n", UndefindedHeaders)}");
+            if (UndefinedHeaders != null)
+                MessageBox.Show($"{PageName}\n\n{string.Join("\n", UndefinedHeaders)}");
             else
                 MessageBox.Show($"{PageName}\n\nHeaders is null.");
         }
@@ -45,7 +46,31 @@ namespace ExcelShSy.Infrastracture.Persistance.Model
             var firstRow = dimension.Start.Row;
             var lastColumn = dimension.End.Column;
 
-            return AssistanceMethods.GetRowValues(worksheet, firstRow, firstColumn, lastColumn);
+            var columns = AssistanceMethods.GetRowValues(worksheet, firstRow, firstColumn, lastColumn);
+            return columns.Distinct().ToList();
+        }
+
+        public string GetShop()
+        {
+            var headerCount = UndefinedHeaders.Count;
+            if (headerCount == 0) return ShopNameConstant.Unknown;
+
+            var ShopData = new ShopMappings().Shops;
+
+            Dictionary<string, int> shopScore = [];
+            var ShopKeys = ShopData.Keys;
+
+            foreach (var shopKey in ShopKeys)
+            {
+                var shopColumn = ShopData[shopKey].columns;
+
+                var score = UndefinedHeaders.Intersect(shopColumn).Count();
+                shopScore.Add(shopKey, score);
+                if (score >= headerCount / 2 && headerCount > 10) return shopKey;
+            }
+
+            var shopName = shopScore.OrderByDescending(x => x.Value).First().Key;
+            return shopScore[shopName] > 0 ? shopName : ShopNameConstant.Unknown;
         }
     }
 }

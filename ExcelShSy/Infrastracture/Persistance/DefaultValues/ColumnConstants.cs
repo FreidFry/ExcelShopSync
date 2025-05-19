@@ -9,6 +9,7 @@
         public const string PriceOld = "PriceOld";
         public const string Quantity = "Quantity";
         public const string Availability = "Availability";
+        public const string CompectAvailability = "CompectAvailability";
         public const string Discount = "Discount";
         public const string DiscountFrom = "DiscountFrom";
         public const string DiscountTo = "DiscountTo";

@@ -7,10 +7,12 @@ namespace ExcelShSy.Core.Interfaces
         string PageName { get; set; }
         ExcelWorksheet ExcelWorksheet { get; set; }
 
-        List<string> UndefindedHeaders { get; set; }
+        List<string> UndefinedHeaders { get; set; }
         Dictionary<string, int> Headers { get; set; }
 
         void ShowInfo();
+
+        string GetShop();
 
     }
 }

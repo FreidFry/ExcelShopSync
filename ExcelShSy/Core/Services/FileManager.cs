@@ -34,6 +34,7 @@ namespace ExcelShSy.Core.Services
 
         public void InitializeFiles()
         {
+            _fileStorage.ClearAll();
             AddTargetFiles();
             AddSourceFiles();
         }

@@ -30,14 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastracture\Persistance\ShopData\Epicenter\" />
-    <Folder Include="Infrastracture\Persistance\ShopData\Horoshop\" />
-    <Folder Include="Infrastracture\Persistance\ShopData\Ibud\" />
-    <Folder Include="Infrastracture\Persistance\ShopData\Rozetka\" />
-    <Folder Include="Infrastracture\Persistance\ShopData\Prom\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="appSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
