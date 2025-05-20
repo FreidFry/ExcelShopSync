@@ -18,17 +18,17 @@ namespace ExcelShSy.Infrastracture.Persistance.Model
         {
             FilePath = path;
             FileName = Path.GetFileName(path);
-            Language = "ua";
             ExcelPackage = new ExcelPackage(path);
             Pages = GetPages(ExcelPackage);
-            ShopName = IndetifyShop(Pages);
-            MessageBox.Show(FileName + "\n\n" + ShopName);
+            Language = LanguagueDetect();
+            ShopName = IndetifyShop();
+            ShowInfo();
         }
 
         public void ShowInfo()
         {
             foreach (var page in Pages)
-                page.ShowInfo();
+                if (page.ShowInfo() != true) return; //if press ok => continue, else => stop
         }
 
         List<IExcelPage> GetPages(ExcelPackage package)
@@ -44,21 +44,38 @@ namespace ExcelShSy.Infrastracture.Persistance.Model
             return pages;
         }
 
-        string IndetifyShop(List<IExcelPage> pages)
+        string IndetifyShop()
         {
             List<string> shops = [];
-            foreach(var page in pages)
+            foreach(var page in Pages)
             {
                 shops.Add(page.GetShop());
                 if (shops.Count > 6) break;
             }
 
             var thisShop = shops.GroupBy(x => x)
-                                .OrderByDescending(g => g.Count())
-                                .First()
-                                .Key;
+                .OrderByDescending(g => g.Count())
+                .First()
+                .Key;
 
             return thisShop;
+        }
+
+        string LanguagueDetect()
+        {
+            List<string> languagues = [];
+            foreach( var page in Pages)
+            {
+                languagues.Add(page.GetLanguague());
+                if (languagues.Count > 15) break;
+            }
+
+            var thisLanguage = languagues.GroupBy(x => x)
+                .OrderByDescending(g => g.Count())
+                .First()
+                .Key;
+
+            return thisLanguage;
         }
     }
 }

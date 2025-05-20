@@ -13,12 +13,14 @@ namespace ExcelShSy.Core.AppConfigs
         {
             services.AddSingleton<IFileStorage, FileStorage>();
             services.AddSingleton<IFileManager, FileManager>();
+            services.AddScoped<IDataProduct, DataProduct>();
 
             services.AddScoped<IFileProvider, FileProvider>();
 
             services.AddScoped<IExcelFile, ExcelFile>();
             services.AddScoped<IExcelPage, ExcelPage>();
             services.AddScoped<IShopMappings, ShopMappings>();
+            services.AddScoped<ILanguageDetector, LanguageDetector>();
             
             services.AddSingleton<MainWindow>();
             return services;
