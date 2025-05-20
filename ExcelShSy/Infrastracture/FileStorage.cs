@@ -1,4 +1,5 @@
-﻿using ExcelShSy.Core.Interfaces;
+﻿using ExcelShSy.Core.Interfaces.Excel;
+using ExcelShSy.Core.Interfaces.Storage;
 
 namespace ExcelShSy.Infrastracture
 {

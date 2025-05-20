@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace ExcelShSy.Core.Interfaces
+namespace ExcelShSy.Core.Interfaces.Storage
 {
     public interface IFileManager
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExcelShSy.Core.Interfaces
+namespace ExcelShSy.Core.Interfaces.Shop
 {
     public interface IShopTemplate
     {

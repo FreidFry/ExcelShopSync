@@ -1,6 +1,6 @@
 ﻿using OfficeOpenXml;
 
-namespace ExcelShSy.Core.Interfaces
+namespace ExcelShSy.Core.Interfaces.Excel
 {
     public interface IExcelFile
     {

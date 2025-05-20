@@ -1,4 +1,4 @@
-﻿namespace ExcelShSy.Core.Interfaces
+﻿namespace ExcelShSy.Core.Interfaces.Common
 {
     public interface ILanguageDetector
     {

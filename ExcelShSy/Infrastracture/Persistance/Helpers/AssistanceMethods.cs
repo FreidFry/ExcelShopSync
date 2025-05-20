@@ -1,15 +1,11 @@
-﻿using OfficeOpenXml;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ExcelShSy.Core.Interfaces.Excel;
+using OfficeOpenXml;
 
 namespace ExcelShSy.Infrastracture.Persistance.Helpers
 {
-    public static class AssistanceMethods
+    public class AssistanceMethods : IAssistanceMethods
     {
-        public static Dictionary<string, int>? GetRowValues(ExcelWorksheet worksheet, int fromRow, int toColumn)
+        public Dictionary<string, int>? GetRowValues(ExcelWorksheet worksheet, int fromRow, int toColumn)
         {
             var range = worksheet.Cells[fromRow, 1, fromRow, toColumn];
             bool HasEmpty = range.Any(cell => cell.Value != null);

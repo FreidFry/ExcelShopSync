@@ -1,8 +1,5 @@
 ﻿[*.cs]
 
-# Default severity for all analyzer diagnostics
-dotnet_analyzer_diagnostic.severity = none
-
 # IDE0290: Use primary constructor
 dotnet_diagnostic.IDE0290.severity = none
 

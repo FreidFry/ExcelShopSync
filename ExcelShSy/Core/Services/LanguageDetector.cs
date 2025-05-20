@@ -1,4 +1,4 @@
-﻿using ExcelShSy.Core.Interfaces;
+﻿using ExcelShSy.Core.Interfaces.Common;
 
 namespace ExcelShSy.Core.Services
 {
@@ -10,9 +10,9 @@ namespace ExcelShSy.Core.Services
         {
             _languageChars = new Dictionary<string, HashSet<char>>
             {
-                ["ru"] = new HashSet<char>("абвгдеёжзийклмнопрстуфхцчшщъыьэюя"),
-                ["uk"] = new HashSet<char>("абвгґдеєжзиіїйклмнопрстуфхцчшщьюя"),
-                ["en"] = new HashSet<char>("abcdefghijklmnopqrstuvwxyz")
+                ["ru"] = [.. "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"],
+                ["uk"] = [.. "абвгґдеєжзиіїйклмнопрстуфхцчшщьюя"],
+                ["en"] = [.. "abcdefghijklmnopqrstuvwxyz"]
             };
         }
 

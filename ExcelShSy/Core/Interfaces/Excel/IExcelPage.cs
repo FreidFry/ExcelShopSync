@@ -1,6 +1,6 @@
 ﻿using OfficeOpenXml;
 
-namespace ExcelShSy.Core.Interfaces
+namespace ExcelShSy.Core.Interfaces.Excel
 {
     public interface IExcelPage
     {
@@ -11,9 +11,6 @@ namespace ExcelShSy.Core.Interfaces
         Dictionary<string, int>? Headers { get; set; }
 
         bool ShowInfo();
-
-        string GetShop();
-        string GetLanguague();
 
     }
 }

@@ -1,5 +1,6 @@
-﻿using ExcelShSy.Core.Interfaces;
-using ExcelShSy.Features.Interfaces;
+﻿using ExcelShSy.Core.Interfaces.Common;
+using ExcelShSy.Core.Interfaces.Operations;
+using ExcelShSy.Core.Interfaces.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
