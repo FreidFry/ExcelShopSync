@@ -1,5 +1,4 @@
-﻿using ExcelShSy.Core.Interfaces.Operations;
-using ExcelShSy.Core.Interfaces.Storage;
+﻿using ExcelShSy.Core.Interfaces.Storage;
 using System.Windows;
 
 namespace ExcelShSy
@@ -7,13 +6,11 @@ namespace ExcelShSy
     public partial class MainWindow : Window
     {
         private readonly IFileManager _fileManager;
-        private readonly IGetPricesFromSource _test;
 
-        public MainWindow(IFileManager fileManager, IGetPricesFromSource test)
+        public MainWindow(IFileManager fileManager)
         {
             InitializeComponent();
             _fileManager = fileManager;
-            _test = test;
         }
 
         private void GetTargetFile_Click(object sender, RoutedEventArgs e)
@@ -28,9 +25,7 @@ namespace ExcelShSy
 
         private void ExecuteTasks_Click(object sender, RoutedEventArgs e)
         {
-            _fileManager.InitializeFiles();
-            _test.GetAllPrice();
-
+            _fileManager.InitializeFiles(FromPriceListCheckBox.IsChecked);
         }
     }
 }

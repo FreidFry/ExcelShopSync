@@ -7,7 +7,6 @@ using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Core.Services.Common;
 using ExcelShSy.Core.Services.Operations;
 using ExcelShSy.Core.Services.Storage;
-using ExcelShSy.Infrastracture;
 using ExcelShSy.Infrastracture.Persistance.Model;
 using ExcelShSy.Infrastracture.Persistance.ShopData;
 
@@ -30,6 +29,7 @@ namespace ExcelShSy.Core.AppConfigs
             services.AddScoped<IShopMappings, ShopMappings>();
             services.AddScoped<ILanguageDetector, LanguageDetector>();
             services.AddScoped<IGetPricesFromSource, GetPricesFromSource>();
+            services.AddScoped<IGetProductFromPrice, GetProductFromPrice>();
 
             //factory
             services.AddScoped<IExcelFileFactory, ExcelFileFactory>();

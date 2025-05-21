@@ -4,14 +4,16 @@ namespace ExcelShSy.Core.Extensions
 {
     public static class ExcelRangeExtensions
     {
-        public static string? GetArticle(this ExcelWorksheet worksheet, int article, int needColumn) =>
-            worksheet.GetValue(article, needColumn)?.ToString();
+        public static string? GetArticle(this ExcelWorksheet worksheet, int row, int needColumn) =>
+            worksheet.GetValue(row, needColumn)?.ToString();
 
-        public static decimal? GetDecimal(this ExcelWorksheet worksheet, int article, int needColumn)
+        public static string? GetString(this ExcelWorksheet worksheet, int row, int needColumn) => worksheet.GetArticle(row, needColumn);
+
+        public static decimal? GetDecimal(this ExcelWorksheet worksheet, int row, int needColumn)
         {
             try
             {
-                var value = worksheet.GetValue(article, needColumn)?.ToString();
+                var value = worksheet.GetValue(row, needColumn)?.ToString();
                 if (string.IsNullOrEmpty(value)) return null;
 
                 value = value.Trim().Replace(',', '.');
@@ -24,7 +26,7 @@ namespace ExcelShSy.Core.Extensions
             }
         }
 
-        public static decimal? GetAvailability(this ExcelWorksheet worksheet, int article, int needColumn) =>
-            worksheet.GetDecimal(article, needColumn);
+        public static decimal? GetAvailability(this ExcelWorksheet worksheet, int row, int needColumn) =>
+            worksheet.GetDecimal(row, needColumn);
     }
 }

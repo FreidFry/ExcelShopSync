@@ -19,7 +19,7 @@ namespace ExcelShSy.Core.Factorys
             return page;
         }
 
-        Dictionary<string, int>? GetTempHeaders(ExcelWorksheet worksheet)
+        static Dictionary<string, int>? GetTempHeaders(ExcelWorksheet worksheet)
         {
             if (worksheet == null || worksheet.Dimension == null)
                 return [];

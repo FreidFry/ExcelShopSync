@@ -30,7 +30,6 @@ namespace ExcelShSy.Core.Services.Storage
             Availability.Add(productName, availability);
         }
 
-        public void AddProductAvailability(string productName, decimal quantity) => AddProductQuantity(productName, quantity);
 
         public void AddProductQuantity(string productName, decimal quantity)
         {
@@ -40,6 +39,14 @@ namespace ExcelShSy.Core.Services.Storage
                 return;
             }
             Quantity.Add(productName, quantity);
+        }
+        public void AddProductAvailability(string productName, decimal quantity) => AddProductQuantity(productName, quantity);
+
+        public void ClearAll()
+        {
+            Price.Clear();
+            Quantity.Clear();
+            Availability.Clear();
         }
     }
 }

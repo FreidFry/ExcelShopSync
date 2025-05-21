@@ -7,10 +7,18 @@
        mc:Ignorable="d"
        Title="ExcelShSy" Height="450" Width="800">
     <Grid>
+        <!-- getTarget -->
         <Button x:Name="GetTargetFile" Content="{local:Loc GetTargetFile}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="96" Click="GetTargetFile_Click" Height="20"/>
+        <Label x:Name="GetTargetFileLable" Content="Label" HorizontalAlignment="Left" Margin="126,7,0,0" VerticalAlignment="Top" Width="111" Height="26"/>
+
+        <!-- getSource -->
         <Button x:Name="GetSourceFile" Content="{local:Loc GetSourceFile}" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="96" Click="GetSourceFile_Click" Height="20"/>
         <Label x:Name="GetSourceFileLable" Content="Label" HorizontalAlignment="Left" Margin="126,32,0,0" VerticalAlignment="Top" Width="111" Height="26"/>
-        <Label x:Name="GetTargetFileLable" Content="Label" HorizontalAlignment="Left" Margin="126,7,0,0" VerticalAlignment="Top" Width="111" Height="26"/>
+        
+        <!-- isPriceList -->
+        <CheckBox x:Name="FromPriceListCheckBox" Content="pricelist" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top"/>
+
+        <!-- start -->
         <Button x:Name="ExecuteTasks" Content="Button" Margin="0,0,10,10" Click="ExecuteTasks_Click" HorizontalAlignment="Right" Width="108" Height="20" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
