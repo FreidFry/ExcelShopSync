@@ -4,4 +4,4 @@ obj/
 .vscode/
 *.suo
 *.user
-/ExcelShopSyncOld/ExcelShopSyncOld.csproj
+ExcelShopSyncOld/
