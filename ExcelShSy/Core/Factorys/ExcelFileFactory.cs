@@ -23,7 +23,7 @@ namespace ExcelShSy.Core.Factorys
 
             file.ShopName = IndetifyShop(file.Pages);
             file.Language = LanguagueDetect(file.Pages);
-            file.ShowInfo();
+
             return file;
         }
 

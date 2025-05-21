@@ -6,12 +6,10 @@ namespace ExcelShSy.Core.Services
 {
     public class FileProvider : IFileProvider
     {
-        private readonly IServiceProvider _provider;
         private readonly IExcelFileFactory _excelFileFactory;
 
-        public FileProvider(IServiceProvider provider, IExcelFileFactory excelFileFactory)
+        public FileProvider(IExcelFileFactory excelFileFactory)
         {
-            _provider = provider;
             _excelFileFactory = excelFileFactory;
         }
 
@@ -22,7 +20,6 @@ namespace ExcelShSy.Core.Services
             foreach (var path in paths)
             {
                 var instance = _excelFileFactory.Create(path);
-                //var instance = ActivatorUtilities.CreateInstance(_provider, typeof(ExcelFile), path) as IExcelFile;
                 if (instance != null)
                     result.Add(instance);
             }
@@ -44,9 +41,7 @@ namespace ExcelShSy.Core.Services
             var result = new List<string>();
 
             foreach (var fileName in fileDialog.FileNames)
-            {
                 result.Add(fileName);
-            }
 
             return result;
         }
