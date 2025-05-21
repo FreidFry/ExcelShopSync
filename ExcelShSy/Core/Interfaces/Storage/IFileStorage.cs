@@ -1,4 +1,6 @@
-﻿namespace ExcelShSy.Core.Interfaces
+﻿using ExcelShSy.Core.Interfaces.Excel;
+
+namespace ExcelShSy.Core.Interfaces.Storage
 {
     public interface IFileStorage
     {

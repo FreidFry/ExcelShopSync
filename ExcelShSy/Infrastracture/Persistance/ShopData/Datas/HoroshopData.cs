@@ -1,4 +1,4 @@
-﻿using ExcelShSy.Core.Interfaces;
+﻿using ExcelShSy.Core.Interfaces.Shop;
 using static ExcelShSy.Infrastracture.Persistance.ShopData.AvailabilityMapping;
 
 namespace ExcelShSy.Infrastracture.Persistance.ShopData.Datas

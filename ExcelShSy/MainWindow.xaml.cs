@@ -1,4 +1,4 @@
-﻿using ExcelShSy.Core.Interfaces;
+﻿using ExcelShSy.Core.Interfaces.Storage;
 using System.Windows;
 
 namespace ExcelShSy

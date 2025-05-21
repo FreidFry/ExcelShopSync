@@ -1,4 +1,4 @@
-﻿using ExcelShSy.Core.Interfaces;
+﻿using ExcelShSy.Core.Interfaces.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

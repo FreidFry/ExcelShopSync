@@ -1,7 +1,9 @@
-﻿using ExcelShSy.Core.Interfaces;
+﻿using ExcelShSy.Core.Interfaces.Excel;
 using OfficeOpenXml;
 using System.IO;
-using System.Windows;
+using static ExcelShSy.Core.Extensions.ExcelFileExtensions;
+
+using static ExcelShSy.Core.Extensions.ExcelPageExtensions;
 
 namespace ExcelShSy.Infrastracture.Persistance.Model
 {
@@ -18,47 +20,13 @@ namespace ExcelShSy.Infrastracture.Persistance.Model
         {
             FilePath = path;
             FileName = Path.GetFileName(path);
-            Language = "ua";
             ExcelPackage = new ExcelPackage(path);
-            Pages = GetPages(ExcelPackage);
-            ShopName = IndetifyShop(Pages);
-            MessageBox.Show(FileName + "\n\n" + ShopName);
         }
 
         public void ShowInfo()
         {
             foreach (var page in Pages)
-                page.ShowInfo();
-        }
-
-        List<IExcelPage> GetPages(ExcelPackage package)
-        {
-            ExcelWorkbook workbook = package.Workbook;
-            if (workbook == null)
-                return [];
-            List<IExcelPage> pages = [];
-            foreach (var page in workbook.Worksheets)
-            {
-                pages.Add(new ExcelPage(page));
-            }
-            return pages;
-        }
-
-        string IndetifyShop(List<IExcelPage> pages)
-        {
-            List<string> shops = [];
-            foreach(var page in pages)
-            {
-                shops.Add(page.GetShop());
-                if (shops.Count > 6) break;
-            }
-
-            var thisShop = shops.GroupBy(x => x)
-                                .OrderByDescending(g => g.Count())
-                                .First()
-                                .Key;
-
-            return thisShop;
+                if (page.ShowInfo() != true) return; //if press ok => continue, else => stop
         }
     }
 }

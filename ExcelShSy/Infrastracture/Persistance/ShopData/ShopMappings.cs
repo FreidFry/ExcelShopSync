@@ -1,4 +1,4 @@
-﻿using ExcelShSy.Core.Interfaces;
+﻿using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Infrastracture.Persistance.Model;
 using ExcelShSy.Infrastracture.Persistance.ShopData.Datas;
 
