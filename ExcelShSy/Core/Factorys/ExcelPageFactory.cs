@@ -1,4 +1,5 @@
-﻿using ExcelShSy.Core.Interfaces.Excel;
+﻿using ExcelShSy.Core.Extensions;
+using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Infrastracture.Persistance.Model;
 using ExcelShSy.Infrastracture.Persistance.ShopData;
 using OfficeOpenXml;
@@ -7,13 +8,6 @@ namespace ExcelShSy.Core.Factorys
 {
     public class ExcelPageFactory : IExcelPageFactory
     {
-        readonly IAssistanceMethods _assistanceMethods;
-
-        public ExcelPageFactory(IAssistanceMethods assistanceMethods)
-        {
-            _assistanceMethods = assistanceMethods;
-        }
-
         public ExcelPage Create(ExcelWorksheet worksheet)
         {
             var page = new ExcelPage(worksheet)
@@ -25,17 +19,12 @@ namespace ExcelShSy.Core.Factorys
             return page;
         }
 
-        Dictionary<string, int>? GetTempHeaders(ExcelWorksheet worksheet)
+        static Dictionary<string, int>? GetTempHeaders(ExcelWorksheet worksheet)
         {
             if (worksheet == null || worksheet.Dimension == null)
                 return [];
 
-            var dimension = worksheet.Dimension;
-
-            var firstRow = dimension.Start.Row;
-            var lastColumn = dimension.End.Column;
-
-            return _assistanceMethods.GetRowValues(worksheet, firstRow, lastColumn);
+            return worksheet.GetRowValueColumnMap(worksheet.Dimension.Start.Row);
         }
 
         static Dictionary<string, int>? GetRealHeaders(Dictionary<string, int>? undefinedHeaders)

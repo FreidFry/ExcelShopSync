@@ -1,7 +1,8 @@
 ﻿using ExcelShSy.Core.Interfaces.Excel;
-using ExcelShSy.Core.Services;
+using ExcelShSy.Core.Services.Common;
 using ExcelShSy.Infrastracture.Persistance.Model;
 using ExcelShSy.Infrastracture.Persistance.ShopData;
+
 using OfficeOpenXml;
 
 namespace ExcelShSy.Core.Extensions
@@ -51,5 +52,46 @@ namespace ExcelShSy.Core.Extensions
             }
             return pages;
         }
+
+        public static IEnumerable<int> GetRowRange(this IExcelPage? page)
+        {
+            if (page == null) return [];
+            var start = page.ExcelWorksheet.Dimension.Start.Row + 1;
+            var end = page.ExcelWorksheet.Dimension.End.Row;
+            var rows = end - start + 1;
+
+            return Enumerable.Range(start, rows);
+        }
+
+        public static IEnumerable<int> GetFullRowRange(this IExcelPage? page)
+        {
+            if (page == null) return [];
+            var start = page.ExcelWorksheet.Dimension.Start.Row;
+            var end = page.ExcelWorksheet.Dimension.End.Row;
+            var rows = end - start + 1;
+
+            return Enumerable.Range(start, rows);
+        }
+
+
+        public static Dictionary<string, int>? GetRowValueColumnMap(this ExcelWorksheet worksheet, int fromRow)
+        {
+            var toColumn = worksheet.Dimension.End.Column;
+            var range = worksheet.Cells[fromRow, 1, fromRow, toColumn];
+            bool HasEmpty = range.Any(cell => cell.Value != null);
+
+#pragma warning disable CS8714, CS8621, CS8619
+            if (HasEmpty)
+            {
+                var RowValues = range.Where(cell => !string.IsNullOrWhiteSpace(cell.Value?.ToString()))
+                    .GroupBy(cell => cell.Value.ToString())
+                    .ToDictionary(g => g.Key, g => g.First().Start.Column);
+                return RowValues;
+            }
+#pragma warning restore CS8714, CS8621, CS8619
+
+            return null;
+        }
+
     }
 }

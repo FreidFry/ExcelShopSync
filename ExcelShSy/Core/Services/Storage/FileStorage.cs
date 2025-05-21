@@ -1,7 +1,7 @@
 ﻿using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Storage;
 
-namespace ExcelShSy.Infrastracture
+namespace ExcelShSy.Core.Services.Storage
 {
     public class FileStorage : IFileStorage
     {
@@ -29,19 +29,15 @@ namespace ExcelShSy.Infrastracture
             }
         }
 
-        public void ClearTarget()
-        {
-            Target.Clear();
-        }
-        public void ClearSource()
-        {
-            Source.Clear();
-        }
+        public void ClearTarget() => Target.Clear();
+        public void ClearSource() => Source.Clear();
 
         public void ClearAll()
         {
             Target.Clear();
+            Target.TrimExcess();
             Source.Clear();
+            Source.TrimExcess();
         }
     }
 }

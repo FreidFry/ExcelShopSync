@@ -2,12 +2,12 @@
 using ExcelShSy.Core.Interfaces.Storage;
 using Microsoft.Win32;
 
-namespace ExcelShSy.Core.Services
+namespace ExcelShSy.Core.Services.Storage
 {
     public class FileProvider : IFileProvider
     {
         private readonly IExcelFileFactory _excelFileFactory;
-
+        
         public FileProvider(IExcelFileFactory excelFileFactory)
         {
             _excelFileFactory = excelFileFactory;

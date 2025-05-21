@@ -25,8 +25,7 @@ namespace ExcelShSy
 
         private void ExecuteTasks_Click(object sender, RoutedEventArgs e)
         {
-            _fileManager.InitializeFiles();
-
+            _fileManager.InitializeFiles(FromPriceListCheckBox.IsChecked);
         }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using ExcelShSy.Core.Interfaces.Excel;
 using OfficeOpenXml;
 using System.IO;
-using static ExcelShSy.Core.Extensions.ExcelFileExtensions;
-
-using static ExcelShSy.Core.Extensions.ExcelPageExtensions;
 
 namespace ExcelShSy.Infrastracture.Persistance.Model
 {
