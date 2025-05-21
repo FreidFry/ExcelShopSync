@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Controls;
 
-namespace ExcelShSy.Core.Services
+namespace ExcelShSy.Core.Services.Storage
 {
     public class FileManager : IFileManager
     {

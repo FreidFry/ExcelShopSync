@@ -29,14 +29,8 @@ namespace ExcelShSy.Infrastracture
             }
         }
 
-        public void ClearTarget()
-        {
-            Target.Clear();
-        }
-        public void ClearSource()
-        {
-            Source.Clear();
-        }
+        public void ClearTarget() => Target.Clear();
+        public void ClearSource() => Source.Clear();
 
         public void ClearAll()
         {

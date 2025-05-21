@@ -1,6 +1,6 @@
 ﻿using ExcelShSy.Core.Interfaces.Common;
 
-namespace ExcelShSy.Core.Services
+namespace ExcelShSy.Core.Services.Common
 {
     public class LanguageDetector : ILanguageDetector
     {
