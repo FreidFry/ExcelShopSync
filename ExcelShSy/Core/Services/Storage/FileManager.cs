@@ -65,15 +65,7 @@ namespace ExcelShSy.Core.Services.Storage
             var paths = _fileProvider.GetPaths();
             if (paths.IsNullOrEmpty()) return;
 
-            
-            if (!SourcePath.Any(s => paths.Contains(s)))
-            {
-                SourcePath.AddRange(paths);
-            }
-            else
-            foreach (var path in paths)
-                if (!SourcePath.Contains(path))
-                    SourcePath.Add(path);
+            SourcePath.AddRange(paths.Distinct().Except(SourcePath));
 
             SetLastPath(label, SourcePath.Last());
         }
@@ -83,15 +75,7 @@ namespace ExcelShSy.Core.Services.Storage
             var paths = _fileProvider.GetPaths();
             if (paths.IsNullOrEmpty()) return;
 
-
-            if (!TargetPath.Any(t => paths.Contains(t)))
-            {
-                TargetPath.AddRange(paths);
-            }
-            else
-            foreach (var path in paths)
-                if (!TargetPath.Contains(path))
-                    TargetPath.Add(path);
+            TargetPath.AddRange(paths.Distinct().Except(TargetPath));
 
             SetLastPath(label, TargetPath.Last());
         }

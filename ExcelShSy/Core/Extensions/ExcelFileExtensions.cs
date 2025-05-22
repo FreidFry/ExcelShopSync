@@ -4,7 +4,7 @@ namespace ExcelShSy.Core.Extensions
 {
     public static class ExcelFileExtensions
     {
-        public static string IndetifyShop(this List<IExcelPage?> pages)
+        public static string IndetifyShop(this IList<IExcelPage?> pages)
         {
             List<string> shops = [];
             foreach (var page in pages)
@@ -21,7 +21,7 @@ namespace ExcelShSy.Core.Extensions
             return thisShop;
         }
 
-        public static string LanguagueDetect(this List<IExcelPage?> pages)
+        public static string LanguagueDetect(this IList<IExcelPage?> pages)
         {
             List<string> languagues = [];
             foreach (var page in pages)

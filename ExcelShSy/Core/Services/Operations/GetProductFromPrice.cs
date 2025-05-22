@@ -75,12 +75,12 @@ namespace ExcelShSy.Core.Services.Operations
 
         static HeaderMap? TryGetHeaders(Dictionary<string, int>? range, int row)
         {
-            return range.GetIndefyHeaders(row) ?? null;
+            return range.GetIndefyPriceHeader(row) ?? null;
         }
 
         static HeaderMap? TryGetHeadersComplect(Dictionary<string, int>? range, int row)
         {
-            return range.GetIndefyHeadersComplect(row) ?? null;
+            return range.GetIndefyPriceHeaderComplect(row) ?? null;
         }
 
         void ProcessRow(ExcelWorksheet worksheet, (HeaderMap? Regular, HeaderMap? Complect) headerMaps, int row)
