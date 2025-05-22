@@ -27,7 +27,7 @@ namespace ExcelShSy.Core.Services.Storage
             return result;
         }
 
-        public List<string> GetPaths()
+        public List<string>? GetPaths()
         {
             OpenFileDialog fileDialog = new()
             {
@@ -36,7 +36,7 @@ namespace ExcelShSy.Core.Services.Storage
             };
 
             if (fileDialog.ShowDialog() == false || fileDialog.FileNames.Length == 0)
-                return [];
+                return null;
 
             var result = new List<string>();
 

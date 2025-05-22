@@ -1,6 +1,8 @@
-﻿using ExcelShSy.Core.Interfaces.Common;
+﻿using ExcelShSy.Core.Extensions;
+using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
+
 using System.IO;
 using System.Windows.Controls;
 
@@ -61,31 +63,37 @@ namespace ExcelShSy.Core.Services.Storage
         public void AddSourceFilesPath(Label label)
         {
             var paths = _fileProvider.GetPaths();
+            if (paths.IsNullOrEmpty()) return;
 
-            string LastPath = string.Empty;
-
+            
+            if (!SourcePath.Any(s => paths.Contains(s)))
+            {
+                SourcePath.AddRange(paths);
+            }
+            else
             foreach (var path in paths)
-                if (File.Exists(path))
-                {
+                if (!SourcePath.Contains(path))
                     SourcePath.Add(path);
-                    LastPath = path;
-                }
-            SetLastPath(label, LastPath);
+
+            SetLastPath(label, SourcePath.Last());
         }
 
         public void AddTargetFilesPath(Label label)
         {
             var paths = _fileProvider.GetPaths();
+            if (paths.IsNullOrEmpty()) return;
 
-            string LastPath = string.Empty;
 
+            if (!TargetPath.Any(t => paths.Contains(t)))
+            {
+                TargetPath.AddRange(paths);
+            }
+            else
             foreach (var path in paths)
-                if (File.Exists(path))
-                {
+                if (!TargetPath.Contains(path))
                     TargetPath.Add(path);
-                    LastPath = path;
-                }
-            SetLastPath(label, LastPath);
+
+            SetLastPath(label, TargetPath.Last());
         }
 
         public void RemoveSourceFilesPath(string path)
@@ -100,9 +108,10 @@ namespace ExcelShSy.Core.Services.Storage
                 TargetPath.Remove(path);
         }
 
-        private static void SetLastPath(Label lable, string path)
+        static void SetLastPath(Label lable, string? path)
         {
-            lable.Content = Path.GetFileName(path);
+            if (!string.IsNullOrEmpty(path))
+                lable.Content = Path.GetFileName(path);
         }
     }
 }
