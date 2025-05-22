@@ -5,6 +5,6 @@ namespace ExcelShSy.Core.Interfaces.Storage
     public interface IFileProvider
     {
         List<IExcelFile> GetFiles(List<string> paths);
-        List<string> GetPaths();
+        List<string>? GetPaths();
     }
 }

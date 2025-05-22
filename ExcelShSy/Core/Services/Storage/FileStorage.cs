@@ -12,21 +12,11 @@ namespace ExcelShSy.Core.Services.Storage
 
         public void AddTarget(List<IExcelFile> files)
         {
-            foreach (var file in files)
-            {
-                if (Target.Contains(file))
-                    continue;
-                Target.Add(file);
-            }
+            Target.AddRange(files);
         }
         public void AddSource(List<IExcelFile> files)
         {
-            foreach (var file in files)
-            {
-                if (Source.Contains(file))
-                    continue;
-                Source.Add(file);
-            }
+            Source.AddRange(files);
         }
 
         public void ClearTarget() => Target.Clear();
@@ -35,9 +25,7 @@ namespace ExcelShSy.Core.Services.Storage
         public void ClearAll()
         {
             Target.Clear();
-            Target.TrimExcess();
             Source.Clear();
-            Source.TrimExcess();
         }
     }
 }
