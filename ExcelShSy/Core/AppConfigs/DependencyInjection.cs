@@ -7,8 +7,10 @@ using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Core.Services.Common;
 using ExcelShSy.Core.Services.Operations;
 using ExcelShSy.Core.Services.Storage;
+using ExcelShSy.Features.Services;
 using ExcelShSy.Infrastracture.Persistance.Model;
 using ExcelShSy.Infrastracture.Persistance.ShopData;
+using ExcelShSy.UiUtils;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -34,8 +36,17 @@ namespace ExcelShSy.Core.AppConfigs
             //factory
             services.AddScoped<IExcelFileFactory, ExcelFileFactory>();
             services.AddScoped<IExcelPageFactory, ExcelPageFactory>();
-            
-            services.AddSingleton<MainWindow>();
+            services.AddScoped<ITaskFactory, MyTaskFactory>();
+
+            //
+            services.AddScoped<IExecuteOperation, SyncPrice>();
+            services.AddScoped<SyncPrice>();
+            services.AddScoped<IExecuteOperation, SavePackages>();
+            services.AddScoped<SavePackages>();
+
+            services.AddSingleton<ILocalizationService, LocalizationService>();
+            services.AddSingleton<LocalizationBinding>();
+            services.AddTransient<MainWindow>();
             return services;
         }
     }

@@ -1,5 +1,8 @@
 ﻿using ExcelShSy.Core.AppConfigs;
+using ExcelShSy.UiUtils;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using System.Windows;
 
 namespace ExcelShSy
@@ -11,7 +14,7 @@ namespace ExcelShSy
             Startup += OnStartup;
         }
 
-        private ServiceProvider _provider;
+        public static ServiceProvider _provider;
 
         private void OnStartup(object sender, StartupEventArgs e)
         {
@@ -20,9 +23,10 @@ namespace ExcelShSy
 
 
             _provider = services.BuildServiceProvider();
+            var loc = _provider.GetRequiredService<LocalizationBinding>();
+            Current.Resources.Add("Loc", loc);
 
-            var main = _provider.GetRequiredService<MainWindow>();
-            main.Show();
+            _provider.GetRequiredService<MainWindow>().Show();
         }
     }
 }

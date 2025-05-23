@@ -41,7 +41,7 @@ namespace ExcelShSy.Core.Services.Operations
             var priceCol = headers[ColumnConstants.Price];
             var worksheet = page.ExcelWorksheet;
 
-            foreach (var row in page.GetRowRange())
+            foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
                 var article = worksheet.GetArticle(row, articleCol);
                 var price = worksheet.GetDecimal(row, priceCol);

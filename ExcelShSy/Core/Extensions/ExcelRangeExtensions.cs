@@ -1,4 +1,6 @@
-﻿using OfficeOpenXml;
+﻿using ExcelShSy.Properties;
+
+using OfficeOpenXml;
 
 namespace ExcelShSy.Core.Extensions
 {
@@ -17,7 +19,8 @@ namespace ExcelShSy.Core.Extensions
                 if (string.IsNullOrEmpty(value)) return null;
 
                 value = value.Trim().Replace(',', '.');
-                var decimalValue = decimal.Parse(value);
+                var decimalValue = Math.Round(decimal.Parse(value), 2, MidpointRounding.AwayFromZero);
+                if (GlobalSettings.IsRound) decimalValue = Math.Ceiling(decimalValue);
                 return decimalValue;
             }
             catch
@@ -26,7 +29,21 @@ namespace ExcelShSy.Core.Extensions
             }
         }
 
-        public static decimal? GetAvailability(this ExcelWorksheet worksheet, int row, int needColumn) =>
-            worksheet.GetDecimal(row, needColumn);
+        public static decimal? GetAvailability(this ExcelWorksheet worksheet, int row, int needColumn)
+        {
+            try
+            {
+                var value = worksheet.GetValue(row, needColumn)?.ToString();
+                if (string.IsNullOrEmpty(value)) return null;
+
+                value = value.Trim().Replace(',', '.');
+                var decimalValue = Math.Round(decimal.Parse(value), 2, MidpointRounding.AwayFromZero);
+                return decimalValue;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

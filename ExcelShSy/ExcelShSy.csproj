@@ -12,6 +12,7 @@
     <PackageReference Include="EPPlus" Version="8.0.5" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
+    <PackageReference Include="Scrutor" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,7 +25,7 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\Buttons.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Buttons.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

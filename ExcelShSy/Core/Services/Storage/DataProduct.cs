@@ -14,7 +14,6 @@ namespace ExcelShSy.Core.Services.Storage
         {
             if (Price.ContainsKey(productName))
             {
-                MessageBox.Show($"{productName} дублируется цена");
                 return;
             }
             Price.Add(productName, price);
@@ -24,7 +23,6 @@ namespace ExcelShSy.Core.Services.Storage
         {
             if (Availability.ContainsKey(productName))
             {
-                MessageBox.Show($"{productName} дублируется наличие");
                 return;
             }
             Availability.Add(productName, availability);
@@ -35,7 +33,6 @@ namespace ExcelShSy.Core.Services.Storage
         {
             if (Quantity.ContainsKey(productName))
             {
-                MessageBox.Show($"{productName} дублируется количество");
                 return;
             }
             Quantity.Add(productName, quantity);

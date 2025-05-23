@@ -6,16 +6,16 @@ namespace ExcelShSy.Infrastracture.Persistance.ShopData
     {
         public static readonly IReadOnlyDictionary<string, IReadOnlyList<string>> Columns = new Dictionary<string, IReadOnlyList<string>>
         {
-            [ColumnConstants.Article] = new[] { "Артикул", "Код_товару", "Артикул*", "Article", "Артикул", "article" },
-            [ColumnConstants.Price] = new[] { "Цена", "Ціна", "Ціна*", "Price", "price" },
-            [ColumnConstants.CompectArticle] = new[] { "артикул комплекту", "ArticleComplect" },
-            [ColumnConstants.CompectPrice] = new[] { "ціна комплекту", "PriceComplect" },
-            [ColumnConstants.PriceOld] = new[] { "Старая цена", "Стара ціна" },
-            [ColumnConstants.Quantity] = new[] { "Количество", "Кількість", "Залишки" },
-            [ColumnConstants.Availability] = new[] { "Наличие", "Наявність", "Наявність*", "availability" },
-            [ColumnConstants.Discount] = new[] { "Скидка %", "Знижка" },
-            [ColumnConstants.DiscountFrom] = new[] { "Термін_дії_знижки_від" },
-            [ColumnConstants.DiscountTo] = new[] { "Дата и время окончания акции", "Термін_дії_знижки_до" }
+            [ColumnConstants.Article] = ["Артикул", "Код_товару", "Артикул*", "Article", "Артикул", "article"],
+            [ColumnConstants.Price] = ["Цена", "Ціна", "Ціна*", "Price", "price"],
+            [ColumnConstants.CompectArticle] = ["артикул комплекту", "ArticleComplect"],
+            [ColumnConstants.CompectPrice] = ["ціна комплекту", "PriceComplect"],
+            [ColumnConstants.PriceOld] = ["Старая цена", "Стара ціна"],
+            [ColumnConstants.Quantity] = ["Количество", "Кількість", "Залишки"],
+            [ColumnConstants.Availability] = ["Наличие", "Наявність", "Наявність*", "availability"],
+            [ColumnConstants.Discount] = ["Скидка %", "Знижка"],
+            [ColumnConstants.DiscountFrom] = ["Термін_дії_знижки_від"],
+            [ColumnConstants.DiscountTo] = ["Дата и время окончания акции", "Термін_дії_знижки_до"]
         };
     }
 }

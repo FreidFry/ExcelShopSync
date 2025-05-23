@@ -2,7 +2,6 @@
 {
     public interface IExecuteOperation
     {
-        string Name { get; }
         void Execute();
     }
 }

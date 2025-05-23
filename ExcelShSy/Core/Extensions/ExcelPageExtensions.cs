@@ -31,6 +31,7 @@ namespace ExcelShSy.Core.Extensions
             var shopName = shopScore.OrderByDescending(x => x.Value).First().Key;
             return shopScore[shopName] > 0 ? shopName : ShopNameConstant.Unknown;
         }
+
         public static string GetLanguague(this IExcelPage? page)
         {
             if (page?.UndefinedHeaders == null || page.UndefinedHeaders.Count == 0)
@@ -40,39 +41,26 @@ namespace ExcelShSy.Core.Extensions
             var detector = new LanguageDetector();
             return detector.Detect(allText);
         }
-        public static List<IExcelPage> GetPages(ExcelPackage package)
-        {
-            ExcelWorkbook workbook = package.Workbook;
-            if (workbook == null)
-                return [];
-            List<IExcelPage> pages = [];
-            foreach (var page in workbook.Worksheets)
-            {
-                pages.Add(new ExcelPage(page));
-            }
-            return pages;
-        }
 
-        public static IEnumerable<int> GetRowRange(this IExcelPage? page)
+        public static IEnumerable<int> GetFullRowRangeWithoutFirstRow(this ExcelWorksheet? worksheet)
         {
-            if (page == null) return [];
-            var start = page.ExcelWorksheet.Dimension.Start.Row + 1;
-            var end = page.ExcelWorksheet.Dimension.End.Row;
+            if (worksheet == null) return [];
+            var start = worksheet.Dimension.Start.Row + 1;
+            var end = worksheet.Dimension.End.Row;
             var rows = end - start + 1;
 
             return Enumerable.Range(start, rows);
         }
 
-        public static IEnumerable<int> GetFullRowRange(this IExcelPage? page)
+        public static IEnumerable<int> GetFullRowRange(this ExcelWorksheet? worksheet)
         {
-            if (page == null) return [];
-            var start = page.ExcelWorksheet.Dimension.Start.Row;
-            var end = page.ExcelWorksheet.Dimension.End.Row;
+            if (worksheet == null) return [];
+            var start = worksheet.Dimension.Start.Row;
+            var end = worksheet.Dimension.End.Row;
             var rows = end - start + 1;
 
             return Enumerable.Range(start, rows);
         }
-
 
         public static Dictionary<string, int>? GetRowValueColumnMap(this ExcelWorksheet worksheet, int fromRow)
         {
@@ -92,6 +80,5 @@ namespace ExcelShSy.Core.Extensions
 
             return null;
         }
-
     }
 }

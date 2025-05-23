@@ -3,22 +3,30 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-       xmlns:local="clr-namespace:ExcelShSy.UiPreferences"
        mc:Ignorable="d"
        Title="ExcelShSy" Height="450" Width="800">
     <Grid>
         <!-- getTarget -->
-        <Button x:Name="GetTargetFile" Content="{local:Loc GetTargetFile}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="96" Click="GetTargetFile_Click" Height="20"/>
-        <Label x:Name="GetTargetFileLable" Content="Label" HorizontalAlignment="Left" Margin="126,7,0,0" VerticalAlignment="Top" Width="111" Height="26"/>
+        <Button x:Name="GetTargetFile" Content="{Binding [GetTargetFile], Source={StaticResource Loc}}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="Auto" Padding="5, 0" Click="GetTargetFile_Click" Height="20"/>
+        <Label x:Name="GetTargetFileLable" Content="Label" Margin="126,7,10,0" VerticalAlignment="Top" Height="26"/>
 
         <!-- getSource -->
-        <Button x:Name="GetSourceFile" Content="{local:Loc GetSourceFile}" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="96" Click="GetSourceFile_Click" Height="20"/>
-        <Label x:Name="GetSourceFileLable" Content="Label" HorizontalAlignment="Left" Margin="126,32,0,0" VerticalAlignment="Top" Width="111" Height="26"/>
-        
-        <!-- isPriceList -->
-        <CheckBox x:Name="FromPriceListCheckBox" Content="pricelist" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="GetSourceFile" Content="{Binding [GetSourceFile], Source={StaticResource Loc}}" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="Auto" Padding="5, 0" Click="GetSourceFile_Click" Height="20"/>
+        <Label x:Name="GetSourceFileLable" Content="Label" HorizontalAlignment="Left" Margin="126,32,0,0" VerticalAlignment="Top" Width="664" Height="26" Grid.ColumnSpan="3"/>
+
+        <Grid Margin="0,63,0,0" x:Name="TaskGrid" Grid.ColumnSpan="3">
+            <!-- isPriceList -->
+            <CheckBox x:Name="FromPriceListCheckBox" Content="pricelist" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+
+            <!-- operations -->
+            <CheckBox Tag="SyncPrice" Content="SyncPrice" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
+            <CheckBox x:Name="IsRound" Content="округлить" HorizontalAlignment="Left" Margin="104,30,0,0" VerticalAlignment="Top" Width="74" Checked="IsRound_Checked" Unchecked="IsRound_Unchecked"/>
+            <Button Content="Button" HorizontalAlignment="Center" Margin="0,0,0,10" Width="112" Click="ChangeLanguage_Click" Height="20" VerticalAlignment="Bottom"/>
+
+        </Grid>
 
         <!-- start -->
-        <Button x:Name="ExecuteTasks" Content="Button" Margin="0,0,10,10" Click="ExecuteTasks_Click" HorizontalAlignment="Right" Width="108" Height="20" VerticalAlignment="Bottom"/>
+        <Button x:Name="ExecuteTasks" Content="Button" Margin="0,0,10,10" Click="ExecuteTasks_Click" HorizontalAlignment="Right" Width="108" Height="20" VerticalAlignment="Bottom" Grid.Column="2"/>
+
     </Grid>
 </Window>

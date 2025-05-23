@@ -37,7 +37,7 @@ namespace ExcelShSy.Core.Services.Operations
             var header = InitHeaders();
             var headerComplect = InitHeaders();
 
-            foreach (var row in page.GetFullRowRange())
+            foreach (var row in worksheet.GetFullRowRange())
             {
                 bool HeaderRow = false;
 
