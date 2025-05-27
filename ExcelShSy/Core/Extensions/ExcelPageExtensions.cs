@@ -21,7 +21,7 @@ namespace ExcelShSy.Core.Extensions
 
             foreach (var shopKey in ShopKeys)
             {
-                var shopColumn = ShopData[shopKey].columns;
+                var shopColumn = ShopData[shopKey].Columns;
 
                 var score = page?.UndefinedHeaders?.Keys.Intersect(shopColumn).Count();
                 shopScore.Add(shopKey, score ?? 0);

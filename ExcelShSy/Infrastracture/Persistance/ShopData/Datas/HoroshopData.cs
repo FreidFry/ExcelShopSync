@@ -1,12 +1,13 @@
 ﻿using ExcelShSy.Core.Interfaces.Shop;
-using static ExcelShSy.Infrastracture.Persistance.ShopData.AvailabilityMapping;
+using static ExcelShSy.Infrastracture.Persistance.DefaultValues.AvailabilityConstant;
+
 
 namespace ExcelShSy.Infrastracture.Persistance.ShopData.Datas
 {
     public record HoroshopData : IShopTemplate
     {
-        public IReadOnlyList<string> columns => new List<string>
-        {
+        public IReadOnlyList<string> Columns =>
+        [
             "Артикул",
             "Родительский артикул",
             "Артикул для отображения на сайте",
@@ -66,7 +67,7 @@ namespace ExcelShSy.Infrastracture.Persistance.ShopData.Datas
             "Код производителя товара (MPN)",
             "На складе для Prom",
             "Электронный товар",
-        };
+        ];
 
         public IReadOnlyDictionary<string, string> Availability => new Dictionary<string, string>
         {

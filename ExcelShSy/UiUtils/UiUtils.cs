@@ -15,14 +15,15 @@ namespace ExcelShSy.UiUtils
                 {
                     string? taskName = cb.Tag?.ToString();
                     if (!string.IsNullOrEmpty(taskName))
-
                         try
                         {
                             var task = taskFactory.CreateTask(taskName);
-                            tasksToRun.Add(task);
+                            if (task != null)
+                                tasksToRun.Add(task);
                         }
                         catch (Exception ex)
                         {
+                            Console.WriteLine();
                         }
                 }
             }

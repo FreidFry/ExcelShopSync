@@ -1,12 +1,13 @@
 ﻿using ExcelShSy.Core.Interfaces.Shop;
-using static ExcelShSy.Infrastracture.Persistance.ShopData.AvailabilityMapping;
+
+using static ExcelShSy.Infrastracture.Persistance.DefaultValues.AvailabilityConstant;
 
 namespace ExcelShSy.Infrastracture.Persistance.ShopData.Datas
 {
     public record IbudData : IShopTemplate
     {
-        public IReadOnlyList<string> columns => new List<string>
-        {
+        public IReadOnlyList<string> Columns =>
+        [
             "id",
             "article",
             "name",
@@ -18,7 +19,7 @@ namespace ExcelShSy.Infrastracture.Persistance.ShopData.Datas
             "min_order",
             "max_order",
             "producer"
-        };
+        ];
 
         public IReadOnlyDictionary<string, string> Availability => new Dictionary<string, string>
         {

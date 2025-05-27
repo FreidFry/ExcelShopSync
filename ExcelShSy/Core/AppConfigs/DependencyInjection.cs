@@ -30,20 +30,28 @@ namespace ExcelShSy.Core.AppConfigs
             services.AddScoped<IExcelPage, ExcelPage>();
             services.AddScoped<IShopMappings, ShopMappings>();
             services.AddScoped<ILanguageDetector, LanguageDetector>();
-            services.AddScoped<IGetPricesFromSource, GetPricesFromSource>();
-            services.AddScoped<IGetProductFromPrice, GetProductFromPrice>();
+            services.AddScoped<IGetProductManager, GetProductFromSource>();
+            services.AddScoped<IFromPrice, FromPrice>();
+            services.AddScoped<IFromSource, FromSource>();
 
             //factory
             services.AddScoped<IExcelFileFactory, ExcelFileFactory>();
             services.AddScoped<IExcelPageFactory, ExcelPageFactory>();
             services.AddScoped<ITaskFactory, MyTaskFactory>();
 
-            //
+            //Executes
             services.AddScoped<IExecuteOperation, SyncPrice>();
             services.AddScoped<SyncPrice>();
+            services.AddScoped<IExecuteOperation, SyncQuantity>();
+            services.AddScoped<SyncQuantity>();
+            services.AddScoped<IExecuteOperation, SyncAvailability>();
+            services.AddScoped<SyncAvailability>();
+            services.AddScoped<IExecuteOperation, SyncDiscount>();
+            services.AddScoped<SyncDiscount>();
             services.AddScoped<IExecuteOperation, SavePackages>();
             services.AddScoped<SavePackages>();
 
+            //UI
             services.AddSingleton<ILocalizationService, LocalizationService>();
             services.AddSingleton<LocalizationBinding>();
             services.AddTransient<MainWindow>();

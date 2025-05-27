@@ -3,27 +3,35 @@ using ExcelShSy.Core.Extensions;
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
+using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastracture.Persistance.DefaultValues;
+using ExcelShSy.Infrastracture.Persistance.Model;
 
 namespace ExcelShSy.Features.Services
 {
-    [Task("SyncPrice")]
-    public class SyncPrice : IExecuteOperation
+    [Task("SyncAvailability")]
+    class SyncAvailability : IExecuteOperation
     {
         private readonly IDataProduct _dataProduct;
         private readonly IFileStorage _fileStorage;
+        private readonly IShopMappings _shopMapping;
 
-        public SyncPrice(IDataProduct dataProduct, IFileStorage fileStorage)
+        private string ShopName = ShopNameConstant.Unknown;
+
+        public SyncAvailability(IDataProduct dataProduct, IFileStorage fileStorage, IShopMappings shopMappings)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
+            _shopMapping = shopMappings;
         }
-
-
         public void Execute()
         {
-            foreach (var file in _fileStorage.Target) ProcessFile(file);
+            foreach (var file in _fileStorage.Target)
+            {
+                ShopName = file.ShopName;
+                ProcessFile(file);
+            }
         }
 
         void ProcessFile(IExcelFile file)
@@ -33,9 +41,10 @@ namespace ExcelShSy.Features.Services
 
         void ProcessPage(IExcelPage page)
         {
+            var shopTemplate = _shopMapping.GetShop(ShopName);
             var worksheet = page.ExcelWorksheet;
 
-            var headers = page.InitialHeadersTuple(ColumnConstants.Price);
+            var headers = page.InitialHeadersTuple(ColumnConstants.Availability);
 
             if (headers.AnyIsNullOrEmpty()) return;
 
@@ -45,8 +54,8 @@ namespace ExcelShSy.Features.Services
                 var article = worksheet.GetArticle(row, headers.articleColumn);
 
                 if (article == null) continue;
-                if (_dataProduct.Price.TryGetValue(article, out var value))
-                worksheet.WriteCell(row, headers.neededColumn, value);
+                if (_dataProduct.Availability.TryGetValue(article, out var value))
+                worksheet.WriteCell(row, headers.neededColumn, shopTemplate.Availability[value]);
                 else product.Add(article);
 
             }

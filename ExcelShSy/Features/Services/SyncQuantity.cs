@@ -8,19 +8,17 @@ using ExcelShSy.Infrastracture.Persistance.DefaultValues;
 
 namespace ExcelShSy.Features.Services
 {
-    [Task("SyncPrice")]
-    public class SyncPrice : IExecuteOperation
+    [Task("SyncQuantity")]
+    public class SyncQuantity : IExecuteOperation
     {
         private readonly IDataProduct _dataProduct;
         private readonly IFileStorage _fileStorage;
 
-        public SyncPrice(IDataProduct dataProduct, IFileStorage fileStorage)
+        public SyncQuantity(IDataProduct dataProduct, IFileStorage fileStorage)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
         }
-
-
         public void Execute()
         {
             foreach (var file in _fileStorage.Target) ProcessFile(file);
@@ -35,7 +33,7 @@ namespace ExcelShSy.Features.Services
         {
             var worksheet = page.ExcelWorksheet;
 
-            var headers = page.InitialHeadersTuple(ColumnConstants.Price);
+            var headers = page.InitialHeadersTuple(ColumnConstants.Quantity);
 
             if (headers.AnyIsNullOrEmpty()) return;
 
@@ -45,8 +43,8 @@ namespace ExcelShSy.Features.Services
                 var article = worksheet.GetArticle(row, headers.articleColumn);
 
                 if (article == null) continue;
-                if (_dataProduct.Price.TryGetValue(article, out var value))
-                worksheet.WriteCell(row, headers.neededColumn, value);
+                if (_dataProduct.Quantity.TryGetValue(article, out var value))
+                worksheet.WriteCell(row, headers.neededColumn, _dataProduct.Quantity[article]);
                 else product.Add(article);
 
             }

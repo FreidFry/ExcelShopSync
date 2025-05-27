@@ -13,7 +13,7 @@ namespace ExcelShSy.Core.Extensions
     {
         public static (int articleColumn, int neededColumn) InitialHeadersTuple(this IExcelPage page, string column)
         {
-            if (page?.Headers == null || page.Headers.IsNullOrEmpty()) return (0, 0);
+            if (page?.Headers == null || page.Headers.IsNullOrEmpty() || !page.Headers.ContainsKey(column)) return (0, 0);
 
             return (page.Headers[ColumnConstants.Article], page.Headers[column]);
         }
@@ -22,7 +22,7 @@ namespace ExcelShSy.Core.Extensions
 
         public static void WriteCell(this ExcelWorksheet worksheet, int row, int column, string value)
         {
-            var currentValue = worksheet.GetValue(row, column).ToString();
+            var currentValue = worksheet.GetValue(row, column)?.ToString();
             if (currentValue != value)
             {
                 worksheet.Cells[row, column].Value = value;
@@ -33,6 +33,16 @@ namespace ExcelShSy.Core.Extensions
         public static void WriteCell(this ExcelWorksheet worksheet, int row, int column, decimal value)
         {
             var currentValue = worksheet.GetDecimal(row, column);
+            if (currentValue != value)
+            {
+                worksheet.Cells[row, column].Value = value;
+                worksheet.ChangeCellColor(row, column);
+            }
+        }
+
+        public static void WriteCell(this ExcelWorksheet worksheet, int row, int column, DateOnly value)
+        {
+            var currentValue = worksheet.GetDate(row, column);
             if (currentValue != value)
             {
                 worksheet.Cells[row, column].Value = value;

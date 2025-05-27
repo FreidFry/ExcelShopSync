@@ -1,12 +1,12 @@
 ﻿using ExcelShSy.Core.Interfaces.Shop;
-using static ExcelShSy.Infrastracture.Persistance.ShopData.AvailabilityMapping;
+using static ExcelShSy.Infrastracture.Persistance.DefaultValues.AvailabilityConstant;
 
 namespace ExcelShSy.Infrastracture.Persistance.ShopData.Datas
 {
     public record RozetkaData : IShopTemplate
     {
-        public IReadOnlyList<string> columns => new List<string>
-        {
+        public IReadOnlyList<string> Columns =>
+        [
             "ID",
             "OFFERID",
             "CID",
@@ -43,7 +43,7 @@ namespace ExcelShSy.Infrastracture.Persistance.ShopData.Datas
             "Країна-виробник товару|98900",
             "Монтаж|220893",
             "Ширина|24948"
-        };
+        ];
 
         public IReadOnlyDictionary<string, string> Availability => new Dictionary<string, string>
         {

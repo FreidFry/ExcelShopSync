@@ -1,19 +1,18 @@
-﻿using ExcelShSy.Core.Interfaces;
-using ExcelShSy.Infrastracture.Persistance.DefaultValues;
-using ExcelShSy.Infrastracture.Persistance.ShopData;
+﻿using ExcelShSy.Infrastracture.Persistance.ShopData;
+
+using System.Diagnostics.CodeAnalysis;
 
 namespace ExcelShSy.Core.Extensions
 {
     public static class DictionaryExtensions
     {
-        public static bool IsNullOrEmpty<TKey, TValue>(this IDictionary<TKey, TValue> dict)
-            where TKey : notnull =>
+        public static bool IsNullOrEmpty<TKey, TValue>([NotNullWhen(false)]this IDictionary<TKey, TValue>? dict) =>
             dict == null || dict.Count == 0;
 
         public static bool HasRequiredKeys(this Dictionary<string, int> dict, params string[] keys) =>
             keys.All(key => dict.ContainsKey(key));
 
-        public static Dictionary<string, int>? GetHeaderMapFromTemplate(this IDictionary<string, int>? range, IReadOnlyDictionary<string, IReadOnlyList<string>>? template, int row)
+        public static Dictionary<string, int>? GetHeaderMapFromTemplate(this IDictionary<string, int>? range, IReadOnlyDictionary<string, IReadOnlyList<string>>? template)
         {
             if (range == null || range.Count < 2) return [];
 
@@ -26,34 +25,25 @@ namespace ExcelShSy.Core.Extensions
             return result.Count > 0 ? result : null;
         }
 
-        public static HeaderMap? GetIndefyPriceHeader(this IDictionary<string, int>? range, int row)
+        public static int GetColumnFromRange(this IDictionary<string, int>? range, string columnName)
         {
             var priceTemplate = ColumnMappingPriceList.Template;
-            var mapping = range.GetHeaderMapFromTemplate(priceTemplate, row);
+            var mapping = range.GetHeaderMapFromTemplate(priceTemplate);
 
             if (mapping == null || mapping.Count < 2)
-                return null;
+                return 0;
 
-            mapping.TryGetValue(ColumnConstants.Article, out int articleCol);
-            mapping.TryGetValue(ColumnConstants.Price, out int priceCol);
-            mapping.TryGetValue(ColumnConstants.Availability, out int availabilityCol);
-
-            return new HeaderMap(articleCol, priceCol, availabilityCol);
+            mapping.TryGetValue(columnName, out int result);
+            
+            return result;
         }
 
-        public static HeaderMap? GetIndefyPriceHeaderComplect(this IDictionary<string, int>? range, int row)
+        public static int GetColumnFromRange(this int oldVal, Dictionary<string, int>? range, string ColumnName)
         {
-            var priceTemplate = ColumnMappingPriceList.Template;
-            var mapping = range.GetHeaderMapFromTemplate(priceTemplate, row);
-
-            if (mapping == null || mapping.Count < 2)
-                return null;
-
-            mapping.TryGetValue(ColumnConstants.CompectArticle, out int articleCol);
-            mapping.TryGetValue(ColumnConstants.CompectPrice, out int priceCol);
-            mapping.TryGetValue(ColumnConstants.CompectAvailability, out int availabilityCol);
-
-            return new HeaderMap(articleCol, priceCol, availabilityCol);
+            int value = range.GetColumnFromRange(ColumnName);
+            if (value > 0)
+                return value;
+            return oldVal;
         }
     }
 }

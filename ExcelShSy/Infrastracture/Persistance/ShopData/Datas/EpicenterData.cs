@@ -1,12 +1,12 @@
 ﻿using ExcelShSy.Core.Interfaces.Shop;
-using static ExcelShSy.Infrastracture.Persistance.ShopData.AvailabilityMapping;
+using static ExcelShSy.Infrastracture.Persistance.DefaultValues.AvailabilityConstant;
 
 namespace ExcelShSy.Infrastracture.Persistance.ShopData.Datas
 {
     public record EpicenterData : IShopTemplate
     {
-        public IReadOnlyList<string> columns => new List<string>
-        {
+        public IReadOnlyList<string> Columns =>
+        [
             "№",
             "Артикул*",
             "Ціна*",
@@ -38,7 +38,7 @@ namespace ExcelShSy.Infrastracture.Persistance.ShopData.Datas
             "Набір атрибутів*",
             "id (не редагується)",
             "Статус (не редагується)"
-        };
+        ];
 
         public IReadOnlyDictionary<string, string> Availability => new Dictionary<string, string>
         {

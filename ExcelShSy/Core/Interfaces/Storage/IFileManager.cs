@@ -10,7 +10,7 @@ namespace ExcelShSy.Core.Interfaces.Storage
         void AddSourceFiles();
         void AddTargetFiles();
 
-        void InitializeFiles(bool? isPrice);
+        void InitializeFiles();
 
         void AddSourceFilesPath(Label label);
         void AddTargetFilesPath(Label label);

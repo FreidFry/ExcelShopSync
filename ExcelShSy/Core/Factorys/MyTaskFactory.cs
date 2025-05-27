@@ -5,6 +5,7 @@ using ExcelShSy.UiUtils;
 using Microsoft.Extensions.DependencyInjection;
 
 using System.Reflection;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace ExcelShSy.Core.Factorys
@@ -28,24 +29,32 @@ namespace ExcelShSy.Core.Factorys
                     t => t);
         }
 
-        public IExecuteOperation CreateTask(string taskName)
+        public IExecuteOperation? CreateTask(string taskName)
         {
-            if (!_tasksMap.TryGetValue(taskName, out var taskType))
-                throw new ArgumentException($"Unknown task {taskName}");
-
-            return (IExecuteOperation)_serviceProvider.GetRequiredService(taskType);
+            try
+            {
+                _tasksMap.TryGetValue(taskName, out var taskType);
+                return (IExecuteOperation?)_serviceProvider.GetRequiredService(taskType);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public void RelizeExecute(Grid TaskGrid)
         {
             List<IExecuteOperation> tasksToRun = [];
             tasksToRun.GetExecuteTask(TaskGrid, this);
-
-            tasksToRun.Add(CreateTask("SavePackages"));
+            var _ = CreateTask("SavePackages");
+            if (_ != null)
+                tasksToRun.Add(_);
             foreach (var task in tasksToRun)
             {
                 task.Execute();
             }
+
+            MessageBox.Show("Finish");
         }
 
         public bool Validate(Grid TaskGrid)

@@ -6,7 +6,9 @@ namespace ExcelShSy.Infrastracture.Persistance.ShopData
 {
     public class ShopMappings : IShopMappings
     {
-        public Dictionary<string, IShopTemplate> Shops => new Dictionary<string, IShopTemplate>
+        public IShopTemplate GetShop(string shopName) => Shops[shopName];
+
+        public Dictionary<string, IShopTemplate> Shops => new()
         {
             {ShopNameConstant.Horoshop, new HoroshopData() },
             {ShopNameConstant.Rozetka, new RozetkaData() },

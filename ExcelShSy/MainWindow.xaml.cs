@@ -3,25 +3,22 @@ using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Properties;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace ExcelShSy
 {
     public partial class MainWindow : Window
     {
         private readonly ILocalizationService _localizationService;
-        private readonly IServiceProvider _serviceProvider;
         private readonly IFileManager _fileManager;
         private readonly ITaskFactory _taskFactory;
 
-        public MainWindow(ILocalizationService localizationService, IServiceProvider serviceProvider, IFileManager fileManager, ITaskFactory taskFactory)
+        public MainWindow(ILocalizationService localizationService, IFileManager fileManager, ITaskFactory taskFactory)
         {
             InitializeComponent();
             _localizationService = localizationService;
-            _serviceProvider = serviceProvider;
             _fileManager = fileManager;
             _taskFactory = taskFactory;
         }
@@ -43,17 +40,42 @@ namespace ExcelShSy
                 MessageBox.Show("Выберите задачу");
                 return;
             }
-            _fileManager.InitializeFiles(FromPriceListCheckBox.IsChecked);
+            _fileManager.InitializeFiles();
             _taskFactory.RelizeExecute(TaskGrid);
         }
-
-        private void IsRound_Checked(object sender, RoutedEventArgs e) => GlobalSettings.IsRound = true;
-
-        private void IsRound_Unchecked(object sender, RoutedEventArgs e) => GlobalSettings.IsRound = false;
 
         private void ChangeLanguage_Click(object sender, RoutedEventArgs e)
         {
             _localizationService.SetCulture(_localizationService.CurrentCulture == new CultureInfo("uk-UA") ? "uk-UA" : "ru-RU");
+        }
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            var cb = sender as CheckBox;
+            var propertyName = cb?.Tag?.ToString();
+            var value = cb?.IsChecked == true;
+
+            if (!string.IsNullOrEmpty(propertyName))
+            {
+                var settingsType = typeof(GlobalSettings);
+                var prop = settingsType.GetProperty(propertyName);
+                prop?.SetValue(null, value);
+            }
+        }
+
+        private void StartDatePicker_SelectedDateChanged(object sender, EventArgs e)
+        {
+            var dp = sender as DatePicker;
+            DateTime selectedDate = dp?.SelectedDate ?? DateTime.Today;
+            DateOnly date = DateOnly.FromDateTime(selectedDate);
+            GlobalSettings.DiscountStartDate = date;
+        }
+
+        private void EndDatePicker_SelectedDateChanged(object sender, EventArgs e)
+        {
+            var dp = sender as DatePicker;
+            DateTime selectedDate = dp?.SelectedDate ?? DateTime.Today;
+            DateOnly date = DateOnly.FromDateTime(selectedDate);
+            GlobalSettings.DiscountEndDate = date;
         }
     }
 }

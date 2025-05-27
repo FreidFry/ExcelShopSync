@@ -8,6 +8,7 @@
         public const string CompectPrice = "CompectPrice";
         public const string PriceOld = "PriceOld";
         public const string Quantity = "Quantity";
+        public const string CompectQuantity = "CompectQuantity";
         public const string Availability = "Availability";
         public const string CompectAvailability = "CompectAvailability";
         public const string Discount = "Discount";

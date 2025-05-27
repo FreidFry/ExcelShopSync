@@ -8,18 +8,17 @@ using ExcelShSy.Infrastracture.Persistance.DefaultValues;
 
 namespace ExcelShSy.Features.Services
 {
-    [Task("SyncPrice")]
-    public class SyncPrice : IExecuteOperation
+    [Task("SyncDiscountDate")]
+    public class SyncDiscountDate : IExecuteOperation
     {
         private readonly IDataProduct _dataProduct;
         private readonly IFileStorage _fileStorage;
 
-        public SyncPrice(IDataProduct dataProduct, IFileStorage fileStorage)
+        public SyncDiscountDate(IDataProduct dataProduct, IFileStorage fileStorage)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
         }
-
 
         public void Execute()
         {
@@ -33,21 +32,27 @@ namespace ExcelShSy.Features.Services
 
         void ProcessPage(IExcelPage page)
         {
+
             var worksheet = page.ExcelWorksheet;
 
-            var headers = page.InitialHeadersTuple(ColumnConstants.Price);
+            var DataStart = page.InitialHeadersTuple(ColumnConstants.DiscountFrom);
+            var DataEnd = page.InitialHeadersTuple(ColumnConstants.DiscountTo);
 
-            if (headers.AnyIsNullOrEmpty()) return;
+            if (DataStart.AnyIsNullOrEmpty() && DataEnd.AnyIsNullOrEmpty()) return;
 
             var product = new List<string>();
+            var productTo = new List<string>();
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
-                var article = worksheet.GetArticle(row, headers.articleColumn);
+                var article = worksheet.GetArticle(row, DataStart.articleColumn);
 
                 if (article == null) continue;
-                if (_dataProduct.Price.TryGetValue(article, out var value))
-                worksheet.WriteCell(row, headers.neededColumn, value);
+                if (_dataProduct.DiscountFrom.TryGetValue(article, out DateOnly valueFrom))
+                    worksheet.WriteCell(row, DataStart.neededColumn, valueFrom);
                 else product.Add(article);
+                if (_dataProduct.DiscountTo.TryGetValue(article, out DateOnly valueTo))
+                    worksheet.WriteCell(row, DataStart.neededColumn, valueTo);
+                else productTo.Add(article);
 
             }
         }
