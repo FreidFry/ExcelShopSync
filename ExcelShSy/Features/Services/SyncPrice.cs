@@ -48,7 +48,6 @@ namespace ExcelShSy.Features.Services
                 if (_dataProduct.Price.TryGetValue(article, out var value))
                 worksheet.WriteCell(row, headers.neededColumn, value);
                 else product.Add(article);
-
             }
         }
     }

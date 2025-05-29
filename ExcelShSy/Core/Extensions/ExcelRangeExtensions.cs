@@ -78,7 +78,7 @@ namespace ExcelShSy.Core.Extensions
             }
         }
 
-        static decimal RoundDecimal(decimal value, int NumbersAfterDot)
+        public static decimal RoundDecimal(decimal value, int NumbersAfterDot)
         {
             return Math.Round(value, NumbersAfterDot, MidpointRounding.AwayFromZero);
         }

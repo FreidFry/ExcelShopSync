@@ -12,8 +12,8 @@ namespace ExcelShSy.Core.Interfaces.Storage
 
         void InitializeFiles();
 
-        void AddSourceFilesPath(Label label);
-        void AddTargetFilesPath(Label label);
+        void AddSourceFilesPath(TextBlock label);
+        void AddTargetFilesPath(TextBlock label);
 
         void RemoveSourceFilesPath(string path);
         void RemoveTargetFilesPath(string path);

@@ -16,10 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\Buttons.Designer.cs">
+    <Compile Update="Resources\MainWindow.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Buttons.resx</DependentUpon>
+      <DependentUpon>MainWindow.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -27,6 +27,10 @@
     <EmbeddedResource Update="Resources\Buttons.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Buttons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\MainWindow.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MainWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

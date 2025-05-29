@@ -4,7 +4,9 @@ using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
+using ExcelShSy.Core.Services.Logger;
 using ExcelShSy.Infrastracture.Persistance.DefaultValues;
+using ExcelShSy.Properties;
 
 namespace ExcelShSy.Features.Services
 {
@@ -13,11 +15,13 @@ namespace ExcelShSy.Features.Services
     {
         private readonly IDataProduct _dataProduct;
         private readonly IFileStorage _fileStorage;
+        private readonly ILogger _logger;
 
-        public SyncDiscountDate(IDataProduct dataProduct, IFileStorage fileStorage)
+        public SyncDiscountDate(IDataProduct dataProduct, IFileStorage fileStorage, ILogger logger)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
+            _logger = logger;
         }
 
         public void Execute()
@@ -32,7 +36,6 @@ namespace ExcelShSy.Features.Services
 
         void ProcessPage(IExcelPage page)
         {
-
             var worksheet = page.ExcelWorksheet;
 
             var DataStart = page.InitialHeadersTuple(ColumnConstants.DiscountFrom);
@@ -40,8 +43,8 @@ namespace ExcelShSy.Features.Services
 
             if (DataStart.AnyIsNullOrEmpty() && DataEnd.AnyIsNullOrEmpty()) return;
 
-            var product = new List<string>();
             var productTo = new List<string>();
+            var ErrorDate = new List<string>();
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
                 var article = worksheet.GetArticle(row, DataStart.articleColumn);
@@ -49,12 +52,20 @@ namespace ExcelShSy.Features.Services
                 if (article == null) continue;
                 if (_dataProduct.DiscountFrom.TryGetValue(article, out DateOnly valueFrom))
                     worksheet.WriteCell(row, DataStart.neededColumn, valueFrom);
-                else product.Add(article);
                 if (_dataProduct.DiscountTo.TryGetValue(article, out DateOnly valueTo))
                     worksheet.WriteCell(row, DataStart.neededColumn, valueTo);
                 else productTo.Add(article);
 
+                if(valueFrom > GlobalSettings.MinDateActually && valueFrom < valueTo)
+                    ErrorDate.Add(article);
             }
+
+            var products = productTo
+                .Union(ErrorDate)
+                .Distinct()
+                .ToList();
+
+            _logger.Log($"Products where errors {string.Join(",", products)}");
         }
     }
 }

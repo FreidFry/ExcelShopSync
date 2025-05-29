@@ -1,0 +1,58 @@
+﻿using System.IO;
+using System.Text;
+
+namespace ExcelShSy.Core.Services.Logger
+{
+    public class Logger : ILogger
+    {
+        private readonly string date = DateTime.Now.ToString("y-MM-dd HH-mm-ss");
+        private readonly string LogFilePath;
+
+        public Logger()
+        {
+            LogFilePath = Init();
+        }
+
+        public string Init()
+        {
+            var logDirectory = Path.Combine(Environment.CurrentDirectory, "Logs");
+
+            if (!Path.Exists(logDirectory)) Directory.CreateDirectory(logDirectory);
+            var logPath = Path.Combine(logDirectory, "Log_" + date + ".log");
+
+            using (var stream = new FileStream(logPath, FileMode.CreateNew, FileAccess.Write)) { }
+
+            var logFiles = Directory.GetFiles(logDirectory, "*.log")
+                                    .OrderBy(File.GetCreationTime)
+                                    .ToList();
+
+            while (logFiles.Count >= 5)
+            {
+                File.Delete(logFiles[0]);
+                logFiles.RemoveAt(0);
+            }
+
+            return logPath;
+        }
+
+        public void Log(string message)
+        {
+            var logEntry = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}";
+
+            try
+            {
+                File.AppendAllText(LogFilePath, logEntry + Environment.NewLine, Encoding.UTF8);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка при записи в лог: " + ex.Message);
+            }
+        }
+
+        public void LogError(string message) => Log("ERROR: " + message);
+
+        public void LogInfo(string message) => Log("INFO: " + message);
+
+        public void LogWarning(string message) => Log("WARNING: " + message);
+    }
+}

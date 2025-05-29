@@ -1,5 +1,6 @@
 ﻿using ExcelShSy.Core.Factorys;
 using ExcelShSy.Core.Interfaces.Operations;
+using ExcelShSy.Core.Services.Logger;
 
 using System.Windows.Controls;
 
@@ -19,9 +20,11 @@ namespace ExcelShSy.UiUtils
                         {
                             var task = taskFactory.CreateTask(taskName);
                             if (task != null)
+                            {
                                 tasksToRun.Add(task);
+                            }
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             Console.WriteLine();
                         }

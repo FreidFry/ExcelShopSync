@@ -1,11 +1,13 @@
 ﻿using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
+using ExcelShSy.Core.Services.Logger;
 using ExcelShSy.Properties;
 
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ExcelShSy
 {
@@ -14,13 +16,15 @@ namespace ExcelShSy
         private readonly ILocalizationService _localizationService;
         private readonly IFileManager _fileManager;
         private readonly ITaskFactory _taskFactory;
+        private readonly ILogger _logger;
 
-        public MainWindow(ILocalizationService localizationService, IFileManager fileManager, ITaskFactory taskFactory)
+        public MainWindow(ILocalizationService localizationService, IFileManager fileManager, ITaskFactory taskFactory, ILogger logger)
         {
             InitializeComponent();
             _localizationService = localizationService;
             _fileManager = fileManager;
             _taskFactory = taskFactory;
+            _logger = logger;
         }
 
         private void GetTargetFile_Click(object sender, RoutedEventArgs e)
@@ -61,21 +65,37 @@ namespace ExcelShSy
                 prop?.SetValue(null, value);
             }
         }
-
-        private void StartDatePicker_SelectedDateChanged(object sender, EventArgs e)
+        private void ChangeIncreasePercent_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var dp = sender as DatePicker;
-            DateTime selectedDate = dp?.SelectedDate ?? DateTime.Today;
-            DateOnly date = DateOnly.FromDateTime(selectedDate);
-            GlobalSettings.DiscountStartDate = date;
+            decimal.TryParse(IncreasePercentTextBox.Text, out decimal percents);
+            GlobalSettings.priceIncreasePercentage = percents;
         }
 
-        private void EndDatePicker_SelectedDateChanged(object sender, EventArgs e)
+        private void IncreasePercentTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            var dp = sender as DatePicker;
-            DateTime selectedDate = dp?.SelectedDate ?? DateTime.Today;
-            DateOnly date = DateOnly.FromDateTime(selectedDate);
-            GlobalSettings.DiscountEndDate = date;
+            e.Handled = !IsTextAllowed(e.Text, ((TextBox)sender).Text);
+        }
+
+        private void IncreasePercentTextBox_Pasting(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof(string)))
+            {
+                string pastedText = (string)e.DataObject.GetData(typeof(string));
+                var textBox = (TextBox)sender;
+                string newText = textBox.Text.Insert(textBox.SelectionStart, pastedText);
+                if (!IsTextAllowed(pastedText, newText))
+                    e.CancelCommand();
+            }
+            else
+            {
+                e.CancelCommand();
+            }
+        }
+
+        private bool IsTextAllowed(string newInput, string fullText)
+        {
+            string text = fullText + newInput;
+            return decimal.TryParse(text, out _);
         }
     }
 }

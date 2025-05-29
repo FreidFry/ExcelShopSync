@@ -6,6 +6,7 @@ using OfficeOpenXml.Style;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Windows;
 
 namespace ExcelShSy.Core.Extensions
 {
@@ -58,6 +59,24 @@ namespace ExcelShSy.Core.Extensions
                 worksheet.Cells[row, column].Style.Fill.BackgroundColor.SetColor(Color.Green);
             else
                 worksheet.Cells[row, column].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
+        }
+
+        public static void Warning(bool check, string message)
+        {
+            if (check)
+            {
+                var result = MessageBox.Show(
+                $"{message}",
+                "Confirmation",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning
+            );
+
+                if (result == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
         }
     }
 }

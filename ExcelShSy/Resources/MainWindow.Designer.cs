@@ -22,24 +22,24 @@ namespace ExcelShSy.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Buttons {
+    internal class MainWindow {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Buttons() {
+        internal MainWindow() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExcelShSy.Resources.Buttons", typeof(Buttons).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExcelShSy.Resources.MainWindow", typeof(MainWindow).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace ExcelShSy.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,16 +63,43 @@ namespace ExcelShSy.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        public static string Cancel {
+        internal static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Migrate discount date.
+        /// </summary>
+        internal static string DiscountDate {
+            get {
+                return ResourceManager.GetString("DiscountDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit....
+        /// </summary>
+        internal static string EditFiles {
+            get {
+                return ResourceManager.GetString("EditFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Execute.
+        /// </summary>
+        internal static string ExecuteTasks {
+            get {
+                return ResourceManager.GetString("ExecuteTasks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Get source file.
         /// </summary>
-        public static string GetSourceFile {
+        internal static string GetSourceFile {
             get {
                 return ResourceManager.GetString("GetSourceFile", resourceCulture);
             }
@@ -81,18 +108,72 @@ namespace ExcelShSy.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Get target file.
         /// </summary>
-        public static string GetTargetFile {
+        internal static string GetTargetFile {
             get {
                 return ResourceManager.GetString("GetTargetFile", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Increase price (fake discount).
+        /// </summary>
+        internal static string IncreasePricePercent {
+            get {
+                return ResourceManager.GetString("IncreasePricePercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Round up prices.
+        /// </summary>
+        internal static string RoundUp {
+            get {
+                return ResourceManager.GetString("RoundUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
-        public static string SaveButton {
+        internal static string SaveButton {
             get {
                 return ResourceManager.GetString("SaveButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Migrate availability.
+        /// </summary>
+        internal static string SyncAvailability {
+            get {
+                return ResourceManager.GetString("SyncAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Migrate discount.
+        /// </summary>
+        internal static string SyncDiscount {
+            get {
+                return ResourceManager.GetString("SyncDiscount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Migrate prices.
+        /// </summary>
+        internal static string SyncPrice {
+            get {
+                return ResourceManager.GetString("SyncPrice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Migrate quantity.
+        /// </summary>
+        internal static string SyncQuantity {
+            get {
+                return ResourceManager.GetString("SyncQuantity", resourceCulture);
             }
         }
     }

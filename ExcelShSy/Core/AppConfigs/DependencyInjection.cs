@@ -5,6 +5,7 @@ using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Core.Services.Common;
+using ExcelShSy.Core.Services.Logger;
 using ExcelShSy.Core.Services.Operations;
 using ExcelShSy.Core.Services.Storage;
 using ExcelShSy.Features.Services;
@@ -25,6 +26,8 @@ namespace ExcelShSy.Core.AppConfigs
             services.AddScoped<IDataProduct, DataProduct>();
 
             services.AddScoped<IFileProvider, FileProvider>();
+
+            services.AddSingleton<ILogger, Logger>();
 
             services.AddScoped<IExcelFile, ExcelFile>();
             services.AddScoped<IExcelPage, ExcelPage>();
@@ -48,6 +51,10 @@ namespace ExcelShSy.Core.AppConfigs
             services.AddScoped<SyncAvailability>();
             services.AddScoped<IExecuteOperation, SyncDiscount>();
             services.AddScoped<SyncDiscount>();
+            services.AddScoped<IExecuteOperation, SyncDiscountDate>();
+            services.AddScoped<SyncDiscountDate>();
+            services.AddScoped<IExecuteOperation, IncreasePricePercent>();
+            services.AddScoped<IncreasePricePercent>();
             services.AddScoped<IExecuteOperation, SavePackages>();
             services.AddScoped<SavePackages>();
 

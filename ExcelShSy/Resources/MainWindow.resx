@@ -118,15 +118,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Cancel" xml:space="preserve">
-    <value>Скасувати</value>
+    <value>Cancel</value>
+  </data>
+  <data name="ExecuteTasks" xml:space="preserve">
+    <value>Execute</value>
   </data>
   <data name="GetSourceFile" xml:space="preserve">
-    <value>Виберіть файл для змін</value>
+    <value>Get source file</value>
   </data>
   <data name="GetTargetFile" xml:space="preserve">
-    <value>Виберіть файл істок</value>
+    <value>Get target file</value>
   </data>
   <data name="SaveButton" xml:space="preserve">
-    <value>Зберегти</value>
+    <value>Save</value>
+  </data>
+  <data name="DiscountDate" xml:space="preserve">
+    <value>Migrate discount date</value>
+  </data>
+  <data name="IncreasePricePercent" xml:space="preserve">
+    <value>Increase price (fake discount)</value>
+  </data>
+  <data name="RoundUp" xml:space="preserve">
+    <value>Round up prices</value>
+  </data>
+  <data name="SyncAvailability" xml:space="preserve">
+    <value>Migrate availability</value>
+  </data>
+  <data name="SyncDiscount" xml:space="preserve">
+    <value>Migrate discount</value>
+  </data>
+  <data name="SyncPrice" xml:space="preserve">
+    <value>Migrate prices</value>
+  </data>
+  <data name="SyncQuantity" xml:space="preserve">
+    <value>Migrate quantity</value>
+  </data>
+  <data name="EditFiles" xml:space="preserve">
+    <value>Edit...</value>
   </data>
 </root>

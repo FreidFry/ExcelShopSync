@@ -1,5 +1,6 @@
 ﻿using ExcelShSy.Core.Attributes;
 using ExcelShSy.Core.Interfaces.Operations;
+using ExcelShSy.Core.Services.Logger;
 using ExcelShSy.UiUtils;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -13,11 +14,13 @@ namespace ExcelShSy.Core.Factorys
     public class MyTaskFactory : ITaskFactory
     {
         readonly IServiceProvider _serviceProvider;
+        readonly ILogger _logger;
         private readonly Dictionary<string, Type> _tasksMap;
 
-        public MyTaskFactory(IServiceProvider services)
+        public MyTaskFactory(IServiceProvider services, ILogger logger)
         {
             _serviceProvider = services;
+            _logger = logger;
 
             var allTasks = _serviceProvider.GetServices<IExecuteOperation>();
 
@@ -36,7 +39,7 @@ namespace ExcelShSy.Core.Factorys
                 _tasksMap.TryGetValue(taskName, out var taskType);
                 return (IExecuteOperation?)_serviceProvider.GetRequiredService(taskType);
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
@@ -46,14 +49,18 @@ namespace ExcelShSy.Core.Factorys
         {
             List<IExecuteOperation> tasksToRun = [];
             tasksToRun.GetExecuteTask(TaskGrid, this);
+            _logger.LogInfo("Executes: " + string.Join(", ", tasksToRun));
             var _ = CreateTask("SavePackages");
             if (_ != null)
                 tasksToRun.Add(_);
             foreach (var task in tasksToRun)
             {
+                _logger.LogInfo($"Start {task.GetType().Name}");
                 task.Execute();
-            }
+                _logger.LogInfo($"Finish {task.GetType().Name}");
 
+            }
+            _logger.LogInfo("Finish");
             MessageBox.Show("Finish");
         }
 

@@ -5,6 +5,7 @@ using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
+using ExcelShSy.Core.Services.Logger;
 using ExcelShSy.Infrastracture.Persistance.DefaultValues;
 using ExcelShSy.Infrastracture.Persistance.ShopData;
 using ExcelShSy.Properties;
@@ -16,7 +17,7 @@ namespace ExcelShSy.Core.Services.Operations
     public class FromSource : GetProductFromBase, IFromSource
     {
         IShopTemplate shopTemplate;
-        public FromSource(IDataProduct _dataProduct, IFileStorage _fileStorage) : base(_dataProduct, _fileStorage)
+        public FromSource(IDataProduct _dataProduct, IFileStorage _fileStorage, ILogger _logger) : base(_dataProduct, _fileStorage, _logger)
         { }
         protected override void ProcessPage(IExcelPage page)
         {
@@ -33,12 +34,19 @@ namespace ExcelShSy.Core.Services.Operations
             var discountToCol = headers.TryGetValue(ColumnConstants.DiscountTo, out var dt) ? dt : 0;
             var worksheet = page.ExcelWorksheet;
 
-            if (articleCol == 0) return;
-
+            if (articleCol == 0)
+            {
+                _logger.LogWarning($"{page.PageName} not found article");
+                return;
+            }
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
                 var article = worksheet.GetArticle(row, articleCol);
-                if (string.IsNullOrEmpty(article)) continue;
+                if (string.IsNullOrEmpty(article))
+                {
+                    _logger.LogWarning($"In {row} row empty atricle");
+                    continue;
+                }
 
                 SetProductData(article, priceCol, quantityCol, availabilityCol, discountCol, discountFromCol, discountToCol, row, worksheet);
             }
@@ -72,15 +80,17 @@ namespace ExcelShSy.Core.Services.Operations
                 var val = ws.GetDiscount(row, Discount);
                 if (val != null) _dataProduct.AddProductDiscount(article, (decimal)val);
             }
+
             if (GlobalSettings.DiscountDate && DiscountFrom > 0)
             {
                 var val = ws.GetDate(row, DiscountFrom);
-                if (val != null) if (val > GlobalSettings.MinDateActually ) _dataProduct.AddProductDiscountFrom(article, (DateOnly)val);
+                if (val != null) if (val > GlobalSettings.MinDateActually) _dataProduct.AddProductDiscountFrom(article, (DateOnly)val);
             }
+
             if (GlobalSettings.DiscountDate && DiscountTo > 0)
             {
                 var val = ws.GetDate(row, DiscountTo);
-                if (val != null) if (val > GlobalSettings.DiscountStartDate) _dataProduct.AddProductDiscountTo(article, (DateOnly)val);
+                if (val != null) if (val > GlobalSettings.MinDateActually) _dataProduct.AddProductDiscountTo(article, (DateOnly)val);
             }
         }
     }

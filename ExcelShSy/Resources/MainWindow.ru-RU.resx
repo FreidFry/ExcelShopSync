@@ -120,6 +120,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
+  <data name="ExecuteTasks" xml:space="preserve">
+    <value>Выполнить</value>
+  </data>
   <data name="GetSourceFile" xml:space="preserve">
     <value>Выбрать файл для изменений</value>
   </data>
@@ -128,5 +131,29 @@
   </data>
   <data name="SaveButton" xml:space="preserve">
     <value>Сохранить</value>
+  </data>
+  <data name="DiscountDate" xml:space="preserve">
+    <value>Перенести дату скидки</value>
+  </data>
+  <data name="IncreasePricePercent" xml:space="preserve">
+    <value>Увеличить цену (фальшивая скидка)</value>
+  </data>
+  <data name="RoundUp" xml:space="preserve">
+    <value>Округлить цены</value>
+  </data>
+  <data name="SyncAvailability" xml:space="preserve">
+    <value>Перенести наличие</value>
+  </data>
+  <data name="SyncDiscount" xml:space="preserve">
+    <value>Перенести скидку</value>
+  </data>
+  <data name="SyncPrice" xml:space="preserve">
+    <value>Перенести цены</value>
+  </data>
+  <data name="SyncQuantity" xml:space="preserve">
+    <value>Перенести количество</value>
+  </data>
+  <data name="EditFiles" xml:space="preserve">
+    <value>Изменить...</value>
   </data>
 </root>

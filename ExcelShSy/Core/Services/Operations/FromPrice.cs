@@ -4,6 +4,7 @@ using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
+using ExcelShSy.Core.Services.Logger;
 using ExcelShSy.Infrastracture.Persistance.DefaultValues;
 using ExcelShSy.Properties;
 
@@ -13,7 +14,7 @@ namespace ExcelShSy.Core.Services.Operations
 {
     public class FromPrice : GetProductFromBase, IFromPrice
     {
-        public FromPrice(IDataProduct _dataProduct, IFileStorage _fileStorage) : base(_dataProduct, _fileStorage)
+        public FromPrice(IDataProduct _dataProduct, IFileStorage _fileStorage, ILogger _logger) : base(_dataProduct, _fileStorage, _logger)
         { }
         protected override void ProcessPage(IExcelPage page)
         {
@@ -46,7 +47,11 @@ namespace ExcelShSy.Core.Services.Operations
                 quantityComp = quantityComp.GetColumnFromRange(range, ColumnConstants.CompectQuantity);
                 availabilityComp = availabilityComp.GetColumnFromRange(range, ColumnConstants.CompectAvailability);
 
-                if (isHeader) continue;
+                if (isHeader)
+                {
+                    _logger.LogInfo($"In {row} row headers");
+                    continue;
+                }
                 if (article != 0)
                 {
                     var current = worksheet.GetArticle(row, article);
