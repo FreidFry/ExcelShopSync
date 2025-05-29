@@ -41,6 +41,8 @@ namespace ExcelShSy.Core.AppConfigs
             services.AddScoped<IExcelFileFactory, ExcelFileFactory>();
             services.AddScoped<IExcelPageFactory, ExcelPageFactory>();
             services.AddScoped<ITaskFactory, MyTaskFactory>();
+            services.AddScoped<IEditLoadFilesWindowFactory, EditLoadFilesWindowFactory>();
+
 
             //Executes
             services.AddScoped<IExecuteOperation, SyncPrice>();
@@ -61,6 +63,7 @@ namespace ExcelShSy.Core.AppConfigs
             //UI
             services.AddSingleton<ILocalizationService, LocalizationService>();
             services.AddSingleton<LocalizationBinding>();
+            services.AddTransient<EditLoadFilesWindow>();
             services.AddTransient<MainWindow>();
             return services;
         }

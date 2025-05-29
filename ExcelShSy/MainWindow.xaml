@@ -28,12 +28,12 @@
             <!-- getTarget -->
             <Button Grid.Row="0" Grid.Column="0" Margin="10 0" Content="{Binding [GetTargetFile], Source={StaticResource Loc}}" Padding="5,0" Height="20" Click="GetTargetFile_Click"/>
             <TextBlock x:Name="GetTargetFileLable" Text="Last file" Grid.Row="0" Grid.Column="1" Margin="0 0 10 0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="250" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
-            <Button Grid.Row="0" Grid.Column="2" Content="{Binding [EditFiles], Source={StaticResource Loc}}" HorizontalAlignment="Left"  Padding="5,0" VerticalAlignment="Center"/>
+            <Button Grid.Row="0" Grid.Column="2" Content="{Binding [EditFiles], Source={StaticResource Loc}}" HorizontalAlignment="Left"  Padding="5,0" VerticalAlignment="Center" Click="ShowEditLoadFiles_Click" Tag="Target"/>
 
             <!-- getSource -->
             <Button Grid.Row="1" Grid.Column="0" Margin="10 0" Content="{Binding [GetSourceFile], Source={StaticResource Loc}}" Padding="5,0" Height="20" Click="GetSourceFile_Click"/>
             <TextBlock x:Name="GetSourceFileLable" Text="Last file" Grid.Row="1" Grid.Column="1" Margin="0 0 10 0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="250" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
-            <Button Grid.Row="1" Grid.Column="2" Content="{Binding [EditFiles], Source={StaticResource Loc}}" HorizontalAlignment="Left"  Padding="5,0" VerticalAlignment="Center"/>
+            <Button Grid.Row="1" Grid.Column="2" Content="{Binding [EditFiles], Source={StaticResource Loc}}" HorizontalAlignment="Left"  Padding="5,0" VerticalAlignment="Center" Click="ShowEditLoadFiles_Click" Tag="Source"/>
 
             <Grid Grid.Row="2" Grid.ColumnSpan="4"  Margin="0,63,0,0" x:Name="TaskGrid">
                 <Grid.RowDefinitions>

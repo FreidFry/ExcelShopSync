@@ -1,4 +1,5 @@
-﻿using ExcelShSy.Core.Interfaces.Common;
+﻿using ExcelShSy.Core.Factorys;
+using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Core.Services.Logger;
@@ -18,13 +19,17 @@ namespace ExcelShSy
         private readonly ITaskFactory _taskFactory;
         private readonly ILogger _logger;
 
-        public MainWindow(ILocalizationService localizationService, IFileManager fileManager, ITaskFactory taskFactory, ILogger logger)
+        private readonly IEditLoadFilesWindowFactory _editLoadFilesWindowFactory;
+
+        public MainWindow(ILocalizationService localizationService, IFileManager fileManager, ITaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory)
         {
             InitializeComponent();
             _localizationService = localizationService;
             _fileManager = fileManager;
             _taskFactory = taskFactory;
             _logger = logger;
+
+            _editLoadFilesWindowFactory = editLoadFilesWindowFactory;
         }
 
         private void GetTargetFile_Click(object sender, RoutedEventArgs e)
@@ -96,6 +101,18 @@ namespace ExcelShSy
         {
             string text = fullText + newInput;
             return decimal.TryParse(text, out _);
+        }
+
+        private void ShowEditLoadFiles_Click(object sender, EventArgs e)
+        {
+            var btn = sender as Button;
+            var propertyName = btn?.Tag?.ToString();
+
+            if (!string.IsNullOrEmpty(propertyName))
+            {
+                var window = _editLoadFilesWindowFactory.Create(propertyName);
+                window.Show();
+            }
         }
     }
 }
