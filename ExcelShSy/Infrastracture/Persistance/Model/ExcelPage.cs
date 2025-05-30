@@ -1,4 +1,5 @@
-﻿using ExcelShSy.Core.Interfaces.Excel;
+﻿using ExcelShSy.Core.Extensions;
+using ExcelShSy.Core.Interfaces.Excel;
 using OfficeOpenXml;
 using System.Windows;
 
@@ -21,7 +22,7 @@ namespace ExcelShSy.Infrastracture.Persistance.Model
         public bool ShowInfo()
         {
             string response;
-            if (Headers != null)
+            if (!Headers.IsNullOrEmpty())
                 response = $"{PageName}\n\n{string.Join("\n", Headers.Select(kv => $"{kv.Key}: {kv.Value}"))}";
             else
                 response = $"{PageName}\n\nHeaders is null.";

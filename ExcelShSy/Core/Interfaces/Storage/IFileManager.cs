@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using ExcelShSy.Core.Interfaces.Excel;
+
+using System.Windows.Controls;
 
 namespace ExcelShSy.Core.Interfaces.Storage
 {
@@ -17,5 +19,7 @@ namespace ExcelShSy.Core.Interfaces.Storage
 
         void RemoveSourceFilesPath(string path);
         void RemoveTargetFilesPath(string path);
+
+        IExcelFile GetFileInfo(string path);
     }
 }

@@ -33,10 +33,11 @@ namespace ExcelShSy.Core.Extensions
                 var stringValue = worksheet.GetString(row, needColumn);
                 if (string.IsNullOrEmpty(stringValue)) return null;
 
-                decimal.TryParse(stringValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var value);
-                var decimalValue = RoundDecimal(value, 2);
-                if (GlobalSettings.IsRound) decimalValue = RoundDecimal(decimalValue, 0);
-                return decimalValue;
+                var normalizedValue = stringValue.Replace(',', '.');
+                decimal.TryParse(normalizedValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var value);
+                
+                if (GlobalSettings.IsRound) return RoundDecimal(value, 0);
+                else return RoundDecimal(value, 2);
             }
             catch
             {
@@ -51,9 +52,10 @@ namespace ExcelShSy.Core.Extensions
                 var stringValue = worksheet.GetString(row, needColumn);
                 if (string.IsNullOrEmpty(stringValue)) return null;
 
-                decimal.TryParse(stringValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var value);
-                var decimalValue = RoundDecimal(value, 2);
-                return decimalValue;
+                var normalizedValue = stringValue.Replace(',', '.');
+                decimal.TryParse(normalizedValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var value);
+
+                return RoundDecimal(value, 2);
             }
             catch
             {
@@ -67,10 +69,9 @@ namespace ExcelShSy.Core.Extensions
             {
                 var stringValue = worksheet.GetString(row, needColumn);
                 if (string.IsNullOrEmpty(stringValue)) return null;
-
-                decimal.TryParse(stringValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var value);
-                var decimalValue = RoundDecimal(value, 2);
-                return decimalValue;
+                var normalizedValue = stringValue.Replace(',', '.');
+                decimal.TryParse(normalizedValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var value);
+                return RoundDecimal(value, 2);
             }
             catch
             {

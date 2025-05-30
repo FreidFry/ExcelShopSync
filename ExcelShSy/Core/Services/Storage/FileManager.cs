@@ -36,6 +36,11 @@ namespace ExcelShSy.Core.Services.Storage
             _getProductManager = getProductManager;
         }
 
+        public IExcelFile GetFileInfo(string path)
+        {
+            return _fileProvider.GetFiles([path])[0];
+        }
+
         public void AddTargetFiles()
         {
             var files = _fileProvider.GetFiles(TargetPath);

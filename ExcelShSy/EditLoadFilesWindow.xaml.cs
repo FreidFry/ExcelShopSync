@@ -16,6 +16,7 @@ namespace ExcelShSy
         public ObservableCollection<string> TemperaryFile { get; set; } = [];
         private readonly IFileManager _fileManager;
         private readonly IFileProvider _fileProvider;
+        private bool _firstOpen = true;
 
         public EditLoadFilesWindow(IFileManager fileManager, IFileProvider fileProvider, string selectedTab)
         {
@@ -23,18 +24,16 @@ namespace ExcelShSy
             _fileManager = fileManager;
             _fileProvider = fileProvider;
 
+            _firstOpen = true;
             DataContext = this;
-
             if (selectedTab != null)
-                CallMethodForTab(selectedTab);
+                CallMethodForTabFirstOpen(selectedTab);
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             if (sender is FrameworkElement fe && fe.DataContext is string item)
-            {
                 TemperaryFile.Remove(item);
-            }
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -45,14 +44,10 @@ namespace ExcelShSy
                 var selected = tabControl.SelectedItem as TabItem;
 
                 CallMethodForTab(selected);
-                FilesControl.SelectedItem = selected;
             }
         }
 
-        private void CallMethodForTab(TabItem tab)
-        {
-            CallMethodForTab(tab.Name);
-        }
+        private void CallMethodForTab(TabItem tab) => CallMethodForTab(tab.Name);
 
         private void CallMethodForTab(string name)
         {
@@ -60,13 +55,38 @@ namespace ExcelShSy
             {
                 case "Target":
                     MethodForTarget();
-                    FilesControl.SelectedItem = Target;
                     break;
                 case "Source":
                     MethodForSource();
-                    FilesControl.SelectedItem = Source;
                     break;
             }
+        }
+
+        private void CallMethodForTabFirstOpen(string name)
+        {
+            switch (name)
+            {
+                case "Target":
+                    AddFromTarget();
+                    break;
+                case "Source":
+                    AddFromSource();
+                    break;
+            }
+        }
+
+        private void AddFromTarget()
+        {
+            TemperaryFile.Clear();
+            foreach (var item in _fileManager.TargetPath)
+                TemperaryFile.Add(item);
+        }
+
+        private void AddFromSource()
+        {
+            TemperaryFile.Clear();
+            foreach (var item in _fileManager.SourcePath)
+                TemperaryFile.Add(item);
         }
 
         private void MethodForTarget()
@@ -74,7 +94,7 @@ namespace ExcelShSy
             if (!TemperaryFile.IsNullOrEmpty())
             {
                 var files = TemperaryFile.ToList();
-                if (!_fileManager.SourcePath.SequenceEqual(files))
+                if (!_fileManager.SourcePath.SequenceEqual(files) && !_firstOpen)
                 {
                     var result = MessageBox.Show("Save changes?", "Save changes", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (result == MessageBoxResult.Yes)
@@ -82,14 +102,10 @@ namespace ExcelShSy
                         _fileManager.SourcePath.Clear();
                         _fileManager.SourcePath.AddRange(files);
                     }
-                    TemperaryFile.Clear();
-                    return;
                 }
             }
-
-            TemperaryFile.Clear();
-            foreach (var item in _fileManager.TargetPath)
-                TemperaryFile.Add(item);
+            _firstOpen = false;
+            AddFromTarget();
         }
 
         private void MethodForSource()
@@ -97,7 +113,7 @@ namespace ExcelShSy
             if (!TemperaryFile.IsNullOrEmpty())
             {
                 var files = TemperaryFile.ToList();
-                if (!_fileManager.TargetPath.SequenceEqual(files))
+                if (!_fileManager.TargetPath.SequenceEqual(files) && !_firstOpen)
                 {
                     var result = MessageBox.Show("Save changes?", "Save changes", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (result == MessageBoxResult.Yes)
@@ -105,21 +121,26 @@ namespace ExcelShSy
                         _fileManager.TargetPath.Clear();
                         _fileManager.TargetPath.AddRange(files);
                     }
-                    TemperaryFile.Clear();
-                    return;
                 }
             }
-
-            TemperaryFile.Clear();
-            foreach (var item in _fileManager.SourcePath)
-                TemperaryFile.Add(item);
+            _firstOpen = false;
+            AddFromSource();
         }
 
         private void AddFiles_Click(object sender, EventArgs e)
         {
             var files = _fileProvider.GetPaths();
             if (files.IsNullOrEmpty()) return;
-            foreach (var file in files) TemperaryFile.Add(file);
+            foreach (var file in files) if (!TemperaryFile.Contains(file)) TemperaryFile.Add(file);
+        }
+
+        private void ShowInfoFile_Click(object sender, EventArgs e)
+        {
+            if (sender is FrameworkElement fe && fe.DataContext is string item)
+            {
+                var file = _fileManager.GetFileInfo(item);
+                file.ShowInfo();
+            }
         }
     }
 }
