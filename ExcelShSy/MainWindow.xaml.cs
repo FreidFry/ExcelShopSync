@@ -20,8 +20,9 @@ namespace ExcelShSy
         private readonly ILogger _logger;
 
         private readonly IEditLoadFilesWindowFactory _editLoadFilesWindowFactory;
+        private readonly ISettingWindowFactory _settingWindowFactory;
 
-        public MainWindow(ILocalizationService localizationService, IFileManager fileManager, ITaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory)
+        public MainWindow(ILocalizationService localizationService, IFileManager fileManager, ITaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory)
         {
             InitializeComponent();
             _localizationService = localizationService;
@@ -30,6 +31,7 @@ namespace ExcelShSy
             _logger = logger;
 
             _editLoadFilesWindowFactory = editLoadFilesWindowFactory;
+            _settingWindowFactory = settingWindowFactory;
         }
 
         private void GetTargetFile_Click(object sender, RoutedEventArgs e)
@@ -113,6 +115,12 @@ namespace ExcelShSy
                 var window = _editLoadFilesWindowFactory.Create(propertyName);
                 window.Show();
             }
+        }
+
+        private void SettingsWindowOpen_Click(object sender, EventArgs e)
+        {
+            var window = _settingWindowFactory.Create();
+            window.Show();
         }
     }
 }

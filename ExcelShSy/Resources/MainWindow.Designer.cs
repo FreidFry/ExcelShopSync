@@ -142,6 +142,15 @@ namespace ExcelShSy.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string Setting {
+            get {
+                return ResourceManager.GetString("Setting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Migrate availability.
         /// </summary>
         internal static string SyncAvailability {

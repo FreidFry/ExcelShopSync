@@ -124,10 +124,10 @@
     <value>Выполнить</value>
   </data>
   <data name="GetSourceFile" xml:space="preserve">
-    <value>Выбрать файл для изменений</value>
+    <value>Выбрать файл источник</value>
   </data>
   <data name="GetTargetFile" xml:space="preserve">
-    <value>Выбрать файл источник</value>
+    <value>Выбрать файл для изменений</value>
   </data>
   <data name="SaveButton" xml:space="preserve">
     <value>Сохранить</value>
@@ -155,5 +155,8 @@
   </data>
   <data name="EditFiles" xml:space="preserve">
     <value>Изменить...</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Настройки</value>
   </data>
 </root>

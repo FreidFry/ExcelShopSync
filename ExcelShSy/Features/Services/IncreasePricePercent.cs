@@ -46,7 +46,7 @@ namespace ExcelShSy.Features.Services
             else
             {
                 AssistanceExtensions.Warning(GlobalSettings.priceIncreasePercentage >= 200, $"Are you sure you want a {GlobalSettings.priceIncreasePercentage}% increase?");
-                priceIncrease /= 100;
+                priceIncrease = GlobalSettings.priceIncreasePercentage / 100;
             }
 
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())

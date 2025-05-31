@@ -2,7 +2,6 @@
 using ExcelShSy.Core.Interfaces.Storage;
 
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -38,16 +37,13 @@ namespace ExcelShSy
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.Source is TabControl)
+            if (e.Source is TabControl tabControl)
             {
-                var tabControl = sender as TabControl;
-                var selected = tabControl.SelectedItem as TabItem;
-
-                CallMethodForTab(selected);
+                var tabItem = tabControl.SelectedItem as TabItem;
+                if (tabItem != null)
+                    CallMethodForTab(tabItem.Name);
             }
         }
-
-        private void CallMethodForTab(TabItem tab) => CallMethodForTab(tab.Name);
 
         private void CallMethodForTab(string name)
         {
@@ -67,10 +63,10 @@ namespace ExcelShSy
             switch (name)
             {
                 case "Target":
-                    AddFromTarget();
+                    FilesControl.SelectedItem = Target;
                     break;
                 case "Source":
-                    AddFromSource();
+                    FilesControl.SelectedItem = Source;
                     break;
             }
         }

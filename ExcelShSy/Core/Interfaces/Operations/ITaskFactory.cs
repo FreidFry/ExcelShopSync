@@ -1,11 +1,12 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace ExcelShSy.Core.Interfaces.Operations
 {
     public interface ITaskFactory
     {
         IExecuteOperation? CreateTask(string taskName);
-        void RelizeExecute(Grid TaskGrid);
-        bool Validate(Grid TaskGrid);
+        void RelizeExecute(DependencyObject parent);
+        bool Validate(DependencyObject parent);
     }
 }

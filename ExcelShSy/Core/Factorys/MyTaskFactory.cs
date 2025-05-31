@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ExcelShSy.Core.Factorys
 {
@@ -45,10 +46,10 @@ namespace ExcelShSy.Core.Factorys
             }
         }
 
-        public void RelizeExecute(Grid TaskGrid)
+        public void RelizeExecute(DependencyObject parent)
         {
             List<IExecuteOperation> tasksToRun = [];
-            tasksToRun.GetExecuteTask(TaskGrid, this);
+            tasksToRun.GetExecuteTask(parent, this);
             _logger.LogInfo("Executes: " + string.Join(", ", tasksToRun));
             var _ = CreateTask("SavePackages");
             if (_ != null)
@@ -64,12 +65,18 @@ namespace ExcelShSy.Core.Factorys
             MessageBox.Show("Finish");
         }
 
-        public bool Validate(Grid TaskGrid)
+        public bool Validate(DependencyObject parent)
         {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
 
-            foreach (var child in TaskGrid.Children)
                 if (child is CheckBox cb && cb.IsChecked == true)
                     return true;
+
+                if (Validate(child))
+                    return true;
+            }
             return false;
         }
     }

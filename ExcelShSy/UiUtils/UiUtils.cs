@@ -1,34 +1,34 @@
 ﻿using ExcelShSy.Core.Factorys;
 using ExcelShSy.Core.Interfaces.Operations;
-using ExcelShSy.Core.Services.Logger;
 
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ExcelShSy.UiUtils
 {
     public static class UiUtils
     {
-        public static void GetExecuteTask(this List<IExecuteOperation> tasksToRun, Grid TaskGrid, MyTaskFactory taskFactory)
+        public static void GetExecuteTask(this List<IExecuteOperation> tasksToRun, DependencyObject parent, MyTaskFactory taskFactory)
         {
-            foreach (var child in TaskGrid.Children)
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
             {
-                if (child is CheckBox cb && cb.IsChecked == true)
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child is CheckBox cb && cb.IsChecked == true && cb.Tag is string taskName)
                 {
-                    string? taskName = cb.Tag?.ToString();
-                    if (!string.IsNullOrEmpty(taskName))
-                        try
-                        {
-                            var task = taskFactory.CreateTask(taskName);
-                            if (task != null)
-                            {
-                                tasksToRun.Add(task);
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            Console.WriteLine();
-                        }
+                    try
+                    {
+                        var task = taskFactory.CreateTask(taskName);
+                        if (task != null)
+                            tasksToRun.Add(task);
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
+
+                tasksToRun.GetExecuteTask(child, taskFactory);
             }
         }
     }
