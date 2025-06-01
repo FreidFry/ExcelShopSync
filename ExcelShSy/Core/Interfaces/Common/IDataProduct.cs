@@ -16,7 +16,7 @@
         void AddProductDiscount(string productName, decimal discount);
         void AddProductDiscountFrom(string productName, DateOnly discount);
         void AddProductDiscountTo(string productName, DateOnly discount);
-        void ClearAll();
+        void ClearData();
 
 
     }

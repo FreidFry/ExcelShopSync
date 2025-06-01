@@ -1,7 +1,6 @@
 ﻿using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Storage;
-using ExcelShSy.Core.Services.Logger;
 
 namespace ExcelShSy.Core.Abstracts
 {

@@ -5,45 +5,19 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
+	  <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="8.0.5" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
     <PackageReference Include="Scrutor" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\EditLoadFilesWindow.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>EditLoadFilesWindow.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\MainWindow.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>MainWindow.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Buttons.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Buttons.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\EditLoadFilesWindow.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>EditLoadFilesWindow.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\MainWindow.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>MainWindow.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
+    <None Update="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
     <None Update="appSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

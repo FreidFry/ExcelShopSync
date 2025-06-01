@@ -1,10 +1,9 @@
-﻿using ExcelShSy.Infrastracture.Persistance.Model;
-using OfficeOpenXml;
+﻿using OfficeOpenXml;
 
 namespace ExcelShSy.Core.Interfaces.Excel
 {
     public interface IExcelPageFactory
     {
-        ExcelPage Create(ExcelWorksheet worksheet);
+        IExcelPage Create(ExcelWorksheet worksheet);
     }
 }

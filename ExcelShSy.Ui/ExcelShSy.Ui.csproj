@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\ExcelShSy.Infrastructure\ExcelShSy.Infrastructure.csproj" />
+		<ProjectReference Include="..\ExcelShSy\ExcelShSy.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Resources\EditLoadFilesWindow.resx">
+			<LastGenOutput>EditLoadFilesWindow.Designer.cs</LastGenOutput>
+			<Generator>ResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\MainWindow.resx">
+			<LastGenOutput>MainWindow.Designer.cs</LastGenOutput>
+			<Generator>ResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+	</ItemGroup>
+
+</Project>
