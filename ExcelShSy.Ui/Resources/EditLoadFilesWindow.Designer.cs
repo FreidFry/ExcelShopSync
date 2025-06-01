@@ -22,7 +22,7 @@ namespace ExcelShSy.Ui.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class EditLoadFilesWindow {
+    public class EditLoadFilesWindow {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace ExcelShSy.Ui.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExcelShSy.Ui.Resources.EditLoadFilesWindow", typeof(EditLoadFilesWindow).Assembly);
@@ -51,7 +51,7 @@ namespace ExcelShSy.Ui.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Add new file.
         /// </summary>
-        internal static string AddFile {
+        public static string AddFile {
             get {
                 return ResourceManager.GetString("AddFile", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
-        internal static string Delete {
+        public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to File name.
         /// </summary>
-        internal static string File {
+        public static string File {
             get {
                 return ResourceManager.GetString("File", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sources files.
         /// </summary>
-        internal static string Sourcefiles {
+        public static string Sourcefiles {
             get {
                 return ResourceManager.GetString("Sourcefiles", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Target files.
         /// </summary>
-        internal static string TargetFiles {
+        public static string TargetFiles {
             get {
                 return ResourceManager.GetString("TargetFiles", resourceCulture);
             }

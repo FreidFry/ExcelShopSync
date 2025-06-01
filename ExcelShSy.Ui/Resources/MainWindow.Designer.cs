@@ -22,7 +22,7 @@ namespace ExcelShSy.Ui.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class MainWindow {
+    public class MainWindow {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace ExcelShSy.Ui.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExcelShSy.Ui.Resources.MainWindow", typeof(MainWindow).Assembly);
@@ -51,7 +51,7 @@ namespace ExcelShSy.Ui.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        internal static string Cancel {
+        public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Migrate discount date.
         /// </summary>
-        internal static string DiscountDate {
+        public static string DiscountDate {
             get {
                 return ResourceManager.GetString("DiscountDate", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Edit....
         /// </summary>
-        internal static string EditFiles {
+        public static string EditFiles {
             get {
                 return ResourceManager.GetString("EditFiles", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Execute.
         /// </summary>
-        internal static string ExecuteTasks {
+        public static string ExecuteTasks {
             get {
                 return ResourceManager.GetString("ExecuteTasks", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Get source file.
         /// </summary>
-        internal static string GetSourceFile {
+        public static string GetSourceFile {
             get {
                 return ResourceManager.GetString("GetSourceFile", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Get target file.
         /// </summary>
-        internal static string GetTargetFile {
+        public static string GetTargetFile {
             get {
                 return ResourceManager.GetString("GetTargetFile", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Increase price (fake discount).
         /// </summary>
-        internal static string IncreasePricePercent {
+        public static string IncreasePricePercent {
             get {
                 return ResourceManager.GetString("IncreasePricePercent", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Round up prices.
         /// </summary>
-        internal static string RoundUp {
+        public static string RoundUp {
             get {
                 return ResourceManager.GetString("RoundUp", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
-        internal static string SaveButton {
+        public static string SaveButton {
             get {
                 return ResourceManager.GetString("SaveButton", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
-        internal static string Setting {
+        public static string Setting {
             get {
                 return ResourceManager.GetString("Setting", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Migrate availability.
         /// </summary>
-        internal static string SyncAvailability {
+        public static string SyncAvailability {
             get {
                 return ResourceManager.GetString("SyncAvailability", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Migrate discount.
         /// </summary>
-        internal static string SyncDiscount {
+        public static string SyncDiscount {
             get {
                 return ResourceManager.GetString("SyncDiscount", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Migrate prices.
         /// </summary>
-        internal static string SyncPrice {
+        public static string SyncPrice {
             get {
                 return ResourceManager.GetString("SyncPrice", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace ExcelShSy.Ui.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Migrate quantity.
         /// </summary>
-        internal static string SyncQuantity {
+        public static string SyncQuantity {
             get {
                 return ResourceManager.GetString("SyncQuantity", resourceCulture);
             }
