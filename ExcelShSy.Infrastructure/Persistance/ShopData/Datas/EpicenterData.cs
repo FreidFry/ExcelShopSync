@@ -48,5 +48,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
             { OnOrder, "в наявності" },
             { ReadyToGo, "в наявності" },
         };
+
+        public string DataFormat => "";
     }
 }

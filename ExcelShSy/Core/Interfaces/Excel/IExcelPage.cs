@@ -10,7 +10,7 @@ namespace ExcelShSy.Core.Interfaces.Excel
         Dictionary<string, int>? UndefinedHeaders { get; set; }
         Dictionary<string, int>? Headers { get; set; }
 
-        bool ShowInfo();
+        string ShowInfo();
 
     }
 }

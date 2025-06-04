@@ -77,5 +77,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
             { OutOfStock, "Не в наявності" },
             { ReadyToGo, "в наявності" }
         };
+
+        public string DataFormat => "dd-MM-yyyy HH:mm:ss";
     }
 }

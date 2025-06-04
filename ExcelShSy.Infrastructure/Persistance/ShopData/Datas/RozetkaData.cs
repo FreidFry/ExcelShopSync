@@ -53,5 +53,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
             { OnOrder, "Под заказ" },
             { ReadyToGo, "Готов к отправке" }
         };
+
+        public string DataFormat => "";
     }
 }

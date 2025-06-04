@@ -3,6 +3,7 @@
 using OfficeOpenXml;
 
 using System.IO;
+using System.Windows;
 
 namespace ExcelShSy.Infrastructure.Persistance.Model
 {
@@ -24,8 +25,14 @@ namespace ExcelShSy.Infrastructure.Persistance.Model
 
         public void ShowInfo()
         {
-            foreach (var page in Pages)
-                if (page.ShowInfo() != true) return; //if press ok => continue, else => stop
+            for (int page = 0; page < Pages.Count; page++)
+            {
+                var response = Pages[page].ShowInfo();
+                var s = MessageBox.Show(response, $"{FileName} ({ShopName}) {page+1}/{Pages.Count}", MessageBoxButton.OKCancel);
+                if (s == MessageBoxResult.OK) continue; //show next message
+
+                return; //stop show message
+            }
         }
     }
 }

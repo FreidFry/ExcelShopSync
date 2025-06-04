@@ -69,5 +69,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
             { OutOfStock, "-" },
             { ReadyToGo, "!" }
         };
+
+        public string DataFormat => "";
     }
 }

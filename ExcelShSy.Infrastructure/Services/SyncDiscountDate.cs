@@ -2,6 +2,7 @@
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
+using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Infrastructure.Persistance.DefaultValues;
@@ -14,18 +15,32 @@ namespace ExcelShSy.Infrastructure.Services
     {
         private readonly IDataProduct _dataProduct;
         private readonly IFileStorage _fileStorage;
+        private readonly IShopMappings _shopMapping;
         private readonly ILogger _logger;
+        private string _shopFormat;
 
-        public SyncDiscountDate(IDataProduct dataProduct, IFileStorage fileStorage, ILogger logger)
+        public SyncDiscountDate(IDataProduct dataProduct, IFileStorage fileStorage, ILogger logger, IShopMappings shopMapping)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
             _logger = logger;
+
+            _shopMapping = shopMapping;
         }
 
         public void Execute()
         {
-            foreach (var file in _fileStorage.Target) ProcessFile(file);
+            foreach (var file in _fileStorage.Target)
+            {
+                _shopFormat = SetDataFormat(file.ShopName);
+                ProcessFile(file);
+            }
+        }
+
+        string SetDataFormat(string shopName)
+        {
+            var shopTemplate = _shopMapping.GetShop(shopName);
+            return shopTemplate.DataFormat;
         }
 
         void ProcessFile(IExcelFile file)
@@ -50,12 +65,12 @@ namespace ExcelShSy.Infrastructure.Services
 
                 if (article == null) continue;
                 if (_dataProduct.DiscountFrom.TryGetValue(article, out DateOnly valueFrom))
-                    worksheet.WriteCell(row, DataStart.neededColumn, valueFrom);
+                    worksheet.WriteCell(row, DataStart.neededColumn, ConvertDate(valueFrom));
                 if (_dataProduct.DiscountTo.TryGetValue(article, out DateOnly valueTo))
-                    worksheet.WriteCell(row, DataStart.neededColumn, valueTo);
+                    worksheet.WriteCell(row, DataStart.neededColumn, ConvertDate(valueTo));
                 else productTo.Add(article);
 
-                if(valueFrom > GlobalSettings.MinDateActually && valueFrom < valueTo)
+                if (valueFrom > GlobalSettings.MinDateActually && valueFrom < valueTo)
                     ErrorDate.Add(article);
             }
 
@@ -65,6 +80,11 @@ namespace ExcelShSy.Infrastructure.Services
                 .ToList();
 
             _logger.Log($"Products where errors {string.Join(",", products)}");
+        }
+
+        string ConvertDate(DateOnly date)
+        {
+            return date.ToString(_shopFormat);
         }
     }
 }

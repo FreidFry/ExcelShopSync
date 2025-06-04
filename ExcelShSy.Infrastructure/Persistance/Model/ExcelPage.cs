@@ -3,8 +3,6 @@ using ExcelShSy.Infrastructure.Extensions;
 
 using OfficeOpenXml;
 
-using System.Windows;
-
 namespace ExcelShSy.Infrastructure.Persistance.Model
 {
     public class ExcelPage : IExcelPage
@@ -21,17 +19,14 @@ namespace ExcelShSy.Infrastructure.Persistance.Model
             ExcelWorksheet = worksheet;
         }
 
-        public bool ShowInfo()
+        public string ShowInfo()
         {
             string response;
             if (!Headers.IsNullOrEmpty())
                 response = $"{PageName}\n\n{string.Join("\n", Headers.Select(kv => $"{kv.Key}: {kv.Value}"))}";
             else
                 response = $"{PageName}\n\nHeaders is null.";
-            var s = MessageBox.Show(response, "kek", MessageBoxButton.OKCancel);
-            if (s == MessageBoxResult.OK) return true; //show next message
-
-            return false; //stop show message
+            return response;
         }
     }
 }
