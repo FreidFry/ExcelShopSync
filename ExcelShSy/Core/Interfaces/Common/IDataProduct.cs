@@ -3,6 +3,7 @@
     public interface IDataProduct
     {
         Dictionary<string, decimal> Price { get; set; }
+        List<string> Articles { get; set; }
         Dictionary<string, decimal> Quantity { get; set; }
         Dictionary<string, string> Availability { get; set; }
         Dictionary<string, decimal> Discount { get; set; }
@@ -16,6 +17,7 @@
         void AddProductDiscount(string productName, decimal discount);
         void AddProductDiscountFrom(string productName, DateOnly discount);
         void AddProductDiscountTo(string productName, DateOnly discount);
+        void AddProductArticle(string article);
         void ClearData();
 
 

@@ -4,6 +4,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
 {
     public class DataProduct : IDataProduct
     {
+        public List<string> Articles { get; set; } = [];
         public Dictionary<string, decimal> Price { get; set; } = [];
         public Dictionary<string, decimal> Quantity { get; set; } = [];
         public Dictionary<string, string> Availability { get; set; } = [];
@@ -96,6 +97,11 @@ namespace ExcelShSy.Infrastructure.Services.Storage
                 result[strings[0]].Add(strings[1]);
             }
             return result;
+        }
+
+        public void AddProductArticle(string article)
+        {
+            if (!Articles.Contains(article)) Articles.Add(article);
         }
     }
 }

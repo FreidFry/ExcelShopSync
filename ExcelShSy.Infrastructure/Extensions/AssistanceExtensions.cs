@@ -19,6 +19,13 @@ namespace ExcelShSy.Infrastructure.Extensions
             return (page.Headers[ColumnConstants.Article], page.Headers[column]);
         }
 
+        public static int InitialHeadersTuple(this IExcelPage page)
+        {
+            if (page?.Headers == null || page.Headers.IsNullOrEmpty()) return 0;
+
+            return page.Headers[ColumnConstants.Article];
+        }
+
         public static bool AnyIsNullOrEmpty([NotNullWhen(false)] this (int, int) tuple) => tuple.Item1 is 0 || tuple.Item2 is 0;
 
         public static void WriteCell(this ExcelWorksheet worksheet, int row, int column, string value)

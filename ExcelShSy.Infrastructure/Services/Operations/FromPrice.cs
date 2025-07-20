@@ -70,6 +70,8 @@ namespace ExcelShSy.Infrastructure.Services.Operations
 
         void SetProductData(string article, int priceCol, int qtyCol, int availCol, int row, ExcelWorksheet ws)
         {
+            _dataProduct.AddProductArticle(article);
+
             if (GlobalSettings.SyncPrice && priceCol > 0)
             {
                 var val = ws.GetDecimal(row, priceCol);

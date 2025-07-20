@@ -10,10 +10,10 @@ namespace ExcelShSy.Infrastructure.Services.Operations
         private readonly IFileStorage _fileStorage;
 
         private readonly IFromPrice _fromPrice;
-        private readonly IFromSource _fromSources;
+        private readonly IFromMarket _fromSources;
 
 
-        public GetProductFromSource(IFileStorage fileStorage, IFromPrice fromPrice, IFromSource fromSources)
+        public GetProductFromSource(IFileStorage fileStorage, IFromPrice fromPrice, IFromMarket fromSources)
         {
             _fileStorage = fileStorage;
 

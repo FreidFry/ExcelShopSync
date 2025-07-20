@@ -37,7 +37,7 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddScoped<ILanguageDetector, LanguageDetector>();
             services.AddScoped<IGetProductManager, GetProductFromSource>();
             services.AddScoped<IFromPrice, FromPrice>();
-            services.AddScoped<IFromSource, FromSource>();
+            services.AddScoped<IFromMarket, FromMarket>();
 
             //factory
             services.AddScoped<IExcelFileFactory, ExcelFileFactory>();
@@ -62,6 +62,8 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddScoped<IncreasePricePercent>();
             services.AddScoped<IExecuteOperation, SavePackages>();
             services.AddScoped<SavePackages>();
+            services.AddScoped<IExecuteOperation, FindMissingProducts>();
+            services.AddScoped<FindMissingProducts>();
 
             //UI
             services.AddSingleton<ILocalizationService, LocalizationService>();
