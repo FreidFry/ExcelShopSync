@@ -1,6 +1,6 @@
 ﻿namespace ExcelShSy.Core.Interfaces.Operations
 {
-    public interface IFromSource : IGetProductFromSource
+    public interface IFromMarket : IGetProductFromSource
     {
     }
 }

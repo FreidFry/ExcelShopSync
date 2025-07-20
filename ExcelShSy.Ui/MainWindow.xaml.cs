@@ -4,7 +4,6 @@ using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Properties;
 using ExcelShSy.Ui.Interfaces;
 
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -65,6 +64,7 @@ namespace ExcelShSy.Ui
                 prop?.SetValue(null, value);
             }
         }
+
         private void ChangeIncreasePercent_TextChanged(object sender, TextChangedEventArgs e)
         {
             decimal.TryParse(IncreasePercentTextBox.Text, out decimal percents);

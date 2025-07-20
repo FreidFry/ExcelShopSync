@@ -15,7 +15,7 @@ namespace ExcelShSy.Core.Abstracts
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
-            _logger = logger;            
+            _logger = logger;
         }
 
         public void GetAllProduct(IExcelFile file)

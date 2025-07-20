@@ -13,10 +13,10 @@ using OfficeOpenXml;
 
 namespace ExcelShSy.Infrastructure.Services.Operations
 {
-    public class FromSource : GetProductFromBase, IFromSource
+    public class FromMarket : GetProductFromBase, IFromMarket
     {
         IShopTemplate shopTemplate;
-        public FromSource(IDataProduct _dataProduct, IFileStorage _fileStorage, ILogger _logger) : base(_dataProduct, _fileStorage, _logger)
+        public FromMarket(IDataProduct _dataProduct, IFileStorage _fileStorage, ILogger _logger) : base(_dataProduct, _fileStorage, _logger)
         { }
 
         protected override void ProcessPage(IExcelPage page)

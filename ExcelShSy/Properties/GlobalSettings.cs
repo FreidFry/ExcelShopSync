@@ -12,5 +12,6 @@
         public static DateOnly MinDateActually { get; set; } = new DateOnly(2025, 1, 1);
 
         public static decimal priceIncreasePercentage { get;set; }
+        public static bool FindMissingProducts { get; set; } = false;
     }
 }
