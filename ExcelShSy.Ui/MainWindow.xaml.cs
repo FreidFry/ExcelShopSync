@@ -1,6 +1,7 @@
 ﻿using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
+using ExcelShSy.Infrastructure.Events;
 using ExcelShSy.Properties;
 using ExcelShSy.Ui.Interfaces;
 
@@ -14,12 +15,12 @@ namespace ExcelShSy.Ui
     {
         private readonly ILocalizationService _localizationService;
         private readonly IFileManager _fileManager;
-        private readonly ITaskFactory _taskFactory;
+        private readonly IOperationTaskFactory _taskFactory;
         private readonly ILogger _logger;
         private readonly IEditLoadFilesWindowFactory _editLoadFilesWindowFactory;
         private readonly ISettingWindowFactory _settingWindowFactory;
 
-        public MainWindow(ILocalizationService localizationService, IFileManager fileManager, ITaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory)
+        public MainWindow(ILocalizationService localizationService, IFileManager fileManager, IOperationTaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory)
         {
             InitializeComponent();
             _localizationService = localizationService;
@@ -28,27 +29,39 @@ namespace ExcelShSy.Ui
             _logger = logger;
             _editLoadFilesWindowFactory = editLoadFilesWindowFactory;
             _settingWindowFactory = settingWindowFactory;
+
+            RegestrationTextBlockEvent("TargetLb", GetTargetFileLable);
+            RegestrationTextBlockEvent("SourceLb", GetSourceFileLable);
+        }
+
+        private static void RegestrationTextBlockEvent(string key, TextBlock textBlock)
+        {
+            TextBlockEvents.OnTextUpdate += (tarketKey, text) =>
+            {
+                if (tarketKey == key)
+                    textBlock.Text = text;
+            };
         }
 
         private void GetTargetFile_Click(object sender, RoutedEventArgs e)
         {
-            _fileManager.AddTargetFilesPath(GetTargetFileLable);
+            _fileManager.AddTargetFilesPath();
         }
 
         private void GetSourceFile_Click(object sender, RoutedEventArgs e)
         {
-            _fileManager.AddSourceFilesPath(GetSourceFileLable);
+            _fileManager.AddSourceFilesPath();
         }
 
         private void ExecuteTasks_Click(object sender, RoutedEventArgs e)
         {
-            if (!_taskFactory.Validate(TaskGrid))
+            if (!_taskFactory.IsAnyCheckboxChecked(TaskGrid))
             {
                 MessageBox.Show("Выберите задачу");
                 return;
             }
             _fileManager.InitializeFiles();
-            _taskFactory.RelizeExecute(TaskGrid);
+            _taskFactory.ExecuteOperations(TaskGrid);
         }
 
         private void CheckBox_Click(object sender, RoutedEventArgs e)
@@ -92,7 +105,7 @@ namespace ExcelShSy.Ui
             }
         }
 
-        private bool IsTextAllowed(string newInput, string fullText)
+        private static bool IsTextAllowed(string newInput, string fullText)
         {
             string text = fullText + newInput;
             return decimal.TryParse(text, out _);

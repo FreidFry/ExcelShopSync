@@ -3,8 +3,9 @@ using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Extensions;
 
+using static ExcelShSy.Infrastructure.Extensions.FileNameExtensions;
+
 using System.IO;
-using System.Windows.Controls;
 
 namespace ExcelShSy.Infrastructure.Services.Storage
 {
@@ -64,7 +65,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             _getProductManager.GetAllProduct();
         }
 
-        public void AddSourceFilesPath(TextBlock label)
+        public void AddSourceFilesPath()
         {
             var paths = _fileProvider.GetPaths();
             if (paths.IsNullOrEmpty())
@@ -75,10 +76,10 @@ namespace ExcelShSy.Infrastructure.Services.Storage
 
             SourcePath.AddRange(paths.Distinct().Except(SourcePath));
 
-            SetLastPath(label, SourcePath.Last());
+            SetLastPath("SourceLb", SourcePath);
         }
 
-        public void AddTargetFilesPath(TextBlock label)
+        public void AddTargetFilesPath()
         {
             var paths = _fileProvider.GetPaths();
             if (paths.IsNullOrEmpty())
@@ -88,7 +89,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             }
             TargetPath.AddRange(paths.Distinct().Except(TargetPath));
 
-            SetLastPath(label, TargetPath.Last());
+            SetLastPath("TargetLb", TargetPath);
         }
 
         public void RemoveSourceFilesPath(string path)
@@ -107,12 +108,6 @@ namespace ExcelShSy.Infrastructure.Services.Storage
                 _logger.LogInfo($"Remove target files path: {Path.GetFileNameWithoutExtension(path)}");
                 TargetPath.Remove(path);
             }
-        }
-
-        static void SetLastPath(TextBlock lable, string? path)
-        {
-            if (!string.IsNullOrEmpty(path))
-                lable.Text = Path.GetFileName(path);
         }
     }
 }

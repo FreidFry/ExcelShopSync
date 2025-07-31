@@ -97,7 +97,7 @@ namespace ExcelShSy.Ui.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Get source file.
+        ///   Looks up a localized string similar to Add source file.
         /// </summary>
         public static string GetSourceFile {
             get {
@@ -106,7 +106,7 @@ namespace ExcelShSy.Ui.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Get target file.
+        ///   Looks up a localized string similar to Add target file.
         /// </summary>
         public static string GetTargetFile {
             get {

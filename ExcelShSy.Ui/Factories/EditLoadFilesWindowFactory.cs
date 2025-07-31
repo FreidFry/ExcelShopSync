@@ -1,4 +1,5 @@
-﻿using ExcelShSy.Core.Interfaces.Storage;
+﻿using ExcelShSy.Core.Interfaces.Excel;
+using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Ui.Interfaces;
 
 namespace ExcelShSy.Ui.Factories
@@ -7,16 +8,18 @@ namespace ExcelShSy.Ui.Factories
     {
         private readonly IFileManager _FileManager;
         private readonly IFileProvider _FileProvider;
+        private readonly IExcelFileFactory _ExcelFileFactory;
 
-        public EditLoadFilesWindowFactory(IFileManager fileManager, IFileProvider fileProvider)
+        public EditLoadFilesWindowFactory(IFileManager fileManager, IFileProvider fileProvider, IExcelFileFactory excelFileFactory)
         {
             _FileManager = fileManager;
             _FileProvider = fileProvider;
+            _ExcelFileFactory = excelFileFactory;
         }
 
-        public EditLoadFilesWindow Create(string name)
+        public EditLoadFilesWindow Create(string page)
         {
-            return new(_FileManager, _FileProvider, name);
+            return new(page, _FileManager, _FileProvider, _ExcelFileFactory);
         }
     }
 }

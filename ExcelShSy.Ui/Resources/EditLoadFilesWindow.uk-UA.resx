@@ -126,6 +126,9 @@
   <data name="File" xml:space="preserve">
     <value>Ім'я файлу</value>
   </data>
+  <data name="Info" xml:space="preserve">
+    <value>Інфо</value>
+  </data>
   <data name="Sourcefiles" xml:space="preserve">
     <value>Файли джерело</value>
   </data>

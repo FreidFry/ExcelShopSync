@@ -124,10 +124,10 @@
     <value>Execute</value>
   </data>
   <data name="GetSourceFile" xml:space="preserve">
-    <value>Get source file</value>
+    <value>Add source file</value>
   </data>
   <data name="GetTargetFile" xml:space="preserve">
-    <value>Get target file</value>
+    <value>Add target file</value>
   </data>
   <data name="SaveButton" xml:space="preserve">
     <value>Save</value>

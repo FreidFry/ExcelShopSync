@@ -88,6 +88,15 @@ namespace ExcelShSy.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Info.
+        /// </summary>
+        public static string Info {
+            get {
+                return ResourceManager.GetString("Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sources files.
         /// </summary>
         public static string Sourcefiles {

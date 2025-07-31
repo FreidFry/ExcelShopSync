@@ -42,7 +42,7 @@ namespace ExcelShSy.Ui.AppConfigs
             //factory
             services.AddScoped<IExcelFileFactory, ExcelFileFactory>();
             services.AddScoped<IExcelPageFactory, ExcelPageFactory>();
-            services.AddScoped<ITaskFactory, MyTaskFactory>();
+            services.AddScoped<IOperationTaskFactory, OperationTaskFactory>();
             services.AddScoped<IEditLoadFilesWindowFactory, EditLoadFilesWindowFactory>();
             services.AddScoped<ISettingWindowFactory, SettingWindowFactory>();
 

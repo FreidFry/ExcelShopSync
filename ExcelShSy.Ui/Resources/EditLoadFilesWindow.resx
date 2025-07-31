@@ -126,6 +126,9 @@
   <data name="File" xml:space="preserve">
     <value>File name</value>
   </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
   <data name="Sourcefiles" xml:space="preserve">
     <value>Sources files</value>
   </data>

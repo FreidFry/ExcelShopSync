@@ -12,13 +12,13 @@ using System.Windows.Media;
 
 namespace ExcelShSy.Infrastructure.Factories
 {
-    public class MyTaskFactory : ITaskFactory
+    public class OperationTaskFactory : IOperationTaskFactory
     {
         readonly IServiceProvider _serviceProvider;
         readonly ILogger _logger;
         private readonly Dictionary<string, Type> _tasksMap;
 
-        public MyTaskFactory(IServiceProvider services, ILogger logger)
+        public OperationTaskFactory(IServiceProvider services, ILogger logger)
         {
             _serviceProvider = services;
             _logger = logger;
@@ -46,14 +46,14 @@ namespace ExcelShSy.Infrastructure.Factories
             }
         }
 
-        public void RelizeExecute(DependencyObject parent)
+        public void ExecuteOperations(DependencyObject parent)
         {
             List<IExecuteOperation> tasksToRun = [];
-            tasksToRun.GetExecuteTask(parent, this);
-            _logger.LogInfo("Executes: " + string.Join(", ", tasksToRun));
-            var _ = CreateTask("SavePackages");
-            if (_ != null)
-                tasksToRun.Add(_);
+            tasksToRun.AddOperationTask(parent, this);
+            _logger.LogInfo("Executes: " + string.Join(", ", tasksToRun.Select(t => t.GetType().Name)));
+            var saveTask = CreateTask("SavePackages");
+            if (saveTask != null)
+                tasksToRun.Add(saveTask);
             foreach (var task in tasksToRun)
             {
                 _logger.LogInfo($"Start {task.GetType().Name}");
@@ -65,7 +65,7 @@ namespace ExcelShSy.Infrastructure.Factories
             MessageBox.Show("Finish");
         }
 
-        public bool Validate(DependencyObject parent)
+        public bool IsAnyCheckboxChecked(DependencyObject parent)
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
             {
@@ -74,7 +74,7 @@ namespace ExcelShSy.Infrastructure.Factories
                 if (child is CheckBox cb && cb.IsChecked == true)
                     return true;
 
-                if (Validate(child))
+                if (IsAnyCheckboxChecked(child))
                     return true;
             }
             return false;

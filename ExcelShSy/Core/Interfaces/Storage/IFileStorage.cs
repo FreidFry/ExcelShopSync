@@ -14,6 +14,5 @@ namespace ExcelShSy.Core.Interfaces.Storage
         void ClearSource();
 
         void ClearAll();
-
     }
 }

@@ -1,157 +1,155 @@
-﻿using ExcelShSy.Core.Interfaces.Storage;
+﻿using ExcelShSy.Core.Interfaces.Excel;
+using ExcelShSy.Core.Interfaces.Storage;
+using ExcelShSy.Infrastructure.Events;
 using ExcelShSy.Infrastructure.Extensions;
-
+using ExcelShSy.Ui.Models.EditLoadFiles;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Globalization;
-using System.IO;
 
 namespace ExcelShSy
 {
-    public class FileNameConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is string path)
-                return Path.GetFileName(path);
-            return value;
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    /// <summary>
-    /// Interaction logic for EditLoadFilesWindow.xaml
-    /// </summary>
     public partial class EditLoadFilesWindow : Window
     {
-        public ObservableCollection<string> TemperaryFile { get; set; } = [];
+        public ObservableCollection<FileItem> TemperaryTargetFiles { get; set; } = [];
+        public ObservableCollection<FileItem> TemperarySourceFiles { get; set; } = [];
         private readonly IFileManager _fileManager;
         private readonly IFileProvider _fileProvider;
-        private bool _firstOpen = true;
+        private readonly IExcelFileFactory _excelfileFactory;
 
-        public EditLoadFilesWindow(IFileManager fileManager, IFileProvider fileProvider, string selectedTab)
+        public EditLoadFilesWindow(string TabName, IFileManager fileManager, IFileProvider fileProvider, IExcelFileFactory fileFactory)
         {
             InitializeComponent();
             _fileManager = fileManager;
             _fileProvider = fileProvider;
+            _excelfileFactory = fileFactory;
 
-            _firstOpen = true;
             DataContext = this;
-            if (selectedTab != null)
-                CallMethodForTabFirstOpen(selectedTab);
+
+            SetFileNameList(TemperaryTargetFiles, _fileManager.TargetPath);
+            SetFileNameList(TemperarySourceFiles, _fileManager.SourcePath);
+
+            SelectTab(TabName);
         }
 
-        private void Delete_Click(object sender, RoutedEventArgs e)
+        private void SelectTab(string TabName)
         {
-            if (sender is FrameworkElement fe && fe.DataContext is string item)
-                TemperaryFile.Remove(item);
-        }
-
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.Source is TabControl tabControl)
+            FilesControl.SelectedItem = TabName switch
             {
-                var tabItem = tabControl.SelectedItem as TabItem;
-                if (tabItem != null)
-                    CallMethodForTab(tabItem.Name);
+                "Target" => Target,
+                "Source" => Source,
+                _ => 0,
+            };
+        }
+
+        private static void SetFileNameList(ObservableCollection<FileItem> observableCollection, IEnumerable<string> list)
+        {
+            foreach (string filePath in list)
+            {
+                var item = new FileItem(filePath);
+                observableCollection.Add(item);
             }
         }
 
-        private void CallMethodForTab(string name)
+        private void AddFile_Click(object sender, EventArgs e)
         {
-            switch (name)
+            var button = sender as Button;
+            var tag = button!.Tag as string;
+            switch (tag)
             {
                 case "Target":
-                    MethodForTarget();
+                    AddItems(TemperaryTargetFiles);
                     break;
                 case "Source":
-                    MethodForSource();
+                    AddItems(TemperarySourceFiles);
                     break;
+                default: break;
             }
         }
 
-        private void CallMethodForTabFirstOpen(string name)
+        private void AddItems(ObservableCollection<FileItem> items)
         {
-            switch (name)
+            var sources = _fileProvider.GetPaths();
+            if (sources.IsNullOrEmpty()) return;
+            foreach (var file in sources)
+            {
+                if (!items.Any(item => item.FilePath == file)) items.Add(new FileItem(file));
+            }
+        }
+
+        private void RemoveFile_Click(object sender, EventArgs e)
+        {
+            var remove = CreateMessageBoxYesNoWarning("Confirm", "Confirm");
+            if (remove) return;
+            var button = sender as Button;
+            var tag = button!.Tag as string;
+            switch (tag)
             {
                 case "Target":
-                    FilesControl.SelectedItem = Target;
+                    RemoveItems(TemperaryTargetFiles);
                     break;
                 case "Source":
-                    FilesControl.SelectedItem = Source;
+                    RemoveItems(TemperarySourceFiles);
                     break;
+                default: break;
             }
         }
 
-        private void AddFromTarget()
+        private void RemoveItems(ObservableCollection<FileItem> items)
         {
-            TemperaryFile.Clear();
-            foreach (var item in _fileManager.TargetPath)
-                TemperaryFile.Add(item);
-        }
-
-        private void AddFromSource()
-        {
-            TemperaryFile.Clear();
-            foreach (var item in _fileManager.SourcePath)
-                TemperaryFile.Add(item);
-        }
-
-        private void MethodForTarget()
-        {
-            if (!TemperaryFile.IsNullOrEmpty())
+            var remove = items.Where(item => item.IsSelectedToRemove).ToList();
+            foreach (var file in remove)
             {
-                var files = TemperaryFile.ToList();
-                if (!_fileManager.SourcePath.SequenceEqual(files) && !_firstOpen)
-                {
-                    var result = MessageBox.Show("Save changes?", "Save changes", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        _fileManager.SourcePath.Clear();
-                        _fileManager.SourcePath.AddRange(files);
-                    }
-                }
+                items.Remove(file);
             }
-            _firstOpen = false;
-            AddFromTarget();
         }
 
-        private void MethodForSource()
+        private void Close_Click(object sender, EventArgs e)
         {
-            if (!TemperaryFile.IsNullOrEmpty())
+            var succes = CreateMessageBoxYesNoWarning("You realy close window?", "confirm");
+            if (!succes) Close();
+        }
+
+        private bool CreateMessageBoxYesNoWarning(string message, string windowName)
+        {
+            var result = MessageBox.Show(message, windowName, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.No) return true;
+            return false;
+        }
+
+        private void ApplyButton_Click(object sender, EventArgs e)
+        {
+            TransferFileList();
+            Close();
+        }
+
+        private void TransferFileList()
+        {
+            var targetList = TemperaryTargetFiles.Select(i => i.FilePath).ToList();
+            var sourceList = TemperarySourceFiles.Select(i => i.FilePath).ToList();
+            TextBlockEvents.UpdateText("TargetLb", "");
+            TextBlockEvents.UpdateText("SourceLb", "");
+
+            _fileManager.TargetPath.Clear();
+            if (targetList != null && targetList.Count > 0)
             {
-                var files = TemperaryFile.ToList();
-                if (!_fileManager.TargetPath.SequenceEqual(files) && !_firstOpen)
-                {
-                    var result = MessageBox.Show("Save changes?", "Save changes", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        _fileManager.TargetPath.Clear();
-                        _fileManager.TargetPath.AddRange(files);
-                    }
-                }
+                _fileManager.TargetPath.AddRange(targetList);
+                FileNameExtensions.SetLastPath("TargetLb", targetList);
             }
-            _firstOpen = false;
-            AddFromSource();
-        }
-
-        private void AddFiles_Click(object sender, EventArgs e)
-        {
-            var files = _fileProvider.GetPaths();
-            if (files.IsNullOrEmpty()) return;
-            foreach (var file in files) if (!TemperaryFile.Contains(file)) TemperaryFile.Add(file);
-        }
-
-        private void ShowInfoFile_Click(object sender, EventArgs e)
-        {
-            if (sender is FrameworkElement fe && fe.DataContext is string item)
+                _fileManager.SourcePath.Clear();
+            if (sourceList != null && sourceList.Count > 0)
             {
-                var file = _fileManager.GetFileInfo(item);
+                _fileManager.SourcePath.AddRange(sourceList);
+                FileNameExtensions.SetLastPath("SourceLb", sourceList);
+            }
+        }
+
+        public void ShowInfo_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is FileItem target)
+            {
+                var path = target.FilePath;
+                var file = _excelfileFactory.Create(path);
                 file.ShowInfo();
             }
         }

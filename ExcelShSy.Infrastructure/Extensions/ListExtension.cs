@@ -2,6 +2,7 @@
 using ExcelShSy.Infrastructure.Factories;
 
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,7 +15,7 @@ namespace ExcelShSy.Infrastructure.Extensions
         {
             return list == null || list.Count == 0;
         }
-        public static void GetExecuteTask(this List<IExecuteOperation> tasksToRun, DependencyObject parent, MyTaskFactory taskFactory)
+        public static void AddOperationTask(this List<IExecuteOperation> tasksToRun, DependencyObject parent, OperationTaskFactory taskFactory)
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
             {
@@ -33,7 +34,7 @@ namespace ExcelShSy.Infrastructure.Extensions
                     }
                 }
 
-                tasksToRun.GetExecuteTask(child, taskFactory);
+                tasksToRun.AddOperationTask(child, taskFactory);
             }
         }
     }

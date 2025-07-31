@@ -5,9 +5,6 @@ using System.Windows.Controls;
 
 namespace ExcelShSy.Ui
 {
-    /// <summary>
-    /// Interaction logic for SettingWindow.xaml
-    /// </summary>
     public partial class SettingWindow : Window
     {
         private readonly ILocalizationService _localizationService;
