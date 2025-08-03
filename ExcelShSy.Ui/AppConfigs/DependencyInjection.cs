@@ -1,4 +1,5 @@
-﻿using ExcelShSy.Core.Interfaces.Common;
+﻿using ExcelShSy.Core.Interfaces;
+using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Shop;
@@ -13,7 +14,7 @@ using ExcelShSy.Infrastructure.Services.Operations;
 using ExcelShSy.Infrastructure.Services.Storage;
 using ExcelShSy.Ui.Factories;
 using ExcelShSy.Ui.Interfaces;
-using ExcelShSy.Ui.Utils;
+using ExcelShSy.Ui.Localization;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -66,8 +67,7 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddScoped<FindMissingProducts>();
 
             //UI
-            services.AddSingleton<ILocalizationService, LocalizationService>();
-            services.AddSingleton<LocalizationBinding>();
+            services.AddTransient<ILocalizationManager, LocalizationManager>();
             services.AddTransient<EditLoadFilesWindow>();
             services.AddTransient<SettingWindow>();
             services.AddTransient<MainWindow>();
