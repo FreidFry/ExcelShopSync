@@ -97,6 +97,15 @@ namespace ExcelShSy.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Find missing.
+        /// </summary>
+        public static string FindMissing {
+            get {
+                return ResourceManager.GetString("FindMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add source file.
         /// </summary>
         public static string GetSourceFile {
@@ -120,6 +129,33 @@ namespace ExcelShSy.Ui.Resources {
         public static string IncreasePricePercent {
             get {
                 return ResourceManager.GetString("IncreasePricePercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last file.
+        /// </summary>
+        public static string LastFile {
+            get {
+                return ResourceManager.GetString("LastFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please, select any execute.
+        /// </summary>
+        public static string NoSetExecute_ {
+            get {
+                return ResourceManager.GetString("NoSetExecute_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No selected execute.
+        /// </summary>
+        public static string NoSetExecuteTitle_ {
+            get {
+                return ResourceManager.GetString("NoSetExecuteTitle_", resourceCulture);
             }
         }
         

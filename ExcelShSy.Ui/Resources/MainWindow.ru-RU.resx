@@ -159,4 +159,16 @@
   <data name="Setting" xml:space="preserve">
     <value>Настройки</value>
   </data>
+  <data name="LastFile" xml:space="preserve">
+    <value>Последний файл</value>
+  </data>
+  <data name="FindMissing" xml:space="preserve">
+    <value>Найти отсутствующие</value>
+  </data>
+  <data name="NoSetExecute_" xml:space="preserve">
+    <value>Пожалуйста, выберите любую задачу</value>
+  </data>
+  <data name="NoSetExecuteTitle_" xml:space="preserve">
+    <value>Нет выбранных заданий</value>
+  </data>
 </root>

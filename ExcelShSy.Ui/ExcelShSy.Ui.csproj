@@ -18,6 +18,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Properties\Settings.Designer.cs">
+	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Settings.settings</DependentUpon>
+	  </Compile>
 	  <Compile Update="Resources\EditLoadFilesWindow.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -27,6 +32,11 @@
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>MainWindow.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Resources\SettingWindow.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>SettingWindow.resx</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -39,6 +49,17 @@
 			<LastGenOutput>MainWindow.Designer.cs</LastGenOutput>
 			<Generator>PublicResXFileCodeGenerator</Generator>
 		</EmbeddedResource>
+		<EmbeddedResource Update="Resources\SettingWindow.resx">
+		  <Generator>ResXFileCodeGenerator</Generator>
+		  <LastGenOutput>SettingWindow.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Properties\Settings.settings">
+	    <Generator>PublicSettingsSingleFileGenerator</Generator>
+	    <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+	  </None>
 	</ItemGroup>
 
 </Project>

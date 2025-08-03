@@ -1,22 +1,22 @@
-﻿using ExcelShSy.Core.Interfaces.Common;
+﻿using ExcelShSy.Core.Interfaces;
 using ExcelShSy.Ui.Interfaces;
-
-using Microsoft.Extensions.DependencyInjection;
 
 namespace ExcelShSy.Ui.Factories
 {
     public class SettingWindowFactory : ISettingWindowFactory
     {
+        private readonly ILocalizationManager _localizationManager;
         private readonly IServiceProvider _serviceProvider;
 
-        public SettingWindowFactory(IServiceProvider serviceProvider)
+        public SettingWindowFactory(IServiceProvider serviceProvider, ILocalizationManager localizationManager)
         {
             _serviceProvider = serviceProvider;
+            _localizationManager = localizationManager;
         }
 
         public SettingWindow Create()
         {
-            return _serviceProvider.GetRequiredService<SettingWindow>();
+            return new(_serviceProvider, _localizationManager);
         }
     }
 }

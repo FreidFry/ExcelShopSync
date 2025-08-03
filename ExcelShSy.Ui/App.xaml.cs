@@ -1,32 +1,36 @@
-﻿using ExcelShSy.Ui.AppConfigs;
-using ExcelShSy.Ui.Utils;
+﻿using ExcelShSy.Core.Interfaces;
+using ExcelShSy.Ui.AppConfigs;
+using ExcelShSy.Ui.Properties;
 
 using Microsoft.Extensions.DependencyInjection;
-
+using System.Globalization;
 using System.Windows;
 
 namespace ExcelShSy.Ui
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         private ServiceProvider _serviceProvider;
+        private ILocalizationManager _localizationManager;
 
         public App()
         {
             var services = new ServiceCollection();
             services.AddDependencyInjection();
             _serviceProvider = services.BuildServiceProvider();
+            _localizationManager = _serviceProvider.GetRequiredService<ILocalizationManager>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            var loc = _serviceProvider.GetRequiredService<LocalizationBinding>();
-            Current.Resources.Add("Loc", loc);
+            string langCode = Settings.Default.Language;
+            if (langCode == null || string.IsNullOrEmpty(langCode))
+                langCode = CultureInfo.InstalledUICulture.Name;
+            var culture = new CultureInfo(langCode);
+
+            _localizationManager.SetCulture(culture);
 
             var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();

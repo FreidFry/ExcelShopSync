@@ -1,7 +1,5 @@
 ﻿using ExcelShSy.Core.Interfaces.Excel;
 
-using System.Windows.Controls;
-
 namespace ExcelShSy.Core.Interfaces.Storage
 {
     public interface IFileManager

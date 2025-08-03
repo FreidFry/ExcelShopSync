@@ -1,5 +1,4 @@
-﻿
-namespace ExcelShSy.Core.Interfaces.Excel
+﻿namespace ExcelShSy.Core.Interfaces.Excel
 {
     public interface IExcelFileFactory
     {

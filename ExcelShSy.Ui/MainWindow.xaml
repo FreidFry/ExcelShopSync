@@ -3,15 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:resx="clr-namespace:ExcelShSy.Ui.Resources"
+        xmlns:local="clr-namespace:ExcelShSy.Ui.Localization"
         mc:Ignorable="d"
         Title="ExcelShSy"
         MinWidth="485"
         MinHeight="300"
         Width="485"
         Height="300"
-        SizeToContent="WidthAndHeight"
-        WindowStartupLocation="CenterScreen">
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -20,9 +19,9 @@
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" Height="20" Background="Transparent" >
-            <MenuItem VerticalAlignment="Center" Header="{x:Static resx:MainWindow.Setting}" Click="SettingsWindowOpen_Click" />
+            <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Setting}" Click="SettingsWindowOpen_Click" />
         </Menu>
-        
+
         <Grid Grid.Row="1" Margin="10,0,10,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -33,39 +32,39 @@
             <StackPanel Grid.Row="1" Margin="10,10,10,10" Grid.ColumnSpan="2" >
                 <!-- Get target -->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,7" >
-                    <Button Grid.Row="0" Grid.Column="0" Content="{x:Static resx:MainWindow.GetTargetFile}" Padding="5,0" Click="GetTargetFile_Click"/>
-                    <Button Grid.Row="0" Grid.Column="1" Content="{x:Static resx:MainWindow.EditFiles}" Margin="10 0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ShowEditLoadFiles_Click" Tag="Target" />
-                    <TextBlock x:Name="GetTargetFileLable" Text="Last file" Grid.Row="0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="250" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
+                    <Button Grid.Row="0" x:Name="TargetFilesButton" Content="{local:Loc MainWindow.GetTargetFile}" HorizontalContentAlignment="Left" Padding="5,0" Click="GetTargetFile_Click"/>
+                    <Button Grid.Row="0" Content="{local:Loc MainWindow.EditFiles}" Margin="10 0" Padding="5,0" Click="ShowEditLoadFiles_Click" Tag="Target" />
+                    <TextBlock x:Name="GetTargetFileLable" Text="{local:Loc MainWindow.LastFile}" Grid.Row="0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="250"/>
                 </StackPanel>
 
                 <!-- Get source -->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
-                    <Button Grid.Row="1" Grid.Column="0" Content="{x:Static resx:MainWindow.GetSourceFile}" Padding="5,0" Click="GetSourceFile_Click"/>
-                    <Button Grid.Row="1" Grid.Column="1" Content="{x:Static resx:MainWindow.EditFiles}" Margin="10 0" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ShowEditLoadFiles_Click" Tag="Source"/>
-                    <TextBlock x:Name="GetSourceFileLable" Text="Last file" Grid.Row="2" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="250" HorizontalAlignment="Left"  VerticalAlignment="Center"/>
+                    <Button Grid.Row="1" x:Name="SourceFilesButton" Content="{local:Loc MainWindow.GetSourceFile}" HorizontalContentAlignment="Left" Padding="5,0" Click="GetSourceFile_Click"/>
+                    <Button Grid.Row="1" Content="{local:Loc MainWindow.EditFiles}" Margin="10 0" Padding="5,0" Click="ShowEditLoadFiles_Click" Tag="Source"/>
+                    <TextBlock x:Name="GetSourceFileLable" Text="{local:Loc MainWindow.LastFile}" Grid.Row="2" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="250"/>
                 </StackPanel>
             </StackPanel>
             <!-- Operations -->
-            <Border Padding="3" x:Name="TaskGrid" Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5" Margin="0,0,0,10">
+            <Border Padding="3" x:Name="TaskGrid" Grid.Row="2" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5" Margin="0,0,0,10">
                 <StackPanel>
 
                     <StackPanel Margin="0, 2.5" Grid.Row="0" Orientation="Horizontal" >
-                        <CheckBox Content="{x:Static resx:MainWindow.SyncPrice}" Tag="SyncPrice" Click="CheckBox_Click" VerticalAlignment="Center" />
-                        <CheckBox Margin="5 0" Content="{x:Static resx:MainWindow.RoundUp}" Tag="IsRound" Click="CheckBox_Click" VerticalAlignment="Center" />
-                        <CheckBox Content="{x:Static resx:MainWindow.IncreasePricePercent}" HorizontalAlignment="Left" Tag="IncreasePricePercent" Click="CheckBox_Click" VerticalAlignment="Center" />
+                        <CheckBox Content="{local:Loc MainWindow.SyncPrice}" Tag="SyncPrice" Click="CheckBox_Click" VerticalAlignment="Center" />
+                        <CheckBox Margin="5 0" Content="{local:Loc MainWindow.RoundUp}" Tag="IsRound" Click="CheckBox_Click" VerticalAlignment="Center" />
+                        <CheckBox Content="{local:Loc MainWindow.IncreasePricePercent}" HorizontalAlignment="Left" Tag="IncreasePricePercent" Click="CheckBox_Click" VerticalAlignment="Center" />
                         <TextBox  Margin="5 0" TextWrapping="Wrap" Width="50" Name="IncreasePercentTextBox" TextChanged="ChangeIncreasePercent_TextChanged" PreviewTextInput="IncreasePercentTextBox_PreviewTextInput" DataObject.Pasting="IncreasePercentTextBox_Pasting" VerticalAlignment="Center" />
                     </StackPanel>
 
-                    <CheckBox Grid.Row="1" Margin="0 2.5" Content="{x:Static resx:MainWindow.SyncAvailability}" Tag="SyncAvailability" Click="CheckBox_Click" VerticalAlignment="Center" />
-                    <CheckBox Grid.Row="2" Margin="0 2.5" Content="{x:Static resx:MainWindow.SyncQuantity}" Tag="SyncQuantity" Click="CheckBox_Click" VerticalAlignment="Center" />
-                    <CheckBox Grid.Row="3" Margin="0 2.5" Content="{x:Static resx:MainWindow.SyncDiscount}" Tag="SyncDiscount" Click="CheckBox_Click" VerticalAlignment="Center" />
-                    <CheckBox Grid.Row="4" Margin="0 2.5" Content="{x:Static resx:MainWindow.DiscountDate}" Tag="DiscountDate" Click="CheckBox_Click" VerticalAlignment="Center" />
-                    <CheckBox Grid.Row="5" Margin="0 2.5" Tag="FindMissingProduct" Content="Find missing" Click="CheckBox_Click" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="1" Margin="0 2.5" Content="{local:Loc MainWindow.SyncAvailability}" Tag="SyncAvailability" Click="CheckBox_Click" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="2" Margin="0 2.5" Content="{local:Loc MainWindow.SyncQuantity}" Tag="SyncQuantity" Click="CheckBox_Click" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="3" Margin="0 2.5" Content="{local:Loc MainWindow.SyncDiscount}" Tag="SyncDiscount" Click="CheckBox_Click" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="4" Margin="0 2.5" Content="{local:Loc MainWindow.DiscountDate}" Tag="DiscountDate" Click="CheckBox_Click" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="5" Margin="0 2.5" Tag="FindMissingProduct" Content="{local:Loc MainWindow.FindMissing}" Click="CheckBox_Click" VerticalAlignment="Center" />
 
                 </StackPanel>
             </Border>
 
-            <Button Grid.Row="3" x:Name="ExecuteTasks" MinWidth="120" Content="{x:Static resx:MainWindow.ExecuteTasks}" Click="ExecuteTasks_Click" HorizontalAlignment="Right" />
+            <Button Grid.Row="3" x:Name="ExecuteTasks" MinWidth="120" Content="{local:Loc MainWindow.ExecuteTasks}" Click="ExecuteTasks_Click" HorizontalAlignment="Right" />
         </Grid>
     </Grid>
 </Window>

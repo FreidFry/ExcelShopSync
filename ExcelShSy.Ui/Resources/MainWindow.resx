@@ -159,4 +159,16 @@
   <data name="Setting" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="LastFile" xml:space="preserve">
+    <value>Last file</value>
+  </data>
+  <data name="FindMissing" xml:space="preserve">
+    <value>Find missing</value>
+  </data>
+  <data name="NoSetExecute_" xml:space="preserve">
+    <value>Please, select any execute</value>
+  </data>
+  <data name="NoSetExecuteTitle_" xml:space="preserve">
+    <value>No selected execute</value>
+  </data>
 </root>

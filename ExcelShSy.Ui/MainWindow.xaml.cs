@@ -4,26 +4,25 @@ using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Events;
 using ExcelShSy.Properties;
 using ExcelShSy.Ui.Interfaces;
-
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+
+using static ExcelShSy.Ui.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Ui
 {
     public partial class MainWindow : Window
     {
-        private readonly ILocalizationService _localizationService;
         private readonly IFileManager _fileManager;
         private readonly IOperationTaskFactory _taskFactory;
         private readonly ILogger _logger;
         private readonly IEditLoadFilesWindowFactory _editLoadFilesWindowFactory;
         private readonly ISettingWindowFactory _settingWindowFactory;
 
-        public MainWindow(ILocalizationService localizationService, IFileManager fileManager, IOperationTaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory)
+        public MainWindow(IFileManager fileManager, IOperationTaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory)
         {
-            InitializeComponent();
-            _localizationService = localizationService;
+            InitializeComponents();
             _fileManager = fileManager;
             _taskFactory = taskFactory;
             _logger = logger;
@@ -32,6 +31,22 @@ namespace ExcelShSy.Ui
 
             RegestrationTextBlockEvent("TargetLb", GetTargetFileLable);
             RegestrationTextBlockEvent("SourceLb", GetSourceFileLable);
+        }
+
+        private void InitializeComponents()
+        {
+            InitializeComponent();
+
+            Loaded += (s, e) =>
+            {
+                var twight = TargetFilesButton.ActualWidth;
+                var swight = SourceFilesButton.ActualWidth;
+
+                if (swight > twight)
+                    TargetFilesButton.Width = swight;
+                else
+                    SourceFilesButton.Width = twight;
+            };
         }
 
         private static void RegestrationTextBlockEvent(string key, TextBlock textBlock)
@@ -57,7 +72,9 @@ namespace ExcelShSy.Ui
         {
             if (!_taskFactory.IsAnyCheckboxChecked(TaskGrid))
             {
-                MessageBox.Show("Выберите задачу");
+                var message = GetLocalizate("MainWindow", "NoSetExecute_");
+                var title = GetLocalizate("MainWindow", "NoSetExecuteTitle_");
+                MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             _fileManager.InitializeFiles();
@@ -124,6 +141,11 @@ namespace ExcelShSy.Ui
         }
 
         private void SettingsWindowOpen_Click(object sender, EventArgs e)
+        {
+            OpenSettingWindow();
+        }
+
+        public void OpenSettingWindow()
         {
             var window = _settingWindowFactory.Create();
             window.Show();

@@ -7,6 +7,8 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 
+using static ExcelShSy.Ui.Localization.GetLocalizationInCode;
+
 namespace ExcelShSy
 {
     public partial class EditLoadFilesWindow : Window
@@ -72,14 +74,15 @@ namespace ExcelShSy
             var sources = _fileProvider.GetPaths();
             if (sources.IsNullOrEmpty()) return;
             foreach (var file in sources)
-            {
-                if (!items.Any(item => item.FilePath == file)) items.Add(new FileItem(file));
-            }
+                if (!items.Any(item => item.FilePath == file))
+                    items.Add(new FileItem(file));
         }
 
         private void RemoveFile_Click(object sender, EventArgs e)
         {
-            var remove = CreateMessageBoxYesNoWarning("Confirm", "Confirm");
+            var message = GetLocalizate("EditLoadFilesWindow", "DeleteWarning_");
+            var title = GetLocalizate("EditLoadFilesWindow", "DeleteWarningTitle_");
+            var remove = CreateMessageBoxYesNoWarning(message, title);
             if (remove) return;
             var button = sender as Button;
             var tag = button!.Tag as string;
@@ -106,7 +109,9 @@ namespace ExcelShSy
 
         private void Close_Click(object sender, EventArgs e)
         {
-            var succes = CreateMessageBoxYesNoWarning("You realy close window?", "confirm");
+            var message = GetLocalizate("EditLoadFilesWindow", "CloseWarning_");
+            var title = GetLocalizate("EditLoadFilesWindow", "CloseWarningTitle_");
+            var succes = CreateMessageBoxYesNoWarning(message, title);
             if (!succes) Close();
         }
 
@@ -136,7 +141,7 @@ namespace ExcelShSy
                 _fileManager.TargetPath.AddRange(targetList);
                 FileNameExtensions.SetLastPath("TargetLb", targetList);
             }
-                _fileManager.SourcePath.Clear();
+            _fileManager.SourcePath.Clear();
             if (sourceList != null && sourceList.Count > 0)
             {
                 _fileManager.SourcePath.AddRange(sourceList);

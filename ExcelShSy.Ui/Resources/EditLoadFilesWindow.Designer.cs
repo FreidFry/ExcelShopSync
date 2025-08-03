@@ -70,11 +70,74 @@ namespace ExcelShSy.Ui.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply.
+        /// </summary>
+        public static string Apply {
+            get {
+                return ResourceManager.GetString("Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ✓.
+        /// </summary>
+        public static string CheckBox {
+            get {
+                return ResourceManager.GetString("CheckBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You really close this window?.
+        /// </summary>
+        public static string CloseWarning_ {
+            get {
+                return ResourceManager.GetString("CloseWarning_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string CloseWarningTitle_ {
+            get {
+                return ResourceManager.GetString("CloseWarningTitle_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You really want to delete this file?.
+        /// </summary>
+        public static string DeleteWarning_ {
+            get {
+                return ResourceManager.GetString("DeleteWarning_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm delete.
+        /// </summary>
+        public static string DeleteWarningTitle_ {
+            get {
+                return ResourceManager.GetString("DeleteWarningTitle_", resourceCulture);
             }
         }
         
@@ -111,6 +174,15 @@ namespace ExcelShSy.Ui.Resources {
         public static string TargetFiles {
             get {
                 return ResourceManager.GetString("TargetFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Load Files.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
     }
