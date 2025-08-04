@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ExcelShSy.Ui.Resources {
+namespace ExcelShSy.Localization.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ExcelShSy.Ui.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExcelShSy.Ui.Resources.EditLoadFilesWindow", typeof(EditLoadFilesWindow).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExcelShSy.Localization.Resources.EditLoadFilesWindow", typeof(EditLoadFilesWindow).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -6,16 +6,18 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Mappings
     {
         public static readonly IReadOnlyDictionary<string, IReadOnlyList<string>> Columns = new Dictionary<string, IReadOnlyList<string>>
         {
-            [ColumnConstants.Article] = ["Артикул", "Код_товару", "Артикул*", "Article", "Артикул", "article"],
-            [ColumnConstants.Price] = ["Цена", "Ціна", "Ціна*", "Price", "price"],
-            [ColumnConstants.CompectArticle] = ["артикул комплекту", "ArticleComplect"],
-            [ColumnConstants.CompectPrice] = ["ціна комплекту", "PriceComplect"],
-            [ColumnConstants.PriceOld] = ["Старая цена", "Стара ціна"],
-            [ColumnConstants.Quantity] = ["Количество", "Кількість", "Залишки"],
-            [ColumnConstants.Availability] = ["Наличие", "Наявність", "Наявність*", "availability"],
-            [ColumnConstants.Discount] = ["Скидка %", "Знижка"],
-            [ColumnConstants.DiscountFrom] = ["Термін_дії_знижки_від"],
-            [ColumnConstants.DiscountTo] = ["Дата и время окончания акции", "Термін_дії_знижки_до"]
+            [ColumnConstants.Article] = ["Артикул", "Код_товару", "Артикул*", "Article", "Артикул"],
+            [ColumnConstants.ComplectArticle] = ["Артикул комплекту", "ArticleComplect"],
+            [ColumnConstants.Price] = ["Цена", "Ціна", "Ціна*", "Price"],
+            [ColumnConstants.ComplectPrice] = ["Цена комплекта", "Ціна комплекту", "PriceComplect"],
+            [ColumnConstants.Quantity] = ["Количество", "Кількість", "Залишки", "Quantity"],
+            [ColumnConstants.ComplectQuantity] = ["Количество комплекта", "Кількість комплекту", "QuantityComplect"],
+            [ColumnConstants.Availability] = ["Наличие", "Наявність", "Наявність*", "Availability"],
+            [ColumnConstants.ComplectAvailability] = ["Наличие комплекта", "Наявність комплекту", "AvailabilityComplect"],
+            [ColumnConstants.PriceOld] = ["Старая цена", "Стара ціна", "OldPrice"],
+            [ColumnConstants.Discount] = ["Скидка %", "Знижка", "Discount"],
+            [ColumnConstants.DiscountFrom] = ["Термін_дії_знижки_від", "Дата начала скидки", "Дата початку знижки", "DiscountDateStart"],
+            [ColumnConstants.DiscountTo] = ["Дата и время окончания акции", "Термін_дії_знижки_до", "Дата окончания скидки", "Дата кінця знижки", "DiscuontDateEnd"]
         };
     }
 }

@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 
-using static ExcelShSy.Ui.Localization.GetLocalizationInCode;
+using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy
 {

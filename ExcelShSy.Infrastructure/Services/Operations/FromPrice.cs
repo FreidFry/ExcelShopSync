@@ -9,6 +9,8 @@ using ExcelShSy.Properties;
 
 using OfficeOpenXml;
 
+using ExcelShSy.Infrastructure.Persistance.ShopData.Mappings;
+
 namespace ExcelShSy.Infrastructure.Services.Operations
 {
     public class FromPrice : GetProductFromBase, IFromPrice
@@ -42,10 +44,10 @@ namespace ExcelShSy.Infrastructure.Services.Operations
                 quantity = quantity.GetColumnFromRange(range, ColumnConstants.Quantity);
                 availability = availability.GetColumnFromRange(range, ColumnConstants.Availability);
 
-                articleComp = articleComp.GetColumnFromRange(range, ColumnConstants.CompectArticle);
-                priceComp = priceComp.GetColumnFromRange(range, ColumnConstants.CompectPrice);
-                quantityComp = quantityComp.GetColumnFromRange(range, ColumnConstants.CompectQuantity);
-                availabilityComp = availabilityComp.GetColumnFromRange(range, ColumnConstants.CompectAvailability);
+                articleComp = articleComp.GetColumnFromRange(range, ColumnConstants.ComplectArticle);
+                priceComp = priceComp.GetColumnFromRange(range, ColumnConstants.ComplectPrice);
+                quantityComp = quantityComp.GetColumnFromRange(range, ColumnConstants.ComplectQuantity);
+                availabilityComp = availabilityComp.GetColumnFromRange(range, ColumnConstants.ComplectAvailability);
 
                 if (isHeader)
                 {
@@ -86,9 +88,21 @@ namespace ExcelShSy.Infrastructure.Services.Operations
 
             if (GlobalSettings.SyncAvailability && availCol > 0)
             {
-                var val = ws.GetString(row, availCol);
+                var undentif = ws.GetString(row, availCol);
+                var val = IndentifyAvailability(undentif);
                 if (val != null) _dataProduct.AddProductAvailability(article, val);
             }
+        }
+
+        static string? IndentifyAvailability(string? availability)
+        {
+            if (availability == null) return null;
+            var result = AvailabilityMappingPriceList.Template
+                .FirstOrDefault(x => x.Value
+                                        .Contains(availability))
+                                            .Key;
+            if (result == null) return null;
+            return result;
         }
     }
 }

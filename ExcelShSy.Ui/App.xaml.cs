@@ -1,6 +1,6 @@
 ﻿using ExcelShSy.Core.Interfaces;
 using ExcelShSy.Ui.AppConfigs;
-using ExcelShSy.Ui.Properties;
+using ExcelShSy.Localization.Properties;
 
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
@@ -31,6 +31,8 @@ namespace ExcelShSy.Ui
             var culture = new CultureInfo(langCode);
 
             _localizationManager.SetCulture(culture);
+
+            this.ShutdownMode = ShutdownMode.OnMainWindowClose;
 
             var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();

@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-using static ExcelShSy.Ui.Localization.GetLocalizationInCode;
+using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Ui
 {
@@ -136,7 +136,7 @@ namespace ExcelShSy.Ui
             if (!string.IsNullOrEmpty(propertyName))
             {
                 var window = _editLoadFilesWindowFactory.Create(propertyName);
-                window.Show();
+                window.ShowDialog();
             }
         }
 
@@ -148,6 +148,18 @@ namespace ExcelShSy.Ui
         public void OpenSettingWindow()
         {
             var window = _settingWindowFactory.Create();
+            window.ShowDialog();
+        }
+
+        private void AboutWindowOpen_Click(object sender, EventArgs e)
+        {
+            var window = new WPFAboutF4Labs.F4LabsAboutWindow();
+            window.ShowDialog();
+        }
+
+        private void GuideWindowOpen_Click(object sender, EventArgs e)
+        {
+            var window = new Guide.WebView();
             window.Show();
         }
     }

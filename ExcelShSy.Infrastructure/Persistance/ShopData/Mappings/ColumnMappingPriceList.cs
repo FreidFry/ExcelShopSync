@@ -7,11 +7,11 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Mappings
         public static readonly IReadOnlyDictionary<string, IReadOnlyList<string>> Template = new Dictionary<string, IReadOnlyList<string>>
         {
             [ColumnConstants.Article] = ["Article", "Артикул"],
-            [ColumnConstants.Price] = ["Price", "РРЦ, грн", "РРЦ грн", "Ціна"],
-            [ColumnConstants.CompectArticle] = ["Article Comlect", "Артикул комплекта"],
-            [ColumnConstants.CompectPrice] = ["Price Comlect", "Ціна комплекта"],
-            [ColumnConstants.Availability] = ["Availability", "Наличие"],
-            [ColumnConstants.CompectAvailability] = ["Availability Complet", "Наличие комплекта"]
+            [ColumnConstants.Price] = ["Price", "Ціна", "Цена"],
+            [ColumnConstants.ComplectArticle] = ["ArticleComplect", "Артикул комплекта", "Артикул комплекту"],
+            [ColumnConstants.ComplectPrice] = ["PriceComplect", "Цена комплекта", "Ціна комплекту"],
+            [ColumnConstants.Availability] = ["Availability", "Наличие", "Наявність"],
+            [ColumnConstants.ComplectAvailability] = ["AvailabilityComplect", "Наличие комплекта", "Наявність комплекту"]
         };
     }
 }

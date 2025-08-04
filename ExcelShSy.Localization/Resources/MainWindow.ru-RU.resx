@@ -118,57 +118,63 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Cancel" xml:space="preserve">
-    <value>Скасувати</value>
+    <value>Отмена</value>
   </data>
   <data name="ExecuteTasks" xml:space="preserve">
-    <value>Виконати</value>
+    <value>Выполнить</value>
   </data>
   <data name="GetSourceFile" xml:space="preserve">
-    <value>Додати файл джерело</value>
+    <value>Добавить файл источник</value>
   </data>
   <data name="GetTargetFile" xml:space="preserve">
-    <value>Додати файл для змін</value>
+    <value>Добавить файл для изменений</value>
   </data>
   <data name="SaveButton" xml:space="preserve">
-    <value>Зберегти</value>
+    <value>Сохранить</value>
   </data>
   <data name="DiscountDate" xml:space="preserve">
-    <value>Перенести дату знижки</value>
+    <value>Перенести дату скидки</value>
   </data>
   <data name="IncreasePricePercent" xml:space="preserve">
-    <value>Збільшити ціну (фейкова знижка)</value>
+    <value>Увеличить цену (фальшивая скидка)</value>
   </data>
   <data name="RoundUp" xml:space="preserve">
-    <value>Округлити ціни</value>
+    <value>Округлить цены</value>
   </data>
   <data name="SyncAvailability" xml:space="preserve">
-    <value>Перенести наявність</value>
+    <value>Перенести наличие</value>
   </data>
   <data name="SyncDiscount" xml:space="preserve">
-    <value>Перенести знижку</value>
+    <value>Перенести скидку</value>
   </data>
   <data name="SyncPrice" xml:space="preserve">
-    <value>Перенести ціни</value>
+    <value>Перенести цены</value>
   </data>
   <data name="SyncQuantity" xml:space="preserve">
-    <value>Перенести кількість товару</value>
+    <value>Перенести количество</value>
   </data>
   <data name="EditFiles" xml:space="preserve">
-    <value>Змінити...</value>
+    <value>Изменить...</value>
   </data>
   <data name="Setting" xml:space="preserve">
-    <value>Налаштування</value>
+    <value>Настройки</value>
   </data>
   <data name="LastFile" xml:space="preserve">
-    <value>Останній файл</value>
+    <value>Последний файл</value>
   </data>
   <data name="FindMissing" xml:space="preserve">
-    <value>Знайти відсутні</value>
+    <value>Найти отсутствующие</value>
   </data>
   <data name="NoSetExecute_" xml:space="preserve">
-    <value>Будь-ласка, виберіть будь-яке завдання</value>
+    <value>Пожалуйста, выберите любую задачу</value>
   </data>
   <data name="NoSetExecuteTitle_" xml:space="preserve">
-    <value>Немає вибраних задач</value>
+    <value>Нет выбранных заданий</value>
+  </data>
+  <data name="AboutApp" xml:space="preserve">
+    <value>Сведения о программе</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Больше</value>
   </data>
 </root>

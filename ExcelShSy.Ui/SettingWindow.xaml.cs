@@ -1,5 +1,5 @@
 ﻿using ExcelShSy.Core.Interfaces;
-using ExcelShSy.Ui.Properties;
+using ExcelShSy.Localization.Properties;
 using ExcelShSy.Ui.Resources;
 using ExcelShSy.Ui.Utils;
 using Microsoft.Extensions.DependencyInjection;
@@ -66,8 +66,11 @@ namespace ExcelShSy.Ui
             _localizationManager.SetCulture(_newLocalization);
 
             var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             Application.Current.MainWindow.Close();
             Application.Current.MainWindow = mainWindow;
+            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+
             mainWindow.Show();
         }
     }

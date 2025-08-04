@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ExcelShSy.Ui.Resources {
+namespace ExcelShSy.Localization.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace ExcelShSy.Ui.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class SettingWindow {
+    internal class F4LabsAboutWindow {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal SettingWindow() {
+        internal F4LabsAboutWindow() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace ExcelShSy.Ui.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExcelShSy.Ui.Resources.SettingWindow", typeof(SettingWindow).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExcelShSy.Localization.Resources.F4LabsAboutWindow", typeof(F4LabsAboutWindow).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,29 +61,60 @@ namespace ExcelShSy.Ui.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply.
+        ///   Looks up a localized string similar to Developed by F4Labs Studio..
         /// </summary>
-        internal static string ApplyButton {
+        internal static string AboutDevelop {
             get {
-                return ResourceManager.GetString("ApplyButton", resourceCulture);
+                return ResourceManager.GetString("AboutDevelop", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Language.
+        ///   Looks up a localized string similar to This application is designed to simplify and speed up working with price lists and pricing data in Excel.  
+        ///It allows automatic data transfer from a price list or store to other stores, reducing the risk of errors and saving significant time.  
+        ///It helps transfer prices, availability, quantities, and discounts, raise prices, and find missing products in a store by comparing data from a price list or another store..
         /// </summary>
-        internal static string Language {
+        internal static string AboutProgram {
             get {
-                return ResourceManager.GetString("Language", resourceCulture);
+                return ResourceManager.GetString("AboutProgram", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Settings.
+        ///   Looks up a localized string similar to Politov Michail. All rights reserved..
+        /// </summary>
+        internal static string Copyright {
+            get {
+                return ResourceManager.GetString("Copyright", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If this application has been useful to you and you’d like to support its development, you can make a donation.  
+        ///Your support helps us improve functionality, fix bugs, and deliver updates faster.  
+        ///Even a small contribution makes a difference. Thank you for your support!.
+        /// </summary>
+        internal static string SupportSegment {
+            get {
+                return ResourceManager.GetString("SupportSegment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application Information.
         /// </summary>
         internal static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version.
+        /// </summary>
+        internal static string Version {
+            get {
+                return ResourceManager.GetString("Version", resourceCulture);
             }
         }
     }

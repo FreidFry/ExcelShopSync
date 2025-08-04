@@ -2,9 +2,10 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Markup;
-using ExcelShSy.Ui.Properties;
 
-namespace ExcelShSy.Ui.Localization
+using ExcelShSy.Localization.Properties;
+
+namespace ExcelShSy.Localization
 {
     public class LocalizationManager : ILocalizationManager
     {

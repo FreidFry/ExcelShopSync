@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ExcelShSy.Ui.Properties {
+namespace ExcelShSy.Localization.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

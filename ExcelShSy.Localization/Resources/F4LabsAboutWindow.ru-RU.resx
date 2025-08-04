@@ -117,58 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Cancel" xml:space="preserve">
-    <value>Отмена</value>
+  <data name="AboutDevelop" xml:space="preserve">
+    <value>Разработано студией F4Labs.</value>
   </data>
-  <data name="ExecuteTasks" xml:space="preserve">
-    <value>Выполнить</value>
+  <data name="AboutProgram" xml:space="preserve">
+    <value>Данное приложение предназначено для упрощения и ускорения работы с прайс-листами и ценами в Excel.
+Оно позволяет автоматически переносить данные с прайс-листа или магазина в другие магазины, снижая вероятность ошибок и экономя значительное количество времени.
+Помогает перенести цены, наличие, количество и скидки, поднять цены, найти отсутствующие товары в магазине сравнивая данные из прайса/другого магазина.</value>
   </data>
-  <data name="GetSourceFile" xml:space="preserve">
-    <value>Добавить файл источник</value>
+  <data name="SupportSegment" xml:space="preserve">
+    <value>Если приложение оказалось для вас полезным и вы хотите поддержать разработку — вы можете отправить донат.  
+Поддержка помогает нам развивать функциональность, исправлять ошибки и делать обновления быстрее.  
+Даже небольшая сумма имеет значение. Спасибо за вашу поддержку!</value>
   </data>
-  <data name="GetTargetFile" xml:space="preserve">
-    <value>Добавить файл для изменений</value>
+  <data name="Copyright" xml:space="preserve">
+    <value>Политов Михаил. Все права защищены.</value>
   </data>
-  <data name="SaveButton" xml:space="preserve">
-    <value>Сохранить</value>
+  <data name="Title" xml:space="preserve">
+    <value>Сведения о программе</value>
   </data>
-  <data name="DiscountDate" xml:space="preserve">
-    <value>Перенести дату скидки</value>
-  </data>
-  <data name="IncreasePricePercent" xml:space="preserve">
-    <value>Увеличить цену (фальшивая скидка)</value>
-  </data>
-  <data name="RoundUp" xml:space="preserve">
-    <value>Округлить цены</value>
-  </data>
-  <data name="SyncAvailability" xml:space="preserve">
-    <value>Перенести наличие</value>
-  </data>
-  <data name="SyncDiscount" xml:space="preserve">
-    <value>Перенести скидку</value>
-  </data>
-  <data name="SyncPrice" xml:space="preserve">
-    <value>Перенести цены</value>
-  </data>
-  <data name="SyncQuantity" xml:space="preserve">
-    <value>Перенести количество</value>
-  </data>
-  <data name="EditFiles" xml:space="preserve">
-    <value>Изменить...</value>
-  </data>
-  <data name="Setting" xml:space="preserve">
-    <value>Настройки</value>
-  </data>
-  <data name="LastFile" xml:space="preserve">
-    <value>Последний файл</value>
-  </data>
-  <data name="FindMissing" xml:space="preserve">
-    <value>Найти отсутствующие</value>
-  </data>
-  <data name="NoSetExecute_" xml:space="preserve">
-    <value>Пожалуйста, выберите любую задачу</value>
-  </data>
-  <data name="NoSetExecuteTitle_" xml:space="preserve">
-    <value>Нет выбранных заданий</value>
+  <data name="Version" xml:space="preserve">
+    <value>Версия</value>
   </data>
 </root>

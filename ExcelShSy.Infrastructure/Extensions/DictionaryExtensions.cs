@@ -6,7 +6,7 @@ namespace ExcelShSy.Infrastructure.Extensions
 {
     public static class DictionaryExtensions
     {
-        public static bool IsNullOrEmpty<TKey, TValue>([NotNullWhen(false)]this IDictionary<TKey, TValue>? dict) =>
+        public static bool IsNullOrEmpty<TKey, TValue>([NotNullWhen(false)] this IDictionary<TKey, TValue>? dict) =>
             dict == null || dict.Count == 0;
 
         public static bool HasRequiredKeys(this Dictionary<string, int> dict, params string[] keys) =>
@@ -14,7 +14,7 @@ namespace ExcelShSy.Infrastructure.Extensions
 
         public static Dictionary<string, int>? GetHeaderMapFromTemplate(this IDictionary<string, int>? range, IReadOnlyDictionary<string, IReadOnlyList<string>>? template)
         {
-            if (range == null || range.Count < 2) return [];
+            if (range == null) return [];
 
             var result = template
                 .SelectMany(pair => pair.Value, (pair, name) => new { pair.Key, Name = name })
@@ -30,12 +30,12 @@ namespace ExcelShSy.Infrastructure.Extensions
             var priceTemplate = ColumnMappingPriceList.Template;
             var mapping = range.GetHeaderMapFromTemplate(priceTemplate);
 
-            if (mapping == null || mapping.Count < 2)
-                return 0;
-
-            mapping.TryGetValue(columnName, out int result);
-            
-            return result;
+            if (mapping != null)
+            {
+                mapping.TryGetValue(columnName, out int result);
+                return result;
+            }
+            return 0;
         }
 
         public static int GetColumnFromRange(this int oldVal, Dictionary<string, int>? range, string ColumnName)

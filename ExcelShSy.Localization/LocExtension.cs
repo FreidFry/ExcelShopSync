@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Resources;
 using System.Windows.Markup;
 
-namespace ExcelShSy.Ui.Localization
+namespace ExcelShSy.Localization
 {
     [MarkupExtensionReturnType(typeof(string))]
     public class LocExtension : MarkupExtension
@@ -24,7 +24,7 @@ namespace ExcelShSy.Ui.Localization
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            string baseName = $"ExcelShSy.Ui.Resources.{_resourceFile}";
+            string baseName = $"ExcelShSy.Localization.Resources.{_resourceFile}";
             var rm = new ResourceManager(baseName, Assembly.GetExecutingAssembly());
             var value = rm.GetString(_key, CultureInfo.CurrentUICulture);
             if (string.IsNullOrEmpty(value))

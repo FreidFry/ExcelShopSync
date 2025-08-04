@@ -6,6 +6,12 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
+		<AssemblyVersion>2.1.1.0</AssemblyVersion>
+		<FileVersion>2.1.1.0</FileVersion>
+		<NeutralLanguage>en</NeutralLanguage>
+		<Product>ExcelShSy</Product>
+		<Company>F4Labs</Company>
+		<Authors>F4Labs</Authors>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -13,53 +19,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\ExcelShSy.Guide\ExcelShSy.Guide.csproj" />
+		<ProjectReference Include="..\ExcelShSy.Localization\ExcelShSy.Localization.csproj" />
+		<ProjectReference Include="..\WPFAboutF4Labs\WPFAboutF4Labs.csproj" />
 		<ProjectReference Include="..\ExcelShSy.Infrastructure\ExcelShSy.Infrastructure.csproj" />
 		<ProjectReference Include="..\ExcelShSy\ExcelShSy.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Properties\Settings.Designer.cs">
-	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Settings.settings</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\EditLoadFilesWindow.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>EditLoadFilesWindow.resx</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\MainWindow.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>MainWindow.resx</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\SettingWindow.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>SettingWindow.resx</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Update="Resources\EditLoadFilesWindow.resx">
-			<LastGenOutput>EditLoadFilesWindow.Designer.cs</LastGenOutput>
-			<Generator>PublicResXFileCodeGenerator</Generator>
-		</EmbeddedResource>
-		<EmbeddedResource Update="Resources\MainWindow.resx">
-			<LastGenOutput>MainWindow.Designer.cs</LastGenOutput>
-			<Generator>PublicResXFileCodeGenerator</Generator>
-		</EmbeddedResource>
-		<EmbeddedResource Update="Resources\SettingWindow.resx">
-		  <Generator>ResXFileCodeGenerator</Generator>
-		  <LastGenOutput>SettingWindow.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="Properties\Settings.settings">
-	    <Generator>PublicSettingsSingleFileGenerator</Generator>
-	    <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-	  </None>
+		<AssemblyMetadata Include="ReleaseYear" Value="2025" />
 	</ItemGroup>
 
 </Project>

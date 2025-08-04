@@ -14,7 +14,7 @@ using ExcelShSy.Infrastructure.Services.Operations;
 using ExcelShSy.Infrastructure.Services.Storage;
 using ExcelShSy.Ui.Factories;
 using ExcelShSy.Ui.Interfaces;
-using ExcelShSy.Ui.Localization;
+using ExcelShSy.Localization;
 
 using Microsoft.Extensions.DependencyInjection;
 
