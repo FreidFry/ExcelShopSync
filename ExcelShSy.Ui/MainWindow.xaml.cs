@@ -51,7 +51,7 @@ namespace ExcelShSy.Ui
 
         private static void RegestrationTextBlockEvent(string key, TextBlock textBlock)
         {
-            TextBlockEvents.OnTextUpdate += (tarketKey, text) =>
+            UpdateTextBlockEvents.OnTextUpdate += (tarketKey, text) =>
             {
                 if (tarketKey == key)
                     textBlock.Text = text;
@@ -60,25 +60,26 @@ namespace ExcelShSy.Ui
 
         private void GetTargetFile_Click(object sender, RoutedEventArgs e)
         {
-            _fileManager.AddTargetFilesPath();
+            _fileManager.AddTargetPath();
         }
 
         private void GetSourceFile_Click(object sender, RoutedEventArgs e)
         {
-            _fileManager.AddSourceFilesPath();
+            _fileManager.AddSourcePath();
         }
 
         private void ExecuteTasks_Click(object sender, RoutedEventArgs e)
         {
-            if (!_taskFactory.IsAnyCheckboxChecked(TaskGrid))
+            if (!_taskFactory.HasCheckedCheckbox(TaskGrid))
             {
                 var message = GetLocalizate("MainWindow", "NoSetExecute_");
                 var title = GetLocalizate("MainWindow", "NoSetExecuteTitle_");
                 MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            _fileManager.InitializeFiles();
+            _fileManager.InitializeAllFiles();
             _taskFactory.ExecuteOperations(TaskGrid);
+            _fileManager.ClearAfterComplete();
         }
 
         private void CheckBox_Click(object sender, RoutedEventArgs e)
@@ -89,7 +90,7 @@ namespace ExcelShSy.Ui
 
             if (!string.IsNullOrEmpty(propertyName))
             {
-                var settingsType = typeof(GlobalSettings);
+                var settingsType = typeof(ProductProcessingOptions);
                 var prop = settingsType.GetProperty(propertyName);
                 prop?.SetValue(null, value);
             }
@@ -98,7 +99,7 @@ namespace ExcelShSy.Ui
         private void ChangeIncreasePercent_TextChanged(object sender, TextChangedEventArgs e)
         {
             decimal.TryParse(IncreasePercentTextBox.Text, out decimal percents);
-            GlobalSettings.priceIncreasePercentage = percents;
+            ProductProcessingOptions.priceIncreasePercentage = percents;
         }
 
         private void IncreasePercentTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)

@@ -6,7 +6,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
 {
     public record PromData : IShopTemplate
     {
-        public IReadOnlyList<string> Columns =>
+        public IReadOnlyList<string> UnmappedHeaders =>
         [
             "Код_товару",
                     "Назва_позиції",
@@ -62,7 +62,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
                     "Значення_Характеристики"
         ];
 
-        public IReadOnlyDictionary<string, string> Availability => new Dictionary<string, string>
+        public IReadOnlyDictionary<string, string> AvailabilityMap => new Dictionary<string, string>
         {
             { InStock, "+" },
             { OnOrder, "5" },

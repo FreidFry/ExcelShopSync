@@ -9,21 +9,21 @@ namespace ExcelShSy.Infrastructure.Extensions
 {
     public static class ExcelPageExtensions
     {
-        public static string GetShop(this IExcelPage? page)
+        public static string GetShop(this IExcelSheet? page)
         {
-            var headerCount = page?.UndefinedHeaders?.Count;
+            var headerCount = page?.UnmappedHeaders?.Count;
             if (headerCount == null || headerCount == 0) return ShopNameConstant.Unknown;
 
-            var ShopData = new ShopMappings().Shops;
+            var ShopData = new ShopMapping().Shops;
 
             Dictionary<string, int> shopScore = [];
             var ShopKeys = ShopData.Keys;
 
             foreach (var shopKey in ShopKeys)
             {
-                var shopColumn = ShopData[shopKey].Columns;
+                var shopColumn = ShopData[shopKey].UnmappedHeaders;
 
-                var score = page?.UndefinedHeaders?.Keys.Intersect(shopColumn).Count();
+                var score = page?.UnmappedHeaders?.Keys.Intersect(shopColumn).Count();
                 shopScore.Add(shopKey, score ?? 0);
                 if (score >= headerCount / 2 && headerCount > 10) return shopKey;
             }
@@ -32,14 +32,14 @@ namespace ExcelShSy.Infrastructure.Extensions
             return shopScore[shopName] > 0 ? shopName : ShopNameConstant.Unknown;
         }
 
-        public static string GetLanguague(this IExcelPage? page)
+        public static string GetLanguague(this IExcelSheet? page)
         {
-            if (page?.UndefinedHeaders == null || page.UndefinedHeaders.Count == 0)
+            if (page?.UnmappedHeaders == null || page.UnmappedHeaders.Count == 0)
                 return "unknown";
 
-            var allText = string.Join(" ", page.UndefinedHeaders.Keys.Take(15).ToList());
-            var detector = new LanguageDetector();
-            return detector.Detect(allText);
+            var allText = string.Join(" ", page.UnmappedHeaders.Keys.Take(15).ToList());
+            var detector = new LanguageIdentifier();
+            return detector.IdentifyLanguage(allText);
         }
 
         public static IEnumerable<int> GetFullRowRangeWithoutFirstRow(this ExcelWorksheet? worksheet)

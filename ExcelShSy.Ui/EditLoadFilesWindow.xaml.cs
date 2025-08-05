@@ -13,8 +13,8 @@ namespace ExcelShSy
 {
     public partial class EditLoadFilesWindow : Window
     {
-        public ObservableCollection<FileItem> TemperaryTargetFiles { get; set; } = [];
-        public ObservableCollection<FileItem> TemperarySourceFiles { get; set; } = [];
+        public ObservableCollection<ExcelFileItem> TemperaryTargetFiles { get; set; } = [];
+        public ObservableCollection<ExcelFileItem> TemperarySourceFiles { get; set; } = [];
         private readonly IFileManager _fileManager;
         private readonly IFileProvider _fileProvider;
         private readonly IExcelFileFactory _excelfileFactory;
@@ -28,8 +28,8 @@ namespace ExcelShSy
 
             DataContext = this;
 
-            SetFileNameList(TemperaryTargetFiles, _fileManager.TargetPath);
-            SetFileNameList(TemperarySourceFiles, _fileManager.SourcePath);
+            SetFileNameList(TemperaryTargetFiles, _fileManager.TargetPaths);
+            SetFileNameList(TemperarySourceFiles, _fileManager.SourcePaths);
 
             SelectTab(TabName);
         }
@@ -44,11 +44,11 @@ namespace ExcelShSy
             };
         }
 
-        private static void SetFileNameList(ObservableCollection<FileItem> observableCollection, IEnumerable<string> list)
+        private static void SetFileNameList(ObservableCollection<ExcelFileItem> observableCollection, IEnumerable<string> list)
         {
             foreach (string filePath in list)
             {
-                var item = new FileItem(filePath);
+                var item = new ExcelFileItem(filePath);
                 observableCollection.Add(item);
             }
         }
@@ -69,13 +69,13 @@ namespace ExcelShSy
             }
         }
 
-        private void AddItems(ObservableCollection<FileItem> items)
+        private void AddItems(ObservableCollection<ExcelFileItem> items)
         {
-            var sources = _fileProvider.GetPaths();
+            var sources = _fileProvider.PickExcelFilePaths();
             if (sources.IsNullOrEmpty()) return;
             foreach (var file in sources)
                 if (!items.Any(item => item.FilePath == file))
-                    items.Add(new FileItem(file));
+                    items.Add(new ExcelFileItem(file));
         }
 
         private void RemoveFile_Click(object sender, EventArgs e)
@@ -98,7 +98,7 @@ namespace ExcelShSy
             }
         }
 
-        private void RemoveItems(ObservableCollection<FileItem> items)
+        private void RemoveItems(ObservableCollection<ExcelFileItem> items)
         {
             var remove = items.Where(item => item.IsSelectedToRemove).ToList();
             foreach (var file in remove)
@@ -132,30 +132,30 @@ namespace ExcelShSy
         {
             var targetList = TemperaryTargetFiles.Select(i => i.FilePath).ToList();
             var sourceList = TemperarySourceFiles.Select(i => i.FilePath).ToList();
-            TextBlockEvents.UpdateText("TargetLb", "");
-            TextBlockEvents.UpdateText("SourceLb", "");
+            UpdateTextBlockEvents.UpdateText("TargetLb", "");
+            UpdateTextBlockEvents.UpdateText("SourceLb", "");
 
-            _fileManager.TargetPath.Clear();
+            _fileManager.TargetPaths.Clear();
             if (targetList != null && targetList.Count > 0)
             {
-                _fileManager.TargetPath.AddRange(targetList);
+                _fileManager.TargetPaths.AddRange(targetList);
                 FileNameExtensions.SetLastPath("TargetLb", targetList);
             }
-            _fileManager.SourcePath.Clear();
+            _fileManager.SourcePaths.Clear();
             if (sourceList != null && sourceList.Count > 0)
             {
-                _fileManager.SourcePath.AddRange(sourceList);
+                _fileManager.SourcePaths.AddRange(sourceList);
                 FileNameExtensions.SetLastPath("SourceLb", sourceList);
             }
         }
 
         public void ShowInfo_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.DataContext is FileItem target)
+            if (sender is Button button && button.DataContext is ExcelFileItem target)
             {
                 var path = target.FilePath;
                 var file = _excelfileFactory.Create(path);
-                file.ShowInfo();
+                file.ShowFileDetails();
             }
         }
     }

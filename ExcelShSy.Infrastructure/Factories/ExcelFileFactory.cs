@@ -19,20 +19,20 @@ namespace ExcelShSy.Infrastructure.Factories
         {
             var file = new ExcelFile(path);
 
-            file.Pages = GetPages(file.ExcelPackage);
+            file.SheetList = GetPages(file.ExcelPackage);
 
-            file.ShopName = IndetifyShop(file.Pages);
-            file.Language = LanguageDetect(file.Pages);
+            file.ShopName = IndetifyShop(file.SheetList);
+            file.Language = LanguageDetect(file.SheetList);
 
             return file;
         }
 
-        List<IExcelPage> GetPages(ExcelPackage package)
+        List<IExcelSheet> GetPages(ExcelPackage package)
         {
             ExcelWorkbook workbook = package.Workbook;
             if (workbook == null)
                 return [];
-            List<IExcelPage> pages = [];
+            List<IExcelSheet> pages = [];
             foreach (var page in workbook.Worksheets)
             {
                 pages.Add(_excelPageFactory.Create(page));
@@ -40,7 +40,7 @@ namespace ExcelShSy.Infrastructure.Factories
             return pages;
         }
 
-        static string IndetifyShop(List<IExcelPage> pages)
+        static string IndetifyShop(List<IExcelSheet> pages)
         {
             List<string> shops = [];
             foreach (var page in pages)
@@ -57,7 +57,7 @@ namespace ExcelShSy.Infrastructure.Factories
             return thisShop;
         }
 
-        static string LanguageDetect(List<IExcelPage> pages)
+        static string LanguageDetect(List<IExcelSheet> pages)
         {
             List<string> languagues = [];
             foreach (var page in pages)

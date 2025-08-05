@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy", "ExcelShSy\ExcelShSy.csproj", "{1111CB76-D0CE-4420-87A1-BB83382F3E4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy.Core", "ExcelShSy\ExcelShSy.Core.csproj", "{1111CB76-D0CE-4420-87A1-BB83382F3E4C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy.Ui", "ExcelShSy.Ui\ExcelShSy.Ui.csproj", "{2F7A1DBC-1B8C-428D-AB9E-F62CD6102097}"
 EndProject

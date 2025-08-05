@@ -13,13 +13,15 @@ namespace ExcelShSy.Infrastructure.Services
     [Task("SyncDiscountDate")]
     public class SyncDiscountDate : IExecuteOperation
     {
-        private readonly IDataProduct _dataProduct;
+        private readonly IProductStorage _dataProduct;
         private readonly IFileStorage _fileStorage;
-        private readonly IShopMappings _shopMapping;
+        private readonly IShopMapping _shopMapping;
         private readonly ILogger _logger;
         private string _shopFormat;
 
-        public SyncDiscountDate(IDataProduct dataProduct, IFileStorage fileStorage, ILogger logger, IShopMappings shopMapping)
+        public List<string> Errors { get; } = [];
+
+        public SyncDiscountDate(IProductStorage dataProduct, IFileStorage fileStorage, ILogger logger, IShopMapping shopMapping)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
@@ -39,18 +41,18 @@ namespace ExcelShSy.Infrastructure.Services
 
         string SetDataFormat(string shopName)
         {
-            var shopTemplate = _shopMapping.GetShop(shopName);
+            var shopTemplate = _shopMapping.FindShopTemplate(shopName);
             return shopTemplate.DataFormat;
         }
 
         void ProcessFile(IExcelFile file)
         {
-            foreach (var page in file.Pages) ProcessPage(page);
+            foreach (var page in file.SheetList) OperationWraper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
-        void ProcessPage(IExcelPage page)
+        void ProcessPage(IExcelSheet page)
         {
-            var worksheet = page.ExcelWorksheet;
+            var worksheet = page.Worksheet;
 
             var DataStart = page.InitialHeadersTuple(ColumnConstants.DiscountFrom);
             var DataEnd = page.InitialHeadersTuple(ColumnConstants.DiscountTo);
@@ -70,7 +72,7 @@ namespace ExcelShSy.Infrastructure.Services
                     worksheet.WriteCell(row, DataStart.neededColumn, ConvertDate(valueTo));
                 else productTo.Add(article);
 
-                if (valueFrom > GlobalSettings.MinDateActually && valueFrom < valueTo)
+                if (valueFrom > ProductProcessingOptions.MinDateActually && valueFrom < valueTo)
                     ErrorDate.Add(article);
             }
 

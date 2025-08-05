@@ -1,7 +1,6 @@
 ﻿using ExcelShSy.Core.Attributes;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
-
 using System.IO;
 
 
@@ -13,6 +12,8 @@ namespace ExcelShSy.Infrastructure.Services
 
         private readonly IFileStorage _fileStorage;
 
+        public List<string> Errors { get; } = [];
+
         public SavePackages(IFileStorage fileStorage)
         {
             _fileStorage = fileStorage;
@@ -21,7 +22,7 @@ namespace ExcelShSy.Infrastructure.Services
         public void Execute()
         {
             foreach (var file in _fileStorage.Target)
-                file.ExcelPackage.SaveAs(GetNewPath(file.FilePath));
+                file.ExcelPackage.SaveAs(GetNewPath(file.FileLocation));
         }
 
         static string GetNewPath(string oldPath)

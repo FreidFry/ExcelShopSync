@@ -1,5 +1,5 @@
 ﻿using ExcelShSy.Core.Attributes;
-using ExcelShSy.Core.Interfaces.Common;
+using ExcelShSy.Core.Exeptions;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
@@ -12,12 +12,14 @@ namespace ExcelShSy.Infrastructure.Services
     [Task("FindMissingProduct")]
     public class FindMissingProducts : IExecuteOperation
     {
-        private readonly IDataProduct _dataProduct;
+        private readonly IProductStorage _dataProduct;
         private readonly IFileStorage _fileStorage;
         private FileStream _fileStream;
         private StreamWriter _writer;
 
-        public FindMissingProducts(IDataProduct dataProduct, IFileStorage fileStorage)
+        public List<string> Errors { get; } = [];
+
+        public FindMissingProducts(IProductStorage dataProduct, IFileStorage fileStorage)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
@@ -41,16 +43,16 @@ namespace ExcelShSy.Infrastructure.Services
 
         void ProcessFile(IExcelFile file)
         {
-            foreach (var page in file.Pages)
+            foreach (var page in file.SheetList)
             {
-                _writer.WriteLine(CenterText(page.PageName));
-                ProcessPage(page);
+                _writer.WriteLine(CenterText(page.SheetName));
+                OperationWraper.Try(() => ProcessPage(page), Errors, file.FileName);
             }
         }
 
-        void ProcessPage(IExcelPage page)
+        void ProcessPage(IExcelSheet page)
         {
-            var worksheet = page.ExcelWorksheet;
+            var worksheet = page.Worksheet;
 
             var articleCol = page.InitialHeadersTuple();
 
@@ -73,7 +75,7 @@ namespace ExcelShSy.Infrastructure.Services
             _writer.WriteLine(CenterText($"{missing.Count}/{totalRow} not founded"));
         }
 
-        string CenterText(string text, int totalWidth = 80, char filler = '-')
+        static string CenterText(string text, int totalWidth = 80, char filler = '-')
         {
             int padding = totalWidth - text.Length;
             int padLeft = padding / 2;

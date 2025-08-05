@@ -36,7 +36,7 @@ namespace ExcelShSy.Infrastructure.Extensions
                 var normalizedValue = stringValue.Replace(',', '.');
                 decimal.TryParse(normalizedValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var value);
                 
-                if (GlobalSettings.IsRound) return RoundDecimal(value, 0);
+                if (ProductProcessingOptions.ShouldRoundPrices) return RoundDecimal(value, 0);
                 else return RoundDecimal(value, 2);
             }
             catch

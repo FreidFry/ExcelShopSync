@@ -23,7 +23,7 @@
 		<ProjectReference Include="..\ExcelShSy.Localization\ExcelShSy.Localization.csproj" />
 		<ProjectReference Include="..\WPFAboutF4Labs\WPFAboutF4Labs.csproj" />
 		<ProjectReference Include="..\ExcelShSy.Infrastructure\ExcelShSy.Infrastructure.csproj" />
-		<ProjectReference Include="..\ExcelShSy\ExcelShSy.csproj" />
+		<ProjectReference Include="..\ExcelShSy\ExcelShSy.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

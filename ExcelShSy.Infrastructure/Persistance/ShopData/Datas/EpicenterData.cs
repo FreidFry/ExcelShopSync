@@ -6,7 +6,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
 {
     public record EpicenterData : IShopTemplate
     {
-        public IReadOnlyList<string> Columns =>
+        public IReadOnlyList<string> UnmappedHeaders =>
         [
             "№",
             "Артикул*",
@@ -41,7 +41,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
             "Статус (не редагується)"
         ];
 
-        public IReadOnlyDictionary<string, string> Availability => new Dictionary<string, string>
+        public IReadOnlyDictionary<string, string> AvailabilityMap => new Dictionary<string, string>
         {
             { InStock, "в наявності" },
             { OutOfStock, "немає в наявності" },

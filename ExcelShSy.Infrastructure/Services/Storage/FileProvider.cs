@@ -14,9 +14,9 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             _excelFileFactory = excelFileFactory;
         }
 
-        public List<IExcelFile> GetFiles(List<string> paths)
+        public List<IExcelFile> FetchExcelFile(List<string> paths)
         {
-            var result = new List<IExcelFile>();
+            List<IExcelFile> result = [];
 
             foreach (var path in paths)
             {
@@ -28,7 +28,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             return result;
         }
 
-        public List<string>? GetPaths()
+        public List<string>? PickExcelFilePaths()
         {
             OpenFileDialog fileDialog = new()
             {
@@ -39,7 +39,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             if (fileDialog.ShowDialog() == false || fileDialog.FileNames.Length == 0)
                 return null;
 
-            var result = new List<string>();
+            List<string> result = [];
 
             foreach (var fileName in fileDialog.FileNames)
                 result.Add(fileName);

@@ -1,4 +1,5 @@
-﻿using ExcelShSy.Core.Interfaces.Excel;
+﻿using ExcelShSy.Core.Exeptions;
+using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Infrastructure.Persistance.DefaultValues;
 
 using OfficeOpenXml;
@@ -12,18 +13,28 @@ namespace ExcelShSy.Infrastructure.Extensions
 {
     public static class AssistanceExtensions
     {
-        public static (int articleColumn, int neededColumn) InitialHeadersTuple(this IExcelPage page, string column)
+        public static (int articleColumn, int neededColumn) InitialHeadersTuple(this IExcelSheet page, string columnName)
         {
-            if (page?.Headers == null || page.Headers.IsNullOrEmpty() || !page.Headers.ContainsKey(column)) return (0, 0);
+            if (page?.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty() || !page.MappedHeaders.ContainsKey(columnName)) return (0, 0);
 
-            return (page.Headers[ColumnConstants.Article], page.Headers[column]);
+            var article = page.FindColumnInHeaders(ColumnConstants.Article);
+            var needColumn = page.FindColumnInHeaders(columnName);
+
+            return (article, needColumn);
         }
 
-        public static int InitialHeadersTuple(this IExcelPage page)
+        public static int InitialHeadersTuple(this IExcelSheet page)
         {
-            if (page?.Headers == null || page.Headers.IsNullOrEmpty()) return 0;
+            if (page?.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty()) return 0;
 
-            return page.Headers[ColumnConstants.Article];
+            return page.FindColumnInHeaders(ColumnConstants.Article);
+        }
+
+        private static int FindColumnInHeaders(this IExcelSheet page, string columnName)
+        {
+            if (page?.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty() || !page.MappedHeaders.TryGetValue(columnName, out int value))
+                throw new ShopDataException($"page \"{page.SheetName}\" - {columnName} not found! Please check your file.");
+            return value;
         }
 
         public static bool AnyIsNullOrEmpty([NotNullWhen(false)] this (int, int) tuple) => tuple.Item1 is 0 || tuple.Item2 is 0;

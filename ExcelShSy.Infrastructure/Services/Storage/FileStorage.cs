@@ -19,10 +19,10 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             Source.AddRange(files);
         }
 
-        public void ClearTarget() => Target.Clear();
-        public void ClearSource() => Source.Clear();
+        public void ClearTargetFiles() => Target.Clear();
+        public void ClearSourceFiles() => Source.Clear();
 
-        public void ClearAll()
+        public void ClearAllFiles()
         {
             Target.Clear();
             Source.Clear();

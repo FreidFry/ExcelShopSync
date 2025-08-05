@@ -14,11 +14,11 @@ namespace ExcelShSy.Infrastructure.Extensions
                 if (fileName.Length > 25)
                     fileName = $"{fileName.Substring(0, 25)}...";
                 if (pathList.Count == 1)
-                    TextBlockEvents.UpdateText(TextBlockName, fileName);
+                    UpdateTextBlockEvents.UpdateText(TextBlockName, fileName);
                 else
                 {
                     var normalizedFileName = $"{fileName} [+ {pathList.Count - 1}]";
-                    TextBlockEvents.UpdateText(TextBlockName, normalizedFileName);
+                    UpdateTextBlockEvents.UpdateText(TextBlockName, normalizedFileName);
                 }
             }
         }

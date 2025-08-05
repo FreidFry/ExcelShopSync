@@ -12,7 +12,7 @@ namespace ExcelShSy.Localization
         public void SetCulture(string code)
         {
             CultureInfo? culture;
-            if (string.IsNullOrEmpty(code))
+            if (string.IsNullOrEmpty(code)) //if code is null or empty, use the installed Windows culture
                 culture = new CultureInfo(CultureInfo.InstalledUICulture.Name);
             else
                 culture = new CultureInfo(code);

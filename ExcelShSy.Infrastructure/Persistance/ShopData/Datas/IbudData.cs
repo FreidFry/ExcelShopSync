@@ -6,7 +6,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
 {
     public record IbudData : IShopTemplate
     {
-        public IReadOnlyList<string> Columns =>
+        public IReadOnlyList<string> UnmappedHeaders =>
         [
             "id",
             "article",
@@ -21,7 +21,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
             "producer"
         ];
 
-        public IReadOnlyDictionary<string, string> Availability => new Dictionary<string, string>
+        public IReadOnlyDictionary<string, string> AvailabilityMap => new Dictionary<string, string>
         {
             { InStock, "В наличии" },
             { OutOfStock, "Нет в наличии" },

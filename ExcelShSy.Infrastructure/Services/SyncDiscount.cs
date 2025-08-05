@@ -1,5 +1,4 @@
 ﻿using ExcelShSy.Core.Attributes;
-using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
@@ -11,14 +10,16 @@ namespace ExcelShSy.Infrastructure.Services
     [Task("SyncDiscount")]
     public class SyncDiscount : IExecuteOperation
     {
-        private readonly IDataProduct _dataProduct;
+        private readonly IProductStorage _dataProduct;
         private readonly IFileStorage _fileStorage;
 
-        public SyncDiscount(IDataProduct dataProduct, IFileStorage fileStorage)
+        public SyncDiscount(IProductStorage dataProduct, IFileStorage fileStorage)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
         }
+
+        public List<string> Errors { get; } = [];
 
         public void Execute()
         {
@@ -27,13 +28,13 @@ namespace ExcelShSy.Infrastructure.Services
 
         void ProcessFile(IExcelFile file)
         {
-            foreach (var page in file.Pages) ProcessPage(page);
+            foreach (var page in file.SheetList) OperationWraper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
-        void ProcessPage(IExcelPage page)
+        void ProcessPage(IExcelSheet page)
         {
 
-            var worksheet = page.ExcelWorksheet;
+            var worksheet = page.Worksheet;
 
             var headers = page.InitialHeadersTuple(ColumnConstants.Discount);
 

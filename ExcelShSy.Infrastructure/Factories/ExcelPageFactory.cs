@@ -9,13 +9,13 @@ namespace ExcelShSy.Infrastructure.Factories
 {
     public class ExcelPageFactory : IExcelPageFactory
     {
-        public IExcelPage Create(ExcelWorksheet worksheet)
+        public IExcelSheet Create(ExcelWorksheet worksheet)
         {
             var page = new ExcelPage(worksheet)
             {
-                UndefinedHeaders = GetTempHeaders(worksheet)
+                UnmappedHeaders = GetTempHeaders(worksheet)
             };
-            page.Headers = GetRealHeaders(page.UndefinedHeaders);
+            page.MappedHeaders = GetRealHeaders(page.UnmappedHeaders);
 
             return page;
         }

@@ -26,19 +26,19 @@ namespace ExcelShSy.Ui.AppConfigs
         {
             services.AddSingleton<IFileStorage, FileStorage>();
             services.AddSingleton<IFileManager, FileManager>();
-            services.AddScoped<IDataProduct, DataProduct>();
+            services.AddScoped<IProductStorage, ProductStorage>();
 
             services.AddScoped<IFileProvider, FileProvider>();
 
             services.AddSingleton<ILogger, Logger>();
 
             services.AddScoped<IExcelFile, ExcelFile>();
-            services.AddScoped<IExcelPage, ExcelPage>();
-            services.AddScoped<IShopMappings, ShopMappings>();
-            services.AddScoped<ILanguageDetector, LanguageDetector>();
-            services.AddScoped<IGetProductManager, GetProductFromSource>();
-            services.AddScoped<IFromPrice, FromPrice>();
-            services.AddScoped<IFromMarket, FromMarket>();
+            services.AddScoped<IExcelSheet, ExcelPage>();
+            services.AddScoped<IShopMapping, ShopMapping>();
+            services.AddScoped<ILanguageIdentifier, LanguageIdentifier>();
+            services.AddScoped<IGetProductManager, ProductImporterSelector>();
+            services.AddScoped<IFetchMasterProduct, FetchProductMaster>();
+            services.AddScoped<IFetchMarketProduct, MarketProductImporter>();
 
             //factory
             services.AddScoped<IExcelFileFactory, ExcelFileFactory>();

@@ -5,27 +5,27 @@ using OfficeOpenXml;
 
 namespace ExcelShSy.Infrastructure.Persistance.Model
 {
-    public class ExcelPage : IExcelPage
+    public class ExcelPage : IExcelSheet
     {
         
-        public string PageName { get; set; }
-        public ExcelWorksheet ExcelWorksheet { get; set; }
-        public Dictionary<string, int>? UndefinedHeaders { get; set; }
-        public Dictionary<string, int>? Headers { get; set; }
+        public string SheetName { get; set; }
+        public ExcelWorksheet Worksheet { get; set; }
+        public Dictionary<string, int>? UnmappedHeaders { get; set; }
+        public Dictionary<string, int>? MappedHeaders { get; set; }
 
         public ExcelPage(ExcelWorksheet worksheet)
         {
-            PageName = worksheet.Name;
-            ExcelWorksheet = worksheet;
+            SheetName = worksheet.Name;
+            Worksheet = worksheet;
         }
 
-        public string ShowInfo()
+        public string ShowPageDetails()
         {
             string response;
-            if (!Headers.IsNullOrEmpty())
-                response = $"{PageName}\n\n{string.Join("\n", Headers.Select(kv => $"{kv.Key}: {kv.Value}"))}";
+            if (!MappedHeaders.IsNullOrEmpty())
+                response = $"{SheetName}\n\n{string.Join("\n", MappedHeaders.Select(kv => $"{kv.Key}: {kv.Value}"))}";
             else
-                response = $"{PageName}\n\nHeaders is null.";
+                response = $"{SheetName}\n\nHeaders is null.";
             return response;
         }
     }

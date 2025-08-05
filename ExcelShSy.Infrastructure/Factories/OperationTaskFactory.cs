@@ -48,6 +48,8 @@ namespace ExcelShSy.Infrastructure.Factories
 
         public void ExecuteOperations(DependencyObject parent)
         {
+            HashSet<string> errors = [];
+
             List<IExecuteOperation> tasksToRun = [];
             tasksToRun.AddOperationTask(parent, this);
             _logger.LogInfo("Executes: " + string.Join(", ", tasksToRun.Select(t => t.GetType().Name)));
@@ -58,14 +60,27 @@ namespace ExcelShSy.Infrastructure.Factories
             {
                 _logger.LogInfo($"Start {task.GetType().Name}");
                 task.Execute();
+                if (task.Errors.Count != 0)
+                    foreach (var error in task.Errors)
+                        errors.Add(error);
+
                 _logger.LogInfo($"Finish {task.GetType().Name}");
+            }
+            if (errors.Count == 0)
+            {
+                _logger.LogInfo("Finish without errors.");
+                MessageBox.Show("Finish without problems.");
+            }
+            else
+            {
+                _logger.LogInfo("Finish with errors:");
+                foreach (var error in errors) _logger.LogWarning(error);
+                MessageBox.Show("Finish with problems:\n" + string.Join("\n", errors));
 
             }
-            _logger.LogInfo("Finish");
-            MessageBox.Show("Finish");
         }
 
-        public bool IsAnyCheckboxChecked(DependencyObject parent)
+        public bool HasCheckedCheckbox(DependencyObject parent)
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
             {
@@ -74,7 +89,7 @@ namespace ExcelShSy.Infrastructure.Factories
                 if (child is CheckBox cb && cb.IsChecked == true)
                     return true;
 
-                if (IsAnyCheckboxChecked(child))
+                if (HasCheckedCheckbox(child))
                     return true;
             }
             return false;

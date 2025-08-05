@@ -13,17 +13,17 @@ namespace ExcelShSy.Infrastructure.Services.Storage
     {
         private readonly IFileProvider _fileProvider;
         private readonly IFileStorage _fileStorage;
-        private readonly IDataProduct _dataProduct;
+        private readonly IProductStorage _dataProduct;
         private readonly ILogger _logger;
 
         private readonly IGetProductManager _getProductManager;
 
-        public List<string> TargetPath { get; set; } = [];
-        public List<string> SourcePath { get; set; } = [];
+        public List<string> TargetPaths { get; set; } = [];
+        public List<string> SourcePaths { get; set; } = [];
 
         public FileManager(IFileProvider fileProvider,
             IFileStorage fileStorage,
-            IDataProduct dataProduct,
+            IProductStorage dataProduct,
             ILogger logger,
             IGetProductManager getProductManager
             )
@@ -36,77 +36,82 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             _getProductManager = getProductManager;
         }
 
-        public IExcelFile GetFileInfo(string path)
+        public IExcelFile GetFileDetails(string path)
         {
-            return _fileProvider.GetFiles([path])[0];
+            return _fileProvider.FetchExcelFile([path])[0];
         }
 
-        public void AddTargetFiles()
+        public void InitializeTargetFiles()
         {
-            var files = _fileProvider.GetFiles(TargetPath);
+            var files = _fileProvider.FetchExcelFile(TargetPaths);
             if (files != null)
                 _fileStorage.AddTarget(files);
         }
 
-        public void AddSourceFiles()
+        public void InitializeSourceFiles()
         {
-            var files = _fileProvider.GetFiles(SourcePath);
+            var files = _fileProvider.FetchExcelFile(SourcePaths);
             if (files != null)
                 _fileStorage.AddSource(files);
         }
 
-        public void InitializeFiles()
+        public void InitializeAllFiles()
         {
-            _dataProduct.ClearData();
-            _fileStorage.ClearAll();
-
-            AddTargetFiles();
-            AddSourceFiles();
-            _getProductManager.GetAllProduct();
+            InitializeTargetFiles();
+            InitializeSourceFiles();
+            _getProductManager.FetchAllProducts();
         }
 
-        public void AddSourceFilesPath()
+        public void ClearAfterComplete()
         {
-            var paths = _fileProvider.GetPaths();
+            _dataProduct.ClearData();
+            _fileStorage.ClearAllFiles();
+
+            _logger.LogInfo("All files cleared");
+        }
+
+        public void AddSourcePath()
+        {
+            var paths = _fileProvider.PickExcelFilePaths();
             if (paths.IsNullOrEmpty())
             {
                 _logger.LogInfo("Sources file empty");
                 return;
             }
 
-            SourcePath.AddRange(paths.Distinct().Except(SourcePath));
+            SourcePaths.AddRange(paths.Distinct().Except(SourcePaths));
 
-            SetLastPath("SourceLb", SourcePath);
+            SetLastPath("SourceLb", SourcePaths);
         }
 
-        public void AddTargetFilesPath()
+        public void AddTargetPath()
         {
-            var paths = _fileProvider.GetPaths();
+            var paths = _fileProvider.PickExcelFilePaths();
             if (paths.IsNullOrEmpty())
             {
                 _logger.LogError("Targets file empty");
                 return;
             }
-            TargetPath.AddRange(paths.Distinct().Except(TargetPath));
+            TargetPaths.AddRange(paths.Distinct().Except(TargetPaths));
 
-            SetLastPath("TargetLb", TargetPath);
+            SetLastPath("TargetLb", TargetPaths);
         }
 
-        public void RemoveSourceFilesPath(string path)
+        public void RemoveSourcePath(string path)
         {
-            if (SourcePath.Contains(path))
+            if (SourcePaths.Contains(path))
             {
-                SourcePath.Remove(path);
                 _logger.LogInfo($"Remove source files path: {Path.GetFileNameWithoutExtension(path)}");
+                SourcePaths.Remove(path);
             }
         }
 
-        public void RemoveTargetFilesPath(string path)
+        public void RemoveTargetPath(string path)
         {
-            if (TargetPath.Contains(path))
+            if (TargetPaths.Contains(path))
             {
                 _logger.LogInfo($"Remove target files path: {Path.GetFileNameWithoutExtension(path)}");
-                TargetPath.Remove(path);
+                TargetPaths.Remove(path);
             }
         }
     }

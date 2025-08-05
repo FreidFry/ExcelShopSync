@@ -7,7 +7,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
 {
     public record HoroshopData : IShopTemplate
     {
-        public IReadOnlyList<string> Columns =>
+        public IReadOnlyList<string> UnmappedHeaders =>
         [
             "Артикул",
             "Родительский артикул",
@@ -70,7 +70,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
             "Электронный товар",
         ];
 
-        public IReadOnlyDictionary<string, string> Availability => new Dictionary<string, string>
+        public IReadOnlyDictionary<string, string> AvailabilityMap => new Dictionary<string, string>
         {
             { InStock, "В наявності" },
             { OnOrder, "Під замовлення" },

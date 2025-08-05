@@ -6,7 +6,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
 {
     public record RozetkaData : IShopTemplate
     {
-        public IReadOnlyList<string> Columns =>
+        public IReadOnlyList<string> UnmappedHeaders =>
         [
             "ID",
             "OFFERID",
@@ -46,7 +46,7 @@ namespace ExcelShSy.Infrastructure.Persistance.ShopData.Datas
             "Ширина|24948"
         ];
 
-        public IReadOnlyDictionary<string, string> Availability => new Dictionary<string, string>
+        public IReadOnlyDictionary<string, string> AvailabilityMap => new Dictionary<string, string>
         {
             { InStock, "В наявності" },
             { OutOfStock, "Не в наявності" },

@@ -5,7 +5,6 @@ using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Infrastructure.Persistance.DefaultValues;
 using ExcelShSy.Properties;
-
 using static ExcelShSy.Infrastructure.Extensions.ExcelRangeExtensions;
 
 namespace ExcelShSy.Infrastructure.Services
@@ -20,6 +19,8 @@ namespace ExcelShSy.Infrastructure.Services
             _fileStorage = fileStorage;
         }
 
+        public List<string> Errors => throw new NotImplementedException();
+
         public void Execute()
         {
             foreach (var file in _fileStorage.Target) ProcessFile(file);
@@ -27,13 +28,13 @@ namespace ExcelShSy.Infrastructure.Services
 
         void ProcessFile(IExcelFile file)
         {
-            foreach (var page in file.Pages) ProcessPage(page);
+            foreach (var page in file.SheetList) OperationWraper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
-        void ProcessPage(IExcelPage page)
+        void ProcessPage(IExcelSheet page)
         {
 
-            var worksheet = page.ExcelWorksheet;
+            var worksheet = page.Worksheet;
 
             var headers = page.InitialHeadersTuple(ColumnConstants.PriceOld);
 
@@ -41,12 +42,12 @@ namespace ExcelShSy.Infrastructure.Services
             if (headers.AnyIsNullOrEmpty()) return;
 
             decimal priceIncrease = 0;
-            if (GlobalSettings.priceIncreasePercentage < 100)
-                priceIncrease = (GlobalSettings.priceIncreasePercentage + 100) / 100;
+            if (ProductProcessingOptions.priceIncreasePercentage < 100)
+                priceIncrease = (ProductProcessingOptions.priceIncreasePercentage + 100) / 100;
             else
             {
-                AssistanceExtensions.Warning(GlobalSettings.priceIncreasePercentage >= 200, $"Are you sure you want a {GlobalSettings.priceIncreasePercentage}% increase?");
-                priceIncrease = GlobalSettings.priceIncreasePercentage / 100;
+                AssistanceExtensions.Warning(ProductProcessingOptions.priceIncreasePercentage >= 200, $"Are you sure you want a {ProductProcessingOptions.priceIncreasePercentage}% increase?");
+                priceIncrease = ProductProcessingOptions.priceIncreasePercentage / 100;
             }
 
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
@@ -55,7 +56,7 @@ namespace ExcelShSy.Infrastructure.Services
                 if (price == null) continue;
                 decimal priceValue = (decimal)price * priceIncrease;
 
-                if (GlobalSettings.IsRound) priceValue = RoundDecimal(priceValue, 0);
+                if (ProductProcessingOptions.ShouldRoundPrices) priceValue = RoundDecimal(priceValue, 0);
                 else priceValue = RoundDecimal(priceValue, 2);
 
                 worksheet.WriteCell(row, headers.neededColumn, priceValue);
