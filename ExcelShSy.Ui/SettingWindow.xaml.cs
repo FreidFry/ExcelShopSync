@@ -73,5 +73,11 @@ namespace ExcelShSy.Ui
 
             mainWindow.Show();
         }
+
+        private void ShopManagerOpen_Click(object s, EventArgs e)
+        {
+            Window shopManagerWindow = _serviceProvider.GetRequiredService<ShopManagerWindow>();
+            shopManagerWindow.ShowDialog();
+        }
     }
 }

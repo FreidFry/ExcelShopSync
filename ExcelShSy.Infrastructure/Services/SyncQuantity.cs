@@ -4,10 +4,11 @@ using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Infrastructure.Persistance.DefaultValues;
+using ExcelShSy.Properties;
 
 namespace ExcelShSy.Infrastructure.Services
 {
-    [Task("SyncQuantity")]
+    [Task(nameof(ProductProcessingOptions.ShouldSyncQuantities))]
     public class SyncQuantity : IExecuteOperation
     {
         private readonly IProductStorage _dataProduct;

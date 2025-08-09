@@ -12,11 +12,23 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <TextBlock Text="{local:Loc SettingWindow.Language}" Height="Auto" VerticalAlignment="Center" />
-            <ComboBox x:Name="CBLanguagues" Height="Auto" Width="150" Margin="10 0" SelectionChanged="CBLanguagues_SelectionChanged" >
+        <StackPanel Margin="10" >
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="0,0,0,10"/>
+                </Style>
+                <Style TargetType="StackPanel">
+                    <Setter Property="Margin" Value="0,0,0,10"/>
+                </Style>
+            </StackPanel.Resources>
 
-            </ComboBox>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <TextBlock Text="{local:Loc SettingWindow.Language}" Height="Auto" VerticalAlignment="Center" />
+            <ComboBox x:Name="CBLanguagues" Height="Auto" Width="150" Margin="10 0" SelectionChanged="CBLanguagues_SelectionChanged" />
+        </StackPanel>
+
+        <Button Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Left" Content="{local:Loc SettingWindow.UserShopManager}" Padding="10 2" Click="ShopManagerOpen_Click"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" >

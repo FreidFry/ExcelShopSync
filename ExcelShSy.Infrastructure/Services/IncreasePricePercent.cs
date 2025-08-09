@@ -9,7 +9,7 @@ using static ExcelShSy.Infrastructure.Extensions.ExcelRangeExtensions;
 
 namespace ExcelShSy.Infrastructure.Services
 {
-    [Task("IncreasePricePercent")]
+    [Task(nameof(ProductProcessingOptions.ShouldIncreasePrices))]
     public class IncreasePricePercent : IExecuteOperation
     {
         private readonly IFileStorage _fileStorage;
@@ -19,7 +19,7 @@ namespace ExcelShSy.Infrastructure.Services
             _fileStorage = fileStorage;
         }
 
-        public List<string> Errors => throw new NotImplementedException();
+        public List<string> Errors { get; } = [];
 
         public void Execute()
         {
@@ -36,10 +36,12 @@ namespace ExcelShSy.Infrastructure.Services
 
             var worksheet = page.Worksheet;
 
-            var headers = page.InitialHeadersTuple(ColumnConstants.PriceOld);
+            var headers = page.InitialHeadersTuple(ColumnConstants.Price);
 
-            if (headers.AnyIsNullOrEmpty()) headers = page.InitialHeadersTuple(ColumnConstants.Price);
             if (headers.AnyIsNullOrEmpty()) return;
+
+            var OldPriceColumn = page.InitialNeedColumn(ColumnConstants.PriceOld);
+            if (OldPriceColumn == 0) OldPriceColumn = page.InitialNeedColumn(ColumnConstants.Price);
 
             decimal priceIncrease = 0;
             if (ProductProcessingOptions.priceIncreasePercentage < 100)
@@ -59,7 +61,7 @@ namespace ExcelShSy.Infrastructure.Services
                 if (ProductProcessingOptions.ShouldRoundPrices) priceValue = RoundDecimal(priceValue, 0);
                 else priceValue = RoundDecimal(priceValue, 2);
 
-                worksheet.WriteCell(row, headers.neededColumn, priceValue);
+                worksheet.WriteCell(row, OldPriceColumn, priceValue);
             }
         }
     }

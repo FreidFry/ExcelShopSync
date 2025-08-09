@@ -22,7 +22,7 @@
             <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Setting}" Click="SettingsWindowOpen_Click" />
             <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.About}">
                 <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.AboutApp}" Click="AboutWindowOpen_Click" />
-                <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Guide}" Click="GuideWindowOpen_Click" />
+                <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Guid}" Click="GuideWindowOpen_Click" />
             </MenuItem>
         </Menu>
 
@@ -53,17 +53,17 @@
                 <StackPanel>
 
                     <StackPanel Margin="0, 2.5" Grid.Row="0" Orientation="Horizontal" >
-                        <CheckBox Content="{local:Loc MainWindow.SyncPrice}" Tag="SyncPrice" Click="CheckBox_Click" VerticalAlignment="Center" />
-                        <CheckBox Margin="5 0" Content="{local:Loc MainWindow.RoundUp}" Tag="IsRound" Click="CheckBox_Click" VerticalAlignment="Center" />
-                        <CheckBox Content="{local:Loc MainWindow.IncreasePricePercent}" HorizontalAlignment="Left" Tag="IncreasePricePercent" Click="CheckBox_Click" VerticalAlignment="Center" />
+                        <CheckBox Content="{local:Loc MainWindow.SyncPrice}" Tag="ShouldSyncPrices" Click="CheckBox_Click" VerticalAlignment="Center" />
+                        <CheckBox Margin="5 0" Content="{local:Loc MainWindow.RoundUp}" Tag="ShouldRoundPrices" Click="CheckBox_Click" VerticalAlignment="Center" />
+                        <CheckBox Content="{local:Loc MainWindow.IncreasePricePercent}" HorizontalAlignment="Left" Tag="ShouldIncreasePrices" Click="CheckBox_Click" VerticalAlignment="Center" />
                         <TextBox  Margin="5 0" TextWrapping="Wrap" Width="50" Name="IncreasePercentTextBox" TextChanged="ChangeIncreasePercent_TextChanged" PreviewTextInput="IncreasePercentTextBox_PreviewTextInput" DataObject.Pasting="IncreasePercentTextBox_Pasting" VerticalAlignment="Center" />
                     </StackPanel>
 
-                    <CheckBox Grid.Row="1" Margin="0 2.5" Content="{local:Loc MainWindow.SyncAvailability}" Tag="SyncAvailability" Click="CheckBox_Click" VerticalAlignment="Center" />
-                    <CheckBox Grid.Row="2" Margin="0 2.5" Content="{local:Loc MainWindow.SyncQuantity}" Tag="SyncQuantity" Click="CheckBox_Click" VerticalAlignment="Center" />
-                    <CheckBox Grid.Row="3" Margin="0 2.5" Content="{local:Loc MainWindow.SyncDiscount}" Tag="SyncDiscount" Click="CheckBox_Click" VerticalAlignment="Center" />
-                    <CheckBox Grid.Row="4" Margin="0 2.5" Content="{local:Loc MainWindow.DiscountDate}" Tag="DiscountDate" Click="CheckBox_Click" VerticalAlignment="Center" />
-                    <CheckBox Grid.Row="5" Margin="0 2.5" Tag="FindMissingProduct" Content="{local:Loc MainWindow.FindMissing}" Click="CheckBox_Click" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="1" Margin="0 2.5" Content="{local:Loc MainWindow.SyncAvailability}" Tag="ShouldSyncAvailability" Click="CheckBox_Click" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="2" Margin="0 2.5" Content="{local:Loc MainWindow.SyncQuantity}" Tag="ShouldSyncQuantities" Click="CheckBox_Click" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="3" Margin="0 2.5" Content="{local:Loc MainWindow.SyncDiscount}" Tag="ShouldSyncDiscounts" Click="CheckBox_Click" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="4" Margin="0 2.5" Content="{local:Loc MainWindow.DiscountDate}" Tag="ShouldSyncDiscountDate" Click="CheckBox_Click" VerticalAlignment="Center" />
+                    <CheckBox Grid.Row="5" Margin="0 2.5" Tag="ShouldFindMissingProducts" Content="{local:Loc MainWindow.FindMissing}" Click="CheckBox_Click" VerticalAlignment="Center" />
 
                 </StackPanel>
             </Border>

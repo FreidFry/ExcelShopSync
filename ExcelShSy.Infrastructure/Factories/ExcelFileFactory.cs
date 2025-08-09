@@ -1,4 +1,5 @@
 ﻿using ExcelShSy.Core.Interfaces.Excel;
+using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Infrastructure.Persistance.Model;
 
@@ -9,10 +10,12 @@ namespace ExcelShSy.Infrastructure.Factories
     public class ExcelFileFactory : IExcelFileFactory
     {
         private readonly IExcelPageFactory _excelPageFactory;
+        private readonly IShopStorage _shopStorage;
 
-        public ExcelFileFactory(IExcelPageFactory excelPageFactory)
+        public ExcelFileFactory(IExcelPageFactory excelPageFactory, IShopStorage shopStorage)
         {
             _excelPageFactory = excelPageFactory;
+            _shopStorage = shopStorage;
         }
 
         public IExcelFile Create(string path)
@@ -40,12 +43,12 @@ namespace ExcelShSy.Infrastructure.Factories
             return pages;
         }
 
-        static string IndetifyShop(List<IExcelSheet> pages)
+        string IndetifyShop(List<IExcelSheet> pages)
         {
             List<string> shops = [];
             foreach (var page in pages)
             {
-                shops.Add(page.GetShop());
+                shops.Add(page.GetShop(_shopStorage));
                 if (shops.Count > 6) break;
             }
 

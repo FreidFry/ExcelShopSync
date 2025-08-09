@@ -1,15 +1,16 @@
 ﻿using ExcelShSy.Core.Interfaces.Excel;
+using ExcelShSy.Core.Interfaces.Shop;
 
 namespace ExcelShSy.Infrastructure.Extensions
 {
     public static class ExcelFileExtensions
     {
-        public static string IndetifyShop(this IList<IExcelSheet?> pages)
+        public static string IndetifyShop(this IList<IExcelSheet?> pages, IShopStorage shopStorage)
         {
             List<string> shops = [];
             foreach (var page in pages)
             {
-                shops.Add(page.GetShop());
+                shops.Add(page.GetShop(shopStorage));
                 if (shops.Count > 6) break;
             }
 

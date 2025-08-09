@@ -177,4 +177,7 @@
   <data name="About" xml:space="preserve">
     <value>Больше</value>
   </data>
+  <data name="Guid" xml:space="preserve">
+    <value>Инструкция</value>
+  </data>
 </root>

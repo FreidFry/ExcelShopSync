@@ -10,12 +10,13 @@ using ExcelShSy.Properties;
 using OfficeOpenXml;
 
 using ExcelShSy.Infrastructure.Persistance.ShopData.Mappings;
+using ExcelShSy.Core.Interfaces.Shop;
 
 namespace ExcelShSy.Infrastructure.Services.Operations
 {
     public class FetchProductMaster : BaseProductImporter, IFetchMasterProduct
     {
-        public FetchProductMaster(IProductStorage _dataProduct, IFileStorage _fileStorage, ILogger _logger) : base(_dataProduct, _fileStorage, _logger)
+        public FetchProductMaster(IProductStorage _dataProduct, IFileStorage _fileStorage, IShopStorage _shopStorage, ILogger _logger) : base(_dataProduct, _fileStorage, _shopStorage, _logger)
         { }
 
         protected override void ProcessPage(IExcelSheet page)

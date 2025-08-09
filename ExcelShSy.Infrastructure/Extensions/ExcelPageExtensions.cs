@@ -1,35 +1,32 @@
 ﻿using ExcelShSy.Core.Interfaces.Excel;
+using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Infrastructure.Persistance.Model;
-using ExcelShSy.Infrastructure.Persistance.ShopData;
 using ExcelShSy.Infrastructure.Services.Common;
-
 using OfficeOpenXml;
 
 namespace ExcelShSy.Infrastructure.Extensions
 {
     public static class ExcelPageExtensions
     {
-        public static string GetShop(this IExcelSheet? page)
+        public static string GetShop(this IExcelSheet? page, IShopStorage shopStorage)
         {
             var headerCount = page?.UnmappedHeaders?.Count;
-            if (headerCount == null || headerCount == 0) return ShopNameConstant.Unknown;
-
-            var ShopData = new ShopMapping().Shops;
+            if (headerCount == null || headerCount == 0) return string.Empty;
 
             Dictionary<string, int> shopScore = [];
-            var ShopKeys = ShopData.Keys;
+            var ShopKeys = shopStorage.GetShopList();
 
             foreach (var shopKey in ShopKeys)
             {
-                var shopColumn = ShopData[shopKey].UnmappedHeaders;
-
+                var shopColumn = shopStorage.GetShopMapping(shopKey)?.UnmappedHeaders;
+                if (shopColumn == null || shopColumn.Count == 0) continue;
                 var score = page?.UnmappedHeaders?.Keys.Intersect(shopColumn).Count();
                 shopScore.Add(shopKey, score ?? 0);
                 if (score >= headerCount / 2 && headerCount > 10) return shopKey;
             }
 
             var shopName = shopScore.OrderByDescending(x => x.Value).First().Key;
-            return shopScore[shopName] > 0 ? shopName : ShopNameConstant.Unknown;
+            return shopScore[shopName] > 0 ? shopName : string.Empty;
         }
 
         public static string GetLanguague(this IExcelSheet? page)
@@ -68,7 +65,6 @@ namespace ExcelShSy.Infrastructure.Extensions
             var range = worksheet.Cells[fromRow, 1, fromRow, toColumn];
             bool HasEmpty = range.Any(cell => cell.Value != null);
 
-#pragma warning disable CS8714, CS8621, CS8619
             if (HasEmpty)
             {
                 var RowValues = range.Where(cell => !string.IsNullOrWhiteSpace(cell.Value?.ToString()))
@@ -76,7 +72,6 @@ namespace ExcelShSy.Infrastructure.Extensions
                     .ToDictionary(g => g.Key, g => g.First().Start.Column);
                 return RowValues;
             }
-#pragma warning restore CS8714, CS8621, CS8619
 
             return null;
         }

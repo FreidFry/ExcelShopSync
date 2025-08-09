@@ -25,7 +25,7 @@ namespace ExcelShSy.Infrastructure.Services.Operations
         {
             foreach (var file in _fileStorage.Source)
             {
-                if (file.ShopName == ShopNameConstant.Unknown)
+                if (file.ShopName == string.Empty)
                 {
                     _fromPrice.FetchAllProducts(file);
                     continue;

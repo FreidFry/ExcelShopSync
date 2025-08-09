@@ -5,20 +5,20 @@ using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Infrastructure.Persistance.DefaultValues;
-using ExcelShSy.Infrastructure.Persistance.Model;
+using ExcelShSy.Properties;
 
 namespace ExcelShSy.Infrastructure.Services
 {
-    [Task("SyncAvailability")]
+    [Task(nameof(ProductProcessingOptions.ShouldSyncAvailability))]
     public class SyncAvailability : IExecuteOperation
     {
         private readonly IProductStorage _dataProduct;
         private readonly IFileStorage _fileStorage;
-        private readonly IShopMapping _shopMapping;
+        private readonly IShopStorage _shopMapping;
 
-        private string ShopName = ShopNameConstant.Unknown;
+        private string ShopName = string.Empty;
 
-        public SyncAvailability(IProductStorage dataProduct, IFileStorage fileStorage, IShopMapping shopMappings)
+        public SyncAvailability(IProductStorage dataProduct, IFileStorage fileStorage, IShopStorage shopMappings)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
@@ -43,7 +43,7 @@ namespace ExcelShSy.Infrastructure.Services
 
         void ProcessPage(IExcelSheet page)
         {
-            var shopTemplate = _shopMapping.FindShopTemplate(ShopName);
+            var shopTemplate = _shopMapping.GetShopMapping(ShopName);
             var worksheet = page.Worksheet;
 
             var headers = page.InitialHeadersTuple(ColumnConstants.Availability);

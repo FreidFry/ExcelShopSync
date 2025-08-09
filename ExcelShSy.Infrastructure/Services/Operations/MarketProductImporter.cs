@@ -6,7 +6,6 @@ using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Infrastructure.Persistance.DefaultValues;
-using ExcelShSy.Infrastructure.Persistance.ShopData;
 using ExcelShSy.Properties;
 
 using OfficeOpenXml;
@@ -15,13 +14,14 @@ namespace ExcelShSy.Infrastructure.Services.Operations
 {
     public class MarketProductImporter : BaseProductImporter, IFetchMarketProduct
     {
-        IShopTemplate shopTemplate;
-        public MarketProductImporter(IProductStorage _dataProduct, IFileStorage _fileStorage, ILogger _logger) : base(_dataProduct, _fileStorage, _logger)
-        { }
+        IShopTemplate _shopTemplate;
+        public MarketProductImporter(IProductStorage _dataProduct, IFileStorage _fileStorage, ILogger _logger, IShopStorage _) : base(_dataProduct, _fileStorage, _, _logger)
+        { 
+         _shopTemplate = _shopStorage.GetShopMapping(shopName);
+        }
 
         protected override void ProcessPage(IExcelSheet page)
         {
-            shopTemplate = new ShopMapping().FindShopTemplate(shopName);
             var headers = page.MappedHeaders;
             if (headers.IsNullOrEmpty()) return;
 
@@ -70,7 +70,7 @@ namespace ExcelShSy.Infrastructure.Services.Operations
             {
                 var val = ws.GetString(row, availCol);
                 if (val != null) _dataProduct.AddProductAvailability(article,
-                    shopTemplate.AvailabilityMap
+                    _shopTemplate.AvailabilityMap
                     .FirstOrDefault(a => a.Value == val)
                     .Key ?? AvailabilityConstant.OnOrder);
             }

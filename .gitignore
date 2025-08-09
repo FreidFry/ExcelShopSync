@@ -4,3 +4,5 @@ obj/
 .vscode/
 *.suo
 *.user
+/ExcelShSy.LocalDataBaseModule/ExcelShSy.LocalDataBaseModule.csproj
+/ShopsJsons

@@ -86,5 +86,14 @@ namespace ExcelShSy.Localization.Resources {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open user shop manager.
+        /// </summary>
+        internal static string UserShopManager {
+            get {
+                return ResourceManager.GetString("UserShopManager", resourceCulture);
+            }
+        }
     }
 }

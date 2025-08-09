@@ -6,7 +6,6 @@ using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Factories;
 using ExcelShSy.Infrastructure.Persistance.Model;
-using ExcelShSy.Infrastructure.Persistance.ShopData;
 using ExcelShSy.Infrastructure.Services;
 using ExcelShSy.Infrastructure.Services.Common;
 using ExcelShSy.Infrastructure.Services.Logger;
@@ -26,7 +25,9 @@ namespace ExcelShSy.Ui.AppConfigs
         {
             services.AddSingleton<IFileStorage, FileStorage>();
             services.AddSingleton<IFileManager, FileManager>();
-            services.AddScoped<IProductStorage, ProductStorage>();
+            services.AddSingleton<IProductStorage, ProductStorage>();
+            services.AddSingleton<IShopStorage, ShopStorage>();
+            services.AddSingleton<IColumnMappingStorage, ColumnMappingStorage>();
 
             services.AddScoped<IFileProvider, FileProvider>();
 
@@ -34,7 +35,7 @@ namespace ExcelShSy.Ui.AppConfigs
 
             services.AddScoped<IExcelFile, ExcelFile>();
             services.AddScoped<IExcelSheet, ExcelPage>();
-            services.AddScoped<IShopMapping, ShopMapping>();
+            services.AddScoped<IShopTemplate, ShopTemplate>();
             services.AddScoped<ILanguageIdentifier, LanguageIdentifier>();
             services.AddScoped<IGetProductManager, ProductImporterSelector>();
             services.AddScoped<IFetchMasterProduct, FetchProductMaster>();
@@ -47,6 +48,7 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddScoped<IEditLoadFilesWindowFactory, EditLoadFilesWindowFactory>();
             services.AddScoped<ISettingWindowFactory, SettingWindowFactory>();
 
+            services.AddScoped<IShopTemplateFactory, ShopTemplateFactory>();
 
             //Executes
             services.AddScoped<IExecuteOperation, SyncPrice>();
@@ -71,6 +73,7 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddTransient<EditLoadFilesWindow>();
             services.AddTransient<SettingWindow>();
             services.AddTransient<MainWindow>();
+            services.AddTransient<ShopManagerWindow>();
             return services;
         }
     }

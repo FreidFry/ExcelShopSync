@@ -117,16 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApplyButton" xml:space="preserve">
-    <value>Прийняти</value>
+  <data name="AllColumnList" xml:space="preserve">
+    <value>All Columns</value>
   </data>
-  <data name="Language" xml:space="preserve">
-    <value>Мова</value>
+  <data name="Article" xml:space="preserve">
+    <value>Article</value>
+  </data>
+  <data name="Availability" xml:space="preserve">
+    <value>Availability</value>
+  </data>
+  <data name="DataFormat" xml:space="preserve">
+    <value>Date Format</value>
+  </data>
+  <data name="Discount" xml:space="preserve">
+    <value>Discount</value>
+  </data>
+  <data name="DiscountEnd" xml:space="preserve">
+    <value>Discount date start</value>
+  </data>
+  <data name="DiscountStart" xml:space="preserve">
+    <value>Discount date end</value>
+  </data>
+  <data name="Header" xml:space="preserve">
+    <value>Custom Header Mapping</value>
+  </data>
+  <data name="InStock" xml:space="preserve">
+    <value>Value for "In stock"</value>
+  </data>
+  <data name="OldPrice" xml:space="preserve">
+    <value>Old price</value>
+  </data>
+  <data name="OnOrder" xml:space="preserve">
+    <value>Value for "on order"</value>
+  </data>
+  <data name="OutOfStock" xml:space="preserve">
+    <value>Value for "out of stock"</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="ReadyToGo" xml:space="preserve">
+    <value>Value for "ready to ship"</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Налаштування</value>
-  </data>
-  <data name="UserShopManager" xml:space="preserve">
-    <value>Відкрити менеджер магазинів</value>
+    <value>Header Mapping Editor</value>
   </data>
 </root>

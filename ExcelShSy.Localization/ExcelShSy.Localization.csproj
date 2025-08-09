@@ -37,6 +37,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Resources\ShopManagerWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ShopManagerWindow.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -62,6 +67,10 @@
     <EmbeddedResource Update="Resources\SettingWindow.resx">
       <LastGenOutput>SettingWindow.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ShopManagerWindow.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ShopManagerWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

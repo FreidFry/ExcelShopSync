@@ -1,15 +1,14 @@
 ﻿using ExcelShSy.Core.Attributes;
-using ExcelShSy.Core.Exeptions;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Extensions;
-
+using ExcelShSy.Properties;
 using System.IO;
 
 namespace ExcelShSy.Infrastructure.Services
 {
-    [Task("FindMissingProduct")]
+    [Task(nameof(ProductProcessingOptions.ShouldFindMissingProducts))]
     public class FindMissingProducts : IExecuteOperation
     {
         private readonly IProductStorage _dataProduct;

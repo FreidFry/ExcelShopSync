@@ -12,7 +12,8 @@ namespace ExcelShSy.Infrastructure.Extensions
             }
             catch (ShopDataException ex)
             {
-                errors.Add($"[{context}] {ex.Message}");
+                var declaringType = action.Method.DeclaringType?.FullName?.Split("+")[0].Split(".").Last();
+                errors.Add($"[{context}] {ex.Message} method: \"{declaringType}\"");
             }
             catch (Exception ex)
             {

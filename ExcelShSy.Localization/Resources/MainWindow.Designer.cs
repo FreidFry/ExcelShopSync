@@ -142,6 +142,15 @@ namespace ExcelShSy.Localization.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Instruction.
+        /// </summary>
+        public static string Guid {
+            get {
+                return ResourceManager.GetString("Guid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Increase price (fake discount).
         /// </summary>
         public static string IncreasePricePercent {

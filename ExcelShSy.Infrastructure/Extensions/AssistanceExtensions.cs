@@ -30,6 +30,13 @@ namespace ExcelShSy.Infrastructure.Extensions
             return page.FindColumnInHeaders(ColumnConstants.Article);
         }
 
+        public static int InitialNeedColumn(this IExcelSheet page, string columnName)
+        {
+            if (page?.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty()) return 0;
+
+            return page.FindColumnInHeaders(columnName);
+        }
+
         private static int FindColumnInHeaders(this IExcelSheet page, string columnName)
         {
             if (page?.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty() || !page.MappedHeaders.TryGetValue(columnName, out int value))

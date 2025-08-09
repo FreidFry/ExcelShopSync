@@ -10,18 +10,18 @@ using ExcelShSy.Properties;
 
 namespace ExcelShSy.Infrastructure.Services
 {
-    [Task("SyncDiscountDate")]
+    [Task(nameof(ProductProcessingOptions.ShouldSyncDiscountDate))]
     public class SyncDiscountDate : IExecuteOperation
     {
         private readonly IProductStorage _dataProduct;
         private readonly IFileStorage _fileStorage;
-        private readonly IShopMapping _shopMapping;
+        private readonly IShopStorage _shopMapping;
         private readonly ILogger _logger;
         private string _shopFormat;
 
         public List<string> Errors { get; } = [];
 
-        public SyncDiscountDate(IProductStorage dataProduct, IFileStorage fileStorage, ILogger logger, IShopMapping shopMapping)
+        public SyncDiscountDate(IProductStorage dataProduct, IFileStorage fileStorage, ILogger logger, IShopStorage shopMapping)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
@@ -41,7 +41,7 @@ namespace ExcelShSy.Infrastructure.Services
 
         string SetDataFormat(string shopName)
         {
-            var shopTemplate = _shopMapping.FindShopTemplate(shopName);
+            var shopTemplate = _shopMapping.GetShopMapping(shopName);
             return shopTemplate.DataFormat;
         }
 
@@ -54,22 +54,41 @@ namespace ExcelShSy.Infrastructure.Services
         {
             var worksheet = page.Worksheet;
 
-            var DataStart = page.InitialHeadersTuple(ColumnConstants.DiscountFrom);
-            var DataEnd = page.InitialHeadersTuple(ColumnConstants.DiscountTo);
+            var articleCol = page.InitialHeadersTuple();
+            var DataStart = 0;
+            var DataEnd = 0;
+            try
+            {
+                var StartDate = page.InitialNeedColumn(ColumnConstants.DiscountFrom);
+                DataStart = StartDate;
+            }
+            catch
+            {
+                _logger.Log($"No column {ColumnConstants.DiscountFrom} in {page.SheetName}");
+            }
+            try
+            {
+                var EndDate = page.InitialNeedColumn(ColumnConstants.DiscountTo);
+                DataEnd = EndDate;
+            }
+            catch
+            {
+                _logger.Log($"No column {ColumnConstants.DiscountTo} in {page.SheetName}");
+            }
 
-            if (DataStart.AnyIsNullOrEmpty() && DataEnd.AnyIsNullOrEmpty()) return;
+            if (DataStart == 0 && DataEnd == 0) return;
 
             var productTo = new List<string>();
             var ErrorDate = new List<string>();
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
-                var article = worksheet.GetArticle(row, DataStart.articleColumn);
+                var article = worksheet.GetArticle(row, articleCol);
 
                 if (article == null) continue;
                 if (_dataProduct.DiscountFrom.TryGetValue(article, out DateOnly valueFrom))
-                    worksheet.WriteCell(row, DataStart.neededColumn, ConvertDate(valueFrom));
+                    worksheet.WriteCell(row, DataStart, ConvertDate(valueFrom));
                 if (_dataProduct.DiscountTo.TryGetValue(article, out DateOnly valueTo))
-                    worksheet.WriteCell(row, DataStart.neededColumn, ConvertDate(valueTo));
+                    worksheet.WriteCell(row, DataEnd, ConvertDate(valueTo));
                 else productTo.Add(article);
 
                 if (valueFrom > ProductProcessingOptions.MinDateActually && valueFrom < valueTo)

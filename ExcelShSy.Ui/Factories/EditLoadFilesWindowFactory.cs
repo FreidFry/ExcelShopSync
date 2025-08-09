@@ -17,9 +17,7 @@ namespace ExcelShSy.Ui.Factories
             _ExcelFileFactory = excelFileFactory;
         }
 
-        public EditLoadFilesWindow Create(string page)
-        {
-            return new(page, _FileManager, _FileProvider, _ExcelFileFactory);
-        }
+        public EditLoadFilesWindow Create(string page) => 
+            new(page, _FileManager, _FileProvider, _ExcelFileFactory);
     }
 }
