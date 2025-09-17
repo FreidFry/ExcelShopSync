@@ -4,10 +4,8 @@
         xmlns:local="clr-namespace:ExcelShSy.LocalDataBaseModule"
         Title="DataBaseViewer" Height="450" Width="800">
     <Grid>
-        <!--
-        <DataGrid x:Name="Table" CanUserAddRows="True" CanUserDeleteRows="True" IsReadOnly="False" >
+        <DataGrid x:Name="Table" IsReadOnly="False" >
             
         </DataGrid>
-        -->
     </Grid>
 </Window>

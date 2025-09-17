@@ -185,5 +185,12 @@ namespace ExcelShSy.Ui
                 return path;
             return baseFile;
         }
+
+
+        private async void OpenDbManager_Click(object? sender, RoutedEventArgs e)
+        {
+            var window = new LocalDataBaseModule.DataBaseViewer();
+            await window.ShowDialog(this);
+        }
     }
 }

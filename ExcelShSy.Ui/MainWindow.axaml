@@ -21,6 +21,7 @@
                 <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.AboutApp}" Click="AboutWindowOpen_Click" />
                 <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Guid}" Click="GuideWindowOpen_Click" />
             </MenuItem>
+            <MenuItem VerticalAlignment="Center" Header="DataBase" Click="OpenDbManager_Click"/>
         </Menu>
 
         <Grid Grid.Row="1" Margin="10,0,10,10">

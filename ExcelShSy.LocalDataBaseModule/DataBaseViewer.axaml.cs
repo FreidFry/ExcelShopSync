@@ -11,6 +11,7 @@ namespace ExcelShSy.LocalDataBaseModule
 
         private void Initialize()
         {
+            InitializeComponent();
         }
     }
 }

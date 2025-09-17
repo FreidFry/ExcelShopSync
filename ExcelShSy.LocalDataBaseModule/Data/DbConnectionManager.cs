@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
-using System.IO;
 
-namespace ExcelShSy.LocalDataBaseModule.unknown
+namespace ExcelShSy.LocalDataBaseModule.Data
 {
     public class DbConnectionManager
     {
