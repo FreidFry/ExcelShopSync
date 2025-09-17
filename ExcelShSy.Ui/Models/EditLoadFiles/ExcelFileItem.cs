@@ -1,5 +1,6 @@
-﻿using System.ComponentModel;
-using System.IO;
+﻿
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace ExcelShSy.Ui.Models.EditLoadFiles
 {
@@ -7,46 +8,52 @@ namespace ExcelShSy.Ui.Models.EditLoadFiles
     {
         private bool _isChecked;
         private string _fileName;
-        private string _filePath;
+        private readonly string _filePath;
+
+        #region IsSelectedToRemove
 
         public bool IsSelectedToRemove
         {
             get => _isChecked;
             set
             {
-                if (_isChecked != value)
-                {
-                    _isChecked = value;
-                    OnPropertyChanged(nameof(IsSelectedToRemove));
-                }
+                if (_isChecked == value) return;
+                _isChecked = value;
+                OnPropertyChanged(nameof(IsSelectedToRemove));
             }
         }
 
+
+        #endregion
+        
+        #region FileName
         public string Name
         {
             get => _fileName;
             set
             {
-                if (_fileName != value)
-                {
-                    _fileName = value;
-                    OnPropertyChanged(nameof(Name));
-                }
+                if (_fileName == value) return;
+                _fileName = value;
+                OnPropertyChanged(nameof(Name));
             }
         }
 
+        #endregion
+        
+        #region FilePath
         public string FilePath
         {
             get => _filePath;
-            set { 
-            if( _filePath != value)
-                {
-                    _filePath = value;
-                    OnPropertyChanged(nameof(FilePath));
-                }
+            init
+            {
+                if (_filePath == value) return;
+                _filePath = value;
+                OnPropertyChanged(nameof(FilePath));
             }
         }
 
+        #endregion
+        
         public ExcelFileItem(string path)
         {
             Name = Path.GetFileNameWithoutExtension(path);
@@ -54,8 +61,12 @@ namespace ExcelShSy.Ui.Models.EditLoadFiles
             FilePath = path;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name) =>
+        public ExcelFileItem()
+        { }
+
+        
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged(string name) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

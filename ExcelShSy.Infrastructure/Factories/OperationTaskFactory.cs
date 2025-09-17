@@ -6,9 +6,10 @@ using ExcelShSy.Infrastructure.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
 using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+using Avalonia;
+using MsBox.Avalonia;
+using Avalonia.Controls;
+using Avalonia.VisualTree;
 
 namespace ExcelShSy.Infrastructure.Factories
 {
@@ -46,7 +47,7 @@ namespace ExcelShSy.Infrastructure.Factories
             }
         }
 
-        public void ExecuteOperations(DependencyObject parent)
+        public void ExecuteOperations(Visual parent)
         {
             HashSet<string> errors = [];
 
@@ -66,33 +67,33 @@ namespace ExcelShSy.Infrastructure.Factories
 
                 _logger.LogInfo($"Finish {task.GetType().Name}");
             }
+
             if (errors.Count == 0)
             {
                 _logger.LogInfo("Finish without errors.");
-                MessageBox.Show("Finish without problems.");
+                MessageBoxManager.GetMessageBoxStandard("Finish", "Finish without problems." ).ShowAsync();
             }
             else
             {
                 _logger.LogInfo("Finish with errors:");
                 foreach (var error in errors) _logger.LogWarning(error);
-                MessageBox.Show("Finish with problems:\n" + string.Join("\n", errors));
-
+                MessageBoxManager.GetMessageBoxStandard("Finish with problems", "Finish with problems:\n" + string.Join("\n", errors)).ShowAsync();
             }
         }
 
-        public bool HasCheckedCheckbox(DependencyObject parent)
+        public bool HasCheckedCheckbox(Visual parent)
         {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            foreach (var child in parent.GetVisualChildren())
             {
-                var child = VisualTreeHelper.GetChild(parent, i);
-
                 if (child is CheckBox cb && cb.IsChecked == true)
                     return true;
 
-                if (HasCheckedCheckbox(child))
+                if (child is Visual visual && HasCheckedCheckbox(visual))
                     return true;
             }
+
             return false;
         }
+
     }
 }

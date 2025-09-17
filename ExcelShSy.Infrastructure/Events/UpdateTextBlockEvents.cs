@@ -1,4 +1,6 @@
-﻿namespace ExcelShSy.Infrastructure.Events
+﻿using System;
+
+namespace ExcelShSy.Infrastructure.Events
 {
     public static class UpdateTextBlockEvents
     {

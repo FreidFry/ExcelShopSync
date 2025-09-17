@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using ExcelShSy.Core.Interfaces.Common;
 
 namespace ExcelShSy.Core.Interfaces
 {
@@ -6,5 +7,6 @@ namespace ExcelShSy.Core.Interfaces
     {
         void SetCulture(string code);
         void SetCulture(CultureInfo culture);
+        void SaveSettings(IAppSettings settings);
     }
 }

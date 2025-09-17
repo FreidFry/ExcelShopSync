@@ -14,7 +14,7 @@ using ExcelShSy.Infrastructure.Services.Storage;
 using ExcelShSy.Ui.Factories;
 using ExcelShSy.Ui.Interfaces;
 using ExcelShSy.Localization;
-
+using ExcelShSy.Localization.Properties;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExcelShSy.Ui.AppConfigs
@@ -28,6 +28,7 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddSingleton<IProductStorage, ProductStorage>();
             services.AddSingleton<IShopStorage, ShopStorage>();
             services.AddSingleton<IColumnMappingStorage, ColumnMappingStorage>();
+            services.AddSingleton<IAppSettings, AppSettings>();
 
             services.AddScoped<IFileProvider, FileProvider>();
 

@@ -1,37 +1,53 @@
-﻿using ExcelShSy.Core.Interfaces;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Markup;
-
+﻿using System.Globalization;
+using System.Text.Json;
+using Avalonia;
+using ExcelShSy.Core.Interfaces;
+using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Localization.Properties;
 
 namespace ExcelShSy.Localization
 {
     public class LocalizationManager : ILocalizationManager
     {
+        private const string SettingsFile = "settings.json";
+        
+        public event EventHandler? LanguageChanged;
+        
         public void SetCulture(string code)
         {
-            CultureInfo? culture;
-            if (string.IsNullOrEmpty(code)) //if code is null or empty, use the installed Windows culture
+            CultureInfo culture;
+
+            if (string.IsNullOrEmpty(code))
                 culture = new CultureInfo(CultureInfo.InstalledUICulture.Name);
             else
                 culture = new CultureInfo(code);
 
-            Thread.CurrentThread.CurrentUICulture = culture;
-            Thread.CurrentThread.CurrentCulture = culture;
-
-            Settings.Default.Language = code;
-            Settings.Default.Save();
+            ApplyCulture(culture);
         }
 
-        public void SetCulture(CultureInfo culture)
+        public void SaveSettings(IAppSettings settings)
+        {
+            var json = JsonSerializer.Serialize(settings);
+            File.WriteAllText(SettingsFile, json);
+        }
+
+        private void ApplyCulture(CultureInfo culture)
         {
             Thread.CurrentThread.CurrentUICulture = culture;
             Thread.CurrentThread.CurrentCulture = culture;
 
-            FrameworkElement.LanguageProperty.OverrideMetadata(
-        typeof(FrameworkElement),
-        new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(culture.IetfLanguageTag)));
+            SaveSettings(new AppSettings { Language = culture.Name });
+
+            // уведомляем UI через Loc.Instance
+            Loc.Instance.Refresh();
+            
+            // сигналим всем, кто подписан
+            LanguageChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SetCulture(CultureInfo culture)
+        {
+            ApplyCulture(culture);
         }
     }
 }

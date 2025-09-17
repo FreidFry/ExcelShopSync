@@ -1,4 +1,5 @@
-﻿using ExcelShSy.Core.Exeptions;
+﻿using System;
+using ExcelShSy.Core.Exeptions;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Infrastructure.Persistance.DefaultValues;
 
@@ -6,8 +7,17 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
-using System.Windows;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Layout;
+using ReactiveUI;
+
+using Avalonia.Media;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
+using Color = System.Drawing.Color;
+
 
 namespace ExcelShSy.Infrastructure.Extensions
 {
@@ -84,24 +94,6 @@ namespace ExcelShSy.Infrastructure.Extensions
                 worksheet.Cells[row, column].Style.Fill.BackgroundColor.SetColor(Color.Green);
             else
                 worksheet.Cells[row, column].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
-        }
-
-        public static void Warning(bool check, string message)
-        {
-            if (check)
-            {
-                var result = MessageBox.Show(
-                $"{message}",
-                "Confirmation",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning
-            );
-
-                if (result == MessageBoxResult.No)
-                {
-                    return;
-                }
-            }
         }
     }
 }

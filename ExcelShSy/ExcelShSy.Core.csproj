@@ -5,13 +5,45 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-	<UseWPF>true</UseWPF>
+	<UseWPF>false</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPPlus" Version="8.0.5" />
+    <PackageReference Include="Avalonia" Version="11.3.4" />
+    <PackageReference Include="EPPlus" Version="8.1.0" />
+    <PackageReference Include="EPPlus.Interfaces" Version="8.1.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
-    <PackageReference Include="Scrutor" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Bcl.Cryptography" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="9.0.8" />
+    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net461" Version="1.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ReactiveUI" Version="20.4.1" />
+    <PackageReference Include="Scrutor" Version="6.1.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Formats.Asn1" Version="9.0.8" />
+    <PackageReference Include="System.IO.Pipelines" Version="9.0.8" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.8" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.8" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.8" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="9.0.8" />
+    <PackageReference Include="System.Text.Json" Version="9.0.8" />
   </ItemGroup>
 
   <ItemGroup>

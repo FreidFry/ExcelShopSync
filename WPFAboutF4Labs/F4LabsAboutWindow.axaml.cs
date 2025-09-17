@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using System.Windows;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 using ExcelShSy.Localization;
 
 
@@ -12,7 +13,6 @@ namespace WPFAboutF4Labs
         {
             Init();
         }
-
         private void Init()
         {
             InitializeComponent();

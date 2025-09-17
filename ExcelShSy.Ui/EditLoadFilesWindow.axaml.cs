@@ -1,15 +1,16 @@
-﻿using ExcelShSy.Core.Interfaces.Excel;
+using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Events;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Ui.Models.EditLoadFiles;
 using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Controls;
-
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 using static ExcelShSy.Localization.GetLocalizationInCode;
 
-namespace ExcelShSy
+namespace ExcelShSy.Ui
 {
     public partial class EditLoadFilesWindow : Window
     {
@@ -17,33 +18,36 @@ namespace ExcelShSy
         public ObservableCollection<ExcelFileItem> TemperarySourceFiles { get; set; } = [];
         private readonly IFileManager _fileManager;
         private readonly IFileProvider _fileProvider;
-        private readonly IExcelFileFactory _excelfileFactory;
-
-        public EditLoadFilesWindow(string TabName, IFileManager fileManager, IFileProvider fileProvider, IExcelFileFactory fileFactory)
+        private readonly IExcelFileFactory _excelFileFactory;
+        
+        public EditLoadFilesWindow(string tabName, IFileManager fileManager, IFileProvider fileProvider, IExcelFileFactory fileFactory)
         {
             InitializeComponent();
+            
             _fileManager = fileManager;
             _fileProvider = fileProvider;
-            _excelfileFactory = fileFactory;
+            _excelFileFactory = fileFactory;
 
-            DataContext = this;
 
             SetFileNameList(TemperaryTargetFiles, _fileManager.TargetPaths);
             SetFileNameList(TemperarySourceFiles, _fileManager.SourcePaths);
+            DataContext = this;
 
-            SelectTab(TabName);
+            SelectTab(tabName);
         }
 
-        private void SelectTab(string TabName)
+        private void SelectTab(string tabName)
         {
-            FilesControl.SelectedItem = TabName switch
+            foreach (var item in FilesControl.Items)
             {
-                "Target" => Target,
-                "Source" => Source,
-                _ => 0,
-            };
+                if (item is TabItem tab && tab.Header?.ToString() == tabName)
+                {
+                    FilesControl.SelectedItem = tab;
+                    break;
+                }
+            }
         }
-
+        
         private static void SetFileNameList(ObservableCollection<ExcelFileItem> observableCollection, IEnumerable<string> list)
         {
             foreach (string filePath in list)
@@ -53,7 +57,7 @@ namespace ExcelShSy
             }
         }
 
-        private void AddFile_Click(object sender, EventArgs e)
+        private void AddFile_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
             var tag = button!.Tag as string;
@@ -72,17 +76,17 @@ namespace ExcelShSy
         private void AddItems(ObservableCollection<ExcelFileItem> items)
         {
             var sources = _fileProvider.PickExcelFilePaths();
-            if (sources.IsNullOrEmpty()) return;
-            foreach (var file in sources)
+            if (sources.Result.IsNullOrEmpty()) return;
+            foreach (var file in sources.Result)
                 if (!items.Any(item => item.FilePath == file))
                     items.Add(new ExcelFileItem(file));
         }
 
-        private void RemoveFile_Click(object sender, EventArgs e)
+        private async void RemoveFile_Click(object? sender, RoutedEventArgs e)
         {
             var message = GetLocalizate("EditLoadFilesWindow", "DeleteWarning_");
             var title = GetLocalizate("EditLoadFilesWindow", "DeleteWarningTitle_");
-            var remove = CreateMessageBoxYesNoWarning(message, title);
+            var remove = await CreateMessageBoxYesNoWarning(message, title);
             if (remove) return;
             var button = sender as Button;
             var tag = button!.Tag as string;
@@ -107,22 +111,23 @@ namespace ExcelShSy
             }
         }
 
-        private void Close_Click(object sender, EventArgs e)
+        private async void Close_Click(object sender, RoutedEventArgs e)
         {
             var message = GetLocalizate("EditLoadFilesWindow", "CloseWarning_");
             var title = GetLocalizate("EditLoadFilesWindow", "CloseWarningTitle_");
-            var succes = CreateMessageBoxYesNoWarning(message, title);
+            var succes = await CreateMessageBoxYesNoWarning(message, title);
             if (!succes) Close();
         }
 
-        private bool CreateMessageBoxYesNoWarning(string message, string windowName)
+        private async Task<bool> CreateMessageBoxYesNoWarning(string message, string windowName)
         {
-            var result = MessageBox.Show(message, windowName, MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (result == MessageBoxResult.No) return true;
+            var msBox = MessageBoxManager.GetMessageBoxStandard(windowName, message, ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Warning);
+            var result = await msBox.ShowAsync();
+            if (result == ButtonResult.No) return true;
             return false;
         }
 
-        private void ApplyButton_Click(object sender, EventArgs e)
+        private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             TransferFileList();
             Close();
@@ -154,7 +159,7 @@ namespace ExcelShSy
             if (sender is Button button && button.DataContext is ExcelFileItem target)
             {
                 var path = target.FilePath;
-                var file = _excelfileFactory.Create(path);
+                var file = _excelFileFactory.Create(path);
                 file.ShowFileDetails();
             }
         }

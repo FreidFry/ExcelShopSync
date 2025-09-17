@@ -1,13 +1,15 @@
-﻿using ExcelShSy.Core.Interfaces.Common;
+﻿using System.Diagnostics;
+using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Events;
 using ExcelShSy.Properties;
 using ExcelShSy.Ui.Interfaces;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-
+using Avalonia.Controls;
+using Avalonia.Input;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
+using Avalonia.Interactivity;
 using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Ui
@@ -37,16 +39,19 @@ namespace ExcelShSy.Ui
         {
             InitializeComponent();
 
-            Loaded += (s, e) =>
+            this.LayoutUpdated += (sender, args) =>
             {
-                var twight = TargetFilesButton.ActualWidth;
-                var swight = SourceFilesButton.ActualWidth;
+                var twidth = TargetFilesButton.Bounds.Width;
+                var swidth = SourceFilesButton.Bounds.Width;
 
-                if (swight > twight)
-                    TargetFilesButton.Width = swight;
-                else
-                    SourceFilesButton.Width = twight;
+                double max = Math.Max(twidth, swidth);
+                TargetFilesButton.Width = max;
+                SourceFilesButton.Width = max;
+
+                // Отписываемся, чтобы не дергать каждый LayoutUpdated
+                this.LayoutUpdated -= null;
             };
+
         }
 
         private static void RegestrationTextBlockEvent(string key, TextBlock textBlock)
@@ -74,7 +79,8 @@ namespace ExcelShSy.Ui
             {
                 var message = GetLocalizate("MainWindow", "NoSetExecute_");
                 var title = GetLocalizate("MainWindow", "NoSetExecuteTitle_");
-                MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Warning);
+                var msBox = MessageBoxManager.GetMessageBoxStandard(title,message, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
+                msBox.ShowAsync();
                 return;
             }
             _fileManager.InitializeAllFiles();
@@ -102,26 +108,25 @@ namespace ExcelShSy.Ui
             ProductProcessingOptions.priceIncreasePercentage = percents;
         }
 
-        private void IncreasePercentTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void IncreasePercentTextBox_TextInput(object? sender, TextInputEventArgs e)
         {
-            e.Handled = !IsTextAllowed(e.Text, ((TextBox)sender).Text);
+            if (sender is TextBox textBox)
+            {
+                string newText = textBox.Text.Insert(textBox.CaretIndex, e.Text);
+                if (!IsTextAllowed(e.Text, newText))
+                    e.Handled = true; // отменяем ввод
+            }
         }
 
-        private void IncreasePercentTextBox_Pasting(object sender, DataObjectPastingEventArgs e)
+        private void IncreasePercentTextBox_OnTextInput(object sender, TextInputEventArgs e)
         {
-            if (e.DataObject.GetDataPresent(typeof(string)))
-            {
-                string pastedText = (string)e.DataObject.GetData(typeof(string));
-                var textBox = (TextBox)sender;
-                string newText = textBox.Text.Insert(textBox.SelectionStart, pastedText);
-                if (!IsTextAllowed(pastedText, newText))
-                    e.CancelCommand();
-            }
-            else
-            {
-                e.CancelCommand();
-            }
+            var textBox = (TextBox)sender;
+            string newText = textBox.Text.Insert(textBox.CaretIndex, e.Text);
+    
+            if (!IsTextAllowed(e.Text, newText))
+                e.Handled = true; // отменяем ввод 
         }
+
 
         private static bool IsTextAllowed(string newInput, string fullText)
         {
@@ -129,7 +134,7 @@ namespace ExcelShSy.Ui
             return decimal.TryParse(text, out _);
         }
 
-        private void ShowEditLoadFiles_Click(object sender, EventArgs e)
+        private void ShowEditLoadFiles_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
             var propertyName = btn?.Tag?.ToString();
@@ -137,31 +142,48 @@ namespace ExcelShSy.Ui
             if (!string.IsNullOrEmpty(propertyName))
             {
                 var window = _editLoadFilesWindowFactory.Create(propertyName);
-                window.ShowDialog();
+                window.ShowDialog(this);
             }
         }
 
-        private void SettingsWindowOpen_Click(object sender, EventArgs e)
+        private void SettingsWindowOpen_Click(object sender, RoutedEventArgs e)
         {
             OpenSettingWindow();
         }
 
-        public void OpenSettingWindow()
+        public async void OpenSettingWindow()
         {
             var window = _settingWindowFactory.Create();
-            window.ShowDialog();
+            await window.ShowDialog(this);
         }
 
-        private void AboutWindowOpen_Click(object sender, EventArgs e)
+        private async void AboutWindowOpen_Click(object sender, RoutedEventArgs e)
         {
             var window = new WPFAboutF4Labs.F4LabsAboutWindow();
-            window.ShowDialog();
+            await window.ShowDialog(this);
         }
 
-        private void GuideWindowOpen_Click(object sender, EventArgs e)
+        private void GuideWindowOpen_Click(object sender, RoutedEventArgs e)
         {
-            var window = new Guide.WebView();
-            window.Show();
+            var psi = new ProcessStartInfo()
+            {
+                FileName = SelectGuidePage(),
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+        }
+        
+        private static string SelectGuidePage()
+        {
+            var language = Thread.CurrentThread.CurrentCulture.Name;
+            var fileName = "Guid";
+            var fileDirectory = Path.Combine(Environment.CurrentDirectory, "Web");
+            var path = Path.Combine(fileDirectory, $"{fileName}.{language}.html");
+            var baseFile = Path.Combine(fileDirectory, $"{fileName}.html");
+
+            if (File.Exists(path))
+                return path;
+            return baseFile;
         }
     }
 }

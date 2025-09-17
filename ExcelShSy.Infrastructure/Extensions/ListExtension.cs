@@ -2,9 +2,9 @@
 using ExcelShSy.Infrastructure.Factories;
 
 using System.Diagnostics.CodeAnalysis;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.VisualTree;
 
 namespace ExcelShSy.Infrastructure.Extensions
 {
@@ -14,12 +14,10 @@ namespace ExcelShSy.Infrastructure.Extensions
         {
             return list == null || list.Count == 0;
         }
-        public static void AddOperationTask(this List<IExecuteOperation> tasksToRun, DependencyObject parent, OperationTaskFactory taskFactory)
+        public static void AddOperationTask(this List<IExecuteOperation> tasksToRun, Visual parent, OperationTaskFactory taskFactory)
         {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            foreach (var child in parent.GetVisualChildren())
             {
-                var child = VisualTreeHelper.GetChild(parent, i);
-
                 if (child is CheckBox cb && cb.IsChecked == true && cb.Tag is string taskName)
                 {
                     try
@@ -28,13 +26,16 @@ namespace ExcelShSy.Infrastructure.Extensions
                         if (task != null)
                             tasksToRun.Add(task);
                     }
-                    catch (Exception)
+                    catch
                     {
                     }
                 }
 
-                tasksToRun.AddOperationTask(child, taskFactory);
+                // рекурсивно для дочерних элементов
+                if (child is Visual visual)
+                    tasksToRun.AddOperationTask(visual, taskFactory);
             }
         }
+
     }
 }

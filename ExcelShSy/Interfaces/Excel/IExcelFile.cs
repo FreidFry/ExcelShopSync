@@ -11,6 +11,6 @@ namespace ExcelShSy.Core.Interfaces.Excel
 
         List<IExcelSheet> SheetList { get; set; }
 
-        void ShowFileDetails();
+        Task ShowFileDetails();
     }
 }

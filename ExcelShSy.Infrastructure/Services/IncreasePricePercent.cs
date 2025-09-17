@@ -5,6 +5,8 @@ using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Infrastructure.Persistance.DefaultValues;
 using ExcelShSy.Properties;
+using MsBox.Avalonia.Enums;
+using MsBox.Avalonia;
 using static ExcelShSy.Infrastructure.Extensions.ExcelRangeExtensions;
 
 namespace ExcelShSy.Infrastructure.Services
@@ -31,7 +33,7 @@ namespace ExcelShSy.Infrastructure.Services
             foreach (var page in file.SheetList) OperationWraper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
-        void ProcessPage(IExcelSheet page)
+        async void ProcessPage(IExcelSheet page)
         {
 
             var worksheet = page.Worksheet;
@@ -48,7 +50,14 @@ namespace ExcelShSy.Infrastructure.Services
                 priceIncrease = (ProductProcessingOptions.priceIncreasePercentage + 100) / 100;
             else
             {
-                AssistanceExtensions.Warning(ProductProcessingOptions.priceIncreasePercentage >= 200, $"Are you sure you want a {ProductProcessingOptions.priceIncreasePercentage}% increase?");
+                if(ProductProcessingOptions.priceIncreasePercentage >= 200)
+                {
+                    var msBox = MessageBoxManager.GetMessageBoxStandard("Confirm",
+                        $"Are you sure you want a {ProductProcessingOptions.priceIncreasePercentage}% increase?",
+                        ButtonEnum.YesNo);
+                    var result = await msBox.ShowAsync();
+                    if (result == ButtonResult.No) return;
+                };
                 priceIncrease = ProductProcessingOptions.priceIncreasePercentage / 100;
             }
 

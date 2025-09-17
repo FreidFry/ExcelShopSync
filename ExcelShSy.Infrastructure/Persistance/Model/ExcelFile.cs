@@ -2,8 +2,8 @@
 
 using OfficeOpenXml;
 
-using System.IO;
-using System.Windows;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Infrastructure.Persistance.Model
 {
@@ -23,14 +23,16 @@ namespace ExcelShSy.Infrastructure.Persistance.Model
             ExcelPackage = new ExcelPackage(path);
         }
 
-        public void ShowFileDetails()
+        public async Task ShowFileDetails()
         {
             for (int page = 0; page < SheetList.Count; page++)
             {
                 var response = SheetList[page].ShowPageDetails();
-                var s = MessageBox.Show(response, $"{FileName} ({ShopName}) {page+1}/{SheetList.Count}", MessageBoxButton.OKCancel);
-                if (s == MessageBoxResult.OK) continue; //show next message
+                var msgBox = MessageBoxManager.GetMessageBoxStandard($"{FileName} ({ShopName}) {page+1}/{SheetList.Count}", response, ButtonEnum.OkCancel);
 
+                var result = await msgBox.ShowAsync();
+                if (result == ButtonResult.Ok) continue; //show next message
+                
                 return; //stop show message
             }
         }

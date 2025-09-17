@@ -6,6 +6,7 @@ using ExcelShSy.Infrastructure.Extensions;
 using static ExcelShSy.Infrastructure.Extensions.FileNameExtensions;
 
 using System.IO;
+using Avalonia.Controls;
 
 namespace ExcelShSy.Infrastructure.Services.Storage
 {
@@ -70,9 +71,9 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             _logger.LogInfo("All files cleared");
         }
 
-        public void AddSourcePath()
+        public async void AddSourcePath()
         {
-            var paths = _fileProvider.PickExcelFilePaths();
+            var paths = await _fileProvider.PickExcelFilePaths();
             if (paths.IsNullOrEmpty())
             {
                 _logger.LogInfo("Sources file empty");
@@ -84,9 +85,9 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             SetLastPath("SourceLb", SourcePaths);
         }
 
-        public void AddTargetPath()
+        public async void AddTargetPath()
         {
-            var paths = _fileProvider.PickExcelFilePaths();
+            var paths = await _fileProvider.PickExcelFilePaths();
             if (paths.IsNullOrEmpty())
             {
                 _logger.LogError("Targets file empty");

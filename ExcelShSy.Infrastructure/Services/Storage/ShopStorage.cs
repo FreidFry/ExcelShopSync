@@ -1,7 +1,7 @@
 ﻿using ExcelShSy.Core.Interfaces.Shop;
 using Newtonsoft.Json;
-using System.IO;
-using System.Windows;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Infrastructure.Services.Storage
 {
@@ -41,7 +41,8 @@ namespace ExcelShSy.Infrastructure.Services.Storage
                 }
             }
             if (result.Count < 1)
-                MessageBox.Show("No fetch shops!");
+                MessageBoxManager.GetMessageBoxStandard("No fetch shops!","No fetch shops!").ShowAsync();
+            
             return result;
         }
 
@@ -62,15 +63,16 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             return shop;
         }
 
-        public void UpdateShop(IShopTemplate updatedShop)
+        public async void UpdateShop(IShopTemplate updatedShop)
         {
             var index = Shops.FindIndex(s => s.Name == updatedShop.Name);
             if (index != -1)
                 Shops[index] = updatedShop;
             else
             {
-                var question = MessageBox.Show($"Shop {updatedShop.Name} not found. Do you want to add it?", "Shop Not Found", MessageBoxButton.YesNo);
-                if (question == MessageBoxResult.Yes)
+                var msBox = MessageBoxManager.GetMessageBoxStandard("Shop Not Found",$"Shop {updatedShop.Name} not found. Do you want to add it?", ButtonEnum.YesNo);
+                var result = await msBox.ShowAsync();
+                if (result == ButtonResult.Yes)
                     Shops.Add(updatedShop);
             }
         }

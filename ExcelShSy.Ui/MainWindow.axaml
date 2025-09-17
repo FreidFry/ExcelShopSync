@@ -1,10 +1,7 @@
 ﻿<Window x:Class="ExcelShSy.Ui.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExcelShSy.Localization;assembly=ExcelShSy.Localization"
-        mc:Ignorable="d"
         Title="ExcelShSy"
         MinWidth="485"
         MinHeight="300"
@@ -56,7 +53,7 @@
                         <CheckBox Content="{local:Loc MainWindow.SyncPrice}" Tag="ShouldSyncPrices" Click="CheckBox_Click" VerticalAlignment="Center" />
                         <CheckBox Margin="5 0" Content="{local:Loc MainWindow.RoundUp}" Tag="ShouldRoundPrices" Click="CheckBox_Click" VerticalAlignment="Center" />
                         <CheckBox Content="{local:Loc MainWindow.IncreasePricePercent}" HorizontalAlignment="Left" Tag="ShouldIncreasePrices" Click="CheckBox_Click" VerticalAlignment="Center" />
-                        <TextBox  Margin="5 0" TextWrapping="Wrap" Width="50" Name="IncreasePercentTextBox" TextChanged="ChangeIncreasePercent_TextChanged" PreviewTextInput="IncreasePercentTextBox_PreviewTextInput" DataObject.Pasting="IncreasePercentTextBox_Pasting" VerticalAlignment="Center" />
+                        <TextBox  Margin="5 0" TextWrapping="Wrap" Width="50" Name="IncreasePercentTextBox" TextChanged="ChangeIncreasePercent_TextChanged" VerticalAlignment="Center" />
                     </StackPanel>
 
                     <CheckBox Grid.Row="1" Margin="0 2.5" Content="{local:Loc MainWindow.SyncAvailability}" Tag="ShouldSyncAvailability" Click="CheckBox_Click" VerticalAlignment="Center" />

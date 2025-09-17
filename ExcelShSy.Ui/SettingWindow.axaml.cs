@@ -1,10 +1,14 @@
-﻿using ExcelShSy.Core.Interfaces;
+﻿using System.Text.Json;
+using Avalonia;
+using ExcelShSy.Core.Interfaces;
 using ExcelShSy.Localization.Properties;
 using ExcelShSy.Ui.Resources;
 using ExcelShSy.Ui.Utils;
 using Microsoft.Extensions.DependencyInjection;
-using System.Windows;
-using System.Windows.Controls;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Interactivity;
+using ExcelShSy.Core.Interfaces.Common;
 
 namespace ExcelShSy.Ui
 {
@@ -13,12 +17,14 @@ namespace ExcelShSy.Ui
         private readonly string _currentLocalization;
         private string _newLocalization;
         private bool _changeLanguage = false;
+        private readonly IAppSettings _settings;
 
         private readonly IServiceProvider _serviceProvider;
         private readonly ILocalizationManager _localizationManager;
-        public SettingWindow(IServiceProvider serviceProvider, ILocalizationManager localizationManager)
+        public SettingWindow(IServiceProvider serviceProvider, ILocalizationManager localizationManager, IAppSettings settings)
         {
-            _currentLocalization = Settings.Default.Language;
+            _settings = settings;
+            _currentLocalization = _settings.Language;
             _serviceProvider = serviceProvider;
             _localizationManager = localizationManager;
             InitializeControls();
@@ -53,7 +59,7 @@ namespace ExcelShSy.Ui
                     Tag = language,
                 };
                 CBLanguagues.Items.Add(cbi);
-                if (language.GetLangCode() == Settings.Default.Language)
+                if (language.GetLangCode() == _settings.Language)
                 {
                     CBLanguagues.SelectedItem = cbi;
                 }
@@ -61,23 +67,27 @@ namespace ExcelShSy.Ui
 
         }
 
-        private void ApplyLanguageChange()
+        private async void ApplyLanguageChange()
         {
             _localizationManager.SetCulture(_newLocalization);
+            _localizationManager.SaveSettings(new AppSettings { Language = _newLocalization });
 
-            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-            Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-            Application.Current.MainWindow.Close();
-            Application.Current.MainWindow = mainWindow;
-            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+            // Закрываем окно настроек
+            this.Close();
 
-            mainWindow.Show();
+            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+                desktop.MainWindow.Close();
+                desktop.MainWindow = mainWindow;
+                mainWindow.Show();
+            }
         }
 
-        private void ShopManagerOpen_Click(object s, EventArgs e)
+        private void ShopManagerOpen_Click(object s, RoutedEventArgs e)
         {
             Window shopManagerWindow = _serviceProvider.GetRequiredService<ShopManagerWindow>();
-            shopManagerWindow.ShowDialog();
+            shopManagerWindow.ShowDialog(this);
         }
     }
 }

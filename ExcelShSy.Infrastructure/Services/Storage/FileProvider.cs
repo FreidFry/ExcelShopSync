@@ -1,7 +1,7 @@
-﻿using ExcelShSy.Core.Interfaces.Excel;
+﻿using Avalonia.Controls;
+using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Storage;
-
-using Microsoft.Win32;
+using static ExcelShSy.Core.WindowHelper;
 
 namespace ExcelShSy.Infrastructure.Services.Storage
 {
@@ -28,23 +28,21 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             return result;
         }
 
-        public List<string>? PickExcelFilePaths()
+        [Obsolete("Obsolete")]
+        public async Task<List<string>?> PickExcelFilePaths()
         {
-            OpenFileDialog fileDialog = new()
+            var fileDialog = new OpenFileDialog
             {
-                Filter = "Excel Files|*.xls;*.xlsx;*.xlsm",
-                Multiselect = true
+                AllowMultiple = true,
+                Filters = [new FileDialogFilter { Name = "Excel Files", Extensions = { "xls", "xlsx", "xlsm" } }]
             };
 
-            if (fileDialog.ShowDialog() == false || fileDialog.FileNames.Length == 0)
+            var fileNames = await fileDialog.ShowAsync(GetActiveWindow());
+            if (fileNames == null || fileNames.Length == 0)
                 return null;
 
-            List<string> result = [];
+            return [..fileNames];
 
-            foreach (var fileName in fileDialog.FileNames)
-                result.Add(fileName);
-
-            return result;
         }
     }
 }

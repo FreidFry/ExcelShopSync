@@ -1,8 +1,11 @@
-﻿using ExcelShSy.Core.Interfaces.Shop;
+﻿using System.Collections.ObjectModel;
+using ExcelShSy.Core.Interfaces.Shop;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Ui
 {
@@ -10,8 +13,8 @@ namespace ExcelShSy.Ui
     {
         private readonly IShopStorage _shopStorage;
 
-        private bool _ShopChanged = false;
-        private bool Ready = false;
+        private bool _shopChanged = false;
+        private bool _ready = false;
 
         #region Current Shop
 
@@ -32,8 +35,8 @@ namespace ExcelShSy.Ui
         #endregion
 
         #region Shop Headers
-        private List<string> _currentShopHeaders;
-        public List<string> CurrentShopHeaders
+        private ObservableCollection<string> _currentShopHeaders = [];
+        public ObservableCollection<string> CurrentShopHeaders
         {
             get => _currentShopHeaders;
             set
@@ -47,7 +50,7 @@ namespace ExcelShSy.Ui
         }
         #endregion
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public new event PropertyChangedEventHandler? PropertyChanged;
 
         public ShopManagerWindow(IShopStorage shopStorage)
         {
@@ -58,7 +61,7 @@ namespace ExcelShSy.Ui
             Loaded += (s, e) =>
             {
                 LoadMagazineInSelector();
-                Ready = true;
+                _ready = true;
             };
         }
 
@@ -74,32 +77,35 @@ namespace ExcelShSy.Ui
             MagazineSelector.SelectedIndex = 0;
         }
 
-        private void SelectMagazine_Changed(object sender, SelectionChangedEventArgs e)
+        private async void SelectMagazine_Changed(object sender, SelectionChangedEventArgs e)
         {
-            if (_ShopChanged)
+            if (_shopChanged)
             {
-                var question = MessageBox.Show("You have unsaved changes. Do you want to save them?", "Unsaved Changes", MessageBoxButton.YesNoCancel);
-                if (question == MessageBoxResult.Yes)
+                var msBox = MessageBoxManager.GetMessageBoxStandard("Unsaved Changes", "You have unsaved changes. Do you want to save them?", ButtonEnum.YesNoCancel);
+                var result = await msBox.ShowAsync();
+                if (result == ButtonResult.Yes)
                 {
                     SaveShop();
                 }
-                else if (question == MessageBoxResult.Cancel)
+                else if (result == ButtonResult.Cancel)
                     return;
             }
             if (MagazineSelector.SelectedItem is string selectedShop)
             {
                 var shop = _shopStorage.GetShopMapping(selectedShop);
+                foreach (var header in shop.UnmappedHeaders)
+                    CurrentShopHeaders.Add(header);
                 CurrentShop = shop;
-                CurrentShopHeaders = CurrentShop.UnmappedHeaders;
-                _ShopChanged = false;
+                _shopChanged = false;
             }
         }
 
 
-        private void SaveShopTemplate_Click(object sender, RoutedEventArgs e)
+        private async void SaveShopTemplate_Click(object sender, RoutedEventArgs e)
         {
-            var question = MessageBox.Show("Are you sure you want to save the changes?", "Confirm Save", MessageBoxButton.YesNo);
-            if (question != MessageBoxResult.Yes)
+            var msBox = MessageBoxManager.GetMessageBoxStandard( "Confirm Save","Are you sure you want to save the changes?", ButtonEnum.YesNo);
+            var result = await msBox.ShowAsync();
+            if (result != ButtonResult.Yes)
                 return;
             SaveShop();
         }
@@ -108,18 +114,18 @@ namespace ExcelShSy.Ui
         {
             _shopStorage.UpdateShop(CurrentShop);
             _shopStorage.SaveShopTemplate(CurrentShop);
-            _ShopChanged = false;
+            _shopChanged = false;
         }
 
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void IsChanged_Changed(object sender, RoutedEventArgs e)
         {
-            if (Ready)
-                _ShopChanged = true;
+            if (_ready)
+                _shopChanged = true;
         }
     }
 }
