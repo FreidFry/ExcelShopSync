@@ -76,24 +76,25 @@ namespace ExcelShSy.Ui
             }
         }
 
-        private void InitializeDbPath()
-        {
+        private void InitializeDbPath() =>
             DataBasePath.Text = _settings.DataBasePath;
-        }
 
         private async void ApplyLanguageChange()
         {
             _localizationManager.SetCulture(_settings.Language);
 
             // Закрываем окно настроек
-            this.Close();
-
             if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                var oldMainWindow = desktop.MainWindow;
+                oldMainWindow.Hide();
+                
                 var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-                desktop.MainWindow.Close();
                 desktop.MainWindow = mainWindow;
                 mainWindow.Show();
+
+                oldMainWindow.DataContext = null;
+                oldMainWindow.Close();
             }
         }
 
