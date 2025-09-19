@@ -1,5 +1,6 @@
 ﻿using ExcelShSy.Core.Interfaces;
 using ExcelShSy.Core.Interfaces.Common;
+using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Shop;
@@ -11,6 +12,8 @@ using ExcelShSy.Infrastructure.Services.Common;
 using ExcelShSy.Infrastructure.Services.Logger;
 using ExcelShSy.Infrastructure.Services.Operations;
 using ExcelShSy.Infrastructure.Services.Storage;
+using ExcelShSy.LocalDataBaseModule;
+using ExcelShSy.LocalDataBaseModule.Data;
 using ExcelShSy.Ui.Factories;
 using ExcelShSy.Ui.Interfaces;
 using ExcelShSy.Localization;
@@ -42,13 +45,16 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddScoped<IFetchMasterProduct, FetchProductMaster>();
             services.AddScoped<IFetchMarketProduct, MarketProductImporter>();
 
+            services.AddScoped<IDataBaseInitializer, DbCreateManager>();
+
             //factory
             services.AddScoped<IExcelFileFactory, ExcelFileFactory>();
             services.AddScoped<IExcelPageFactory, ExcelPageFactory>();
             services.AddScoped<IOperationTaskFactory, OperationTaskFactory>();
             services.AddScoped<IEditLoadFilesWindowFactory, EditLoadFilesWindowFactory>();
             services.AddScoped<ISettingWindowFactory, SettingWindowFactory>();
-
+            services.AddScoped<IDataBaseViewerFactory, DataBaseViewerFactory>();
+            
             services.AddScoped<IShopTemplateFactory, ShopTemplateFactory>();
 
             //Executes
@@ -75,6 +81,7 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddTransient<SettingWindow>();
             services.AddTransient<MainWindow>();
             services.AddTransient<ShopManagerWindow>();
+            services.AddTransient<DataBaseViewer>();
             return services;
         }
     }

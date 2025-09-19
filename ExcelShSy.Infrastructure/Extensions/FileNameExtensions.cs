@@ -1,5 +1,4 @@
 ﻿using ExcelShSy.Infrastructure.Events;
-using System.IO;
 
 namespace ExcelShSy.Infrastructure.Extensions
 {

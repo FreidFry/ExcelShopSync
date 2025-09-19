@@ -3,25 +3,26 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:ExcelShSy.Localization;assembly=ExcelShSy.Localization"
         Title="{local:Loc SettingWindow.Title}" Height="450" Width="300" WindowStartupLocation="CenterScreen">
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Grid Margin="10" RowDefinitions="*,Auto">
 
         <StackPanel Margin="10" >
 
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <TextBlock Text="{local:Loc SettingWindow.Language}" VerticalAlignment="Center" />
-            <ComboBox x:Name="CBLanguagues" Width="150" Margin="10 0" SelectionChanged="CBLanguagues_SelectionChanged" />
-        </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBlock Text="{local:Loc SettingWindow.Language}" VerticalAlignment="Center" />
+                <ComboBox x:Name="CBLanguagues" Width="150" Margin="10 0" SelectionChanged="CBLanguagues_SelectionChanged" />
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                <TextBlock Text="Data base path" VerticalAlignment="Center"/>
+                <TextBox x:Name="DataBasePath" Width="150" Margin="10 0"/>
+                <Button Content="Select path" x:Name="SelectDataBasePathButton"/>
+            </StackPanel>
 
-        <Button Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Left" Content="{local:Loc SettingWindow.UserShopManager}" Padding="10 2" Click="ShopManagerOpen_Click"/>
+        <Button VerticalAlignment="Top" HorizontalAlignment="Left" Content="{local:Loc SettingWindow.UserShopManager}" Padding="10 2" Click="ShopManagerOpen_Click"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" >
             <Button Content="{local:Loc SettingWindow.ApplyButton}" Width="80" Click="Apply_Click" />
-
         </StackPanel>
     </Grid>
 </Window>

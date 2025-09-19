@@ -1,6 +1,5 @@
 ﻿using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Shop;
-using ExcelShSy.Infrastructure.Persistance.Model;
 using ExcelShSy.Infrastructure.Services.Common;
 using OfficeOpenXml;
 

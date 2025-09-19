@@ -1,11 +1,13 @@
 ﻿<Window x:Class="ExcelShSy.LocalDataBaseModule.DataBaseViewer"
         xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:ExcelShSy.Localization;assembly=ExcelShSy.Localization"
         xmlns:local="clr-namespace:ExcelShSy.LocalDataBaseModule"
+        x:DataType="local:DataBaseViewer"
         Title="DataBaseViewer" Height="450" Width="800">
-    <Grid>
-        <DataGrid x:Name="Table" IsReadOnly="False" >
-            
-        </DataGrid>
+    
+    <Grid RowDefinitions="Auto,*">
+        <Button Content="AddNew" Click="AddNewProduct_Click" />
+        <DataGrid Grid.Row="1" x:Name="Table" AutoGenerateColumns="False" />
     </Grid>
 </Window>

@@ -35,7 +35,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ReactiveUI" Version="20.4.1" />
-    <PackageReference Include="Scrutor" Version="6.1.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Formats.Asn1" Version="9.0.8" />
     <PackageReference Include="System.IO.Pipelines" Version="9.0.8" />

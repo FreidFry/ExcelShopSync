@@ -1,5 +1,4 @@
-﻿using System;
-using ExcelShSy.Core.Exeptions;
+﻿using ExcelShSy.Core.Exeptions;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Infrastructure.Persistance.DefaultValues;
 
@@ -7,15 +6,6 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
 using System.Diagnostics.CodeAnalysis;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Layout;
-using ReactiveUI;
-
-using Avalonia.Media;
-using MsBox.Avalonia;
-using MsBox.Avalonia.Enums;
 using Color = System.Drawing.Color;
 
 

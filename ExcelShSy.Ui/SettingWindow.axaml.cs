@@ -50,10 +50,15 @@ namespace ExcelShSy.Ui
         private void InitializeControls()
         {
             InitializeComponent();
+            InitialLanguages();
 
+        }
+
+        private void InitialLanguages()
+        {
             foreach (var language in Helpers.GetEnums<Enums.SupportedLanguagues>())
             {
-                var cbi = new ComboBoxItem()
+                var cbi = new ComboBoxItem
                 {
                     Content = language.GetDescriptoin(),
                     Tag = language,
@@ -64,7 +69,6 @@ namespace ExcelShSy.Ui
                     CBLanguagues.SelectedItem = cbi;
                 }
             }
-
         }
 
         private async void ApplyLanguageChange()

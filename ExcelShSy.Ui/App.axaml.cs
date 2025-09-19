@@ -21,7 +21,7 @@ namespace ExcelShSy.Ui
             services.AddDependencyInjection();
             
             _appSettings = ConfigManager.Load();
-            services.AddSingleton<IAppSettings>(_appSettings);
+            services.AddSingleton(_appSettings);
             
             _serviceProvider = services.BuildServiceProvider();
             _localizationManager = _serviceProvider.GetRequiredService<ILocalizationManager>();

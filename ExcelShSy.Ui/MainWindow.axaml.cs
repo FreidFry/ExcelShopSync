@@ -10,6 +10,7 @@ using Avalonia.Input;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using Avalonia.Interactivity;
+using ExcelShSy.Core.Interfaces.DataBase;
 using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Ui
@@ -21,8 +22,9 @@ namespace ExcelShSy.Ui
         private readonly ILogger _logger;
         private readonly IEditLoadFilesWindowFactory _editLoadFilesWindowFactory;
         private readonly ISettingWindowFactory _settingWindowFactory;
+        private readonly IDataBaseViewerFactory _dataBaseViewer;
 
-        public MainWindow(IFileManager fileManager, IOperationTaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory)
+        public MainWindow(IFileManager fileManager, IOperationTaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory, IDataBaseViewerFactory dataBaseViewer)
         {
             InitializeComponents();
             _fileManager = fileManager;
@@ -30,6 +32,7 @@ namespace ExcelShSy.Ui
             _logger = logger;
             _editLoadFilesWindowFactory = editLoadFilesWindowFactory;
             _settingWindowFactory = settingWindowFactory;
+            _dataBaseViewer = dataBaseViewer;
 
             RegestrationTextBlockEvent("TargetLb", GetTargetFileLable);
             RegestrationTextBlockEvent("SourceLb", GetSourceFileLable);
@@ -189,7 +192,7 @@ namespace ExcelShSy.Ui
 
         private async void OpenDbManager_Click(object? sender, RoutedEventArgs e)
         {
-            var window = new LocalDataBaseModule.DataBaseViewer();
+            var window = _dataBaseViewer.Create();
             await window.ShowDialog(this);
         }
     }

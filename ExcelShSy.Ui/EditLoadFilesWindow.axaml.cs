@@ -1,11 +1,11 @@
+using System.Collections.ObjectModel;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Events;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Ui.Models.EditLoadFiles;
-using System.Collections.ObjectModel;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using static ExcelShSy.Localization.GetLocalizationInCode;
