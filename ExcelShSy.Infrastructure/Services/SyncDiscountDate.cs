@@ -4,9 +4,9 @@ using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
+using ExcelShSy.Core.Properties;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Infrastructure.Persistance.DefaultValues;
-using ExcelShSy.Properties;
 
 namespace ExcelShSy.Infrastructure.Services
 {

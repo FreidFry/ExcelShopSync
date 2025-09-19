@@ -1,6 +1,4 @@
 ﻿using ExcelShSy.Core.Interfaces.Common;
-
-using System.IO;
 using System.Text;
 
 namespace ExcelShSy.Infrastructure.Services.Logger

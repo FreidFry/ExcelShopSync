@@ -17,7 +17,7 @@ using ExcelShSy.LocalDataBaseModule.Data;
 using ExcelShSy.Ui.Factories;
 using ExcelShSy.Ui.Interfaces;
 using ExcelShSy.Localization;
-using ExcelShSy.Localization.Properties;
+using ExcelShSy.Settings.Properties;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExcelShSy.Ui.AppConfigs

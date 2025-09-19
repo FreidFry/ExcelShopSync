@@ -1,6 +1,6 @@
 using System.Reflection;
 using System.Text.Json;
-using ExcelShSy.Localization.Properties;
+using ExcelShSy.Settings.Properties;
 
 namespace ExcelShSy.Ui.AppConfigs;
 

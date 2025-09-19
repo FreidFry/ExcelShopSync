@@ -46,10 +46,10 @@ namespace ExcelShSy.Infrastructure.Persistance.Model
             }
         }
 
-        public string DataFormat { get => _dataFormat;
+        public string? DataFormat { get => _dataFormat;
             set
             {
-                _dataFormat = value;
+                if (value != null) _dataFormat = value;
                 OnPropertyChanged();
             }
         }

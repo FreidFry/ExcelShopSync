@@ -1,7 +1,6 @@
-﻿
-using ExcelShSy.Core.Interfaces.Shop;
+﻿using ExcelShSy.Core.Interfaces.Shop;
 
-namespace ExcelShSy.Infrastructure.Services.Storage
+namespace ExcelShSy.Core.Interfaces.Storage
 {
     public interface IColumnMappingStorage
     {

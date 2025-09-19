@@ -1,7 +1,7 @@
 ﻿using ExcelShSy.Core.Interfaces.Excel;
+using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Infrastructure.Persistance.Model;
-using ExcelShSy.Infrastructure.Services.Storage;
 using OfficeOpenXml;
 
 namespace ExcelShSy.Infrastructure.Factories

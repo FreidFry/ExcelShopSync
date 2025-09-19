@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Storage;
-using ExcelShSy.Infrastructure.Events;
+using ExcelShSy.Event;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Ui.Models.EditLoadFiles;
 using MsBox.Avalonia;

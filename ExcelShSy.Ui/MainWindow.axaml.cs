@@ -2,15 +2,15 @@
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
-using ExcelShSy.Infrastructure.Events;
-using ExcelShSy.Properties;
+using ExcelShSy.Event;
 using ExcelShSy.Ui.Interfaces;
 using Avalonia.Controls;
 using Avalonia.Input;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using Avalonia.Interactivity;
-using ExcelShSy.Core.Interfaces.DataBase;
+using ExcelShSy.Core.Properties;
+using static System.Decimal;
 using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Ui
@@ -34,8 +34,8 @@ namespace ExcelShSy.Ui
             _settingWindowFactory = settingWindowFactory;
             _dataBaseViewer = dataBaseViewer;
 
-            RegestrationTextBlockEvent("TargetLb", GetTargetFileLable);
-            RegestrationTextBlockEvent("SourceLb", GetSourceFileLable);
+            RegistrationTextBlockEvent("TargetLb", GetTargetFileLable);
+            RegistrationTextBlockEvent("SourceLb", GetSourceFileLable);
         }
 
         private void InitializeComponents()
@@ -44,24 +44,22 @@ namespace ExcelShSy.Ui
 
             this.LayoutUpdated += (sender, args) =>
             {
-                var twidth = TargetFilesButton.Bounds.Width;
-                var swidth = SourceFilesButton.Bounds.Width;
+                var tWidth = TargetFilesButton.Bounds.Width;
+                var sWidth = SourceFilesButton.Bounds.Width;
 
-                double max = Math.Max(twidth, swidth);
+                var max = Math.Max(tWidth, sWidth);
                 TargetFilesButton.Width = max;
                 SourceFilesButton.Width = max;
-
-                // Отписываемся, чтобы не дергать каждый LayoutUpdated
+                
                 this.LayoutUpdated -= null;
             };
-
         }
 
-        private static void RegestrationTextBlockEvent(string key, TextBlock textBlock)
+        private static void RegistrationTextBlockEvent(string key, TextBlock textBlock)
         {
-            UpdateTextBlockEvents.OnTextUpdate += (tarketKey, text) =>
+            UpdateTextBlockEvents.OnTextUpdate += (targetKey, text) =>
             {
-                if (tarketKey == key)
+                if (targetKey == key)
                     textBlock.Text = text;
             };
         }
@@ -107,7 +105,7 @@ namespace ExcelShSy.Ui
 
         private void ChangeIncreasePercent_TextChanged(object sender, TextChangedEventArgs e)
         {
-            decimal.TryParse(IncreasePercentTextBox.Text, out decimal percents);
+            TryParse(IncreasePercentTextBox.Text, out decimal percents);
             ProductProcessingOptions.priceIncreasePercentage = percents;
         }
 
@@ -115,7 +113,7 @@ namespace ExcelShSy.Ui
         {
             if (sender is TextBox textBox)
             {
-                string newText = textBox.Text.Insert(textBox.CaretIndex, e.Text);
+                var newText = textBox.Text.Insert(textBox.CaretIndex, e.Text);
                 if (!IsTextAllowed(e.Text, newText))
                     e.Handled = true; // отменяем ввод
             }
@@ -134,7 +132,7 @@ namespace ExcelShSy.Ui
         private static bool IsTextAllowed(string newInput, string fullText)
         {
             string text = fullText + newInput;
-            return decimal.TryParse(text, out _);
+            return TryParse(text, out _);
         }
 
         private void ShowEditLoadFiles_Click(object sender, RoutedEventArgs e)
@@ -154,7 +152,7 @@ namespace ExcelShSy.Ui
             OpenSettingWindow();
         }
 
-        public async void OpenSettingWindow()
+        private async void OpenSettingWindow()
         {
             var window = _settingWindowFactory.Create();
             await window.ShowDialog(this);
@@ -179,14 +177,12 @@ namespace ExcelShSy.Ui
         private static string SelectGuidePage()
         {
             var language = Thread.CurrentThread.CurrentCulture.Name;
-            var fileName = "Guid";
+            const string fileName = "Guid";
             var fileDirectory = Path.Combine(Environment.CurrentDirectory, "Web");
             var path = Path.Combine(fileDirectory, $"{fileName}.{language}.html");
             var baseFile = Path.Combine(fileDirectory, $"{fileName}.html");
 
-            if (File.Exists(path))
-                return path;
-            return baseFile;
+            return File.Exists(path) ? path : baseFile;
         }
 
 

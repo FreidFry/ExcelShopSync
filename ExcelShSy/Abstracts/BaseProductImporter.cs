@@ -7,26 +7,24 @@ namespace ExcelShSy.Core.Abstracts
 {
     public abstract class BaseProductImporter
     {
-        protected readonly IProductStorage _dataProduct;
-        protected readonly IFileStorage _fileStorage;
-        protected readonly IShopStorage _shopStorage;
-        protected readonly ILogger _logger;
-        protected string shopName = string.Empty;
+        protected readonly IProductStorage DataProduct;
+        protected readonly IShopStorage ShopStorage;
+        protected readonly ILogger Logger;
+        protected string ShopName = string.Empty;
 
-        protected BaseProductImporter(IProductStorage dataProduct, IFileStorage fileStorage, IShopStorage shopStorage, ILogger logger )
+        protected BaseProductImporter(IProductStorage dataProduct, IShopStorage shopStorage, ILogger logger )
         {
-            _dataProduct = dataProduct;
-            _fileStorage = fileStorage;
-            _shopStorage = shopStorage;
-            _logger = logger;
+            DataProduct = dataProduct;
+            ShopStorage = shopStorage;
+            Logger = logger;
         }
 
         public void FetchAllProducts(IExcelFile file)
         {
-            shopName = file.ShopName;
+            ShopName = file.ShopName;
             foreach (var page in file.SheetList)
             {
-                _logger.Log($"{page.SheetName}");
+                Logger.Log($"{page.SheetName}");
                 ProcessPage(page);
             }
         }

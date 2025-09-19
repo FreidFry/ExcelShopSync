@@ -1,7 +1,6 @@
 ﻿using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
-using ExcelShSy.Infrastructure.Persistance.Model;
 
 namespace ExcelShSy.Infrastructure.Services.Operations
 {

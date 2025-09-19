@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExcelShSy.Event\ExcelShSy.Event.csproj" />
     <ProjectReference Include="..\ExcelShSy\ExcelShSy.Core.csproj" />
   </ItemGroup>
 

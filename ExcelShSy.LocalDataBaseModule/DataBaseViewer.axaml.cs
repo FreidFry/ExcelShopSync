@@ -17,7 +17,6 @@ namespace ExcelShSy.LocalDataBaseModule
         private readonly IShopStorage  _shopStorage;
         private readonly DataUpdateManager _updateManager;
         
-        
         private readonly string _connectionString;
         public DataBaseViewer(IDataBaseInitializer connectionManager, IShopStorage shopStorage)
         {

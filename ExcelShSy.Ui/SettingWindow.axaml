@@ -14,7 +14,7 @@
             
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" >
                 <TextBlock Text="Data base path" VerticalAlignment="Center"/>
-                <TextBox x:Name="DataBasePath" Width="150" Margin="10 0"/>
+                <TextBox x:Name="DataBasePath" IsReadOnly="True" ContextFlyout="{x:Null}" Focusable="False" Width="150" Margin="10 0"/>
                 <Button Content="Select path" x:Name="SelectDataBasePathButton"/>
             </StackPanel>
 

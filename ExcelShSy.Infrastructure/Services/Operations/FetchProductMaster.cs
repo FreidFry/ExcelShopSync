@@ -5,18 +5,17 @@ using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Infrastructure.Persistance.DefaultValues;
-using ExcelShSy.Properties;
-
 using OfficeOpenXml;
 
 using ExcelShSy.Infrastructure.Persistance.ShopData.Mappings;
 using ExcelShSy.Core.Interfaces.Shop;
+using ExcelShSy.Core.Properties;
 
 namespace ExcelShSy.Infrastructure.Services.Operations
 {
     public class FetchProductMaster : BaseProductImporter, IFetchMasterProduct
     {
-        public FetchProductMaster(IProductStorage _dataProduct, IFileStorage _fileStorage, IShopStorage _shopStorage, ILogger _logger) : base(_dataProduct, _fileStorage, _shopStorage, _logger)
+        public FetchProductMaster(IProductStorage _dataProduct, IShopStorage _shopStorage, ILogger _logger) : base(_dataProduct, _shopStorage, _logger)
         { }
 
         protected override void ProcessPage(IExcelSheet page)
@@ -52,7 +51,7 @@ namespace ExcelShSy.Infrastructure.Services.Operations
 
                 if (isHeader)
                 {
-                    _logger.LogInfo($"In {row} row headers");
+                    Logger.LogInfo($"In {row} row headers");
                     continue;
                 }
                 if (article != 0)
@@ -73,25 +72,25 @@ namespace ExcelShSy.Infrastructure.Services.Operations
 
         void SetProductData(string article, int priceCol, int qtyCol, int availCol, int row, ExcelWorksheet ws)
         {
-            _dataProduct.AddProductArticle(article);
+            DataProduct.AddProductArticle(article);
 
             if (ProductProcessingOptions.ShouldSyncPrices && priceCol > 0)
             {
                 var val = ws.GetDecimal(row, priceCol);
-                if (val != null) _dataProduct.AddProductPrice(article, (decimal)val);
+                if (val != null) DataProduct.AddProductPrice(article, (decimal)val);
             }
 
             if (ProductProcessingOptions.ShouldSyncQuantities && qtyCol > 0)
             {
                 var val = ws.GetQuantity(row, qtyCol);
-                if (val != null) _dataProduct.AddProductQuantity(article, (decimal)val);
+                if (val != null) DataProduct.AddProductQuantity(article, (decimal)val);
             }
 
             if (ProductProcessingOptions.ShouldSyncAvailability && availCol > 0)
             {
                 var undentif = ws.GetString(row, availCol);
                 var val = IndentifyAvailability(undentif);
-                if (val != null) _dataProduct.AddProductAvailability(article, val);
+                if (val != null) DataProduct.AddProductAvailability(article, val);
             }
         }
 

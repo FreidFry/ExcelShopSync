@@ -1,4 +1,5 @@
 ﻿using ExcelShSy.Core.Interfaces.Shop;
+using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Persistance.DefaultValues;
 
 namespace ExcelShSy.Infrastructure.Services.Storage

@@ -1,6 +1,6 @@
 using ExcelShSy.Core.Interfaces.Common;
 
-namespace ExcelShSy.Localization.Properties;
+namespace ExcelShSy.Settings.Properties;
 
 public class AppSettings : IAppSettings
 {

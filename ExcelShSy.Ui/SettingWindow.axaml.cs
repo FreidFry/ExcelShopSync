@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using Avalonia;
 using ExcelShSy.Core.Interfaces;
-using ExcelShSy.Localization.Properties;
 using ExcelShSy.Ui.Resources;
 using ExcelShSy.Ui.Utils;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using ExcelShSy.Core.Interfaces.Common;
+using ExcelShSy.Settings.Properties;
 
 namespace ExcelShSy.Ui
 {

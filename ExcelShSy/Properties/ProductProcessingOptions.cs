@@ -1,4 +1,4 @@
-﻿namespace ExcelShSy.Properties
+﻿namespace ExcelShSy.Core.Properties
 {
     public static class ProductProcessingOptions
     {

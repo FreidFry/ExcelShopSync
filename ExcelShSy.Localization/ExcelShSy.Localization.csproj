@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExcelShSy.Settings\ExcelShSy.Settings.csproj" />
     <ProjectReference Include="..\ExcelShSy\ExcelShSy.Core.csproj" />
   </ItemGroup>
 

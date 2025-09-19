@@ -1,9 +1,8 @@
 ﻿using System.Globalization;
 using System.Text.Json;
-using Avalonia;
 using ExcelShSy.Core.Interfaces;
 using ExcelShSy.Core.Interfaces.Common;
-using ExcelShSy.Localization.Properties;
+using ExcelShSy.Settings.Properties;
 
 namespace ExcelShSy.Localization
 {

@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy.Localization", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy.LocalDataBaseModule", "ExcelShSy.LocalDataBaseModule\ExcelShSy.LocalDataBaseModule.csproj", "{4FAC7810-7263-43BF-B2A6-3F2D282728A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy.Event", "ExcelShSy.Event\ExcelShSy.Event.csproj", "{976A736F-579E-4F51-A695-467C09F8C276}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy.Settings", "ExcelShSy.Settings\ExcelShSy.Settings.csproj", "{FBA51CC3-4BAE-4E14-8DD9-43854ED24C60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{4FAC7810-7263-43BF-B2A6-3F2D282728A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FAC7810-7263-43BF-B2A6-3F2D282728A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FAC7810-7263-43BF-B2A6-3F2D282728A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{976A736F-579E-4F51-A695-467C09F8C276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{976A736F-579E-4F51-A695-467C09F8C276}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{976A736F-579E-4F51-A695-467C09F8C276}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{976A736F-579E-4F51-A695-467C09F8C276}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBA51CC3-4BAE-4E14-8DD9-43854ED24C60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBA51CC3-4BAE-4E14-8DD9-43854ED24C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBA51CC3-4BAE-4E14-8DD9-43854ED24C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBA51CC3-4BAE-4E14-8DD9-43854ED24C60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

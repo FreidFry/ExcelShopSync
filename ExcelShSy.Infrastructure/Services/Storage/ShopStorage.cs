@@ -1,4 +1,5 @@
 ﻿using ExcelShSy.Core.Interfaces.Shop;
+using ExcelShSy.Core.Interfaces.Storage;
 using Newtonsoft.Json;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;

@@ -3,8 +3,7 @@ using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Extensions;
-using ExcelShSy.Properties;
-using System.IO;
+using ExcelShSy.Core.Properties;
 
 namespace ExcelShSy.Infrastructure.Services
 {

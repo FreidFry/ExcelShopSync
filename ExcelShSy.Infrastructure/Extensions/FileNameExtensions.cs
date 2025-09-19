@@ -1,10 +1,10 @@
-﻿using ExcelShSy.Infrastructure.Events;
+﻿using ExcelShSy.Event;
 
 namespace ExcelShSy.Infrastructure.Extensions
 {
     public static class FileNameExtensions
     {
-        public static void SetLastPath(string TextBlockName, List<string> pathList)
+        public static void SetLastPath(string textBlockName, List<string> pathList)
         {
             if (!pathList.IsNullOrEmpty())
             {
@@ -13,11 +13,11 @@ namespace ExcelShSy.Infrastructure.Extensions
                 if (fileName.Length > 25)
                     fileName = $"{fileName.Substring(0, 25)}...";
                 if (pathList.Count == 1)
-                    UpdateTextBlockEvents.UpdateText(TextBlockName, fileName);
+                    UpdateTextBlockEvents.UpdateText(textBlockName, fileName);
                 else
                 {
                     var normalizedFileName = $"{fileName} [+ {pathList.Count - 1}]";
-                    UpdateTextBlockEvents.UpdateText(TextBlockName, normalizedFileName);
+                    UpdateTextBlockEvents.UpdateText(textBlockName, normalizedFileName);
                 }
             }
         }

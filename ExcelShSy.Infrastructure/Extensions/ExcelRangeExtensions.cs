@@ -1,8 +1,6 @@
-﻿using ExcelShSy.Properties;
-
-using OfficeOpenXml;
-
+﻿using OfficeOpenXml;
 using System.Globalization;
+using ExcelShSy.Core.Properties;
 
 namespace ExcelShSy.Infrastructure.Extensions
 {
