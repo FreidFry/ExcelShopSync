@@ -7,6 +7,5 @@ namespace ExcelShSy.Core.Interfaces
     {
         void SetCulture(string code);
         void SetCulture(CultureInfo culture);
-        void SaveSettings(IAppSettings settings);
     }
 }

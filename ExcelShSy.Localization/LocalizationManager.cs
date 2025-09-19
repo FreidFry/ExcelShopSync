@@ -1,15 +1,10 @@
 ﻿using System.Globalization;
-using System.Text.Json;
 using ExcelShSy.Core.Interfaces;
-using ExcelShSy.Core.Interfaces.Common;
-using ExcelShSy.Settings.Properties;
 
 namespace ExcelShSy.Localization
 {
     public class LocalizationManager : ILocalizationManager
     {
-        private const string SettingsFile = "settings.json";
-        
         public event EventHandler? LanguageChanged;
         
         public void SetCulture(string code)
@@ -23,20 +18,12 @@ namespace ExcelShSy.Localization
 
             ApplyCulture(culture);
         }
-
-        public void SaveSettings(IAppSettings settings)
-        {
-            var json = JsonSerializer.Serialize(settings);
-            File.WriteAllText(SettingsFile, json);
-        }
-
+        
         private void ApplyCulture(CultureInfo culture)
         {
             Thread.CurrentThread.CurrentUICulture = culture;
             Thread.CurrentThread.CurrentCulture = culture;
-
-            SaveSettings(new AppSettings { Language = culture.Name });
-
+            
             // уведомляем UI через Loc.Instance
             Loc.Instance.Refresh();
             

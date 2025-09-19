@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Avalonia;
+﻿using Avalonia;
 using ExcelShSy.Core.Interfaces;
 using ExcelShSy.Ui.Resources;
 using ExcelShSy.Ui.Utils;
@@ -7,15 +6,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using ExcelShSy.Core.Interfaces.Common;
-using ExcelShSy.Settings.Properties;
 
 namespace ExcelShSy.Ui
 {
     public partial class SettingWindow : Window
     {
+        private bool _isInitialized = false;
+        
         private readonly string _currentLocalization;
-        private string _newLocalization;
         private bool _changeLanguage = false;
         private readonly IAppSettings _settings;
 
@@ -28,21 +28,25 @@ namespace ExcelShSy.Ui
             _serviceProvider = serviceProvider;
             _localizationManager = localizationManager;
             InitializeControls();
+            
+            _isInitialized = true;
         }
 
         private void CBLanguagues_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (sender is ComboBox combo && combo.SelectedItem is ComboBoxItem item && item.Tag is Enums.SupportedLanguagues selectedLang)
+            if (_isInitialized && sender is ComboBox { SelectedItem: ComboBoxItem { Tag: Enums.SupportedLanguagues selectedLang } })
             {
                 var code = selectedLang.GetLangCode();
-                _newLocalization = code;
+                _settings.Language = code;
                 _changeLanguage = true;
             }
         }
 
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
-            if (_changeLanguage && _newLocalization != _currentLocalization)
+            _settings.SaveSettings(_settings);
+            
+            if (_changeLanguage && _settings.Language != _currentLocalization)
                 ApplyLanguageChange();
             this.Close();
         }
@@ -51,6 +55,7 @@ namespace ExcelShSy.Ui
         {
             InitializeComponent();
             InitialLanguages();
+            InitializeDbPath();
 
         }
 
@@ -71,10 +76,14 @@ namespace ExcelShSy.Ui
             }
         }
 
+        private void InitializeDbPath()
+        {
+            DataBasePath.Text = _settings.DataBasePath;
+        }
+
         private async void ApplyLanguageChange()
         {
-            _localizationManager.SetCulture(_newLocalization);
-            _localizationManager.SaveSettings(new AppSettings { Language = _newLocalization });
+            _localizationManager.SetCulture(_settings.Language);
 
             // Закрываем окно настроек
             this.Close();
@@ -92,6 +101,24 @@ namespace ExcelShSy.Ui
         {
             Window shopManagerWindow = _serviceProvider.GetRequiredService<ShopManagerWindow>();
             shopManagerWindow.ShowDialog(this);
+        }
+
+        private async void SelectDataBasePath_Click(object? sender, RoutedEventArgs e)
+        {
+            var storageProvider = StorageProvider; 
+            var options = new FolderPickerOpenOptions
+            {
+                Title = "Select a Folder",
+                AllowMultiple = false
+            };
+
+            var folders = await storageProvider.OpenFolderPickerAsync(options);
+
+            if (folders.Count <= 0) return;
+            
+            var selectedFolderPath = folders[0].Path.LocalPath;
+            DataBasePath.Text = selectedFolderPath;
+            _settings.DataBasePath = selectedFolderPath;
         }
     }
 }
