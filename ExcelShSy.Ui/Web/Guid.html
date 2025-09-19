@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+    </title>
+    <link rel="stylesheet" href="Style.css" />
+</head>
+
+<body>
+    <div class="root">
+        <h1>
+            Guide
+        </h1>
+        <p class="MainInfo">
+            This guide describes how to work with this program. It covers the rules of operation and possible issues with their solutions. We recommend reading it before use - otherwise, we are not responsible for the application's functionality.
+        </p>
+        <h1>
+            Program Usage Instructions
+        </h1>
+        <p class="MainInfo">
+            The program is designed to process data from Excel files — synchronizing prices, availability, discounts, and other parameters between price lists and marketplaces.
+        </p>
+        <p class="MainInfo Warning">
+            <b>Important:</b> the program works by article numbers, <b>exact match is mandatory.</b> Even a difference in one character (e.g., `K` (Cyrillic) and `К` (Latin)) is critical.
+        </p>
+        <h1>
+            Features
+        </h1>
+        <ol class="Info">
+            <li>
+                Price synchronization by article number.
+            </li>
+            <li>
+                Transfer of availability and setting the "Ready to ship" status.
+            </li>
+            <li>
+                Setting visual discounts (not real).
+            </li>
+            <li>
+                Transfer of real discounts with date specifications (if supported by the store).
+            </li>
+            <li>
+                Working with multiple source and target files.
+            </li>
+        </ol>
+        <div>
+            <h1>
+                Recommendations Before Starting
+            </h1>
+            <div class="Attention">
+                <ul>
+                    <li>
+                        Test the program on a file copy.
+                    </li>
+                    <li>
+                        Follow the instructions provided below.
+                    </li>
+                    <li>
+                        Use tooltips when hovering over interface elements.
+                    </li>
+                    <li>
+                        All Excel files must be closed before starting processing.
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <h1>
+            Preparing Files for Work
+        </h1>
+        <div>
+            <h2>
+                Price List
+            </h2>
+            <div class="Warning">
+                <h3>
+                    Mandatory columns (hereinafter referred to as columns):
+                </h3>
+                <ul>
+                    <li>
+                        Article number
+                    </li>
+                </ul>
+            </div>
+            <h3>
+                Additional columns (depending on tasks):
+            </h3>
+            <p>
+                Price, availability, quantity
+            </p>
+            <h3>
+                Columns must be named one of the following options:
+            </h3>
+            <div class="Attention">
+                <h4>
+                    Article number:
+                </h4>
+                <ul>
+                    <li>
+                        Артикул
+                    </li>
+                    <li>
+                        Article
+                    </li>
+                </ul>
+                <h4>
+                    Price:
+                </h4>
+                <ul>
+                    <li>
+                        Цена
+                    </li>
+                    <li>
+                        Ціна
+                    </li>
+                    <li>
+                        Price
+                    </li>
+                </ul>
+                <h4>
+                    Availability:
+                </h4>
+                <ul>
+                    <li>
+                        Наличие
+                    </li>
+                    <li>
+                        Наявність
+                    </li>
+                    <li>
+                        Availability
+                    </li>
+                </ul>
+            </div>
+
+            <h3>
+                There is also the ability to work with "kits" (which can also be just another product, as this is done to reduce row length)
+            </h3>
+
+            <div class="Attention">
+                <h4>
+                    Article number:
+                </h4>
+                <ul>
+                    <li>
+                        Артикул комплекта
+                    </li>
+                    <li>
+                        Артикул комплекту
+                    </li>
+                    <li>
+                        ArticleComplect
+                    </li>
+                </ul>
+                <h4>
+                    Price:
+                </h4>
+                <ul>
+                    <li>
+                        Цена комплекта
+                    </li>
+                    <li>
+                        Ціна комплекту
+                    </li>
+                    <li>
+                        PriceComplect
+                    </li>
+                </ul>
+                <h4>
+                    Availability:
+                </h4>
+                <ul>
+                    <li>
+                        Наличие комплекта
+                    </li>
+                    <li>
+                        Наявність комплекту
+                    </li>
+                    <li>
+                        AvailabilityComplect
+                    </li>
+                </ul>
+            </div>
+            <h4>Also, availability columns must be filled according to their status. Here's how it should be written:</h4>
+            <div class="Attention">
+                <h4>In stock</h4>
+                <ul>
+                    <li>В наличии</li>
+                    <li>У наявності</li>
+                    <li>InStock</li>
+                </ul>
+                <h4>Out of stock</h4>
+                <ul>
+                    <li>Нет в наличии</li>
+                    <li>Немає у наявності</li>
+                    <li>OutOfStock</li>
+                </ul>
+                <h4>Ready to ship</h4>
+                <ul>
+                    <li>Готов к отправке</li>
+                    <li>Готове до відправки</li>
+                    <li>ReadyToGo</li>
+                </ul>
+                <h4>On order</h4>
+                <ul>
+                    <li>Под заказ</li>
+                    <li>Під замовлення</li>
+                    <li>OnOrder</li>
+                </ul>
+            </div>
+            <div class="Split"></div>
+
+            <h2>Store Export</h2>
+            <p class="MainInfo">All columns depend on the store itself and their presence in the program's processing. Initially, the program supports the following stores:</p>
+            <ul>
+                <li>
+                    Epicenter
+                </li>
+                <li>
+                    Rozetka
+                </li>
+                <li>
+                    Prom
+                </li>
+                <li>
+                    Horoshop
+                </li>
+                <li>
+                    Ibud
+                </li>
+            </ul>
+        </div>
+        <div>
+            <h1>
+                Getting Started
+            </h1>
+
+            <h2>
+                Selecting Files for Tasks:
+            </h2>
+
+            <ol>
+                <li>
+                    <p>
+                        Loading target files (Target)
+                    </p>
+                    <ul>
+                        <li>
+                            Button: File for changes
+                        </li>
+                        <li>
+                            Used to make changes.
+                        </li>
+                        <p>
+                            Examples:
+                        </p>
+                        <ul>
+                            <li>
+                                Store file where changes need to be transferred;
+                            </li>
+                            <li>
+                                When searching for missing items - File for search.
+                            </li>
+                        </ul>
+                    </ul>
+                </li>
+                <li>
+                    <p>
+                        Loading source files (Source)
+                    </p>
+                    <ul>
+                        <li>
+                            Button: Source file
+                        </li>
+                        <li>
+                            Used as data sources.
+                        </li>
+                        <p>
+                            Examples:
+                        </p>
+                        <ul>
+                            <li>
+                                Price list;
+                            </li>
+                            <li>
+                                Store file from which values need to be extracted;
+                            </li>
+                            <li>
+                                When searching for missing items - the file that serves as an example (usually a price list).
+                            </li>
+                        </ul>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+        <div class="Split"></div>
+        <div>
+            <h2>
+                Types of Possible Tasks:
+            </h2>
+            <p>
+                Here will be links to task descriptions. You can also simply scroll down to view them.
+            </p>
+            <div class="link-list">
+                <ul>
+                    <li>
+                        <a href="#Price">Price transfer</a>
+                    </li>
+                    <li>
+                        <a href="#Round">Price rounding (of transferred prices)</a>
+                    </li>
+                    <li>
+                        <a href="#Increase">Price increase (of all prices)</a>
+                    </li>
+                    <li>
+                        <a href="#Availability">Availability transfer</a>
+                    </li>
+                    <li>
+                        <a href="#Quantity">Quantity transfer</a>
+                    </li>
+                    <li>
+                        <a href="#Discount">Discount transfer</a>
+                    </li>
+                    <li>
+                        <a href="#DiscountDate">Transfer of discount end/start dates (if supported by the store)</a>
+                    </li>
+                    <li>
+                        <a href="#Missing">Search for missing products</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="Split"></div>
+        <div>
+            <h1>
+                General Rules or Features
+            </h1>
+            <h4>
+                All rules apply only to transfers from the price list!
+            </h4>
+            <p>You can change columns depending on the size. But this needs to be done every time there is an offset.</p>
+            <p>Example:</p>
+            <ul>
+                <li>
+                    <p>Incorrect</p>
+                    <table class="NotCorrect">
+                        <tr>
+                            <td>Article number</td>
+                            <td>Price</td>
+                            <td>Availability</td>
+                            <td>Some column</td>
+                            <td>Some column</td>
+                            <td>Some column</td>
+                        </tr>
+                        <tr>
+                            <td>product1</td>
+                            <td>200</td>
+                            <td>+</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                        </tr>
+                        <tr>
+                            <td>Some column</td>
+                            <td>Article number</td>
+                            <td>Availability</td>
+                            <td>Some column</td>
+                            <td>Price</td>
+                            <td>Some column</td>
+                        </tr>
+                        <tr>
+                            <td>...</td>
+                            <td>product2</td>
+                            <td>+</td>
+                            <td>...</td>
+                            <td>300</td>
+                            <td>...</td>
+                        </tr>
+                        <tr>
+                            <td>product3</td>
+                            <td>700</td>
+                            <td>+</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                        </tr>
+                    </table>
+                </li>
+                <p>
+                    Output will be -> Product1 with price 200 in stock, Product2 with price 300 in stock, product3 - ignored
+                </p>
+                <li>
+                    <p>Correct</p>
+                    <table class="Correct">
+                        <tr>
+                            <td>Article number</td>
+                            <td>Price</td>
+                            <td>Availability</td>
+                            <td>Some column</td>
+                            <td>Some column</td>
+                            <td>Some column</td>
+                        </tr>
+                        <tr>
+                            <td>product1</td>
+                            <td>200</td>
+                            <td>+</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                        </tr>
+                        <tr>
+                            <td>Some column</td>
+                            <td>Article number</td>
+                            <td>Availability</td>
+                            <td>Some column</td>
+                            <td>Price</td>
+                            <td>Some column</td>
+                        </tr>
+                        <tr>
+                            <td>...</td>
+                            <td>product2</td>
+                            <td>+</td>
+                            <td>...</td>
+                            <td>300</td>
+                            <td>...</td>
+                        </tr>
+                        <tr>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                        </tr>
+                    </table>
+                    <p>
+                        Output will be -> Product1 with price 200 in stock, Product2 with price 300 in stock
+                    </p>
+                </li>
+            </ul>
+        </div>
+        <div class="Split"></div>
+        <div>
+            <h1>
+                Details for Each
+            </h1>
+
+            <h4>
+                All rules apply only to transfers from the price list!
+            </h4>
+            <div id="Price">
+                <h2>
+                    Price Transfer:
+                </h2>
+                <div class="Warning">
+                    <h3>
+                        Mandatory columns:
+                    </h3>
+                    <ul>
+                        <li>
+                            "Article number" or "Kit article number" (for kit price)
+                        </li>
+                        <li>
+                            "Price" or "Kit price" (for kit article number)
+                        </li>
+                    </ul>
+                </div>
+                <h3>
+                    Rules:
+                </h3>
+                <p class="CriticalAttention">
+                    There must be columns like "Article number" and "Price" in a single instance. If you add more of them, the values will be taken from the last column.
+                </p>
+                <ul>
+                    <p>
+                        Example:
+                    </p>
+                    <li>
+                        <p>
+                            Incorrect:
+                        </p>
+                        <table class="NotCorrect">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Price
+                                </td>
+                                <td>
+                                    Article number
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    200
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <p>
+                        Output will be -> Product2 with price 200
+                    </p>
+                    <li>
+                        <p>
+                            Correct:
+                        </p>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Price
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    200
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product2
+                                </td>
+                                <td>
+                                    300
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                        <p>
+                            Output will be -> Product1 with price 200, Product2 with price 300
+                        </p>
+                    </li>
+                </ul>
+                <p class="CriticalAttention">
+                    You can combine Article numbers and Kit article numbers. But if there is a kit column, there must be corresponding columns for the product!
+                </p>
+                <p>
+                    Example:
+                </p>
+                <ul>
+                    <li>
+                        <p>
+                            Incorrect:
+                        </p>
+                        <table class="NotCorrect">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Price
+                                </td>
+                                <td>
+                                    Kit article number
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    200
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <p>
+                        Output will be -> Product1 with price 200. Product 2 will be ignored
+                    </p>
+                    <li>
+                        <p>
+                            Correct:
+                        </p>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Price
+                                </td>
+                                <td>
+                                    Kit article number
+                                </td>
+                                <td>
+                                    Kit price
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    200
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                                <td>
+                                    300
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                        <p>
+                            Output will be -> Product1 with price 200 and Product2 with price 300
+                        </p>
+                    </li>
+                </ul>
+                <p class="CriticalAttention">
+                    They can also be placed in any order convenient for you, but the mandatory condition is that for a kit article number there must be a kit price and "article number" must have "price"
+                </p>
+                Example of how it can be:
+                <ul>
+                    <li>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Kit article number
+                                </td>
+                                <td>
+                                    Price
+                                </td>
+                                <td>
+                                    Kit price
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                                <td>
+                                    200
+                                </td>
+                                <td>
+                                    300
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <li>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Price
+                                </td>
+                                <td>
+                                    Kit price
+                                </td>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Kit article number
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    200
+                                </td>
+                                <td>
+                                    300
+                                </td>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                </ul>
+            </div>
+            <div class="Split"></div>
+            <div id="Round">
+                <h2>
+                    Price Rounding:
+                </h2>
+                <p>
+                    It occurs for products that were transferred from the source. Meaning, if it's not in the source, it won't be in the file being modified.
+                </p>
+            </div>
+            <div class="Split"></div>
+            <div id="Increase">
+                <h3>
+                    Price Increase:
+                </h3>
+                <p>
+                    Goes through each product and applies a "discount" by increasing the old price. (If there is no old price) it simply increases the product's price.
+                </p>
+            </div>
+            <div class="Split"></div>
+            <div id="Availability">
+                <h3>
+                    Availability Transfer:
+                </h3>
+                <div class="Warning">
+                    <h3>
+                        Mandatory columns:
+                    </h3>
+                    <ul>
+                        <li>
+                            "Article number" or "Kit article number" (for kit availability)
+                        </li>
+                        <li>
+                            "Availability" or "kit availability" (for kit article number)
+                        </li>
+                    </ul>
+                </div>
+                <h3>
+                    Rules:
+                </h3>
+                <p>
+                    Same as with price transfer.
+                </p>
+                <p class="CriticalAttention">
+                    There must be columns like "Article number" and "Availability" in a single instance. If you add more of them, the values will be taken from the last column.
+                </p>
+                <p>
+                    Example:
+                </p>
+                <ul>
+                    <li>
+                        <p>
+                            Incorrect:
+                        </p>
+                        <table class="NotCorrect">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Availability
+                                </td>
+                                <td>
+                                    Article number
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    +
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <p>
+                        Output will be -> Product2 in stock. Product1 unchanged
+                    </p>
+                    <li>
+                        <p>
+                            Correct:
+                        </p>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Availability
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    +
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                        <p>
+                            Output will be -> Product1 in stock.
+                        </p>
+                    </li>
+                </ul>
+                <p class="CriticalAttention">
+                    You can combine Article numbers and Kit article numbers. But if there is a kit column, there must be corresponding columns for the product!
+                </p>
+                <p>
+                    Example:
+                </p>
+                <ul>
+                    <li>
+                        <p>
+                            Incorrect:
+                        </p>
+                        <table class="NotCorrect">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Availability
+                                </td>
+                                <td>
+                                    Kit article number
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    +
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <p>
+                        Output will be -> Product1 in stock. Product 2 will be ignored
+                    </p>
+                    <li>
+                        <p>
+                            Correct:
+                        </p>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Availability
+                                </td>
+                                <td>
+                                    Kit article number
+                                </td>
+                                <td>
+                                    Kit availability
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    +
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                                <td>
+                                    +
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                        <p>
+                            Output will be -> Product1 in stock product2 in stock
+                        </p>
+                    </li>
+                </ul>
+                <p class="CriticalAttention">
+                    They can also be placed in any order convenient for you, but the mandatory condition is that for a "kit article number" there must be "kit availability" and "article number" must have "Availability"
+                </p>
+                Example of how it can be:
+                <ul>
+                    <li>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Kit article number
+                                </td>
+                                <td>
+                                    Availability
+                                </td>
+                                <td>
+                                    Kit availability
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                                <td>
+                                    +
+                                </td>
+                                <td>
+                                    +
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <li>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Availability
+                                </td>
+                                <td>
+                                    Kit availability
+                                </td>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Kit article number
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    +
+                                </td>
+                                <td>
+                                    +
+                                </td>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                </ul>
+            </div>
+            <div class="Split"></div>
+            <div id="Quantity">
+                <h2>
+                    Quantity Transfer:
+                </h2>
+                <div class="Warning">
+                    <h3>
+                        Mandatory columns:
+                    </h3>
+                    <ul>
+                        <li>
+                            "Article number" or "Kit article number" (for kit quantity)
+                        </li>
+                        <li>
+                            "Quantity" or "kit quantity" (for kit article number)
+                        </li>
+                    </ul>
+                </div>
+                <h3>
+                    Rules:
+                </h3>
+                <p>
+                    Same as with price and availability transfer.
+                </p>
+                <div class="CriticalAttention">
+                    <p>
+                        There must be columns like "Article number" and "Quantity" in a single instance. If you add more of them, the values will be taken from the last column.
+                    </p>
+                </div>
+                <p>
+                    Example:
+                </p>
+                <ul>
+                    <li>
+                        <p>
+                            Incorrect:
+                        </p>
+                        <table class="NotCorrect">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Quantity
+                                </td>
+                                <td>
+                                    Article number
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    50
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <p>
+                        Output will be -> Product2 with quantity 50. Product1 unchanged
+                    </p>
+                    <li>
+                        <p>
+                            Correct:
+                        </p>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Quantity
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    50
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product2
+                                </td>
+                                <td>
+                                    30
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                        <p>
+                            Output will be -> Product1 with quantity 50. Product2 with quantity 30
+                        </p>
+                    </li>
+                </ul>
+                <p class="CriticalAttention">
+                    You can combine Article numbers and Kit article numbers. But if there is a kit column, there must be corresponding columns for the product!
+                </p>
+                <p>
+                    Example:
+                </p>
+                <ul>
+                    <li>
+                        <p>
+                            Incorrect:
+                        </p>
+                        <table class="NotCorrect">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Quantity
+                                </td>
+                                <td>
+                                    Kit article number
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    50
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <p>
+                        Output will be -> Product1 with quantity 50. Product 2 will be ignored
+                    </p>
+                    <li>
+                        <p>
+                            Correct:
+                        </p>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Availability
+                                </td>
+                                <td>
+                                    Kit article number
+                                </td>
+                                <td>
+                                    Kit availability
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    50
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                                <td>
+                                    30
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                        <p>
+                            Output will be -> Product1 with quantity 50. product2 with quantity 30
+                        </p>
+                    </li>
+                </ul>
+
+                <p class="CriticalAttention">
+                    They can also be placed in any order convenient for you, but the mandatory condition is that for a "kit article number" there must be "kit quantity" and "article number" must have "quantity"
+                </p>
+                <p>
+                    Example of how it can be:
+                </p>
+                <ul>
+                    <li>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Kit article number
+                                </td>
+                                <td>
+                                    Quantity
+                                </td>
+                                <td>
+                                    Kit quantity
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                                <td>
+                                    50
+                                </td>
+                                <td>
+                                    30
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <li>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Quantity
+                                </td>
+                                <td>
+                                    Kit quantity
+                                </td>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Kit article number
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    50
+                                </td>
+                                <td>
+                                    30
+                                </td>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                </ul>
+            </div>
+            <div class="Split"></div>
+            <div id="Discount">
+                <h2>
+                    Discount Transfer
+                </h2>
+                <p>
+                    Transferred from store to store!
+                </p>
+            </div>
+            <div class="Split"></div>
+            <div id="DiscountDate">
+                <h2>
+                    Transfer of Discount Start/End Dates
+                </h2>
+                <p>
+                    Transferred from store to store!
+                </p>
+            </div>
+            <div class="Split"></div>
+            <div id="Missing">
+                <h2>
+                    Search for Missing Products
+                </h2>
+                <div class="Warning">
+                    <h3>
+                        Mandatory columns:
+                    </h3>
+                    <ul>
+                        <li>
+                            Article number
+                        </li>
+                        <li>
+                            Kit article number (if from price list and present in it)
+                        </li>
+                    </ul>
+                </div>
+                <h3>
+                    Rules:
+                </h3>
+                <p class="CriticalAttention">
+                    Goes through all sheets of the file and searches for all values in "article number" and "kit article number" columns if they exist. As in previous cases, there can only be one instance per sheet.
+                </p>
+                <h3>
+                    Examples:
+                </h3>
+                <ul>
+                    <li>
+                        <p>
+                            Incorrect:
+                        </p>
+                        <table class="NotCorrect">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Article number
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <p>
+                        Output will be -> Product1 ignored. product2 will be included in the search calculation
+                    </p>
+                    <li>
+                        <p>
+                            Correct:
+                        </p>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product2
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <p>
+                        Output will be -> Product1 and product2 will be included in the search calculation
+                    </p>
+                    <li>
+                        <table class="Correct">
+                            <tr>
+                                <td>
+                                    Article number
+                                </td>
+                                <td>
+                                    Kit article number
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Product1
+                                </td>
+                                <td>
+                                    Product2
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ...
+                                </td>
+                                <td>
+                                    ...
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                    <p>
+                        Output will be -> Product1 and product2 will be included in the search calculation
+                    </p>
+                </ul>
+            </div>
+        </div>
+        <div class="Split"></div>
+        <div>
+            <h1>Example of what a real price list file might look like:</h1>
+            <h2>Price list with hidden columns for the program:</h2>
+            <img src="img/excel_template_hide.png" alt="">
+            <h2>Price list without hidden columns:</h2>
+            <img src="img/excel_template_full.png" alt="">
+        </div>
+    </div>
+</body>
+
+</html>
