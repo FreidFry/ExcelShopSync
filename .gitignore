@@ -6,3 +6,4 @@ obj/
 *.user
 /ExcelShSy.LocalDataBaseModule/ExcelShSy.LocalDataBaseModule.csproj
 /ShopsJsons
+.idea
