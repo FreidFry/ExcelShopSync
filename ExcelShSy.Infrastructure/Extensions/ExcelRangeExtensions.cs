@@ -1,6 +1,7 @@
 ﻿using OfficeOpenXml;
 using System.Globalization;
 using ExcelShSy.Core.Properties;
+using ExcelShSy.LocalDataBaseModule.Data;
 
 namespace ExcelShSy.Infrastructure.Extensions
 {
@@ -8,6 +9,15 @@ namespace ExcelShSy.Infrastructure.Extensions
     {
         public static string? GetArticle(this ExcelWorksheet worksheet, int row, int needColumn) => worksheet.GetString(row, needColumn);
 
+        // public static string? GetArticleFromDataBase(this ExcelWorksheet worksheet, int row, int needColumn, string currentShop, string connectionString)
+        // {
+        //     var articleInShop = GetString(worksheet, row, needColumn);
+        //     if (string.IsNullOrEmpty(articleInShop)) return articleInShop;
+        //     var masterArticle = DbGetDataManager.GetMasterArticle(articleInShop, currentShop, connectionString);
+        //     
+        //     return !string.IsNullOrEmpty(masterArticle) ? masterArticle : articleInShop;
+        // }
+        
         public static string? GetString(this ExcelWorksheet worksheet, int row, int needColumn)
         {
             var cell = worksheet.Cells[row, needColumn];
@@ -17,11 +27,9 @@ namespace ExcelShSy.Infrastructure.Extensions
                 string mergedAddress = worksheet.MergedCells[cell.Start.Row, cell.Start.Column];
 
                 var firstCell = worksheet.Cells[new ExcelAddress(mergedAddress).Start.Row, new ExcelAddress(mergedAddress).Start.Column];
-
                 return firstCell.Value?.ToString();
             }
-            else
-                return cell.Value?.ToString();
+            return cell.Value?.ToString();
         }
 
         public static decimal? GetDecimal(this ExcelWorksheet worksheet, int row, int needColumn)
@@ -35,7 +43,7 @@ namespace ExcelShSy.Infrastructure.Extensions
                 decimal.TryParse(normalizedValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var value);
                 
                 if (ProductProcessingOptions.ShouldRoundPrices) return RoundDecimal(value, 0);
-                else return RoundDecimal(value, 2);
+                return RoundDecimal(value, 2);
             }
             catch
             {

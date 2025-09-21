@@ -8,19 +8,10 @@
         WindowStartupLocation="CenterScreen" 
         MinWidth="250" MinHeight="400" MaxHeight="400" Width="300" MaxWidth="300">
 
-    <Grid Background="White" Margin="0 0 0 10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-
+    <Grid Background="White" Margin="0 0 0 10" RowDefinitions="*,auto">
         <TabControl Grid.Row="0" x:Name="FilesControl" Grid.ColumnSpan="2" >
             <TabItem Header="{loc:Loc EditLoadFilesWindow.TargetFiles}" x:Name="Target">
-                <Grid >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                <Grid RowDefinitions="auto,*">
 
                     <StackPanel Orientation="Horizontal" Margin="0,3">
                         <Button Padding="5 0" Tag="Target" Click="RemoveFile_Click" Content="{loc:Loc EditLoadFilesWindow.Delete}" />
@@ -77,11 +68,7 @@
             </TabItem>
 
             <TabItem Header="{loc:Loc EditLoadFilesWindow.Sourcefiles}" x:Name="Source">
-                <Grid >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                <Grid RowDefinitions="auto,*">
 
                     <StackPanel Orientation="Horizontal" Margin="0,3">
                         <Button Padding="5 0" Tag="Source" Click="RemoveFile_Click" Content="{loc:Loc EditLoadFilesWindow.Delete}" />

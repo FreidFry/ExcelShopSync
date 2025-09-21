@@ -6,6 +6,8 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
 using System.Diagnostics.CodeAnalysis;
+using ExcelShSy.Core.Interfaces.DataBase;
+using ExcelShSy.LocalDataBaseModule.Data;
 using Color = System.Drawing.Color;
 
 
@@ -44,7 +46,7 @@ namespace ExcelShSy.Infrastructure.Extensions
             return value;
         }
 
-        public static bool AnyIsNullOrEmpty([NotNullWhen(false)] this (int, int) tuple) => tuple.Item1 is 0 || tuple.Item2 is 0;
+        public static bool AnyIsNullOrEmpty(this (int, int) tuple) => tuple.Item1 is 0 || tuple.Item2 is 0;
 
         public static void WriteCell(this ExcelWorksheet worksheet, int row, int column, string value)
         {
@@ -76,14 +78,12 @@ namespace ExcelShSy.Infrastructure.Extensions
             }
         }
 
-        public static void ChangeCellColor(this ExcelWorksheet worksheet, int row, int column)
+        private static void ChangeCellColor(this ExcelWorksheet worksheet, int row, int column)
         {
             worksheet.Cells[row, column].Style.Fill.PatternType = ExcelFillStyle.Solid;
 
-            if (worksheet.Cells[row, column].Style.Fill.BackgroundColor.Rgb == "FFFFFF00")
-                worksheet.Cells[row, column].Style.Fill.BackgroundColor.SetColor(Color.Green);
-            else
-                worksheet.Cells[row, column].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
+            worksheet.Cells[row, column].Style.Fill.BackgroundColor.SetColor(
+                worksheet.Cells[row, column].Style.Fill.BackgroundColor.Rgb == "FFFFFF00" ? Color.Green : Color.Yellow);
         }
     }
 }

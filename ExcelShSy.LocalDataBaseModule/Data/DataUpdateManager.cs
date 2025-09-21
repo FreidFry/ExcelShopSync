@@ -1,11 +1,14 @@
+using ExcelShSy.Core.Interfaces.DataBase;
+using ExcelShSy.LocalDataBaseModule.Extensions;
 using ExcelShSy.LocalDataBaseModule.Persistance;
 using Microsoft.Data.Sqlite;
 using Timer = System.Timers.Timer;
 
 namespace ExcelShSy.LocalDataBaseModule.Data;
 
-public class DataUpdateManager(string connectionString)
+public class DataUpdateManager(ISqliteDbContext dbContext)
 {
+    private readonly IDbCommandWrapper cmd = dbContext.CreateCommand();
     private readonly object _lock = new();
     private readonly Dictionary<(int RowId, string Column), string> _pendingChanges = new();
     private Timer? _timer;
@@ -40,17 +43,24 @@ public class DataUpdateManager(string connectionString)
             changesCopy = new Dictionary<(int, string), string>(_pendingChanges);
             _pendingChanges.Clear();
         }
-
-        using var connection = new SqliteConnection(connectionString);
-        connection.Open();
-
+        
         foreach (var ((rowId, column), value) in changesCopy)
         {
-            using var cmd = connection.CreateCommand();
-            cmd.CommandText = $"UPDATE {Enums.Tables.ProductShopMapping} SET {column} = @val WHERE Id = @id";
-            cmd.Parameters.AddWithValue("@val", value);
-            cmd.Parameters.AddWithValue("@id", rowId);
-            cmd.ExecuteNonQuery();
+            try
+            {
+                var updateQuery = $"UPDATE {Enums.Tables.ProductShopMapping} SET [{column}] = @val WHERE Id = @id;";
+                cmd.SetCommandText(updateQuery);
+
+                cmd.ClearParameters();
+                cmd.AddParametersWithValue("@val", value);
+                cmd.AddParametersWithValue("@id", rowId);
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqliteException ex) when (ex.SqliteErrorCode == 19) //Exist in the table
+            {
+                ErrorHelper.ShowError(ex.Message);
+            }
         }
     }
 }

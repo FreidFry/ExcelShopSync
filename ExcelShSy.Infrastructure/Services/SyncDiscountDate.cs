@@ -1,5 +1,6 @@
 ﻿using ExcelShSy.Core.Attributes;
 using ExcelShSy.Core.Interfaces.Common;
+using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Shop;
@@ -19,9 +20,12 @@ namespace ExcelShSy.Infrastructure.Services
         private readonly ILogger _logger;
         private string _shopFormat;
 
+        private readonly string _connectionString;
+        private string ShopName = string.Empty;
+        
         public List<string> Errors { get; } = [];
 
-        public SyncDiscountDate(IProductStorage dataProduct, IFileStorage fileStorage, ILogger logger, IShopStorage shopMapping)
+        public SyncDiscountDate(IProductStorage dataProduct, IFileStorage fileStorage, ILogger logger, IShopStorage shopMapping, IDataBaseInitializer dataBaseInitializer)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
@@ -35,6 +39,7 @@ namespace ExcelShSy.Infrastructure.Services
             foreach (var file in _fileStorage.Target)
             {
                 _shopFormat = SetDataFormat(file.ShopName);
+                ShopName = file.ShopName;
                 ProcessFile(file);
             }
         }
@@ -82,6 +87,7 @@ namespace ExcelShSy.Infrastructure.Services
             var ErrorDate = new List<string>();
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
+                // var article = worksheet.GetArticleFromDataBase(row, articleCol, ShopName, _connectionString);
                 var article = worksheet.GetArticle(row, articleCol);
 
                 if (article == null) continue;

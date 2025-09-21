@@ -13,7 +13,12 @@ namespace ExcelShSy.Ui
     {
         private readonly IShopStorage _shopStorage;
 
+        #region Actions
+
         private bool _shopChanged = false;
+
+        #endregion
+        
         private bool _ready = false;
 
         #region Current Shop
@@ -69,13 +74,13 @@ namespace ExcelShSy.Ui
         {
             var ShopList = _shopStorage.GetShopList();
             if (ShopList.Count == 0)
-            {
                 return;
-            }
 
             MagazineSelector.ItemsSource = ShopList;
             MagazineSelector.SelectedIndex = 0;
         }
+
+        #region Actions
 
         private async void SelectMagazine_Changed(object sender, SelectionChangedEventArgs e)
         {
@@ -99,8 +104,7 @@ namespace ExcelShSy.Ui
                 _shopChanged = false;
             }
         }
-
-
+        
         private async void SaveShopTemplate_Click(object sender, RoutedEventArgs e)
         {
             var msBox = MessageBoxManager.GetMessageBoxStandard( "Confirm Save","Are you sure you want to save the changes?", ButtonEnum.YesNo);
@@ -110,6 +114,8 @@ namespace ExcelShSy.Ui
             SaveShop();
         }
 
+        #endregion
+
         private void SaveShop()
         {
             _shopStorage.UpdateShop(CurrentShop);
@@ -117,11 +123,16 @@ namespace ExcelShSy.Ui
             _shopChanged = false;
         }
 
+
+        #region Events
+
         void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        #endregion
+        
         private void IsChanged_Changed(object sender, RoutedEventArgs e)
         {
             if (_ready)

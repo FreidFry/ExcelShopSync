@@ -1,4 +1,5 @@
 ﻿using ExcelShSy.Core.Attributes;
+using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Shop;
@@ -16,9 +17,10 @@ namespace ExcelShSy.Infrastructure.Services
         private readonly IFileStorage _fileStorage;
         private readonly IShopStorage _shopMapping;
 
+        private readonly string _connectionString;
         private string ShopName = string.Empty;
 
-        public SyncAvailability(IProductStorage dataProduct, IFileStorage fileStorage, IShopStorage shopMappings)
+        public SyncAvailability(IProductStorage dataProduct, IFileStorage fileStorage, IShopStorage shopMappings, IDataBaseInitializer dataBaseInitializer)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
@@ -53,8 +55,9 @@ namespace ExcelShSy.Infrastructure.Services
             var product = new List<string>();
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
+                // var article = worksheet.GetArticleFromDataBase(row, headers.articleColumn, ShopName, _connectionString);
                 var article = worksheet.GetArticle(row, headers.articleColumn);
-
+                
                 if (article == null) continue;
                 if (_dataProduct.Availability.TryGetValue(article, out var value))
                 worksheet.WriteCell(row, headers.neededColumn, shopTemplate.AvailabilityMap[value]);

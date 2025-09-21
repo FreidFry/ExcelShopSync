@@ -36,6 +36,8 @@ namespace ExcelShSy.Ui
             SelectTab(tabName);
         }
 
+        #region Actions
+
         private void SelectTab(string tabName)
         {
             foreach (var item in FilesControl.Items)
@@ -45,15 +47,6 @@ namespace ExcelShSy.Ui
                     FilesControl.SelectedItem = tab;
                     break;
                 }
-            }
-        }
-        
-        private static void SetFileNameList(ObservableCollection<ExcelFileItem> observableCollection, IEnumerable<string> list)
-        {
-            foreach (string filePath in list)
-            {
-                var item = new ExcelFileItem(filePath);
-                observableCollection.Add(item);
             }
         }
 
@@ -72,16 +65,7 @@ namespace ExcelShSy.Ui
                 default: break;
             }
         }
-
-        private void AddItems(ObservableCollection<ExcelFileItem> items)
-        {
-            var sources = _fileProvider.PickExcelFilePaths();
-            if (sources.Result.IsNullOrEmpty()) return;
-            foreach (var file in sources.Result)
-                if (!items.Any(item => item.FilePath == file))
-                    items.Add(new ExcelFileItem(file));
-        }
-
+        
         private async void RemoveFile_Click(object? sender, RoutedEventArgs e)
         {
             var message = GetLocalizate("EditLoadFilesWindow", "DeleteWarning_");
@@ -101,6 +85,53 @@ namespace ExcelShSy.Ui
                 default: break;
             }
         }
+        
+        private async void Close_Click(object sender, RoutedEventArgs e)
+        {
+            var message = GetLocalizate("EditLoadFilesWindow", "CloseWarning_");
+            var title = GetLocalizate("EditLoadFilesWindow", "CloseWarningTitle_");
+            var succes = await CreateMessageBoxYesNoWarning(message, title);
+            if (!succes) Close();
+        }
+
+        private void ApplyButton_Click(object sender, RoutedEventArgs e)
+        {
+            TransferFileList();
+            Close();
+        }
+
+        public void ShowInfo_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is ExcelFileItem target)
+            {
+                var path = target.FilePath;
+                var file = _excelFileFactory.Create(path);
+                file.ShowFileDetails();
+            }
+        }
+        
+        #endregion
+
+        #region Inner methods
+
+        
+        private static void SetFileNameList(ObservableCollection<ExcelFileItem> observableCollection, IEnumerable<string> list)
+        {
+            foreach (string filePath in list)
+            {
+                var item = new ExcelFileItem(filePath);
+                observableCollection.Add(item);
+            }
+        }
+
+        private void AddItems(ObservableCollection<ExcelFileItem> items)
+        {
+            var sources = _fileProvider.PickExcelFilePaths();
+            if (sources.Result.IsNullOrEmpty()) return;
+            foreach (var file in sources.Result)
+                if (!items.Any(item => item.FilePath == file))
+                    items.Add(new ExcelFileItem(file));
+        }
 
         private void RemoveItems(ObservableCollection<ExcelFileItem> items)
         {
@@ -111,26 +142,12 @@ namespace ExcelShSy.Ui
             }
         }
 
-        private async void Close_Click(object sender, RoutedEventArgs e)
-        {
-            var message = GetLocalizate("EditLoadFilesWindow", "CloseWarning_");
-            var title = GetLocalizate("EditLoadFilesWindow", "CloseWarningTitle_");
-            var succes = await CreateMessageBoxYesNoWarning(message, title);
-            if (!succes) Close();
-        }
-
         private async Task<bool> CreateMessageBoxYesNoWarning(string message, string windowName)
         {
             var msBox = MessageBoxManager.GetMessageBoxStandard(windowName, message, ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Warning);
             var result = await msBox.ShowAsync();
             if (result == ButtonResult.No) return true;
             return false;
-        }
-
-        private void ApplyButton_Click(object sender, RoutedEventArgs e)
-        {
-            TransferFileList();
-            Close();
         }
 
         private void TransferFileList()
@@ -154,14 +171,6 @@ namespace ExcelShSy.Ui
             }
         }
 
-        public void ShowInfo_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button && button.DataContext is ExcelFileItem target)
-            {
-                var path = target.FilePath;
-                var file = _excelFileFactory.Create(path);
-                file.ShowFileDetails();
-            }
-        }
+        #endregion
     }
 }

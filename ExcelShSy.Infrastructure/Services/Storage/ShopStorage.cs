@@ -1,5 +1,7 @@
 ﻿using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
+using ExcelShSy.Infrastructure.Persistance.Model;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
@@ -12,13 +14,15 @@ namespace ExcelShSy.Infrastructure.Services.Storage
 
         private readonly IShopTemplateFactory _shopFactory;
         private readonly IColumnMappingStorage _columnMappingStorage;
+        private readonly IServiceProvider _serviceProvider;
         public List<IShopTemplate> Shops { get; set; }
 
 
-        public ShopStorage(IShopTemplateFactory shopFactory, IColumnMappingStorage columnMapping)
+        public ShopStorage(IShopTemplateFactory shopFactory, IColumnMappingStorage columnMapping, IServiceProvider serviceProvider)
         {
             _shopFactory = shopFactory;
             _columnMappingStorage = columnMapping;
+            _serviceProvider = serviceProvider;
             Shops = Initializer();
         }
 
@@ -55,7 +59,8 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             using var reader = new StreamReader(stream);
             using var jsonReader = new JsonTextReader(reader);
 
-            var shop = serializer.Deserialize<IShopTemplate>(jsonReader);
+            var shop = (IShopTemplate)serializer.Deserialize<ShopTemplate>(jsonReader);
+            
             if (shop == null) shop = _shopFactory.Create();
             if (string.IsNullOrEmpty(shop.Name))
             {
@@ -93,7 +98,10 @@ namespace ExcelShSy.Infrastructure.Services.Storage
         private static JsonSerializer CreateJsonSerializer() => new()
         {
             TypeNameHandling = TypeNameHandling.Objects
+            
         };
+    
+
 
         private void CheckExistPath()
         {

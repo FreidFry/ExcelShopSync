@@ -14,6 +14,8 @@ using ExcelShSy.Infrastructure.Services.Operations;
 using ExcelShSy.Infrastructure.Services.Storage;
 using ExcelShSy.LocalDataBaseModule;
 using ExcelShSy.LocalDataBaseModule.Data;
+using ExcelShSy.LocalDataBaseModule.Persistance;
+using ExcelShSy.LocalDataBaseModule.Wrappers;
 using ExcelShSy.Ui.Factories;
 using ExcelShSy.Ui.Interfaces;
 using ExcelShSy.Localization;
@@ -32,6 +34,7 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddSingleton<IShopStorage, ShopStorage>();
             services.AddSingleton<IColumnMappingStorage, ColumnMappingStorage>();
             services.AddSingleton<IAppSettings, AppSettings>();
+            services.AddSingleton<ISqliteDbContext, SqliteDbContext>();
 
             services.AddScoped<IFileProvider, FileProvider>();
 
@@ -45,9 +48,13 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddScoped<IFetchMasterProduct, FetchProductMaster>();
             services.AddScoped<IFetchMarketProduct, MarketProductImporter>();
 
-            services.AddScoped<IDataBaseInitializer, DbCreateManager>();
+            services.AddSingleton<IDataBaseInitializer, DbCreateManager>();
 
-            //factory
+            #region DataBase
+            services.AddScoped<IDataReaderWrapper, SqliteDataReaderWrapper>();
+            #endregion
+            
+            #region factory
             services.AddScoped<IExcelFileFactory, ExcelFileFactory>();
             services.AddScoped<IExcelPageFactory, ExcelPageFactory>();
             services.AddScoped<IOperationTaskFactory, OperationTaskFactory>();
@@ -56,8 +63,10 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddScoped<IDataBaseViewerFactory, DataBaseViewerFactory>();
             
             services.AddScoped<IShopTemplateFactory, ShopTemplateFactory>();
+            #endregion
 
-            //Executes
+            #region Executes
+            
             services.AddScoped<IExecuteOperation, SyncPrice>();
             services.AddScoped<SyncPrice>();
             services.AddScoped<IExecuteOperation, SyncQuantity>();
@@ -74,14 +83,18 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddScoped<SavePackages>();
             services.AddScoped<IExecuteOperation, FindMissingProducts>();
             services.AddScoped<FindMissingProducts>();
+            
+            #endregion
 
-            //UI
+            #region UI
             services.AddTransient<ILocalizationManager, LocalizationManager>();
             services.AddTransient<EditLoadFilesWindow>();
             services.AddTransient<SettingWindow>();
             services.AddTransient<MainWindow>();
             services.AddTransient<ShopManagerWindow>();
             services.AddTransient<DataBaseViewer>();
+            #endregion
+            
             return services;
         }
     }

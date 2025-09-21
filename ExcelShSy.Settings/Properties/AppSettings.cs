@@ -10,12 +10,27 @@ public class AppSettings : IAppSettings
     private static readonly string CONFIG_FILE = Path.Combine(Environment.CurrentDirectory, CONFIG_FILE_NAME);
     
     public string Language { get; set; } = "";
-    public string DataBasePath {get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "F4Labs");
     
+    private string _dataBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "F4Labs");
+    public string DataBasePath
+    {
+        get => _dataBasePath;
+        set
+        {
+            if (_dataBasePath != value)
+            {
+                _dataBasePath = value;
+                SettingsChanged?.Invoke();
+            }
+        }
+    }
+    public event Action? SettingsChanged;
+
     public void SaveSettings(IAppSettings settings)
     {
         var json = JsonSerializer.Serialize(settings);
         File.WriteAllText(CONFIG_FILE, json);
+        SettingsChanged?.Invoke();
     }
 
 }

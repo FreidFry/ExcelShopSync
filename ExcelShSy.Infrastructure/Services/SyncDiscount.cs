@@ -1,4 +1,5 @@
 ﻿using ExcelShSy.Core.Attributes;
+using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
@@ -13,8 +14,11 @@ namespace ExcelShSy.Infrastructure.Services
     {
         private readonly IProductStorage _dataProduct;
         private readonly IFileStorage _fileStorage;
+        
+        private readonly string _connectionString;
+        private string ShopName = string.Empty;
 
-        public SyncDiscount(IProductStorage dataProduct, IFileStorage fileStorage)
+        public SyncDiscount(IProductStorage dataProduct, IFileStorage fileStorage, IDataBaseInitializer dataBaseInitializer)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
@@ -24,7 +28,11 @@ namespace ExcelShSy.Infrastructure.Services
 
         public void Execute()
         {
-            foreach (var file in _fileStorage.Target) ProcessFile(file);
+            foreach (var file in _fileStorage.Target)
+            {
+                ShopName = file.ShopName;
+                ProcessFile(file);
+            }
         }
 
         void ProcessFile(IExcelFile file)
@@ -44,6 +52,7 @@ namespace ExcelShSy.Infrastructure.Services
             var product = new List<string>();
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
+                // var article = worksheet.GetArticleFromDataBase(row, headers.articleColumn, ShopName, _connectionString);
                 var article = worksheet.GetArticle(row, headers.articleColumn);
 
                 if (article == null) continue;

@@ -10,7 +10,6 @@ using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using Avalonia.Interactivity;
 using ExcelShSy.Core.Properties;
-using static System.Decimal;
 using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Ui
@@ -37,6 +36,8 @@ namespace ExcelShSy.Ui
             RegistrationTextBlockEvent("TargetLb", GetTargetFileLable);
             RegistrationTextBlockEvent("SourceLb", GetSourceFileLable);
         }
+        
+        #region Initialization
 
         private void InitializeComponents()
         {
@@ -55,6 +56,8 @@ namespace ExcelShSy.Ui
             };
         }
 
+        
+
         private static void RegistrationTextBlockEvent(string key, TextBlock textBlock)
         {
             UpdateTextBlockEvents.OnTextUpdate += (targetKey, text) =>
@@ -63,6 +66,74 @@ namespace ExcelShSy.Ui
                     textBlock.Text = text;
             };
         }
+        
+        #endregion
+
+        #region OtherWindows
+
+        private void ShowEditLoadFiles_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            var propertyName = btn?.Tag?.ToString();
+
+            if (!string.IsNullOrEmpty(propertyName))
+            {
+                var window = _editLoadFilesWindowFactory.Create(propertyName);
+                window.ShowDialog(this);
+            }
+        }
+
+        private void SettingsWindowOpen_Click(object sender, RoutedEventArgs e)
+        {
+            OpenSettingWindow();
+        }
+
+        private async void OpenSettingWindow()
+        {
+            var window = _settingWindowFactory.Create();
+            await window.ShowDialog(this);
+        }
+
+        private async void AboutWindowOpen_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new WPFAboutF4Labs.F4LabsAboutWindow();
+            await window.ShowDialog(this);
+        }
+
+        private void GuideWindowOpen_Click(object sender, RoutedEventArgs e)
+        {
+            var psi = new ProcessStartInfo()
+            {
+                FileName = SelectGuidePage(),
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+        }
+
+        #region Support
+
+        private static string SelectGuidePage()
+        {
+            var language = Thread.CurrentThread.CurrentCulture.Name;
+            const string fileName = "Guid";
+            var fileDirectory = Path.Combine(Environment.CurrentDirectory, "Web");
+            var path = Path.Combine(fileDirectory, $"{fileName}.{language}.html");
+            var baseFile = Path.Combine(fileDirectory, $"{fileName}.html");
+
+            return File.Exists(path) ? path : baseFile;
+        }
+
+        #endregion
+        
+        private async void OpenDbManager_Click(object? sender, RoutedEventArgs e)
+        {
+            var window = _dataBaseViewer.Create();
+            await window.ShowDialog(this);
+        }
+
+        #endregion
+
+        #region Actions
 
         private void GetTargetFile_Click(object sender, RoutedEventArgs e)
         {
@@ -103,9 +174,13 @@ namespace ExcelShSy.Ui
             }
         }
 
+        #endregion
+
+        #region Event
+
         private void ChangeIncreasePercent_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TryParse(IncreasePercentTextBox.Text, out decimal percents);
+            Decimal.TryParse(IncreasePercentTextBox.Text, out decimal percents);
             ProductProcessingOptions.priceIncreasePercentage = percents;
         }
 
@@ -127,69 +202,15 @@ namespace ExcelShSy.Ui
             if (!IsTextAllowed(e.Text, newText))
                 e.Handled = true; // отменяем ввод 
         }
-
-
+        
+        #endregion
+        
         private static bool IsTextAllowed(string newInput, string fullText)
         {
             string text = fullText + newInput;
-            return TryParse(text, out _);
+            return decimal.TryParse(text, out _);
         }
 
-        private void ShowEditLoadFiles_Click(object sender, RoutedEventArgs e)
-        {
-            var btn = sender as Button;
-            var propertyName = btn?.Tag?.ToString();
-
-            if (!string.IsNullOrEmpty(propertyName))
-            {
-                var window = _editLoadFilesWindowFactory.Create(propertyName);
-                window.ShowDialog(this);
-            }
-        }
-
-        private void SettingsWindowOpen_Click(object sender, RoutedEventArgs e)
-        {
-            OpenSettingWindow();
-        }
-
-        private async void OpenSettingWindow()
-        {
-            var window = _settingWindowFactory.Create();
-            await window.ShowDialog(this);
-        }
-
-        private async void AboutWindowOpen_Click(object sender, RoutedEventArgs e)
-        {
-            var window = new WPFAboutF4Labs.F4LabsAboutWindow();
-            await window.ShowDialog(this);
-        }
-
-        private void GuideWindowOpen_Click(object sender, RoutedEventArgs e)
-        {
-            var psi = new ProcessStartInfo()
-            {
-                FileName = SelectGuidePage(),
-                UseShellExecute = true
-            };
-            Process.Start(psi);
-        }
         
-        private static string SelectGuidePage()
-        {
-            var language = Thread.CurrentThread.CurrentCulture.Name;
-            const string fileName = "Guid";
-            var fileDirectory = Path.Combine(Environment.CurrentDirectory, "Web");
-            var path = Path.Combine(fileDirectory, $"{fileName}.{language}.html");
-            var baseFile = Path.Combine(fileDirectory, $"{fileName}.html");
-
-            return File.Exists(path) ? path : baseFile;
-        }
-
-
-        private async void OpenDbManager_Click(object? sender, RoutedEventArgs e)
-        {
-            var window = _dataBaseViewer.Create();
-            await window.ShowDialog(this);
-        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ExcelShSy.Core.Attributes;
+using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
@@ -12,12 +13,15 @@ namespace ExcelShSy.Infrastructure.Services
     {
         private readonly IProductStorage _dataProduct;
         private readonly IFileStorage _fileStorage;
+        private readonly string _connectionString;
         private FileStream _fileStream;
         private StreamWriter _writer;
 
+        private string ShopName = string.Empty;
+        
         public List<string> Errors { get; } = [];
 
-        public FindMissingProducts(IProductStorage dataProduct, IFileStorage fileStorage)
+        public FindMissingProducts(IProductStorage dataProduct, IFileStorage fileStorage, IDataBaseInitializer dataBaseInitializer)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
@@ -32,6 +36,7 @@ namespace ExcelShSy.Infrastructure.Services
             foreach (var file in _fileStorage.Target)
             {
                 _writer.WriteLine(CenterText(file.FileName));
+                ShopName = file.ShopName;
                 ProcessFile(file);
             }
             _writer.Flush();
@@ -59,8 +64,9 @@ namespace ExcelShSy.Infrastructure.Services
             var missing = new List<string>();
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
+                // var article = worksheet.GetArticleFromDataBase(row, articleCol, ShopName, _connectionString);
                 var article = worksheet.GetArticle(row, articleCol);
-
+                
                 if (article == null)
                 {
                     missing.Add($"row: {row} - empty product");

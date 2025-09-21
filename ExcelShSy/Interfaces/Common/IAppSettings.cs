@@ -6,4 +6,5 @@ public interface IAppSettings
     
     string Language { get; set; }
     string DataBasePath { get; set; }
+    event Action? SettingsChanged;
 }
