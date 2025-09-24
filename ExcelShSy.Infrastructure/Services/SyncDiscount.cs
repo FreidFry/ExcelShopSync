@@ -14,14 +14,15 @@ namespace ExcelShSy.Infrastructure.Services
     {
         private readonly IProductStorage _dataProduct;
         private readonly IFileStorage _fileStorage;
+        private readonly IDatabaseSearcher _databaseSearcher;
         
-        private readonly string _connectionString;
-        private string ShopName = string.Empty;
+        private string _shopName = string.Empty;
 
-        public SyncDiscount(IProductStorage dataProduct, IFileStorage fileStorage, IDataBaseInitializer dataBaseInitializer)
+        public SyncDiscount(IProductStorage dataProduct, IFileStorage fileStorage, IDatabaseSearcher databaseSearcher)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
+            _databaseSearcher = databaseSearcher;
         }
 
         public List<string> Errors { get; } = [];
@@ -30,17 +31,17 @@ namespace ExcelShSy.Infrastructure.Services
         {
             foreach (var file in _fileStorage.Target)
             {
-                ShopName = file.ShopName;
+                _shopName = file.ShopName;
                 ProcessFile(file);
             }
         }
 
-        void ProcessFile(IExcelFile file)
+        private void ProcessFile(IExcelFile file)
         {
             foreach (var page in file.SheetList) OperationWraper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
-        void ProcessPage(IExcelSheet page)
+        private void ProcessPage(IExcelSheet page)
         {
 
             var worksheet = page.Worksheet;
@@ -49,17 +50,14 @@ namespace ExcelShSy.Infrastructure.Services
 
             if (headers.AnyIsNullOrEmpty()) return;
 
-            var product = new List<string>();
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
-                // var article = worksheet.GetArticleFromDataBase(row, headers.articleColumn, ShopName, _connectionString);
-                var article = worksheet.GetArticle(row, headers.articleColumn);
+                var localArticle = worksheet.GetArticle(row, headers.articleColumn);
+                if (localArticle == null) continue;
+                var article = _databaseSearcher.SearchProduct(_shopName, localArticle);
 
-                if (article == null) continue;
                 if (_dataProduct.Discount.TryGetValue(article, out var value))
                     worksheet.WriteCell(row, headers.neededColumn, value);
-                else product.Add(article);
-
             }
         }
     }

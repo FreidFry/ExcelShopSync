@@ -2,7 +2,7 @@
 {
     public interface IProductStorage
     {
-        List<string> Articles { get; set; }
+        HashSet<string> Articles { get; set; }
         Dictionary<string, decimal> Price { get; set; }
         Dictionary<string, decimal> Quantity { get; set; }
         Dictionary<string, string> Availability { get; set; }

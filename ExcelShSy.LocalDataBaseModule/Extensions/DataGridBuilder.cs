@@ -11,40 +11,40 @@ using static ExcelShSy.LocalDataBaseModule.Extensions.DataGridCommands;
 
 namespace ExcelShSy.LocalDataBaseModule.Extensions;
 
-internal class DataGridBuilder(ISqliteDbContext context)
+public class DataGridBuilder(ISqliteDbContext context)
 {
-    internal void CreateDataGridColumns(DataGrid grid, List<string> shopList, DataUpdateManager updateManager)
+    public void CreateDataGridColumns(DataGrid dataGrid, List<string> shopList, IDatabaseUpdateManager updateManager)
     {
-        AddTextColumn(grid,"Master", $"{Enums.MappingColumns.MasterArticle}");
+        AddTextColumn(dataGrid,"Master", $"{Enums.MappingColumns.MasterArticle}");
         foreach (var colName in shopList)
         {
-            AddTextColumn(grid, colName, colName);
+            AddTextColumn(dataGrid, colName, colName);
         }
-        grid.ClipboardCopyMode = DataGridClipboardCopyMode.None;
+        dataGrid.ClipboardCopyMode = DataGridClipboardCopyMode.None;
         
-        grid.KeyBindings.AddRange(
+        dataGrid.KeyBindings.AddRange(
             new List<KeyBinding>
             {
                 new()
                 {
                     Gesture = new KeyGesture(Key.C, KeyModifiers.Control),
-                    Command = CopyCommand(grid)
+                    Command = CopyCommand(dataGrid)
                     
                 },
                 new()
                 {
                     Gesture = new KeyGesture(Key.Delete),
-                    Command = ClearCellCommand(grid, updateManager)
+                    Command = ClearCellCommand(dataGrid, updateManager)
                 },
                 new()
                 {
                     Gesture = new KeyGesture(Key.Delete, KeyModifiers.Shift),
-                    Command = RemoveProductCommand(grid, context)
+                    Command = RemoveProductCommand(dataGrid, context)
                 }
             });
         
-        grid.ContextMenu = CreateContextMenu(grid, updateManager, context);
-        grid.CellEditEnded += (_, e) => CellEditEndedEvent(e, updateManager);
+        dataGrid.ContextMenu = CreateContextMenu(dataGrid, updateManager, context);
+        dataGrid.CellEditEnded += (_, e) => CellEditEndedEvent(e, updateManager);
     }
     
     private static void AddTextColumn(DataGrid grid, string columnName, string columnNameInBd)
@@ -60,7 +60,7 @@ internal class DataGridBuilder(ISqliteDbContext context)
         });
     }
 
-    private static ContextMenu CreateContextMenu(DataGrid grid, DataUpdateManager updateManager, ISqliteDbContext context) =>
+    private static ContextMenu CreateContextMenu(DataGrid grid, IDatabaseUpdateManager updateManager, ISqliteDbContext context) =>
         new()
         {
             ItemsSource = new[]
@@ -86,7 +86,7 @@ internal class DataGridBuilder(ISqliteDbContext context)
             }
         };
 
-    public void AddNewProductRow(DataGrid grid, ObservableCollection<DynamicRow> rows, ref int productCount)
+    public void AddNewProductRow(DataGrid dataGrid, ObservableCollection<DynamicRow> rows, ref int productCount)
     {
         try
             {
@@ -130,8 +130,8 @@ internal class DataGridBuilder(ISqliteDbContext context)
                     row[columnNames[i]] = reader.IsDBNull(i) ? null : reader.GetValue(i).ToString();
                 }
                 rows.Insert(0, row);
-                grid.SelectedItem = rows[0];
-                grid.ScrollIntoView(rows.FirstOrDefault(), grid.Columns.FirstOrDefault());
+                dataGrid.SelectedItem = rows[0];
+                dataGrid.ScrollIntoView(rows.FirstOrDefault(), dataGrid.Columns.FirstOrDefault());
             }
     }
 }

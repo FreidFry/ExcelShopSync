@@ -15,39 +15,39 @@ namespace ExcelShSy.Infrastructure.Services.Operations
 {
     public class FetchProductMaster : BaseProductImporter, IFetchMasterProduct
     {
-        public FetchProductMaster(IProductStorage _dataProduct, IShopStorage _shopStorage, ILogger _logger) : base(_dataProduct, _shopStorage, _logger)
+        public FetchProductMaster(IProductStorage dataProduct, IShopStorage shopStorage, ILogger logger) : base(dataProduct, shopStorage, logger)
         { }
 
         protected override void ProcessPage(IExcelSheet page)
         {
             var worksheet = page.Worksheet;
 
-            int article = 0;
-            int price = 0;
-            int quantity = 0;
-            int availability = 0;
+            var article = 0;
+            var price = 0;
+            var quantity = 0;
+            var availability = 0;
 
-            int articleComp = 0;
-            int priceComp = 0;
-            int quantityComp = 0;
-            int availabilityComp = 0;
+            var articleComp = 0;
+            var priceComp = 0;
+            var quantityComp = 0;
+            var availabilityComp = 0;
 
 
             foreach (var row in worksheet.GetFullRowRange())
             {
-                bool isHeader = false;
+                var isHeader = false;
 
                 var range = worksheet.GetRowValueColumnMap(row);
 
-                article = article.GetColumnFromRange(range, ColumnConstants.Article);
-                price = price.GetColumnFromRange(range, ColumnConstants.Price);
-                quantity = quantity.GetColumnFromRange(range, ColumnConstants.Quantity);
-                availability = availability.GetColumnFromRange(range, ColumnConstants.Availability);
+                article = article.GetColumnFromRange(range, ColumnConstants.Article, ref isHeader);
+                price = price.GetColumnFromRange(range, ColumnConstants.Price, ref isHeader);
+                quantity = quantity.GetColumnFromRange(range, ColumnConstants.Quantity, ref isHeader);
+                availability = availability.GetColumnFromRange(range, ColumnConstants.Availability, ref isHeader);
 
-                articleComp = articleComp.GetColumnFromRange(range, ColumnConstants.ComplectArticle);
-                priceComp = priceComp.GetColumnFromRange(range, ColumnConstants.ComplectPrice);
-                quantityComp = quantityComp.GetColumnFromRange(range, ColumnConstants.ComplectQuantity);
-                availabilityComp = availabilityComp.GetColumnFromRange(range, ColumnConstants.ComplectAvailability);
+                articleComp = articleComp.GetColumnFromRange(range, ColumnConstants.ComplectArticle, ref isHeader);
+                priceComp = priceComp.GetColumnFromRange(range, ColumnConstants.ComplectPrice, ref isHeader);
+                quantityComp = quantityComp.GetColumnFromRange(range, ColumnConstants.ComplectQuantity, ref isHeader);
+                availabilityComp = availabilityComp.GetColumnFromRange(range, ColumnConstants.ComplectAvailability, ref isHeader);
 
                 if (isHeader)
                 {
@@ -70,7 +70,7 @@ namespace ExcelShSy.Infrastructure.Services.Operations
             }
         }
 
-        void SetProductData(string article, int priceCol, int qtyCol, int availCol, int row, ExcelWorksheet ws)
+        private void SetProductData(string article, int priceCol, int qtyCol, int availCol, int row, ExcelWorksheet ws)
         {
             DataProduct.AddProductArticle(article);
 
@@ -88,13 +88,13 @@ namespace ExcelShSy.Infrastructure.Services.Operations
 
             if (ProductProcessingOptions.ShouldSyncAvailability && availCol > 0)
             {
-                var undentif = ws.GetString(row, availCol);
-                var val = IndentifyAvailability(undentif);
+                var unidentified = ws.GetString(row, availCol);
+                var val = IndetifyAvailability(unidentified);
                 if (val != null) DataProduct.AddProductAvailability(article, val);
             }
         }
 
-        static string? IndentifyAvailability(string? availability)
+        static string? IndetifyAvailability(string? availability)
         {
             if (availability == null) return null;
             var result = AvailabilityMappingPriceList.Template

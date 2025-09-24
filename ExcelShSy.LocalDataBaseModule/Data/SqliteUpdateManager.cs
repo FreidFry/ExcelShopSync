@@ -6,7 +6,7 @@ using Timer = System.Timers.Timer;
 
 namespace ExcelShSy.LocalDataBaseModule.Data;
 
-public class DataUpdateManager(ISqliteDbContext dbContext)
+public class SqliteUpdateManager(ISqliteDbContext dbContext) : IDatabaseUpdateManager
 {
     private readonly IDbCommandWrapper _cmd = dbContext.CreateCommand();
     private readonly object _lock = new();

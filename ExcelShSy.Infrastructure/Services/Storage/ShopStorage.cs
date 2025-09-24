@@ -1,7 +1,6 @@
 ﻿using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Persistance.Model;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
@@ -14,15 +13,13 @@ namespace ExcelShSy.Infrastructure.Services.Storage
 
         private readonly IShopTemplateFactory _shopFactory;
         private readonly IColumnMappingStorage _columnMappingStorage;
-        private readonly IServiceProvider _serviceProvider;
         public List<IShopTemplate> Shops { get; set; }
 
 
-        public ShopStorage(IShopTemplateFactory shopFactory, IColumnMappingStorage columnMapping, IServiceProvider serviceProvider)
+        public ShopStorage(IShopTemplateFactory shopFactory, IColumnMappingStorage columnMapping)
         {
             _shopFactory = shopFactory;
             _columnMappingStorage = columnMapping;
-            _serviceProvider = serviceProvider;
             Shops = Initializer();
         }
 
@@ -32,18 +29,16 @@ namespace ExcelShSy.Infrastructure.Services.Storage
 
             CheckExistPath();
 
-            List<string> FullShopPath = Directory.GetFiles(_directoryPath, "*.json").ToList();
+            var fullShopPath = Directory.GetFiles(_directoryPath, "*.json").ToList();
 
             var serializer = CreateJsonSerializer();
 
-            foreach (var ShopPath in FullShopPath)
+            foreach (var shopPath in fullShopPath)
             {
-                var shop = FetchShopTemplate(ShopPath, serializer);
-                if (shop != null)
-                {
-                    result.Add(shop);
-                    _columnMappingStorage.AddColumn(shop);
-                }
+                var shop = FetchShopTemplate(shopPath, serializer);
+                if (shop == null) continue;
+                result.Add(shop);
+                _columnMappingStorage.AddColumn(shop);
             }
             if (result.Count < 1)
                 MessageBoxManager.GetMessageBoxStandard("No fetch shops!","No fetch shops!").ShowAsync();
@@ -59,7 +54,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             using var reader = new StreamReader(stream);
             using var jsonReader = new JsonTextReader(reader);
 
-            var shop = (IShopTemplate)serializer.Deserialize<ShopTemplate>(jsonReader);
+            IShopTemplate? shop = serializer.Deserialize<ShopTemplate>(jsonReader);
             
             if (shop == null) shop = _shopFactory.Create();
             if (string.IsNullOrEmpty(shop.Name))
@@ -83,13 +78,13 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             }
         }
 
-        public void SaveShopTemplate(IShopTemplate shop)
+        public void SaveShopTemplate(IShopTemplate? shop)
         {
             if (shop == null) return;
             CheckExistPath();
 
-            var FullShopPath = Path.Combine(_directoryPath, $"{shop.Name}.json");
-            using var stream = new FileStream(FullShopPath, FileMode.Create);
+            var fullShopPath = Path.Combine(_directoryPath, $"{shop.Name}.json");
+            using var stream = new FileStream(fullShopPath, FileMode.Create);
             using var writer = new StreamWriter(stream);
             using var jsonWriter = new JsonTextWriter(writer);
             CreateJsonSerializer().Serialize(jsonWriter, shop);
@@ -100,8 +95,6 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             TypeNameHandling = TypeNameHandling.Objects
             
         };
-    
-
 
         private void CheckExistPath()
         {

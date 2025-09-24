@@ -18,18 +18,19 @@ namespace ExcelShSy.Infrastructure.Services
         private readonly IFileStorage _fileStorage;
         private readonly IShopStorage _shopMapping;
         private readonly ILogger _logger;
+        private readonly IDatabaseSearcher _databaseSearcher;
         private string _shopFormat;
-
-        private readonly string _connectionString;
-        private string ShopName = string.Empty;
+        
+        private string _shopName = string.Empty;
         
         public List<string> Errors { get; } = [];
 
-        public SyncDiscountDate(IProductStorage dataProduct, IFileStorage fileStorage, ILogger logger, IShopStorage shopMapping, IDataBaseInitializer dataBaseInitializer)
+        public SyncDiscountDate(IProductStorage dataProduct, IFileStorage fileStorage, ILogger logger, IShopStorage shopMapping, IDatabaseSearcher databaseSearcher)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
             _logger = logger;
+            _databaseSearcher = databaseSearcher;
 
             _shopMapping = shopMapping;
         }
@@ -39,33 +40,33 @@ namespace ExcelShSy.Infrastructure.Services
             foreach (var file in _fileStorage.Target)
             {
                 _shopFormat = SetDataFormat(file.ShopName);
-                ShopName = file.ShopName;
+                _shopName = file.ShopName;
                 ProcessFile(file);
             }
         }
 
-        string SetDataFormat(string shopName)
+        private string SetDataFormat(string shopName)
         {
             var shopTemplate = _shopMapping.GetShopMapping(shopName);
             return shopTemplate.DataFormat;
         }
 
-        void ProcessFile(IExcelFile file)
+        private void ProcessFile(IExcelFile file)
         {
             foreach (var page in file.SheetList) OperationWraper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
-        void ProcessPage(IExcelSheet page)
+        private void ProcessPage(IExcelSheet page)
         {
             var worksheet = page.Worksheet;
 
             var articleCol = page.InitialHeadersTuple();
-            var DataStart = 0;
-            var DataEnd = 0;
+            var dataStart = 0;
+            var dataEnd = 0;
             try
             {
-                var StartDate = page.InitialNeedColumn(ColumnConstants.DiscountFrom);
-                DataStart = StartDate;
+                var startDate = page.InitialNeedColumn(ColumnConstants.DiscountFrom);
+                dataStart = startDate;
             }
             catch
             {
@@ -73,43 +74,43 @@ namespace ExcelShSy.Infrastructure.Services
             }
             try
             {
-                var EndDate = page.InitialNeedColumn(ColumnConstants.DiscountTo);
-                DataEnd = EndDate;
+                var endDate = page.InitialNeedColumn(ColumnConstants.DiscountTo);
+                dataEnd = endDate;
             }
             catch
             {
                 _logger.Log($"No column {ColumnConstants.DiscountTo} in {page.SheetName}");
             }
 
-            if (DataStart == 0 && DataEnd == 0) return;
+            if (dataStart == 0 && dataEnd == 0) return;
 
             var productTo = new List<string>();
-            var ErrorDate = new List<string>();
+            var errorDate = new List<string>();
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
-                // var article = worksheet.GetArticleFromDataBase(row, articleCol, ShopName, _connectionString);
-                var article = worksheet.GetArticle(row, articleCol);
+                var localArticle = worksheet.GetArticle(row, articleCol);
+                if (localArticle == null) continue;
+                var article = _databaseSearcher.SearchProduct(_shopName, localArticle);
 
-                if (article == null) continue;
                 if (_dataProduct.DiscountFrom.TryGetValue(article, out DateOnly valueFrom))
-                    worksheet.WriteCell(row, DataStart, ConvertDate(valueFrom));
+                    worksheet.WriteCell(row, dataStart, ConvertDate(valueFrom));
                 if (_dataProduct.DiscountTo.TryGetValue(article, out DateOnly valueTo))
-                    worksheet.WriteCell(row, DataEnd, ConvertDate(valueTo));
+                    worksheet.WriteCell(row, dataEnd, ConvertDate(valueTo));
                 else productTo.Add(article);
 
                 if (valueFrom > ProductProcessingOptions.MinDateActually && valueFrom < valueTo)
-                    ErrorDate.Add(article);
+                    errorDate.Add(article);
             }
 
             var products = productTo
-                .Union(ErrorDate)
+                .Union(errorDate)
                 .Distinct()
                 .ToList();
 
             _logger.Log($"Products where errors {string.Join(",", products)}");
         }
 
-        string ConvertDate(DateOnly date)
+        private string ConvertDate(DateOnly date)
         {
             return date.ToString(_shopFormat);
         }

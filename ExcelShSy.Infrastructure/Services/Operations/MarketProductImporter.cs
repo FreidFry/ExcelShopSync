@@ -13,8 +13,8 @@ namespace ExcelShSy.Infrastructure.Services.Operations
 {
     public class MarketProductImporter : BaseProductImporter, IFetchMarketProduct
     {
-        IShopTemplate _shopTemplate;
-        public MarketProductImporter(IProductStorage _dataProduct, ILogger _logger, IShopStorage _) : base(_dataProduct, _, _logger)
+        private readonly IShopTemplate? _shopTemplate;
+        public MarketProductImporter(IProductStorage dataProduct, ILogger logger, IShopStorage _) : base(dataProduct, _, logger)
         { 
          _shopTemplate = ShopStorage.GetShopMapping(ShopName);
         }
@@ -51,8 +51,10 @@ namespace ExcelShSy.Infrastructure.Services.Operations
             }
         }
 
-        void SetProductData(string article, int priceCol, int qtyCol, int availCol, int Discount, int DiscountFrom, int DiscountTo, int row, ExcelWorksheet ws)
+        private void SetProductData(string article, int priceCol, int qtyCol, int availCol, int discount, int discountFrom, int discountTo, int row, ExcelWorksheet ws)
         {
+            DataProduct.AddProductArticle(article);
+            
             if (ProductProcessingOptions.ShouldSyncPrices && priceCol > 0)
             {
                 var val = ws.GetDecimal(row, priceCol);
@@ -69,26 +71,26 @@ namespace ExcelShSy.Infrastructure.Services.Operations
             {
                 var val = ws.GetString(row, availCol);
                 if (val != null) DataProduct.AddProductAvailability(article,
-                    _shopTemplate.AvailabilityMap
+                    _shopTemplate?.AvailabilityMap
                     .FirstOrDefault(a => a.Value == val)
                     .Key ?? AvailabilityConstant.OnOrder);
             }
 
-            if (ProductProcessingOptions.ShouldSyncDiscounts && Discount > 0)
+            if (ProductProcessingOptions.ShouldSyncDiscounts && discount > 0)
             {
-                var val = ws.GetDiscount(row, Discount);
+                var val = ws.GetDiscount(row, discount);
                 if (val != null) DataProduct.AddProductDiscount(article, (decimal)val);
             }
 
-            if (ProductProcessingOptions.ShouldSyncDiscountDate && DiscountFrom > 0)
+            if (ProductProcessingOptions.ShouldSyncDiscountDate && discountFrom > 0)
             {
-                var val = ws.GetDate(row, DiscountFrom);
+                var val = ws.GetDate(row, discountFrom);
                 if (val != null) if (val > ProductProcessingOptions.MinDateActually) DataProduct.AddProductDiscountFrom(article, (DateOnly)val);
             }
 
-            if (ProductProcessingOptions.ShouldSyncDiscountDate && DiscountTo > 0)
+            if (ProductProcessingOptions.ShouldSyncDiscountDate && discountTo > 0)
             {
-                var val = ws.GetDate(row, DiscountTo);
+                var val = ws.GetDate(row, discountTo);
                 if (val != null) if (val > ProductProcessingOptions.MinDateActually) DataProduct.AddProductDiscountTo(article, (DateOnly)val);
             }
         }

@@ -4,7 +4,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
 {
     public class ProductStorage : IProductStorage
     {
-        public List<string> Articles { get; set; } = [];
+        public HashSet<string> Articles { get; set; } = [];
         public Dictionary<string, decimal> Price { get; set; } = [];
         public Dictionary<string, decimal> Quantity { get; set; } = [];
         public Dictionary<string, string> Availability { get; set; } = [];
@@ -12,86 +12,77 @@ namespace ExcelShSy.Infrastructure.Services.Storage
         public Dictionary<string, DateOnly> DiscountFrom { get; set; } = [];
         public Dictionary<string, DateOnly> DiscountTo { get; set; } = [];
 
-        public List<string> Colisions { get; set; } = [];
+        public List<string> Collisions { get; set; } = [];
 
         public void AddProductPrice(string productName, decimal price)
         {
-            if (Price.ContainsKey(productName))
+            if (!Price.TryAdd(productName, price))
             {
-                Colisions.Add("price " + productName);
-                return;
+                Collisions.Add("price " + productName);
             }
-            Price.Add(productName, price);
         }
 
         public void AddProductAvailability(string productName, string availability)
         {
-            if (Availability.ContainsKey(productName))
+            if (!Availability.TryAdd(productName, availability))
             {
-                Colisions.Add("Availability " + productName);
-                return;
+                Collisions.Add("Availability " + productName);
             }
-            Availability.Add(productName, availability);
         }
 
         public void AddProductQuantity(string productName, decimal quantity)
         {
-            if (Quantity.ContainsKey(productName))
+            if (!Quantity.TryAdd(productName, quantity))
             {
-                Colisions.Add("Quantity " + productName);
-                return;
+                Collisions.Add("Quantity " + productName);
             }
-            Quantity.Add(productName, quantity);
         }
 
         public void AddProductDiscount(string productName, decimal discount)
         {
-            if (Discount.ContainsKey(productName))
+            if (!Discount.TryAdd(productName, discount))
             {
-                Colisions.Add("Discount " + productName);
-                return;
+                Collisions.Add("Discount " + productName);
             }
-            Discount.Add(productName, discount);
         }
 
         public void AddProductDiscountFrom(string productName, DateOnly discount)
         {
-            if (DiscountFrom.ContainsKey(productName))
+            if (!DiscountFrom.TryAdd(productName, discount))
             {
-                Colisions.Add("DiscountFrom " + productName);
-                return;
+                Collisions.Add("DiscountFrom " + productName);
             }
-            DiscountFrom.Add(productName, discount);
         }
 
         public void AddProductDiscountTo(string productName, DateOnly discount)
         {
-            if (DiscountTo.ContainsKey(productName))
+            if (!DiscountTo.TryAdd(productName, discount))
             {
-                Colisions.Add("DiscountTo " + productName);
-                return;
+                Collisions.Add("DiscountTo " + productName);
             }
-            DiscountTo.Add(productName, discount);
         }
 
         public void ClearData()
         {
+            Articles.Clear();
             Price.Clear();
             Quantity.Clear();
             Availability.Clear();
             Discount.Clear();
             DiscountFrom.Clear();
             DiscountTo.Clear();
+            
+            Collisions.Clear();
         }
 
-        public Dictionary<string, List<string>> GetColisium()
+        public Dictionary<string, List<string>> GetCollisions()
         {
-            if (Colisions.Count == 0) return [];
+            if (Collisions.Count == 0) return [];
             var result = new Dictionary<string, List<string>>();
 
-            foreach (var product in Colisions)
+            foreach (var product in Collisions)
             {
-                string[] strings = product.Split();
+                var strings = product.Split();
                 if (!result.ContainsKey(strings[0]))
                     result[strings[0]] = [];
                 result[strings[0]].Add(strings[1]);
@@ -101,7 +92,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
 
         public void AddProductArticle(string article)
         {
-            if (!Articles.Contains(article)) Articles.Add(article);
+            Articles.Add(article);
         }
     }
 }

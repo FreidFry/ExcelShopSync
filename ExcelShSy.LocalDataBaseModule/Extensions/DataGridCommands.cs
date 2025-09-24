@@ -11,7 +11,7 @@ namespace ExcelShSy.LocalDataBaseModule.Extensions;
 
 internal static class DataGridCommands
 {
-    internal static void CellEditEndedEvent(DataGridCellEditEndedEventArgs e, DataUpdateManager updateManager)
+    internal static void CellEditEndedEvent(DataGridCellEditEndedEventArgs e, IDatabaseUpdateManager updateManager)
     {
         if (e.Row.DataContext is not DynamicRow dynamicRow) return;
 
@@ -19,7 +19,7 @@ internal static class DataGridCommands
         updateManager.ScheduleUpdate(dynamicRow.Id, columnName, dynamicRow[columnName] ?? "");
     }
 
-    internal static RelayCommand ClearCellCommand(DataGrid grid, DataUpdateManager updateManager) => 
+    internal static RelayCommand ClearCellCommand(DataGrid grid, IDatabaseUpdateManager updateManager) => 
         new(_ =>
         {
             if (grid?.SelectedItem is not DynamicRow row || grid.CurrentColumn?.Tag is not string columnName) return;

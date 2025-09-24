@@ -28,12 +28,12 @@ namespace ExcelShSy.Infrastructure.Services
             foreach (var file in _fileStorage.Target) ProcessFile(file);
         }
 
-        void ProcessFile(IExcelFile file)
+        private void ProcessFile(IExcelFile file)
         {
             foreach (var page in file.SheetList) OperationWraper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
-        async void ProcessPage(IExcelSheet page)
+        private async void ProcessPage(IExcelSheet page)
         {
 
             var worksheet = page.Worksheet;
@@ -42,10 +42,10 @@ namespace ExcelShSy.Infrastructure.Services
 
             if (headers.AnyIsNullOrEmpty()) return;
 
-            var OldPriceColumn = page.InitialNeedColumn(ColumnConstants.PriceOld);
-            if (OldPriceColumn == 0) OldPriceColumn = page.InitialNeedColumn(ColumnConstants.Price);
+            var oldPriceColumn = page.InitialNeedColumn(ColumnConstants.PriceOld);
+            if (oldPriceColumn == 0) oldPriceColumn = page.InitialNeedColumn(ColumnConstants.Price);
 
-            decimal priceIncrease = 0;
+            decimal priceIncrease;
             if (ProductProcessingOptions.priceIncreasePercentage < 100)
                 priceIncrease = (ProductProcessingOptions.priceIncreasePercentage + 100) / 100;
             else
@@ -57,7 +57,8 @@ namespace ExcelShSy.Infrastructure.Services
                         ButtonEnum.YesNo);
                     var result = await msBox.ShowAsync();
                     if (result == ButtonResult.No) return;
-                };
+                }
+
                 priceIncrease = ProductProcessingOptions.priceIncreasePercentage / 100;
             }
 
@@ -65,12 +66,11 @@ namespace ExcelShSy.Infrastructure.Services
             {
                 var price = worksheet.GetDecimal(row, headers.neededColumn);
                 if (price == null) continue;
-                decimal priceValue = (decimal)price * priceIncrease;
+                var priceValue = (decimal)price * priceIncrease;
 
-                if (ProductProcessingOptions.ShouldRoundPrices) priceValue = RoundDecimal(priceValue, 0);
-                else priceValue = RoundDecimal(priceValue, 2);
+                priceValue = RoundDecimal(priceValue, ProductProcessingOptions.ShouldRoundPrices ? 0 : 2);
 
-                worksheet.WriteCell(row, OldPriceColumn, priceValue);
+                worksheet.WriteCell(row, oldPriceColumn, priceValue);
             }
         }
     }

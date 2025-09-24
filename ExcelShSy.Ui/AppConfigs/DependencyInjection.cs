@@ -15,6 +15,7 @@ using ExcelShSy.Infrastructure.Services.Storage;
 using ExcelShSy.LocalDataBaseModule;
 using ExcelShSy.LocalDataBaseModule.Data;
 using ExcelShSy.LocalDataBaseModule.Persistance;
+using ExcelShSy.LocalDataBaseModule.Services;
 using ExcelShSy.LocalDataBaseModule.Wrappers;
 using ExcelShSy.Ui.Factories;
 using ExcelShSy.Ui.Interfaces;
@@ -51,7 +52,10 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddSingleton<IDataBaseInitializer, DbCreateManager>();
 
             #region DataBase
+
+            services.AddScoped<IDatabaseUpdateManager, SqliteUpdateManager>();
             services.AddScoped<IDataReaderWrapper, SqliteDataReaderWrapper>();
+            services.AddScoped<IDatabaseSearcher, DatabaseSearcher>();
             #endregion
             
             #region factory

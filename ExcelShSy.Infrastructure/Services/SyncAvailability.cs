@@ -16,15 +16,16 @@ namespace ExcelShSy.Infrastructure.Services
         private readonly IProductStorage _dataProduct;
         private readonly IFileStorage _fileStorage;
         private readonly IShopStorage _shopMapping;
+        private readonly IDatabaseSearcher _databaseSearcher;
 
-        private readonly string _connectionString;
-        private string ShopName = string.Empty;
+        private string _shopName = string.Empty;
 
-        public SyncAvailability(IProductStorage dataProduct, IFileStorage fileStorage, IShopStorage shopMappings, IDataBaseInitializer dataBaseInitializer)
+        public SyncAvailability(IProductStorage dataProduct, IFileStorage fileStorage, IShopStorage shopMappings, IDatabaseSearcher databaseSearcher)
         {
             _dataProduct = dataProduct;
             _fileStorage = fileStorage;
             _shopMapping = shopMappings;
+            _databaseSearcher = databaseSearcher;
         }
 
         public List<string> Errors { get; } = [];
@@ -33,35 +34,33 @@ namespace ExcelShSy.Infrastructure.Services
         {
             foreach (var file in _fileStorage.Target)
             {
-                ShopName = file.ShopName;
+                _shopName = file.ShopName;
                 ProcessFile(file);
             }
         }
 
-        void ProcessFile(IExcelFile file)
+        private void ProcessFile(IExcelFile file)
         {
             foreach (var page in file.SheetList) OperationWraper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
-        void ProcessPage(IExcelSheet page)
+        private void ProcessPage(IExcelSheet page)
         {
-            var shopTemplate = _shopMapping.GetShopMapping(ShopName);
+            var shopTemplate = _shopMapping.GetShopMapping(_shopName);
             var worksheet = page.Worksheet;
 
             var headers = page.InitialHeadersTuple(ColumnConstants.Availability);
 
             if (headers.AnyIsNullOrEmpty()) return;
 
-            var product = new List<string>();
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
-                // var article = worksheet.GetArticleFromDataBase(row, headers.articleColumn, ShopName, _connectionString);
-                var article = worksheet.GetArticle(row, headers.articleColumn);
+                var localArticle = worksheet.GetArticle(row, headers.articleColumn);
+                if (localArticle == null) continue;
+                var article = _databaseSearcher.SearchProduct(_shopName, localArticle);
                 
-                if (article == null) continue;
                 if (_dataProduct.Availability.TryGetValue(article, out var value))
-                worksheet.WriteCell(row, headers.neededColumn, shopTemplate.AvailabilityMap[value]);
-                else product.Add(article);
+                    worksheet.WriteCell(row, headers.neededColumn, shopTemplate.AvailabilityMap[value]);
             }
         }
     }

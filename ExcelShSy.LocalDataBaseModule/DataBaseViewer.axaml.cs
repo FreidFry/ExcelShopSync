@@ -14,18 +14,18 @@ namespace ExcelShSy.LocalDataBaseModule
 {
     public partial class DataBaseViewer : Window
     {
-        private readonly DataUpdateManager _updateManager;
+        private readonly IDatabaseUpdateManager _updateManager;
         private readonly ISqliteDbContext _connection;
         private readonly DataGridBuilder _gridBuilder;
         
         private ObservableCollection<DynamicRow> Rows { get; } = [];
         private int _productCounter;
         
-        public DataBaseViewer(IDataBaseInitializer dataBaseInitializer, IShopStorage shopStorage, ISqliteDbContext sqliteDbContext)
+        public DataBaseViewer(IDataBaseInitializer dataBaseInitializer, IShopStorage shopStorage, ISqliteDbContext sqliteDbContext, IDatabaseUpdateManager updateManager)
         {
             dataBaseInitializer.InitializeDatabase();
             _connection = sqliteDbContext;
-            _updateManager = new DataUpdateManager(_connection);
+            _updateManager = updateManager;
             _gridBuilder = new DataGridBuilder(_connection);
             InitializeComponent();
             
