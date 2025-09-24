@@ -6,8 +6,10 @@ public class DynamicRow : INotifyPropertyChanged
 {
     public int Id { get; init; }
 
-    private readonly Dictionary<string, string?> _values = new();
+    public readonly List<string?> Values = [];
     
+    private readonly Dictionary<string, string?> _values = new();
+
     public string? this[string column]
     {
         get => _values.TryGetValue(column, out var v) ? v : null;
@@ -15,13 +17,17 @@ public class DynamicRow : INotifyPropertyChanged
         {
             if (_values.TryGetValue(column, out var old) && old == value)
                 return;
-            
+
             _values[column] = value;
-            OnPropertyChanged(column);
+            Values.Add(value);
+            if (old != null)
+                Values.Remove(old);
+            OnPropertyChanged($"Item[{column}]");
         }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
+
     protected void OnPropertyChanged(string name) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }

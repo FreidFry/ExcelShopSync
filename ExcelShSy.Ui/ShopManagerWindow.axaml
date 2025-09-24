@@ -9,7 +9,7 @@
         MinHeight="400" MinWidth="600">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="10">
-            <Border Background="White" Padding="32 0 0 0" CornerRadius="10" BorderBrush="#ddd" BorderThickness="1" >
+            <Border Padding="32 0 0 0" CornerRadius="10" BorderBrush="#ddd" BorderThickness="1" >
                 <DockPanel LastChildFill="True">
 
                     <TextBlock Text="{loc:Loc ShopManagerWindow.Header}"

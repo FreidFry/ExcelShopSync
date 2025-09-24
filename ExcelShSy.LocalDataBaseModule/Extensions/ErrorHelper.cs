@@ -3,13 +3,13 @@ using MsBox.Avalonia;
 
 namespace ExcelShSy.LocalDataBaseModule.Extensions;
 
-public class ErrorHelper
+public static class ErrorHelper
 {
     public static void ShowError(string message)
     {
-        Dispatcher.UIThread.Post(async () =>
+        Dispatcher.UIThread.Post(() =>
         {
-            await MessageBoxManager
+            MessageBoxManager
                 .GetMessageBoxStandard("Error", message)
                 .ShowAsync();
         });

@@ -19,7 +19,11 @@ public class SqliteDbContext : ISqliteDbContext, IDisposable
     
     private void OpenConnection()
     {
-        _connection = new SqliteConnection($"Data Source={_appSettings.DataBasePath}Products.db;");
+        var dbFile = Path.Combine(_appSettings.DataBasePath, "Products.db");
+        if (!Directory.Exists(_appSettings.DataBasePath))
+            Directory.CreateDirectory(_appSettings.DataBasePath);
+        
+        _connection = new SqliteConnection($"Data Source={dbFile}");
         _connection.Open();
 
         using var pragma = _connection.CreateCommand();

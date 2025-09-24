@@ -7,14 +7,15 @@ using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using ExcelShSy.Core.Interfaces.Common;
+using ExcelShSy.Core.Interfaces.DataBase;
 
 namespace ExcelShSy.Ui
 {
     public partial class App : Application
     {
-        private ServiceProvider _serviceProvider;
-        private ILocalizationManager _localizationManager;
-        private IAppSettings _appSettings;
+        private readonly ServiceProvider _serviceProvider;
+        private readonly ILocalizationManager _localizationManager;
+        private readonly IAppSettings _appSettings;
         public App()
         {
             var services = new ServiceCollection();

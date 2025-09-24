@@ -20,7 +20,7 @@ namespace ExcelShSy.LocalDataBaseModule.Data
                 using var cmd = sqliteDbContext.CreateCommand();
                 var sqlCheck = $"PRAGMA table_info({Tables.ProductShopMapping})";
                 cmd.SetCommandText(sqlCheck);
-                using var reader = cmd.ExecuteReader();
+                var reader = cmd.ExecuteReader();
 
                 var exists = false;
                 while (reader.Read())
@@ -29,6 +29,7 @@ namespace ExcelShSy.LocalDataBaseModule.Data
                     exists = true;
                     break;
                 }
+                reader.Dispose();
 
                 if (exists) continue;
                 var sql = $@"ALTER TABLE {Tables.ProductShopMapping} ADD COLUMN {shop} VARCHAR(100)";
@@ -42,7 +43,7 @@ namespace ExcelShSy.LocalDataBaseModule.Data
             using var cmd = sqliteDbContext.CreateCommand();
             var sql = $"""
                        CREATE TABLE IF NOT EXISTS {Tables.ProductShopMapping} (
-                           {CommonColumns.Id} INTEGER PRIMARY KEY AUTOINCREMENT,
+                           {MappingColumns.Id} INTEGER PRIMARY KEY AUTOINCREMENT,
                            MasterArticle VARCHAR(100) UNIQUE NOT NULL
                        );
                        """;

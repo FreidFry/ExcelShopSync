@@ -38,7 +38,6 @@
                     <Button Grid.Row="0" Content="{local:Loc MainWindow.EditFiles}" Margin="10 0" Padding="5,0" Click="ShowEditLoadFiles_Click" Tag="Target" />
                     <TextBlock x:Name="GetTargetFileLable" Text="{local:Loc MainWindow.LastFile}" Grid.Row="0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="250"/>
                 </StackPanel>
-
                 <!-- Get source -->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
                     <Button Grid.Row="1" x:Name="SourceFilesButton" Content="{local:Loc MainWindow.GetSourceFile}" HorizontalContentAlignment="Left" Padding="5,0" Click="GetSourceFile_Click"/>

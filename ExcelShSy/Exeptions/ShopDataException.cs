@@ -1,7 +1,4 @@
 ﻿namespace ExcelShSy.Core.Exeptions
 {
-    public class ShopDataException : AppException
-    {
-        public ShopDataException(string message) : base(message) { }
-    }
+    public class ShopDataException(string message) : AppException(message);
 }

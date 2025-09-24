@@ -5,19 +5,12 @@ using ExcelShSy.Core.Interfaces.Storage;
 
 namespace ExcelShSy.Core.Abstracts
 {
-    public abstract class BaseProductImporter
+    public abstract class BaseProductImporter(IProductStorage dataProduct, IShopStorage shopStorage, ILogger logger)
     {
-        protected readonly IProductStorage DataProduct;
-        protected readonly IShopStorage ShopStorage;
-        protected readonly ILogger Logger;
+        protected readonly IProductStorage DataProduct = dataProduct;
+        protected readonly IShopStorage ShopStorage = shopStorage;
+        protected readonly ILogger Logger = logger;
         protected string ShopName = string.Empty;
-
-        protected BaseProductImporter(IProductStorage dataProduct, IShopStorage shopStorage, ILogger logger )
-        {
-            DataProduct = dataProduct;
-            ShopStorage = shopStorage;
-            Logger = logger;
-        }
 
         public void FetchAllProducts(IExcelFile file)
         {

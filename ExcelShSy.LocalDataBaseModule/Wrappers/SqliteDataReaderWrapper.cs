@@ -12,7 +12,5 @@ public class SqliteDataReaderWrapper : IDataReaderWrapper
     public bool Read() => _reader.Read();
     public IDataReader GetReader() => _reader;
     public string GetString(int ordinal) => _reader.GetString(ordinal);
-
     public void Dispose() => _reader.Dispose();
-
 }

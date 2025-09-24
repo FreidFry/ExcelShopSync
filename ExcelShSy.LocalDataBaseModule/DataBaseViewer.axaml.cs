@@ -9,7 +9,6 @@ using ExcelShSy.LocalDataBaseModule.Extensions;
 using ExcelShSy.LocalDataBaseModule.Persistance.Models;
 using Microsoft.Data.Sqlite;
 using static ExcelShSy.LocalDataBaseModule.Persistance.Enums;
-using static ExcelShSy.LocalDataBaseModule.Extensions.DataGridExtensions;
 
 namespace ExcelShSy.LocalDataBaseModule
 {
@@ -17,48 +16,48 @@ namespace ExcelShSy.LocalDataBaseModule
     {
         private readonly DataUpdateManager _updateManager;
         private readonly ISqliteDbContext _connection;
+        private readonly DataGridBuilder _gridBuilder;
         
-        public ObservableCollection<DynamicRow> Rows { get; } = [];
+        private ObservableCollection<DynamicRow> Rows { get; } = [];
+        private int _productCounter;
         
-        public DataBaseViewer(IDataBaseInitializer connectionManager, IShopStorage shopStorage, ISqliteDbContext sqliteDbContext)
+        public DataBaseViewer(IDataBaseInitializer dataBaseInitializer, IShopStorage shopStorage, ISqliteDbContext sqliteDbContext)
         {
+            dataBaseInitializer.InitializeDatabase();
             _connection = sqliteDbContext;
             _updateManager = new DataUpdateManager(_connection);
-            connectionManager.InitializeDatabase();
+            _gridBuilder = new DataGridBuilder(_connection);
             InitializeComponent();
             
             Table.ItemsSource = Rows;
-            CreateDataGridColumns(Table, shopStorage.GetShopList(), _updateManager);
+            _gridBuilder.CreateDataGridColumns(Table, shopStorage.GetShopList(), _updateManager);
             
             Initialize();
-            this.Closing += Window_Closing;
+            Closing += Window_Closing;
         }
 
         private void Initialize()
         {
-            var sql = $@"SELECT * FROM {Tables.ProductShopMapping} ORDER BY Id DESC;";
-            LoadToDataGrid(sql, Rows, _connection);
+            var sql = $@"SELECT * FROM {Tables.ProductShopMapping} ORDER BY {MappingColumns.Id} DESC;";
+            new DataGridLoader(_connection).LoadToDataGrid(sql, Rows);
+            _productCounter = Rows.Count + 1;
         }
 
         private void AddNewProduct_Click(object? sender, RoutedEventArgs e)
         {
             _updateManager.FlushNow();
-            var sql = $@"INSERT INTO {Tables.ProductShopMapping} (MasterArticle) VALUES ('Product')";
-            try
-            {
-                _connection.ExecuteNonQuery(sql);
-                Table.Columns.Clear();
-                Initialize();
-            }
-            catch (SqliteException ex) when (ex.SqliteErrorCode == 19) //Exist in the table
-            {
-                ErrorHelper.ShowError($"Its value issue");
-            }
+            _gridBuilder.AddNewProductRow(Table, Rows, ref _productCounter);
         }
 
         private void Window_Closing(object? sender, CancelEventArgs e)
         {
             _updateManager.FlushNow();
+        }
+
+        private void TextBox_OnTextChanging(object? sender, TextChangingEventArgs e)
+        {
+            if (sender is TextBox textBox)
+                DataGridExtensions.SearchExtension(textBox, Table, Rows);
         }
     }
 }

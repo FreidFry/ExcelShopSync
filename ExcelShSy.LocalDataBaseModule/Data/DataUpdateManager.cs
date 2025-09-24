@@ -8,7 +8,7 @@ namespace ExcelShSy.LocalDataBaseModule.Data;
 
 public class DataUpdateManager(ISqliteDbContext dbContext)
 {
-    private readonly IDbCommandWrapper cmd = dbContext.CreateCommand();
+    private readonly IDbCommandWrapper _cmd = dbContext.CreateCommand();
     private readonly object _lock = new();
     private readonly Dictionary<(int RowId, string Column), string> _pendingChanges = new();
     private Timer? _timer;
@@ -49,13 +49,13 @@ public class DataUpdateManager(ISqliteDbContext dbContext)
             try
             {
                 var updateQuery = $"UPDATE {Enums.Tables.ProductShopMapping} SET [{column}] = @val WHERE Id = @id;";
-                cmd.SetCommandText(updateQuery);
+                _cmd.SetCommandText(updateQuery);
 
-                cmd.ClearParameters();
-                cmd.AddParametersWithValue("@val", value);
-                cmd.AddParametersWithValue("@id", rowId);
+                _cmd.ClearParameters();
+                _cmd.AddParametersWithValue("@val", value);
+                _cmd.AddParametersWithValue("@id", rowId);
 
-                cmd.ExecuteNonQuery();
+                _cmd.ExecuteNonQuery();
             }
             catch (SqliteException ex) when (ex.SqliteErrorCode == 19) //Exist in the table
             {
