@@ -4,8 +4,11 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using ExcelShSy.Infrastructure.Persistance.Model;
 using MsBox.Avalonia;
+using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
+using MsBox.Avalonia.Models;
 
 namespace ExcelShSy.Ui
 {
@@ -98,6 +101,7 @@ namespace ExcelShSy.Ui
             if (MagazineSelector.SelectedItem is string selectedShop)
             {
                 var shop = _shopStorage.GetShopMapping(selectedShop);
+                CurrentShopHeaders.Clear();
                 foreach (var header in shop.UnmappedHeaders)
                     CurrentShopHeaders.Add(header);
                 CurrentShop = shop;
@@ -137,6 +141,44 @@ namespace ExcelShSy.Ui
         {
             if (_ready)
                 _shopChanged = true;
+        }
+
+        private async void AddNewShop_OnClick(object? sender, RoutedEventArgs e)
+        {
+            var msBox = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
+            {
+                ButtonDefinitions =
+                [
+                    new ButtonDefinition{Name = "Create"},
+                    new  ButtonDefinition{Name = "Cancel"}
+                ],
+                ContentTitle = "Create new shop",
+                ContentMessage = "Enter shop name",
+                InputParams = new InputParams(),
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                CanResize = false,
+                MaxWidth = 800,
+                MaxHeight = 300,
+                SizeToContent = SizeToContent.WidthAndHeight
+            });
+            
+            var result = string.Empty;
+            while (true)
+            {
+                var msResult = await msBox.ShowAsync();
+                if (string.IsNullOrWhiteSpace(msBox.InputValue)) continue;
+                result = msResult;
+                break;
+            }
+
+            if (result != "Create") return;
+            var shopName = msBox.InputValue;
+            var shop = new ShopTemplate
+            {
+                Name = shopName
+            };
+            _shopStorage.SaveShopTemplate(shop);
+            _shopStorage.AddShop(shopName);
         }
     }
 }

@@ -180,4 +180,7 @@
   <data name="Guid" xml:space="preserve">
     <value>Инструкция</value>
   </data>
+  <data name="Database" xml:space="preserve">
+    <value>Таблица связей продуктов</value>
+  </data>
 </root>

@@ -180,4 +180,7 @@
   <data name="Guid" xml:space="preserve">
     <value>Instruction</value>
   </data>
+  <data name="Database" xml:space="preserve">
+    <value>Products links table</value>
+  </data>
 </root>

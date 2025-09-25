@@ -1,4 +1,5 @@
-﻿using ExcelShSy.Core.Interfaces.Shop;
+﻿using System.ComponentModel;
+using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Persistance.Model;
 using Newtonsoft.Json;
@@ -7,15 +8,14 @@ using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Infrastructure.Services.Storage
 {
-    public class ShopStorage : IShopStorage
+    public class ShopStorage : IShopStorage, INotifyPropertyChanged
     {
         private readonly string _directoryPath = Path.Combine(Environment.CurrentDirectory, "UserData", "Shops");
 
         private readonly IShopTemplateFactory _shopFactory;
         private readonly IColumnMappingStorage _columnMappingStorage;
         public List<IShopTemplate> Shops { get; set; }
-
-
+        
         public ShopStorage(IShopTemplateFactory shopFactory, IColumnMappingStorage columnMapping)
         {
             _shopFactory = shopFactory;
@@ -46,6 +46,16 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             return result;
         }
 
+        public void AddShop(string shopName)
+        {
+            var path = Path.Combine(_directoryPath, $"{shopName}.json");
+            if (!File.Exists(path)) return;
+            var serializer = CreateJsonSerializer();
+            var shop = FetchShopTemplate(path, serializer);
+            if(shop == null) return;
+            Shops.Add(shop);
+            _columnMappingStorage.AddColumn(shop);
+        }
         public IShopTemplate? GetShopMapping(string shopName) => Shops.FirstOrDefault(s => s.Name == shopName)?.Clone();
 
         private IShopTemplate? FetchShopTemplate(string shopPath, JsonSerializer serializer)
@@ -77,7 +87,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
                     Shops.Add(updatedShop);
             }
         }
-
+        
         public void SaveShopTemplate(IShopTemplate? shop)
         {
             if (shop == null) return;
@@ -98,12 +108,13 @@ namespace ExcelShSy.Infrastructure.Services.Storage
 
         private void CheckExistPath()
         {
-            if (!Directory.Exists(_directoryPath))
-            {
-                Directory.CreateDirectory(_directoryPath);
-            }
+            if (Directory.Exists(_directoryPath)) return;
+            Directory.CreateDirectory(_directoryPath);
         }
 
         public List<string> GetShopList() => Shops.Select(x => x.Name).ToList();
+        
+        public event PropertyChangedEventHandler? PropertyChanged;
+        
     }
 }

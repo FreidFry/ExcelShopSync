@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
@@ -9,7 +10,9 @@ using Avalonia.Input;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using Avalonia.Interactivity;
+using ExcelShSy.Core.Interfaces;
 using ExcelShSy.Core.Properties;
+using ExcelShSy.Localization;
 using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Ui
@@ -35,6 +38,7 @@ namespace ExcelShSy.Ui
 
             RegistrationTextBlockEvent("TargetLb", GetTargetFileLable);
             RegistrationTextBlockEvent("SourceLb", GetSourceFileLable);
+            
         }
         
         #region Initialization
@@ -85,21 +89,22 @@ namespace ExcelShSy.Ui
 
         private void SettingsWindowOpen_Click(object sender, RoutedEventArgs e)
         {
-            OpenSettingWindow();
-        }
-
-        private async void OpenSettingWindow()
-        {
             var window = _settingWindowFactory.Create();
-            await window.ShowDialog(this);
+            window.ShowDialog(this);
         }
 
-        private async void AboutWindowOpen_Click(object sender, RoutedEventArgs e)
+        private void AboutWindowOpen_Click(object sender, RoutedEventArgs e)
         {
             var window = new WPFAboutF4Labs.F4LabsAboutWindow();
-            await window.ShowDialog(this);
+            window.ShowDialog(this);
         }
-
+        
+        private void OpenDbManager_Click(object? sender, RoutedEventArgs e)
+        {
+            var window = _dataBaseViewer.Create();
+            window.ShowDialog(this);
+        }
+        
         private void GuideWindowOpen_Click(object sender, RoutedEventArgs e)
         {
             var psi = new ProcessStartInfo()
@@ -109,7 +114,7 @@ namespace ExcelShSy.Ui
             };
             Process.Start(psi);
         }
-
+        
         #region Support
 
         private static string SelectGuidePage()
@@ -124,12 +129,6 @@ namespace ExcelShSy.Ui
         }
 
         #endregion
-        
-        private async void OpenDbManager_Click(object? sender, RoutedEventArgs e)
-        {
-            var window = _dataBaseViewer.Create();
-            await window.ShowDialog(this);
-        }
 
         #endregion
 
@@ -176,7 +175,7 @@ namespace ExcelShSy.Ui
 
         #endregion
 
-        #region Event
+        #region Events
 
         private void ChangeIncreasePercent_TextChanged(object sender, TextChangedEventArgs e)
         {

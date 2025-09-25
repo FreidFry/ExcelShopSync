@@ -45,9 +45,9 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddScoped<IExcelSheet, ExcelPage>();
             services.AddScoped<IShopTemplate, ShopTemplate>();
             services.AddScoped<ILanguageIdentifier, LanguageIdentifier>();
-            services.AddScoped<IGetProductManager, ProductImporterSelector>();
+            services.AddTransient<IGetProductManager, ProductImporterSelector>();
             services.AddScoped<IFetchMasterProduct, FetchProductMaster>();
-            services.AddScoped<IFetchMarketProduct, MarketProductImporter>();
+            services.AddTransient<IFetchMarketProduct, MarketProductImporter>();
 
             services.AddSingleton<IDataBaseInitializer, DbCreateManager>();
 

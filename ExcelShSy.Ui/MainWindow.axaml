@@ -9,11 +9,7 @@
         Height="300"
         SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Grid RowDefinitions="Auto,*">
 
         <Menu Grid.Row="0" Height="20" Background="Transparent" >
             <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Setting}" Click="SettingsWindowOpen_Click" />
@@ -21,16 +17,10 @@
                 <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.AboutApp}" Click="AboutWindowOpen_Click" />
                 <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Guid}" Click="GuideWindowOpen_Click" />
             </MenuItem>
-            <MenuItem VerticalAlignment="Center" Header="DataBase" Click="OpenDbManager_Click"/>
+            <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Database}" Click="OpenDbManager_Click"/>
         </Menu>
 
-        <Grid Grid.Row="1" Margin="10,0,10,10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <Grid Grid.Row="1" Margin="10,0,10,10" RowDefinitions="Auto,Auto,*,Auto">
             <StackPanel Grid.Row="1" Margin="10,10,10,10" Grid.ColumnSpan="2" >
                 <!-- Get target -->
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,7" >

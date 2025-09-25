@@ -7,7 +7,7 @@ namespace ExcelShSy.Localization
 {
     public class Loc : INotifyPropertyChanged
     {
-        public static Loc Instance { get; } = new Loc();
+        public static Loc Instance { get; } = new();
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public void Refresh() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));

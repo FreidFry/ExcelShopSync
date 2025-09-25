@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ExcelShSy.Core.Interfaces.Shop;
 
@@ -7,9 +8,9 @@ namespace ExcelShSy.Infrastructure.Persistance.Model
     public class ShopTemplate : IShopTemplate
     {
         private string _name;
-        private List<string> _unmappedHeaders;
-        private IReadOnlyDictionary<string, string> _availabilityMap;
-        private string _dataFormat;
+        private List<string>? _unmappedHeaders;
+        private IReadOnlyDictionary<string, string>? _availabilityMap;
+        private string? _dataFormat;
         private string? _article;
         private string? _price;
         private string? _oldPrice;
@@ -29,7 +30,7 @@ namespace ExcelShSy.Infrastructure.Persistance.Model
             }
         }
 
-        public List<string> UnmappedHeaders { get => _unmappedHeaders;
+        public List<string> UnmappedHeaders { get => _unmappedHeaders ??= [];
             set
             {
                 _unmappedHeaders = value;
@@ -38,7 +39,7 @@ namespace ExcelShSy.Infrastructure.Persistance.Model
 
         public IReadOnlyDictionary<string, string> AvailabilityMap
         {
-            get => _availabilityMap;
+            get => _availabilityMap ??= new Dictionary<string, string>(4);
             set
             {
                 _availabilityMap = value;
@@ -139,8 +140,8 @@ namespace ExcelShSy.Infrastructure.Persistance.Model
             return new ShopTemplate
             {
                 Name = this.Name,
-                UnmappedHeaders = new List<string>(this.UnmappedHeaders),
-                AvailabilityMap = new Dictionary<string, string>(this.AvailabilityMap),
+                UnmappedHeaders = this.UnmappedHeaders,
+                AvailabilityMap = this.AvailabilityMap,
                 DataFormat = this.DataFormat,
                 Article = this.Article,
                 Price = this.Price,

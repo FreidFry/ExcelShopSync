@@ -15,8 +15,8 @@ namespace ExcelShSy.Infrastructure.Services.Operations
     {
         private readonly IShopTemplate? _shopTemplate;
         public MarketProductImporter(IProductStorage dataProduct, ILogger logger, IShopStorage _) : base(dataProduct, _, logger)
-        { 
-         _shopTemplate = ShopStorage.GetShopMapping(ShopName);
+        {
+            _shopTemplate = ShopStorage.GetShopMapping(ShopName);
         }
 
         protected override void ProcessPage(IExcelSheet page)

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using ExcelShSy.Core.Interfaces.Common;
 
@@ -122,10 +123,11 @@ namespace ExcelShSy.Ui
         
         #endregion
         
-        private async void ApplyLanguageChange()
+        private void ApplyLanguageChange()
         {
             _localizationManager.SetCulture(_settings.Language);
-
+            AvaloniaXamlLoader.Load(this);
+            
             // Закрываем окно настроек
             if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
@@ -135,9 +137,10 @@ namespace ExcelShSy.Ui
                 var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
                 desktop.MainWindow = mainWindow;
                 mainWindow.Show();
-
+                
                 oldMainWindow.DataContext = null;
                 oldMainWindow.Close();
+                oldMainWindow = null;
             }
         }
     }

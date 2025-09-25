@@ -8,5 +8,6 @@
         void UpdateShop(IShopTemplate updatedShop);
 
         List<IShopTemplate> Shops { get; set; }
+        void AddShop(string shopName);
     }
 }

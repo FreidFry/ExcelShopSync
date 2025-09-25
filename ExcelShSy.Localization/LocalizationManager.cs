@@ -9,13 +9,7 @@ namespace ExcelShSy.Localization
         
         public void SetCulture(string code)
         {
-            CultureInfo culture;
-
-            if (string.IsNullOrEmpty(code))
-                culture = new CultureInfo(CultureInfo.InstalledUICulture.Name);
-            else
-                culture = new CultureInfo(code);
-
+            CultureInfo culture = string.IsNullOrEmpty(code) ? new (CultureInfo.InstalledUICulture.Name) : new (code);
             ApplyCulture(culture);
         }
         
