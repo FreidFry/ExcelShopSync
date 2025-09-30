@@ -2,15 +2,17 @@
 using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using ExcelShSy.Localization;
-
+using ExcelShSy.Core.Interfaces.Common;
 
 namespace WPFAboutF4Labs
 {
     public partial class F4LabsAboutWindow : Window
     {
-        public F4LabsAboutWindow()
+        private readonly ILocalizationService _localizationService;
+        public F4LabsAboutWindow(ILocalizationService localizationService)
         {
+            _localizationService = localizationService;
+            
             Init();
         }
         private void Init()
@@ -21,27 +23,27 @@ namespace WPFAboutF4Labs
             Copyrignt.Text = SetCopyright();
         }
 
-        private static string GetAssemblyVersion()
+        private string GetAssemblyVersion()
         {
-            var text = GetLocalizationInCode.GetLocalizate("F4LabsAboutWindow","Version");
+            var text = _localizationService.GetString("F4LabsAboutWindow","Version");
             return$"{text} {Assembly.GetEntryAssembly()?.GetName().Name?.Split(".")[0]} {Assembly.GetEntryAssembly()?.GetName().Version}\n";
         }
 
-        private static string SetCopyright()
+        private string SetCopyright()
         {
-            var CurrentYear = DateTime.Now.Year.ToString();
+            var currentYear = DateTime.Now.Year.ToString();
             var metadataAttributes = Assembly.GetEntryAssembly()?.GetCustomAttributes<AssemblyMetadataAttribute>();
 
-            string? releaseYear = metadataAttributes?
+            var releaseYear = metadataAttributes?
                 .FirstOrDefault(attr => attr.Key == "ReleaseYear")
                 ?.Value;
 
-            var text = GetLocalizationInCode.GetLocalizate("F4LabsAboutWindow", "Copyright");
+            var text = _localizationService.GetString("F4LabsAboutWindow", "Copyright");
 
-            if (!string.IsNullOrEmpty(releaseYear) && releaseYear == CurrentYear)
-                return $"© {CurrentYear} {text}";
+            if (!string.IsNullOrEmpty(releaseYear) && releaseYear == currentYear)
+                return $"© {currentYear} {text}";
 
-            return $"© {releaseYear}-{CurrentYear} {text}";
+            return $"© {releaseYear}-{currentYear} {text}";
         }
         private void PayPalDonateButton_Click(object sender, RoutedEventArgs e)
         {

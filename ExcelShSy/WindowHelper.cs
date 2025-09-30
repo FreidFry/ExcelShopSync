@@ -9,9 +9,7 @@ public static class WindowHelper
     public static Window? GetActiveWindow()
     {
         if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            return desktop.MainWindow;
-
+            return desktop.MainWindow!;
         return null;
     }
-
 }

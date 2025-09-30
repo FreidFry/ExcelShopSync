@@ -1,36 +1,52 @@
 ﻿using System.Collections.ObjectModel;
 using ExcelShSy.Core.Interfaces.Shop;
+using ExcelShSy.Core.Interfaces.Common;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using ExcelShSy.Infrastructure.Persistance.Model;
+using Avalonia.Threading;
+using DynamicData;
+using ExcelShSy.Core.Interfaces.Storage;
+using ExcelShSy.Infrastructure.Persistence.Model;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
 using MsBox.Avalonia.Models;
+using MsBox.Avalonia.ViewModels.Commands;
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace ExcelShSy.Ui
 {
     public partial class ShopManagerWindow : Window, INotifyPropertyChanged
     {
+        #region Dependency Injections
+        
         private readonly IShopStorage _shopStorage;
-
-        #region Actions
-
-        private bool _shopChanged = false;
+        private readonly ILogger _logger;
+        private readonly IFileProvider _fileProvider;
+        private readonly ILocalizationService _localizationService;
 
         #endregion
         
-        private bool _ready = false;
+        #region State
 
+        private bool _shopChanged;
+        private bool _ready;
+        private int _currentSelection;
+
+        #endregion
+        
+        #region Fields
+        
         #region Current Shop
 
-        private IShopTemplate _currentShop;
-        public IShopTemplate CurrentShop
+        private IShopTemplate? _currentShop;
+        public IShopTemplate? CurrentShop
         {
             get => _currentShop;
-            set
+            private set
             {
                 if (_currentShop != value)
                 {
@@ -43,94 +59,149 @@ namespace ExcelShSy.Ui
         #endregion
 
         #region Shop Headers
-        private ObservableCollection<string> _currentShopHeaders = [];
-        public ObservableCollection<string> CurrentShopHeaders
+        private ObservableCollection<string>? _currentShopHeaders = [];
+        public ObservableCollection<string>? CurrentShopHeaders
         {
             get => _currentShopHeaders;
             set
             {
-                if (_currentShopHeaders != value)
-                {
-                    _currentShopHeaders = value;
-                    OnPropertyChanged();
-                }
+                if (_currentShopHeaders == value) return;
+                _currentShopHeaders = value;
+                OnPropertyChanged();
             }
         }
         #endregion
+        
+        private readonly ObservableCollection<string> _magazineSelectorItems = [];
+        
+        #endregion
+        
 
         public new event PropertyChangedEventHandler? PropertyChanged;
-
-        public ShopManagerWindow(IShopStorage shopStorage)
+        
+        public ShopManagerWindow()
+        {
+            InitializeComponent();
+        }
+        
+        public ShopManagerWindow(IShopStorage shopStorage, ILogger logger, IFileProvider fileProvider, ILocalizationService localizationService) 
         {
             _shopStorage = shopStorage;
-            InitializeComponent();
-            DataContext = this;
-
-            Loaded += (s, e) =>
-            {
-                LoadMagazineInSelector();
-                _ready = true;
-            };
+            _logger = logger;
+            _fileProvider = fileProvider;
+            _localizationService = localizationService;
+            
+            Initialize();
+            
+            Loaded += (_, _) => Dispatcher.UIThread.Post(() => _ready = true, DispatcherPriority.Background);
+            RegistrationEvents();
         }
+        
+        #region Initialization
 
-        private void LoadMagazineInSelector()
+        private void Initialize()
         {
-            var ShopList = _shopStorage.GetShopList();
-            if (ShopList.Count == 0)
-                return;
+            InitializeComponent();
+            InitializeShopSelector();
+            DataContext = this;
+            Closing += OnClosing;
 
-            MagazineSelector.ItemsSource = ShopList;
-            MagazineSelector.SelectedIndex = 0;
+            AllColumnList.ContextMenu = CreateContextMenu(AllColumnList);
         }
 
-        #region Actions
+        private void RegistrationEvents()
+        {
+            _shopStorage.ShopsChanged += OnShopChanged;
+        }
 
-        private async void SelectMagazine_Changed(object sender, SelectionChangedEventArgs e)
+        private async void OnClosing(object? sender, WindowClosingEventArgs e)
         {
             if (_shopChanged)
             {
-                var msBox = MessageBoxManager.GetMessageBoxStandard("Unsaved Changes", "You have unsaved changes. Do you want to save them?", ButtonEnum.YesNoCancel);
-                var result = await msBox.ShowAsync();
-                if (result == ButtonResult.Yes)
+                e.Cancel = true;
+                _shopChanged = false;
+                await SaveShop();
+                Close();
+            }
+        }
+
+        private void InitializeShopSelector()
+        {
+            var shopList = _shopStorage.GetShopList();
+            foreach (var shopName in shopList) _magazineSelectorItems.Add(shopName);
+            
+            MagazineSelector.ItemsSource = _magazineSelectorItems;
+            MagazineSelector.SelectedIndex = 0;
+        }
+
+        private ContextMenu CreateContextMenu(ListBox list) => new()
+        {
+            ItemsSource = new List<MenuItem>
+            {
+                new()
                 {
-                    SaveShop();
+                    Header = _localizationService.GetString(nameof(ShopManagerWindow), "RemoveButton"),
+                    Command = new RelayCommand(_ =>
+                    {
+                        if (list.SelectedItems?.Count < 1) return;
+
+                        if (list.ItemsSource is ObservableCollection<string> items)
+                        {
+                            foreach (var selected in list.SelectedItems.Cast<string>().ToList())
+                                items.Remove(selected);
+                            _shopChanged = true;
+                        }
+                    })
                 }
-                else if (result == ButtonResult.Cancel)
-                    return;
+            }
+        };
+        
+        #endregion
+        
+        #region Handlers
+
+        #region Events
+        private async void SelectMagazine_Changed(object sender, SelectionChangedEventArgs e)
+        {
+            if (MagazineSelector.SelectedIndex == _currentSelection && _ready) return;
+            if (_shopChanged && MagazineSelector.SelectedIndex != _currentSelection)
+            {
+                const string windowName = nameof(ShopManagerWindow);
+                var title = _localizationService.GetString(windowName, "UnsavedChanges");
+                var msg = _localizationService.GetString(windowName, "UnsavedChangesText");
+                
+                var msBox = MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.YesNoCancel);
+                var result = await msBox.ShowWindowDialogAsync(this);
+                switch (result)
+                {
+                    case ButtonResult.Yes:
+                        await SaveShop();
+                        break;
+                    case ButtonResult.Cancel:
+                        MagazineSelector.SelectedIndex = _currentSelection;
+                        return;
+                }
             }
             if (MagazineSelector.SelectedItem is string selectedShop)
             {
+                _ready = false;
                 var shop = _shopStorage.GetShopMapping(selectedShop);
-                CurrentShopHeaders.Clear();
-                foreach (var header in shop.UnmappedHeaders)
-                    CurrentShopHeaders.Add(header);
+                CurrentShopHeaders!.Clear();
+                CurrentShopHeaders.AddRange(shop!.UnmappedHeaders);
                 CurrentShop = shop;
-                _shopChanged = false;
+                _currentSelection = MagazineSelector.SelectedIndex;
             }
+            _shopChanged = false;
+            Dispatcher.UIThread.Post(() => _ready = true, DispatcherPriority.Background);
         }
         
-        private async void SaveShopTemplate_Click(object sender, RoutedEventArgs e)
+        private void OnShopChanged(string shopName)
         {
-            var msBox = MessageBoxManager.GetMessageBoxStandard( "Confirm Save","Are you sure you want to save the changes?", ButtonEnum.YesNo);
-            var result = await msBox.ShowAsync();
-            if (result != ButtonResult.Yes)
-                return;
-            SaveShop();
+            _magazineSelectorItems.Add(shopName);
+            MagazineSelector.SelectedItem = _magazineSelectorItems.Count - 1;
         }
-
-        #endregion
-
-        private void SaveShop()
-        {
-            _shopStorage.UpdateShop(CurrentShop);
-            _shopStorage.SaveShopTemplate(CurrentShop);
-            _shopChanged = false;
-        }
-
-
-        #region Events
-
-        void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -142,43 +213,113 @@ namespace ExcelShSy.Ui
             if (_ready)
                 _shopChanged = true;
         }
+        
+        #endregion
+
+        #region Clicks
+
+        private async void SaveShopTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            await SaveShop();
+        }
 
         private async void AddNewShop_OnClick(object? sender, RoutedEventArgs e)
         {
-            var msBox = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
-            {
-                ButtonDefinitions =
-                [
-                    new ButtonDefinition{Name = "Create"},
-                    new  ButtonDefinition{Name = "Cancel"}
-                ],
-                ContentTitle = "Create new shop",
-                ContentMessage = "Enter shop name",
-                InputParams = new InputParams(),
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                CanResize = false,
-                MaxWidth = 800,
-                MaxHeight = 300,
-                SizeToContent = SizeToContent.WidthAndHeight
-            });
+            string? shopName;
+            string? userAction;
+            var windowName = nameof(ShopManagerWindow);
+            var createButton = _localizationService.GetString(windowName, "CreateButton");
+            var cancelButton = _localizationService.GetString(windowName, "CancelButton");
+            var title = _localizationService.GetString(windowName, "CreateNewShopTitle");
+            var msg = _localizationService.GetString(windowName, "CreateNewShopText");
             
-            var result = string.Empty;
-            while (true)
+            do
             {
-                var msResult = await msBox.ShowAsync();
-                if (string.IsNullOrWhiteSpace(msBox.InputValue)) continue;
-                result = msResult;
-                break;
-            }
+                var msBox = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
+                {
+                    ButtonDefinitions =
+                    [
+                        new ButtonDefinition { Name = createButton },
+                        new ButtonDefinition { Name = cancelButton }
+                    ],
+                    ContentTitle = title,
+                    ContentMessage = msg,
+                    InputParams = new InputParams(),
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    CanResize = false,
+                    MaxWidth = 800,
+                    MaxHeight = 300,
+                    SizeToContent = SizeToContent.WidthAndHeight
+                });
+                userAction = await msBox.ShowWindowDialogAsync(this);
+                shopName = msBox.InputValue;
+            } 
+            while (string.IsNullOrWhiteSpace(shopName));
 
-            if (result != "Create") return;
-            var shopName = msBox.InputValue;
-            var shop = new ShopTemplate
-            {
-                Name = shopName
-            };
+            if (userAction != createButton) return;
+
+            var shop = new ShopTemplate { Name = shopName };
+
             _shopStorage.SaveShopTemplate(shop);
             _shopStorage.AddShop(shopName);
+        }
+        
+        #endregion
+
+        private async Task SaveShop()
+        {
+            if (!_shopChanged)
+            {
+                var windowName = nameof(ShopManagerWindow);
+                var title = _localizationService.GetString(windowName, "ConfirmSaveTitle");
+                var msg = _localizationService.GetString(windowName, "ConfirmSaveText");
+                
+                var msBox = MessageBoxManager.GetMessageBoxStandard( title, msg, ButtonEnum.YesNo);
+                var result = await msBox.ShowWindowDialogAsync(this);
+                if (result != ButtonResult.Yes)
+                    return;
+            }
+            
+            if (CurrentShop == null)
+            {
+                if (MagazineSelector.SelectedItem != null)
+                {
+                    var msg = $"Shop save error shop name: {MagazineSelector.SelectedItem} ";
+                    _logger.LogError(msg);
+                }
+                return;
+            }
+
+            CurrentShop.UnmappedHeaders = CurrentShopHeaders.ToList();
+            _shopStorage.UpdateShop(CurrentShop);
+            _shopStorage.SaveShopTemplate(CurrentShop);
+            _shopChanged = false;
+        }
+
+        private async void GetFirstLineFromFile_Click(object? sender, RoutedEventArgs e)
+        {
+            var path = await _fileProvider.PickExcelFilePath();
+            if (path == null) return;
+            var file = _fileProvider.FetchExcelFile(path);
+
+            var worksheet = file.SheetList?[0].Worksheet;
+            if (worksheet == null) return;
+            
+            var dimension = worksheet.Dimension;
+            var firstRow = dimension.Start.Row;
+            var firstColumn = dimension.Start.Column;
+            var lastColumn = dimension.End.Column;
+            
+            var row = worksheet.Cells[firstRow, firstColumn, firstRow, lastColumn];
+            
+            var values = row.Where(cell => !string.IsNullOrWhiteSpace(cell.Value?.ToString()))
+                .Select(cell => cell.Value?.ToString())
+                .ToList();
+
+            CurrentShopHeaders ??= [];
+            CurrentShopHeaders.Clear();
+            CurrentShopHeaders!.AddRange(values);
+            _shopChanged = true;
         }
     }
 }

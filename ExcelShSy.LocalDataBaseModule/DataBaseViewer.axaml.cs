@@ -4,11 +4,10 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.Core.Interfaces.Shop;
-using ExcelShSy.LocalDataBaseModule.Data;
 using ExcelShSy.LocalDataBaseModule.Extensions;
 using ExcelShSy.LocalDataBaseModule.Persistance.Models;
-using Microsoft.Data.Sqlite;
 using static ExcelShSy.LocalDataBaseModule.Persistance.Enums;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace ExcelShSy.LocalDataBaseModule
 {
@@ -20,6 +19,11 @@ namespace ExcelShSy.LocalDataBaseModule
         
         private ObservableCollection<DynamicRow> Rows { get; } = [];
         private int _productCounter;
+
+        public DataBaseViewer()
+        {
+            InitializeComponent();
+        }
         
         public DataBaseViewer(IDataBaseInitializer dataBaseInitializer, IShopStorage shopStorage, ISqliteDbContext sqliteDbContext, IDatabaseUpdateManager updateManager)
         {

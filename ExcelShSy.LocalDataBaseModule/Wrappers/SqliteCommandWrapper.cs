@@ -3,15 +3,10 @@ using Microsoft.Data.Sqlite;
 
 namespace ExcelShSy.LocalDataBaseModule.Wrappers;
 
-public class SqliteCommandWrapper : IDbCommandWrapper
+public class SqliteCommandWrapper(SqliteConnection conn) : IDbCommandWrapper
 {
-    private readonly SqliteCommand _cmd;
+    private readonly SqliteCommand _cmd = conn.CreateCommand();
 
-    public SqliteCommandWrapper(SqliteConnection conn)
-    {
-        _cmd = conn.CreateCommand();
-    }
-    
     public void ClearParameters() => _cmd.Parameters.Clear();
 
     public void SetCommandText(string sql) => _cmd.CommandText = sql;

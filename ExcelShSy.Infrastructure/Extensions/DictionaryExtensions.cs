@@ -1,5 +1,5 @@
-﻿using ExcelShSy.Infrastructure.Persistance.ShopData.Mappings;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using ExcelShSy.Infrastructure.Persistence.ShopData.Mappings;
 
 namespace ExcelShSy.Infrastructure.Extensions
 {

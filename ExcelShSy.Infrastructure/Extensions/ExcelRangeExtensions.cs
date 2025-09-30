@@ -8,15 +8,6 @@ namespace ExcelShSy.Infrastructure.Extensions
     public static class ExcelRangeExtensions
     {
         public static string? GetArticle(this ExcelWorksheet worksheet, int row, int needColumn) => worksheet.GetString(row, needColumn);
-
-        // public static string? GetArticleFromDataBase(this ExcelWorksheet worksheet, int row, int needColumn, string currentShop, string connectionString)
-        // {
-        //     var articleInShop = GetString(worksheet, row, needColumn);
-        //     if (string.IsNullOrEmpty(articleInShop)) return articleInShop;
-        //     var masterArticle = DbGetDataManager.GetMasterArticle(articleInShop, currentShop, connectionString);
-        //     
-        //     return !string.IsNullOrEmpty(masterArticle) ? masterArticle : articleInShop;
-        // }
         
         public static string? GetString(this ExcelWorksheet worksheet, int row, int needColumn)
         {

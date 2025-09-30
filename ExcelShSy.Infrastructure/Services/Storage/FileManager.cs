@@ -42,15 +42,13 @@ namespace ExcelShSy.Infrastructure.Services.Storage
         public void InitializeTargetFiles()
         {
             var files = _fileProvider.FetchExcelFile(TargetPaths);
-            if (files != null)
-                _fileStorage.AddTarget(files);
+            _fileStorage.AddTarget(files);
         }
 
         public void InitializeSourceFiles()
         {
             var files = _fileProvider.FetchExcelFile(SourcePaths);
-            if (files != null)
-                _fileStorage.AddSource(files);
+            _fileStorage.AddSource(files);
         }
 
         public void InitializeAllFiles()

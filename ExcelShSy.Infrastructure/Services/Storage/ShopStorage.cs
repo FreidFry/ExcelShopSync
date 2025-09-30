@@ -1,25 +1,28 @@
-﻿using System.ComponentModel;
+﻿using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
-using ExcelShSy.Infrastructure.Persistance.Model;
+using ExcelShSy.Infrastructure.Persistence.Model;
 using Newtonsoft.Json;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Infrastructure.Services.Storage
 {
-    public class ShopStorage : IShopStorage, INotifyPropertyChanged
+    public class ShopStorage : IShopStorage
     {
         private readonly string _directoryPath = Path.Combine(Environment.CurrentDirectory, "UserData", "Shops");
 
         private readonly IShopTemplateFactory _shopFactory;
         private readonly IColumnMappingStorage _columnMappingStorage;
+        private readonly ILocalizationService _localizationService;
         public List<IShopTemplate> Shops { get; set; }
         
-        public ShopStorage(IShopTemplateFactory shopFactory, IColumnMappingStorage columnMapping)
+        public ShopStorage(IShopTemplateFactory shopFactory, IColumnMappingStorage columnMapping, ILocalizationService localizationService)
         {
             _shopFactory = shopFactory;
             _columnMappingStorage = columnMapping;
+            _localizationService = localizationService;
             Shops = Initializer();
         }
 
@@ -40,9 +43,14 @@ namespace ExcelShSy.Infrastructure.Services.Storage
                 result.Add(shop);
                 _columnMappingStorage.AddColumn(shop);
             }
+
             if (result.Count < 1)
-                MessageBoxManager.GetMessageBoxStandard("No fetch shops!","No fetch shops!").ShowAsync();
-            
+            {
+                var title = _localizationService.GetMessageString("NoFetchShops");
+                var msg = _localizationService.GetMessageString("NoFetchShops");
+                MessageBoxManager.GetMessageBoxStandard(title, msg)
+                    .ShowAsync();
+            }
             return result;
         }
 
@@ -53,7 +61,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             var serializer = CreateJsonSerializer();
             var shop = FetchShopTemplate(path, serializer);
             if(shop == null) return;
-            Shops.Add(shop);
+            AddShop(shop);
             _columnMappingStorage.AddColumn(shop);
         }
         public IShopTemplate? GetShopMapping(string shopName) => Shops.FirstOrDefault(s => s.Name == shopName)?.Clone();
@@ -64,9 +72,8 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             using var reader = new StreamReader(stream);
             using var jsonReader = new JsonTextReader(reader);
 
-            IShopTemplate? shop = serializer.Deserialize<ShopTemplate>(jsonReader);
-            
-            if (shop == null) shop = _shopFactory.Create();
+            var shop = serializer.Deserialize<ShopTemplate>(jsonReader) ?? _shopFactory.Create();
+
             if (string.IsNullOrEmpty(shop.Name))
             {
                 shop.Name = Path.GetFileNameWithoutExtension(shopPath);
@@ -81,7 +88,11 @@ namespace ExcelShSy.Infrastructure.Services.Storage
                 Shops[index] = updatedShop;
             else
             {
-                var msBox = MessageBoxManager.GetMessageBoxStandard("Shop Not Found",$"Shop {updatedShop.Name} not found. Do you want to add it?", ButtonEnum.YesNo);
+                var title = _localizationService.GetErrorString("ShopNotFound");
+                var msg = _localizationService.GetErrorString("ShopNotFoundText");
+                var formatedText = string.Format(msg, updatedShop.Name);
+                
+                var msBox = MessageBoxManager.GetMessageBoxStandard(title, formatedText, ButtonEnum.YesNo);
                 var result = await msBox.ShowAsync();
                 if (result == ButtonResult.Yes)
                     Shops.Add(updatedShop);
@@ -114,7 +125,18 @@ namespace ExcelShSy.Infrastructure.Services.Storage
 
         public List<string> GetShopList() => Shops.Select(x => x.Name).ToList();
         
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event Action<string>? ShopsChanged;
+
+        public void AddShop(IShopTemplate shop)
+        {
+            Shops.Add(shop);
+            ShopsChanged?.Invoke(shop.Name);
+        }
         
+        public void RemoveShop(IShopTemplate shop)
+        {
+            Shops.Remove(shop);
+            ShopsChanged?.Invoke(shop.Name);
+        }
     }
 }

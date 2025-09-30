@@ -4,20 +4,17 @@ using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Extensions;
-using ExcelShSy.Infrastructure.Persistance.DefaultValues;
 using OfficeOpenXml;
-
-using ExcelShSy.Infrastructure.Persistance.ShopData.Mappings;
 using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Properties;
+using ExcelShSy.Infrastructure.Persistence.DefaultValues;
+using ExcelShSy.Infrastructure.Persistence.ShopData.Mappings;
 
 namespace ExcelShSy.Infrastructure.Services.Operations
 {
-    public class FetchProductMaster : BaseProductImporter, IFetchMasterProduct
+    public class FetchProductPriceList(IProductStorage dataProduct, IShopStorage shopStorage, ILogger logger)
+        : BaseProductImporter(dataProduct, shopStorage, logger), IFetchPriceListProduct
     {
-        public FetchProductMaster(IProductStorage dataProduct, IShopStorage shopStorage, ILogger logger) : base(dataProduct, shopStorage, logger)
-        { }
-
         protected override void ProcessPage(IExcelSheet page)
         {
             var worksheet = page.Worksheet;

@@ -11,6 +11,6 @@
             <Button Content="{local:Loc DataBaseViewer.AddProductButton}" Click="AddNewProduct_Click" />
             <TextBox Watermark="{local:Loc DataBaseViewer.SearchWatermark}" Margin="50 0" TextChanging="TextBox_OnTextChanging" />
         </DockPanel>
-        <DataGrid Grid.Row="1" x:Name="Table" AutoGenerateColumns="False" CanUserSortColumns="False" SelectionMode="Single"/>
+        <DataGrid Grid.Row="1" x:Name="Table" AutoGenerateColumns="False" CanUserSortColumns="False" SelectionMode="Single" />
     </Grid>
 </Window>

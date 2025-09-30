@@ -1,13 +1,16 @@
-﻿using ExcelShSy.Core.Attributes;
+﻿using System.Globalization;
+using ExcelShSy.Core.Attributes;
+using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Core.Properties;
 using ExcelShSy.Infrastructure.Extensions;
-using ExcelShSy.Infrastructure.Persistance.DefaultValues;
+using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 using MsBox.Avalonia.Enums;
 using MsBox.Avalonia;
 using static ExcelShSy.Infrastructure.Extensions.ExcelRangeExtensions;
+using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Infrastructure.Services
 {
@@ -15,10 +18,12 @@ namespace ExcelShSy.Infrastructure.Services
     public class IncreasePricePercent : IExecuteOperation
     {
         private readonly IFileStorage _fileStorage;
+        private readonly ILocalizationService _localizationService;
 
-        public IncreasePricePercent(IFileStorage fileStorage)
+        public IncreasePricePercent(IFileStorage fileStorage, ILocalizationService localizationService)
         {
             _fileStorage = fileStorage;
+            _localizationService = localizationService;
         }
 
         public List<string> Errors { get; } = [];
@@ -52,8 +57,12 @@ namespace ExcelShSy.Infrastructure.Services
             {
                 if(ProductProcessingOptions.priceIncreasePercentage >= 200)
                 {
-                    var msBox = MessageBoxManager.GetMessageBoxStandard("Confirm",
-                        $"Are you sure you want a {ProductProcessingOptions.priceIncreasePercentage}% increase?",
+                    var title = _localizationService.GetMessageString("Confirm");
+                    var msg = _localizationService.GetMessageString("ConfirmText");
+                    var formatedText = string.Format(msg, ProductProcessingOptions.priceIncreasePercentage.ToString(CultureInfo.InvariantCulture));
+                    
+                    var msBox = MessageBoxManager.GetMessageBoxStandard(title,
+                        formatedText,
                         ButtonEnum.YesNo);
                     var result = await msBox.ShowAsync();
                     if (result == ButtonResult.No) return;

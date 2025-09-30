@@ -1,18 +1,28 @@
+using Avalonia;
 using Avalonia.Markup.Xaml;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace ExcelShSy.Localization;
 
 public class LocExtension : MarkupExtension
     {
-        public string Key { get; set; }
+        private string Key { get; }
+
+        public LocExtension()
+        { }
 
         public LocExtension(string key) => Key = key;
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            return new Avalonia.Data.Binding($"[{Key}]")
-            {
-                Source = Loc.Instance
-            };
+            if (serviceProvider.GetService(typeof(IProvideValueTarget)) is not IProvideValueTarget
+                {
+                    TargetObject: AvaloniaObject ao, TargetProperty: AvaloniaProperty ap
+                }) return Loc.Instance[Key];
+
+            Loc.Instance.PropertyChanged += (_, __) => Update();
+            return Loc.Instance[Key];
+            
+            void Update() => ao.SetValue(ap, Loc.Instance[Key]);
         }
     }

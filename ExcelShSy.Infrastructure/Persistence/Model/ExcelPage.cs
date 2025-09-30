@@ -1,9 +1,8 @@
 ﻿using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Infrastructure.Extensions;
-
 using OfficeOpenXml;
 
-namespace ExcelShSy.Infrastructure.Persistance.Model
+namespace ExcelShSy.Infrastructure.Persistence.Model
 {
     public class ExcelPage : IExcelSheet
     {

@@ -8,11 +8,11 @@ namespace ExcelShSy.Infrastructure.Services.Operations
     {
         private readonly IFileStorage _fileStorage;
 
-        private readonly IFetchMasterProduct _fromPrice;
+        private readonly IFetchPriceListProduct _fromPrice;
         private readonly IFetchMarketProduct _fromSources;
 
 
-        public ProductImporterSelector(IFileStorage fileStorage, IFetchMasterProduct fromPrice, IFetchMarketProduct fromSources)
+        public ProductImporterSelector(IFileStorage fileStorage, IFetchPriceListProduct fromPrice, IFetchMarketProduct fromSources)
         {
             _fileStorage = fileStorage;
 

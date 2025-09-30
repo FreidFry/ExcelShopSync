@@ -6,7 +6,7 @@ using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Factories;
-using ExcelShSy.Infrastructure.Persistance.Model;
+using ExcelShSy.Infrastructure.Persistence.Model;
 using ExcelShSy.Infrastructure.Services;
 using ExcelShSy.Infrastructure.Services.Common;
 using ExcelShSy.Infrastructure.Services.Logger;
@@ -29,44 +29,51 @@ namespace ExcelShSy.Ui.AppConfigs
     {
         public static IServiceCollection AddDependencyInjection(this IServiceCollection services)
         {
+            #region Singleton
+
+            #region Sotorages
+
             services.AddSingleton<IFileStorage, FileStorage>();
             services.AddSingleton<IFileManager, FileManager>();
             services.AddSingleton<IProductStorage, ProductStorage>();
             services.AddSingleton<IShopStorage, ShopStorage>();
-            services.AddSingleton<IColumnMappingStorage, ColumnMappingStorage>();
-            services.AddSingleton<IAppSettings, AppSettings>();
             services.AddSingleton<ISqliteDbContext, SqliteDbContext>();
+            services.AddSingleton<IAppSettings, AppSettings>();
+
+            #endregion
+            
+            services.AddSingleton<IColumnMappingStorage, ColumnMappingStorage>();
+            services.AddSingleton<ILocalizationService, LocalizationService>();
+            
+            services.AddSingleton<IDataBaseInitializer, DbCreateManager>();
+            
+            services.AddSingleton<ILogger, Logger>();
+
+            #endregion
 
             services.AddScoped<IFileProvider, FileProvider>();
 
-            services.AddSingleton<ILogger, Logger>();
+            #region Models
 
             services.AddScoped<IExcelFile, ExcelFile>();
             services.AddScoped<IExcelSheet, ExcelPage>();
             services.AddScoped<IShopTemplate, ShopTemplate>();
-            services.AddScoped<ILanguageIdentifier, LanguageIdentifier>();
-            services.AddTransient<IGetProductManager, ProductImporterSelector>();
-            services.AddScoped<IFetchMasterProduct, FetchProductMaster>();
-            services.AddTransient<IFetchMarketProduct, MarketProductImporter>();
 
-            services.AddSingleton<IDataBaseInitializer, DbCreateManager>();
+            #endregion
+            
+            
+            services.AddScoped<ILanguageIdentifier, LanguageIdentifier>();
+            services.AddScoped<IGetProductManager, ProductImporterSelector>();
+            services.AddScoped<IFetchPriceListProduct, FetchProductPriceList>();
+            services.AddScoped<IFetchMarketProduct, MarketProductImporter>();
+
 
             #region DataBase
 
             services.AddScoped<IDatabaseUpdateManager, SqliteUpdateManager>();
             services.AddScoped<IDataReaderWrapper, SqliteDataReaderWrapper>();
             services.AddScoped<IDatabaseSearcher, DatabaseSearcher>();
-            #endregion
             
-            #region factory
-            services.AddScoped<IExcelFileFactory, ExcelFileFactory>();
-            services.AddScoped<IExcelPageFactory, ExcelPageFactory>();
-            services.AddScoped<IOperationTaskFactory, OperationTaskFactory>();
-            services.AddScoped<IEditLoadFilesWindowFactory, EditLoadFilesWindowFactory>();
-            services.AddScoped<ISettingWindowFactory, SettingWindowFactory>();
-            services.AddScoped<IDataBaseViewerFactory, DataBaseViewerFactory>();
-            
-            services.AddScoped<IShopTemplateFactory, ShopTemplateFactory>();
             #endregion
 
             #region Executes
@@ -90,6 +97,18 @@ namespace ExcelShSy.Ui.AppConfigs
             
             #endregion
 
+            #region Factory
+            services.AddTransient<IExcelFileFactory, ExcelFileFactory>();
+            services.AddTransient<IExcelPageFactory, ExcelPageFactory>();
+            services.AddTransient<IOperationTaskFactory, OperationTaskFactory>();
+            services.AddTransient<IEditLoadFilesWindowFactory, EditLoadFilesWindowFactory>();
+            services.AddTransient<ISettingWindowFactory, SettingWindowFactory>();
+            services.AddTransient<IDataBaseViewerFactory, DataBaseViewerFactory>();
+            services.AddTransient<IF4LabsAboutWindowFactory, F4LabsAboutWindowFactory>();
+            
+            services.AddScoped<IShopTemplateFactory, ShopTemplateFactory>();
+            #endregion
+            
             #region UI
             services.AddTransient<ILocalizationManager, LocalizationManager>();
             services.AddTransient<EditLoadFilesWindow>();

@@ -24,6 +24,8 @@ public class AppSettings : IAppSettings
             }
         }
     }
+    
+    public bool CreateNewFileWhileSave { get; set; } = true;
     public event Action? SettingsChanged;
 
     public void SaveSettings(IAppSettings settings)

@@ -1,32 +1,44 @@
-﻿using Avalonia;
+﻿using System.ComponentModel;
 using ExcelShSy.Core.Interfaces;
 using ExcelShSy.Ui.Resources;
 using ExcelShSy.Ui.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using ExcelShSy.Core.Interfaces.Common;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace ExcelShSy.Ui
 {
-    public partial class SettingWindow : Window
+    public partial class SettingWindow : Window, INotifyPropertyChanged
     {
-        private bool _isInitialized;
-
-        #region Actions
-
-        private bool _changeLanguage;
-        private bool _dataBasePathChanged;
+        #region State
+        
+        private readonly bool _isInitialized;
 
         #endregion
         
+        #region Actions
+
+        private bool _shouldLangChanged;
+        private bool _shouldMoveDatabase;
+
+        #endregion
+
+        #region Dipedency Injection
+
         private readonly string _currentLocalization;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILocalizationManager _localizationManager;
         private readonly IAppSettings _settings;
+
+        #endregion
+
+        public SettingWindow()
+        {
+            InitializeComponent();
+        }
         
         public SettingWindow(IServiceProvider serviceProvider, ILocalizationManager localizationManager, IAppSettings settings)
         {
@@ -35,7 +47,7 @@ namespace ExcelShSy.Ui
             _serviceProvider = serviceProvider;
             _localizationManager = localizationManager;
             InitializeControls();
-            
+            DataContext = this;
             _isInitialized = true;
         }
 
@@ -44,6 +56,7 @@ namespace ExcelShSy.Ui
         private void InitializeControls()
         {
             InitializeComponent();
+            
             InitialLanguages();
             InitializeDbPath();
         }
@@ -54,7 +67,7 @@ namespace ExcelShSy.Ui
             {
                 var cbi = new ComboBoxItem
                 {
-                    Content = language.GetDescriptoin(),
+                    Content = Helpers.GetDescription(language),
                     Tag = language,
                 };
                 CBLanguagues.Items.Add(cbi);
@@ -71,37 +84,29 @@ namespace ExcelShSy.Ui
         #endregion
 
         #region Actions
-
+        
+        #region Clicks
+        
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
             _settings.SaveSettings(_settings);
             
-            if (_changeLanguage && _settings.Language != _currentLocalization)
-                ApplyLanguageChange();
+            if (_shouldLangChanged && _settings.Language != _currentLocalization)
+                _localizationManager.SetCulture(_settings.Language);
             
-            if(_dataBasePathChanged)
+            if(_shouldMoveDatabase)
             {
             }
             
-            this.Close();
+            Close();
         }
-
-        private void CBLanguagues_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (_isInitialized && sender is ComboBox { SelectedItem: ComboBoxItem { Tag: Enums.SupportedLanguagues selectedLang } })
-            {
-                var code = selectedLang.GetLangCode();
-                _settings.Language = code;
-                _changeLanguage = true;
-            }
-        }
-
+        
         private void ShopManagerOpen_Click(object s, RoutedEventArgs e)
         {
-            Window shopManagerWindow = _serviceProvider.GetRequiredService<ShopManagerWindow>();
+            var shopManagerWindow = _serviceProvider.GetRequiredService<ShopManagerWindow>();
             shopManagerWindow.ShowDialog(this);
         }
-
+        
         private async void SelectDataBasePath_Click(object? sender, RoutedEventArgs e)
         {
             var storageProvider = StorageProvider;
@@ -118,30 +123,40 @@ namespace ExcelShSy.Ui
             var selectedFolderPath = folders[0].Path.LocalPath;
             DataBasePath.Text = selectedFolderPath;
             _settings.DataBasePath = selectedFolderPath;
-            _dataBasePathChanged = true;
+            _shouldMoveDatabase = true;
         }
         
         #endregion
         
-        private void ApplyLanguageChange()
+        public bool CreateNewFileWhileSave
         {
-            _localizationManager.SetCulture(_settings.Language);
-            AvaloniaXamlLoader.Load(this);
-            
-            // Закрываем окно настроек
-            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            get => _settings.CreateNewFileWhileSave;
+            set
             {
-                var oldMainWindow = desktop.MainWindow;
-                oldMainWindow.Hide();
-                
-                var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-                desktop.MainWindow = mainWindow;
-                mainWindow.Show();
-                
-                oldMainWindow.DataContext = null;
-                oldMainWindow.Close();
-                oldMainWindow = null;
+                if (_settings.CreateNewFileWhileSave != value)
+                {
+                    _settings.CreateNewFileWhileSave = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CreateNewFileWhileSave)));
+                }
             }
         }
+
+        private void CBLanguagues_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isInitialized && sender is ComboBox { SelectedItem: ComboBoxItem { Tag: Enums.SupportedLanguagues selectedLang } })
+            {
+                var code = selectedLang.GetLangCode();
+                _settings.Language = code;
+                _shouldLangChanged = true;
+            }
+        }
+        
+        #endregion
+
+        #region Events
+
+        public new event PropertyChangedEventHandler? PropertyChanged;
+
+        #endregion
     }
 }

@@ -1,8 +1,8 @@
-﻿using ExcelShSy.Infrastructure.Persistance.DefaultValues;
+﻿using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 
-namespace ExcelShSy.Infrastructure.Persistance.ShopData.Mappings
+namespace ExcelShSy.Infrastructure.Persistence.ShopData.Mappings
 {
-    internal class AvailabilityMappingPriceList
+    internal static class AvailabilityMappingPriceList
     {
         public static readonly IReadOnlyDictionary<string, IReadOnlyList<string>> Template = new Dictionary<string, IReadOnlyList<string>>
         {
