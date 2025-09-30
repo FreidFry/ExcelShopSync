@@ -4,9 +4,9 @@ using System.Resources;
 
 namespace ExcelShSy.Localization
 {
-    public static class GetLocalizationInCode
+    public class GetLocalizationInCode
     {
-        public static string GetLocalizate(string resourceFile, string key)
+        public string GetLocalizate(string resourceFile, string key)
         {
             string baseName = $"ExcelShSy.Localization.Resources.{resourceFile}";
             var rm = new ResourceManager(baseName, Assembly.GetExecutingAssembly());

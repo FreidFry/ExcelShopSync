@@ -6,14 +6,11 @@ using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Event;
 using ExcelShSy.Ui.Interfaces;
 using Avalonia.Controls;
-using Avalonia.Input;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using Avalonia.Interactivity;
-using ExcelShSy.Core.Interfaces;
 using ExcelShSy.Core.Properties;
-using ExcelShSy.Localization;
-using static ExcelShSy.Localization.GetLocalizationInCode;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace ExcelShSy.Ui
 {
@@ -25,53 +22,30 @@ namespace ExcelShSy.Ui
         private readonly IEditLoadFilesWindowFactory _editLoadFilesWindowFactory;
         private readonly ISettingWindowFactory _settingWindowFactory;
         private readonly IDataBaseViewerFactory _dataBaseViewer;
+        private readonly IF4LabsAboutWindowFactory _f4LabsAboutWindowFactory;
+        private readonly ILocalizationService _localizationService;
 
-        public MainWindow(IFileManager fileManager, IOperationTaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory, IDataBaseViewerFactory dataBaseViewer)
+        public MainWindow()
         {
-            InitializeComponents();
+            InitializeComponent();
+        }
+        public MainWindow(IFileManager fileManager, IOperationTaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory, IDataBaseViewerFactory dataBaseViewer,
+           IF4LabsAboutWindowFactory f4LabsAboutWindowFactory,ILocalizationService localizationService)
+        {
+            InitializeComponent();
+            
             _fileManager = fileManager;
             _taskFactory = taskFactory;
             _logger = logger;
             _editLoadFilesWindowFactory = editLoadFilesWindowFactory;
             _settingWindowFactory = settingWindowFactory;
             _dataBaseViewer = dataBaseViewer;
+            _f4LabsAboutWindowFactory = f4LabsAboutWindowFactory;
+            _localizationService = localizationService;
 
-            RegistrationTextBlockEvent("TargetLb", GetTargetFileLable);
-            RegistrationTextBlockEvent("SourceLb", GetSourceFileLable);
-            
+            UpdateTextBlockEvents.RegistrationTextBlockEvent("TargetLb", TargetLastFile);
+            UpdateTextBlockEvents.RegistrationTextBlockEvent("SourceLb", SourceLastFile);
         }
-        
-        #region Initialization
-
-        private void InitializeComponents()
-        {
-            InitializeComponent();
-
-            this.LayoutUpdated += (sender, args) =>
-            {
-                var tWidth = TargetFilesButton.Bounds.Width;
-                var sWidth = SourceFilesButton.Bounds.Width;
-
-                var max = Math.Max(tWidth, sWidth);
-                TargetFilesButton.Width = max;
-                SourceFilesButton.Width = max;
-                
-                this.LayoutUpdated -= null;
-            };
-        }
-
-        
-
-        private static void RegistrationTextBlockEvent(string key, TextBlock textBlock)
-        {
-            UpdateTextBlockEvents.OnTextUpdate += (targetKey, text) =>
-            {
-                if (targetKey == key)
-                    textBlock.Text = text;
-            };
-        }
-        
-        #endregion
 
         #region OtherWindows
 
@@ -80,11 +54,11 @@ namespace ExcelShSy.Ui
             var btn = sender as Button;
             var propertyName = btn?.Tag?.ToString();
 
-            if (!string.IsNullOrEmpty(propertyName))
-            {
-                var window = _editLoadFilesWindowFactory.Create(propertyName);
-                window.ShowDialog(this);
-            }
+
+            var window = string.IsNullOrEmpty(propertyName)
+                ? _editLoadFilesWindowFactory.Create()
+                : _editLoadFilesWindowFactory.Create(propertyName);
+            window.ShowDialog(this);
         }
 
         private void SettingsWindowOpen_Click(object sender, RoutedEventArgs e)
@@ -95,7 +69,7 @@ namespace ExcelShSy.Ui
 
         private void AboutWindowOpen_Click(object sender, RoutedEventArgs e)
         {
-            var window = new WPFAboutF4Labs.F4LabsAboutWindow();
+            var window = _f4LabsAboutWindowFactory.Create();
             window.ShowDialog(this);
         }
         
@@ -146,16 +120,16 @@ namespace ExcelShSy.Ui
 
         private void ExecuteTasks_Click(object sender, RoutedEventArgs e)
         {
-            if (!_taskFactory.HasCheckedCheckbox(TaskGrid))
+            if (!_taskFactory.HasCheckedCheckbox(TasksContainer))
             {
-                var message = GetLocalizate("MainWindow", "NoSetExecute_");
-                var title = GetLocalizate("MainWindow", "NoSetExecuteTitle_");
+                var message = _localizationService.GetString("MainWindow", "NoSetExecute_");
+                var title = _localizationService.GetString("MainWindow", "NoSetExecuteTitle_");
                 var msBox = MessageBoxManager.GetMessageBoxStandard(title,message, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
                 msBox.ShowAsync();
                 return;
             }
             _fileManager.InitializeAllFiles();
-            _taskFactory.ExecuteOperations(TaskGrid);
+            _taskFactory.ExecuteOperations(TasksContainer);
             _fileManager.ClearAfterComplete();
         }
 
@@ -179,37 +153,24 @@ namespace ExcelShSy.Ui
 
         private void ChangeIncreasePercent_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Decimal.TryParse(IncreasePercentTextBox.Text, out decimal percents);
-            ProductProcessingOptions.priceIncreasePercentage = percents;
-        }
+            if (sender is not TextBox textBox)
+                return;
+            
+            var filtered = IsTextAllowed(textBox.Text);
 
-        private void IncreasePercentTextBox_TextInput(object? sender, TextInputEventArgs e)
-        {
-            if (sender is TextBox textBox)
+            if (filtered != textBox.Text)
             {
-                var newText = textBox.Text.Insert(textBox.CaretIndex, e.Text);
-                if (!IsTextAllowed(e.Text, newText))
-                    e.Handled = true; // отменяем ввод
+                textBox.Text = filtered;
+                textBox.CaretIndex = filtered.Length;
+                return;
             }
-        }
-
-        private void IncreasePercentTextBox_OnTextInput(object sender, TextInputEventArgs e)
-        {
-            var textBox = (TextBox)sender;
-            string newText = textBox.Text.Insert(textBox.CaretIndex, e.Text);
-    
-            if (!IsTextAllowed(e.Text, newText))
-                e.Handled = true; // отменяем ввод 
+            if (decimal.TryParse(filtered, NumberStyles.Number, CultureInfo.InvariantCulture, out var percents))
+                ProductProcessingOptions.priceIncreasePercentage = percents;
         }
         
         #endregion
-        
-        private static bool IsTextAllowed(string newInput, string fullText)
-        {
-            string text = fullText + newInput;
-            return decimal.TryParse(text, out _);
-        }
 
-        
+        private static string IsTextAllowed(string? newInput) =>
+            new(newInput?.Where(c => char.IsDigit(c) || c == '.' || c == ',').ToArray());
     }
 }

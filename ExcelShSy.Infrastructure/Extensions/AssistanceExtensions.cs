@@ -1,13 +1,9 @@
 ﻿using ExcelShSy.Core.Exeptions;
 using ExcelShSy.Core.Interfaces.Excel;
-using ExcelShSy.Infrastructure.Persistance.DefaultValues;
-
+using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
-using System.Diagnostics.CodeAnalysis;
-using ExcelShSy.Core.Interfaces.DataBase;
-using ExcelShSy.LocalDataBaseModule.Data;
 using Color = System.Drawing.Color;
 
 
@@ -17,7 +13,7 @@ namespace ExcelShSy.Infrastructure.Extensions
     {
         public static (int articleColumn, int neededColumn) InitialHeadersTuple(this IExcelSheet page, string columnName)
         {
-            if (page?.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty() || !page.MappedHeaders.ContainsKey(columnName)) return (0, 0);
+            if (page.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty() || !page.MappedHeaders.ContainsKey(columnName)) return (0, 0);
 
             var article = page.FindColumnInHeaders(ColumnConstants.Article);
             var needColumn = page.FindColumnInHeaders(columnName);
@@ -27,21 +23,21 @@ namespace ExcelShSy.Infrastructure.Extensions
 
         public static int InitialHeadersTuple(this IExcelSheet page)
         {
-            if (page?.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty()) return 0;
+            if (page.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty()) return 0;
 
             return page.FindColumnInHeaders(ColumnConstants.Article);
         }
 
         public static int InitialNeedColumn(this IExcelSheet page, string columnName)
         {
-            if (page?.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty()) return 0;
+            if (page.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty()) return 0;
 
             return page.FindColumnInHeaders(columnName);
         }
 
         private static int FindColumnInHeaders(this IExcelSheet page, string columnName)
         {
-            if (page?.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty() || !page.MappedHeaders.TryGetValue(columnName, out int value))
+            if (page.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty() || !page.MappedHeaders.TryGetValue(columnName, out var value))
                 throw new ShopDataException($"page \"{page.SheetName}\" - {columnName} not found! Please check your file.");
             return value;
         }

@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Media;
+using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Event;
@@ -9,28 +11,38 @@ using ExcelShSy.Ui.Models.EditLoadFiles;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using static ExcelShSy.Localization.GetLocalizationInCode;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace ExcelShSy.Ui
 {
     public partial class EditLoadFilesWindow : Window
     {
-        public ObservableCollection<ExcelFileItem> TemperaryTargetFiles { get; set; } = [];
-        public ObservableCollection<ExcelFileItem> TemperarySourceFiles { get; set; } = [];
+        public ObservableCollection<ExcelFileItem> TemporaryTargetFiles { get; set; } = [];
+        public ObservableCollection<ExcelFileItem> TemporarySourceFiles { get; set; } = [];
         private readonly IFileManager _fileManager;
         private readonly IFileProvider _fileProvider;
         private readonly IExcelFileFactory _excelFileFactory;
-        
-        public EditLoadFilesWindow(string tabName, IFileManager fileManager, IFileProvider fileProvider, IExcelFileFactory fileFactory)
+        private readonly ILocalizationService _localizationService;
+
+        public EditLoadFilesWindow()
+        {
+            InitializeComponent();
+        }
+
+        public EditLoadFilesWindow(IFileManager fileManager, IFileProvider fileProvider,
+            IExcelFileFactory fileFactory, ILocalizationService localizationService)
+            : this("Target", fileManager, fileProvider, fileFactory, localizationService) { }
+        public EditLoadFilesWindow(string tabName, IFileManager fileManager, IFileProvider fileProvider, IExcelFileFactory fileFactory, ILocalizationService localizationService)
         {
             InitializeComponent();
             
             _fileManager = fileManager;
             _fileProvider = fileProvider;
             _excelFileFactory = fileFactory;
+            _localizationService = localizationService;
 
-
-            SetFileNameList(TemperaryTargetFiles, _fileManager.TargetPaths);
-            SetFileNameList(TemperarySourceFiles, _fileManager.SourcePaths);
+            SetFileNameList(TemporaryTargetFiles, _fileManager.TargetPaths);
+            SetFileNameList(TemporarySourceFiles, _fileManager.SourcePaths);
             DataContext = this;
 
             SelectTab(tabName);
@@ -42,11 +54,10 @@ namespace ExcelShSy.Ui
         {
             foreach (var item in FilesControl.Items)
             {
-                if (item is TabItem tab && tab.Header?.ToString() == tabName)
-                {
-                    FilesControl.SelectedItem = tab;
-                    break;
-                }
+                if (item is not TabItem tab) continue;
+                
+                if (tab.Header?.ToString() != tabName) continue;
+                FilesControl.SelectedItem = tab;
             }
         }
 
@@ -57,19 +68,18 @@ namespace ExcelShSy.Ui
             switch (tag)
             {
                 case "Target":
-                    AddItems(TemperaryTargetFiles);
+                    AddItems(TemporaryTargetFiles);
                     break;
                 case "Source":
-                    AddItems(TemperarySourceFiles);
+                    AddItems(TemporarySourceFiles);
                     break;
-                default: break;
             }
         }
         
         private async void RemoveFile_Click(object? sender, RoutedEventArgs e)
         {
-            var message = GetLocalizate("EditLoadFilesWindow", "DeleteWarning_");
-            var title = GetLocalizate("EditLoadFilesWindow", "DeleteWarningTitle_");
+            var message = _localizationService.GetString("EditLoadFilesWindow", "DeleteWarning_");
+            var title = _localizationService.GetString("EditLoadFilesWindow", "DeleteWarningTitle_");
             var remove = await CreateMessageBoxYesNoWarning(message, title);
             if (remove) return;
             var button = sender as Button;
@@ -77,21 +87,20 @@ namespace ExcelShSy.Ui
             switch (tag)
             {
                 case "Target":
-                    RemoveItems(TemperaryTargetFiles);
+                    RemoveItems(TemporaryTargetFiles);
                     break;
                 case "Source":
-                    RemoveItems(TemperarySourceFiles);
+                    RemoveItems(TemporarySourceFiles);
                     break;
-                default: break;
             }
         }
         
         private async void Close_Click(object sender, RoutedEventArgs e)
         {
-            var message = GetLocalizate("EditLoadFilesWindow", "CloseWarning_");
-            var title = GetLocalizate("EditLoadFilesWindow", "CloseWarningTitle_");
-            var succes = await CreateMessageBoxYesNoWarning(message, title);
-            if (!succes) Close();
+            var message = _localizationService.GetString("EditLoadFilesWindow", "CloseWarning_");
+            var title = _localizationService.GetString("EditLoadFilesWindow", "CloseWarningTitle_");
+            var yesNoWarning = await CreateMessageBoxYesNoWarning(message, title);
+            if (!yesNoWarning) Close();
         }
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
@@ -102,12 +111,11 @@ namespace ExcelShSy.Ui
 
         public void ShowInfo_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.DataContext is ExcelFileItem target)
-            {
-                var path = target.FilePath;
-                var file = _excelFileFactory.Create(path);
-                file.ShowFileDetails();
-            }
+            if (sender is not Button { DataContext: ExcelFileItem target }) return;
+            
+            var path = target.FilePath;
+            var file = _excelFileFactory.Create(path);
+            file.ShowFileDetails();
         }
         
         #endregion
@@ -117,23 +125,22 @@ namespace ExcelShSy.Ui
         
         private static void SetFileNameList(ObservableCollection<ExcelFileItem> observableCollection, IEnumerable<string> list)
         {
-            foreach (string filePath in list)
+            foreach (var filePath in list)
             {
                 var item = new ExcelFileItem(filePath);
                 observableCollection.Add(item);
             }
         }
 
-        private void AddItems(ObservableCollection<ExcelFileItem> items)
+        private async void AddItems(ObservableCollection<ExcelFileItem> items)
         {
-            var sources = _fileProvider.PickExcelFilePaths();
-            if (sources.Result.IsNullOrEmpty()) return;
-            foreach (var file in sources.Result)
-                if (!items.Any(item => item.FilePath == file))
-                    items.Add(new ExcelFileItem(file));
+            var sources = await _fileProvider.PickExcelFilePaths();
+            if (sources.IsNullOrEmpty()) return;
+            foreach (var file in sources.Where(file => items.All(item => item.FilePath != file)))
+                items.Add(new ExcelFileItem(file));
         }
 
-        private void RemoveItems(ObservableCollection<ExcelFileItem> items)
+        private static void RemoveItems(ObservableCollection<ExcelFileItem> items)
         {
             var remove = items.Where(item => item.IsSelectedToRemove).ToList();
             foreach (var file in remove)
@@ -142,29 +149,28 @@ namespace ExcelShSy.Ui
             }
         }
 
-        private async Task<bool> CreateMessageBoxYesNoWarning(string message, string windowName)
+        private static async Task<bool> CreateMessageBoxYesNoWarning(string message, string windowName)
         {
             var msBox = MessageBoxManager.GetMessageBoxStandard(windowName, message, ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Warning);
             var result = await msBox.ShowAsync();
-            if (result == ButtonResult.No) return true;
-            return false;
+            return result == ButtonResult.No;
         }
 
         private void TransferFileList()
         {
-            var targetList = TemperaryTargetFiles.Select(i => i.FilePath).ToList();
-            var sourceList = TemperarySourceFiles.Select(i => i.FilePath).ToList();
+            var targetList = TemporaryTargetFiles.Select(i => i.FilePath).ToList();
+            var sourceList = TemporarySourceFiles.Select(i => i.FilePath).ToList();
             UpdateTextBlockEvents.UpdateText("TargetLb", "");
             UpdateTextBlockEvents.UpdateText("SourceLb", "");
 
             _fileManager.TargetPaths.Clear();
-            if (targetList != null && targetList.Count > 0)
+            if (targetList.Count > 0)
             {
                 _fileManager.TargetPaths.AddRange(targetList);
                 FileNameExtensions.SetLastPath("TargetLb", targetList);
             }
             _fileManager.SourcePaths.Clear();
-            if (sourceList != null && sourceList.Count > 0)
+            if (sourceList.Count > 0)
             {
                 _fileManager.SourcePaths.AddRange(sourceList);
                 FileNameExtensions.SetLastPath("SourceLb", sourceList);

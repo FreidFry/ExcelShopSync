@@ -27,7 +27,7 @@ namespace ExcelShSy.Infrastructure.Extensions
             List<string> languagues = [];
             foreach (var page in pages)
             {
-                languagues.Add(page.GetLanguague());
+                languagues.Add(page.GetLanguage());
                 if (languagues.Count > 15) break;
             }
 

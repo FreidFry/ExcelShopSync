@@ -10,18 +10,21 @@ using Avalonia;
 using MsBox.Avalonia;
 using Avalonia.Controls;
 using Avalonia.VisualTree;
+using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Infrastructure.Factories
 {
     public class OperationTaskFactory : IOperationTaskFactory
     {
-        readonly IServiceProvider _serviceProvider;
-        readonly ILogger _logger;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly ILocalizationService _localizationService;
+        private readonly ILogger _logger;
         private readonly Dictionary<string, Type> _tasksMap;
 
-        public OperationTaskFactory(IServiceProvider services, ILogger logger)
+        public OperationTaskFactory(IServiceProvider services, ILocalizationService localizationService, ILogger logger)
         {
             _serviceProvider = services;
+            _localizationService = localizationService;
             _logger = logger;
 
             var allTasks = _serviceProvider.GetServices<IExecuteOperation>();
@@ -30,7 +33,7 @@ namespace ExcelShSy.Infrastructure.Factories
                 .Select(t => t.GetType())
                 .Where(t => t.GetCustomAttribute<TaskAttribute>() != null)
                 .ToDictionary(
-                    t => t.GetCustomAttribute<TaskAttribute>().Name,
+                    t => t.GetCustomAttribute<TaskAttribute>()!.Name,
                     t => t);
         }
 
@@ -39,7 +42,7 @@ namespace ExcelShSy.Infrastructure.Factories
             try
             {
                 _tasksMap.TryGetValue(taskName, out var taskType);
-                return (IExecuteOperation?)_serviceProvider.GetRequiredService(taskType);
+                return (IExecuteOperation?)_serviceProvider.GetRequiredService(taskType!);
             }
             catch
             {
@@ -71,13 +74,17 @@ namespace ExcelShSy.Infrastructure.Factories
             if (errors.Count == 0)
             {
                 _logger.LogInfo("Finish without errors.");
-                MessageBoxManager.GetMessageBoxStandard("Finish", "Finish without problems." ).ShowAsync();
+                var title = _localizationService.GetMessageString("Finish");
+                var msg = _localizationService.GetMessageString("FinishText");
+                MessageBoxManager.GetMessageBoxStandard(title, msg).ShowAsync();
             }
             else
             {
                 _logger.LogInfo("Finish with errors:");
+                var title = _localizationService.GetMessageString("FinishWithProblems");
+                var msg = _localizationService.GetMessageString("FinishWithProblemsText");
                 foreach (var error in errors) _logger.LogWarning(error);
-                MessageBoxManager.GetMessageBoxStandard("Finish with problems", "Finish with problems:\n" + string.Join("\n", errors)).ShowAsync();
+                MessageBoxManager.GetMessageBoxStandard(title, $"{msg}\n" + string.Join("\n", errors)).ShowAsync();
             }
         }
 
@@ -85,13 +92,13 @@ namespace ExcelShSy.Infrastructure.Factories
         {
             foreach (var child in parent.GetVisualChildren())
             {
-                if (child is CheckBox cb && cb.IsChecked == true)
-                    return true;
-
-                if (child is Visual visual && HasCheckedCheckbox(visual))
-                    return true;
+                switch (child)
+                {
+                    case CheckBox { IsChecked: true }:
+                    case not null when HasCheckedCheckbox(child):
+                        return true;
+                }
             }
-
             return false;
         }
 

@@ -117,46 +117,91 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddFile" xml:space="preserve">
-    <value>Додати нові файли</value>
+  <data name="AllColumnList" xml:space="preserve">
+    <value>Все колонки</value>
   </data>
-  <data name="Apply" xml:space="preserve">
-    <value>Зберігти</value>
+  <data name="Article" xml:space="preserve">
+    <value>Артикул</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Відміна</value>
+  <data name="Availability" xml:space="preserve">
+    <value>Наличие</value>
   </data>
-  <data name="CheckBox" xml:space="preserve">
-    <value />
+  <data name="DataFormat" xml:space="preserve">
+    <value>Формат даты</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Видалити</value>
+  <data name="Discount" xml:space="preserve">
+    <value>Скидка</value>
   </data>
-  <data name="File" xml:space="preserve">
-    <value>Ім'я файлу</value>
+  <data name="DiscountEnd" xml:space="preserve">
+    <value>Дата начала скидки</value>
   </data>
-  <data name="Info" xml:space="preserve">
-    <value>Інфо</value>
+  <data name="DiscountStart" xml:space="preserve">
+    <value>Дата конца скидки</value>
   </data>
-  <data name="Sourcefiles" xml:space="preserve">
-    <value>Файли джерело</value>
+  <data name="Header" xml:space="preserve">
+    <value>Конфигурация соответствий заголовков</value>
   </data>
-  <data name="TargetFiles" xml:space="preserve">
-    <value>Файли для змін</value>
+  <data name="InStock" xml:space="preserve">
+    <value>Значение "в наличии"</value>
+  </data>
+  <data name="OldPrice" xml:space="preserve">
+    <value>Предыдущая (старая) цена</value>
+  </data>
+  <data name="OnOrder" xml:space="preserve">
+    <value>Значение "под заказ"</value>
+  </data>
+  <data name="OutOfStock" xml:space="preserve">
+    <value>Значение "нет в наличии"</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Цена</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Количество</value>
+  </data>
+  <data name="ReadyToGo" xml:space="preserve">
+    <value>Значение "готово к отправке"</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Сохранить</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Редагування завантажених файлів</value>
+    <value>Редактор соответствий заголовков</value>
   </data>
-  <data name="CloseWarning_" xml:space="preserve">
-    <value>Ви хочете закрити це вікно?</value>
+  <data name="CreateNewShop" xml:space="preserve">
+    <value>Создать новый магазин</value>
   </data>
-  <data name="CloseWarningTitle_" xml:space="preserve">
-    <value>Підтвердження</value>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Отмена</value>
   </data>
-  <data name="DeleteWarning_" xml:space="preserve">
-    <value>Ви справді хочете видалити цей файл?</value>
+  <data name="ConfirmSaveTitle" xml:space="preserve">
+    <value>Подтвердить сохранение</value>
   </data>
-  <data name="DeleteWarningTitle_" xml:space="preserve">
-    <value>Підтвердження видалення</value>
+  <data name="ConfirmSaveText" xml:space="preserve">
+    <value>Вы уверены, что хотите сохранить изменения?</value>
+  </data>
+  <data name="CreateButton" xml:space="preserve">
+    <value>Создать</value>
+  </data>
+  <data name="CreateNewShopText" xml:space="preserve">
+    <value>Введите название магазина</value>
+  </data>
+  <data name="CreateNewShopTitle" xml:space="preserve">
+    <value>Создать новый магазин</value>
+  </data>
+  <data name="RemoveButton" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="UnsavedChangesText" xml:space="preserve">
+    <value>У вас есть несохраненные изменения. Хотите их сохранить?</value>
+  </data>
+  <data name="UnsavedChanges" xml:space="preserve">
+    <value>Несохраненные изменения</value>
+  </data>
+  <data name="ShopEdit" xml:space="preserve">
+    <value>Редиктировать магазин</value>
+  </data>
+  <data name="GetFirstLine" xml:space="preserve">
+    <value>Получить заголовки магазина</value>
   </data>
 </root>

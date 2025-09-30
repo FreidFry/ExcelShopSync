@@ -1,20 +1,19 @@
 ﻿using ExcelShSy.Core.Interfaces.Excel;
-
-using OfficeOpenXml;
-
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using OfficeOpenXml;
 
-namespace ExcelShSy.Infrastructure.Persistance.Model
+namespace ExcelShSy.Infrastructure.Persistence.Model
 {
     public class ExcelFile : IExcelFile
     {
         public string FileLocation { get; set; }
         public string FileName { get; set; }
-        public string ShopName { get; set; }
-        public string Language { get; set; }
+        public string? ShopName { get; set; }
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
+        public string? Language { get; set; }
         public ExcelPackage ExcelPackage { get; set; }
-        public List<IExcelSheet> SheetList { get; set; }
+        public List<IExcelSheet>? SheetList { get; set; }
 
         public ExcelFile(string path)
         {
@@ -25,9 +24,9 @@ namespace ExcelShSy.Infrastructure.Persistance.Model
 
         public async Task ShowFileDetails()
         {
-            for (int page = 0; page < SheetList.Count; page++)
+            for (var page = 0; page < (SheetList?.Count ?? 0); page++)
             {
-                var response = SheetList[page].ShowPageDetails();
+                var response = SheetList![page].ShowPageDetails();
                 var msgBox = MessageBoxManager.GetMessageBoxStandard($"{FileName} ({ShopName}) {page+1}/{SheetList.Count}", response, ButtonEnum.OkCancel);
 
                 var result = await msgBox.ShowAsync();

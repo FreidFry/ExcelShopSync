@@ -7,9 +7,9 @@ namespace ExcelShSy.Core.Interfaces.Excel
         string FileLocation { get; set; }
         string FileName { get; set; }
         ExcelPackage ExcelPackage { get; set; }
-        string ShopName { get; set; }
+        string? ShopName { get; set; }
 
-        List<IExcelSheet> SheetList { get; set; }
+        List<IExcelSheet>? SheetList { get; set; }
 
         Task ShowFileDetails();
     }

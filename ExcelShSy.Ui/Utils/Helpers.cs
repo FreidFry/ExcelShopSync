@@ -12,21 +12,14 @@ namespace ExcelShSy.Ui.Utils
             return (T[])Enum.GetValues(typeof(T));
         }
 
-        internal static string GetDescriptoin(this Enum value)
+        internal static string GetDescription(this Enum value)
         {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
+            var fi = value.GetType().GetField(value.ToString());
 
-            if (fi != null)
-            {
-                DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            if (fi == null) return value.ToString();
+            var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
-                if (attributes.Length > 0)
-                {
-                    return attributes[0].Description;
-                }
-            }
-
-            return value.ToString();
+            return attributes.Length > 0 ? attributes[0].Description : value.ToString();
         }
 
         public static string GetLangCode(this Enums.SupportedLanguagues value)

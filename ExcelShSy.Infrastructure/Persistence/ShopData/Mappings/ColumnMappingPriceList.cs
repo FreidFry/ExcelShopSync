@@ -1,6 +1,6 @@
-﻿using ExcelShSy.Infrastructure.Persistance.DefaultValues;
+﻿using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 
-namespace ExcelShSy.Infrastructure.Persistance.ShopData.Mappings
+namespace ExcelShSy.Infrastructure.Persistence.ShopData.Mappings
 {
     public static class ColumnMappingPriceList
     {

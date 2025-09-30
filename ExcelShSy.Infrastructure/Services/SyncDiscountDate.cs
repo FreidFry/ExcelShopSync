@@ -7,7 +7,7 @@ using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Core.Properties;
 using ExcelShSy.Infrastructure.Extensions;
-using ExcelShSy.Infrastructure.Persistance.DefaultValues;
+using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 
 namespace ExcelShSy.Infrastructure.Services
 {
@@ -19,7 +19,7 @@ namespace ExcelShSy.Infrastructure.Services
         private readonly IShopStorage _shopMapping;
         private readonly ILogger _logger;
         private readonly IDatabaseSearcher _databaseSearcher;
-        private string _shopFormat;
+        private string? _shopFormat;
         
         private string _shopName = string.Empty;
         

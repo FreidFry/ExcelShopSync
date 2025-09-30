@@ -1,9 +1,10 @@
 ﻿<Window x:Class="ExcelShSy.Ui.SettingWindow"
         xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:ExcelShSy.Ui"
         xmlns:local="clr-namespace:ExcelShSy.Localization;assembly=ExcelShSy.Localization"
         Title="{local:Loc SettingWindow.Title}" MinHeight="450" MinWidth="300" WindowStartupLocation="CenterScreen"
-        SizeToContent="WidthAndHeight">
+        SizeToContent="WidthAndHeight" x:DataType="loc:SettingWindow">
     <Grid Margin="10" RowDefinitions="*,Auto">
 
         <StackPanel Margin="10" >
@@ -20,6 +21,8 @@
             </StackPanel>
 
         <Button Margin="0 5" VerticalAlignment="Top" HorizontalAlignment="Left" Content="{local:Loc SettingWindow.UserShopManager}" Padding="10 2" Click="ShopManagerOpen_Click"/>
+        
+        <CheckBox Content="Save" IsChecked="{Binding CreateNewFileWhileSave, Mode=TwoWay}" />
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" >

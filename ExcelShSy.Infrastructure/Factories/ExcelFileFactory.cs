@@ -1,23 +1,14 @@
 ﻿using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Infrastructure.Extensions;
-using ExcelShSy.Infrastructure.Persistance.Model;
-
+using ExcelShSy.Infrastructure.Persistence.Model;
 using OfficeOpenXml;
 
 namespace ExcelShSy.Infrastructure.Factories
 {
-    public class ExcelFileFactory : IExcelFileFactory
+    public class ExcelFileFactory(IExcelPageFactory excelPageFactory, IShopStorage shopStorage)
+        : IExcelFileFactory
     {
-        private readonly IExcelPageFactory _excelPageFactory;
-        private readonly IShopStorage _shopStorage;
-
-        public ExcelFileFactory(IExcelPageFactory excelPageFactory, IShopStorage shopStorage)
-        {
-            _excelPageFactory = excelPageFactory;
-            _shopStorage = shopStorage;
-        }
-
         public IExcelFile Create(string path)
         {
             var file = new ExcelFile(path);
@@ -30,25 +21,22 @@ namespace ExcelShSy.Infrastructure.Factories
             return file;
         }
 
-        List<IExcelSheet> GetPages(ExcelPackage package)
+        private List<IExcelSheet> GetPages(ExcelPackage package)
         {
             ExcelWorkbook workbook = package.Workbook;
             if (workbook == null)
                 return [];
             List<IExcelSheet> pages = [];
-            foreach (var page in workbook.Worksheets)
-            {
-                pages.Add(_excelPageFactory.Create(page));
-            }
+            pages.AddRange(workbook.Worksheets.Select(excelPageFactory.Create));
             return pages;
         }
 
-        string IndetifyShop(List<IExcelSheet> pages)
+        private string IndetifyShop(List<IExcelSheet> pages)
         {
             List<string> shops = [];
             foreach (var page in pages)
             {
-                shops.Add(page.GetShop(_shopStorage));
+                shops.Add(page.GetShop(shopStorage));
                 if (shops.Count > 6) break;
             }
 
@@ -60,16 +48,16 @@ namespace ExcelShSy.Infrastructure.Factories
             return thisShop;
         }
 
-        static string LanguageDetect(List<IExcelSheet> pages)
+        private static string LanguageDetect(List<IExcelSheet> pages)
         {
-            List<string> languagues = [];
+            List<string> languages = [];
             foreach (var page in pages)
             {
-                languagues.Add(page.GetLanguague());
-                if (languagues.Count > 15) break;
+                languages.Add(page.GetLanguage());
+                if (languages.Count > 15) break;
             }
 
-            var thisLanguage = languagues.GroupBy(x => x)
+            var thisLanguage = languages.GroupBy(x => x)
                 .OrderByDescending(g => g.Count())
                 .First()
                 .Key;

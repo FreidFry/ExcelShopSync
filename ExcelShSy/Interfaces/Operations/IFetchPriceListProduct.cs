@@ -1,6 +1,6 @@
 ﻿namespace ExcelShSy.Core.Interfaces.Operations
 {
-    public interface IFetchMasterProduct : IFetchProductBase
+    public interface IFetchPriceListProduct : IFetchProductBase
     {
     }
 }

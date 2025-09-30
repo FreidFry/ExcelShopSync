@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWPF>false</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -43,32 +42,51 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>DataBaseViewer.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Errors.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Errors.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\MessagesBox.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MessagesBox.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\EditLoadFilesWindow.resx">
-      <LastGenOutput>EditLoadFilesWindow.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\MainWindow.resx">
-      <LastGenOutput>MainWindow.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\F4LabsAboutWindow.resx">
-      <LastGenOutput>F4LabsAboutWindow.Designer.cs</LastGenOutput>
+    <EmbeddedResource Remove="Resources\DataBaseViewer.ru-RU.resx" />
+    <EmbeddedResource Include="Resources\DataBaseViewer.ru-ru.resx" />
+    <EmbeddedResource Remove="Resources\DataBaseViewer.uk-UA.resx" />
+    <EmbeddedResource Include="Resources\DataBaseViewer.uk-ua.resx" />
+    <EmbeddedResource Remove="Resources\EditLoadFilesWindow.ru-RU.resx" />
+    <EmbeddedResource Include="Resources\EditLoadFilesWindow.ru-ru.resx" />
+    <EmbeddedResource Remove="Resources\EditLoadFilesWindow.uk-UA.resx" />
+    <EmbeddedResource Include="Resources\EditLoadFilesWindow.uk-ua.resx" />
+    <EmbeddedResource Remove="Resources\F4LabsAboutWindow.ru-RU.resx" />
+    <EmbeddedResource Include="Resources\F4LabsAboutWindow.ru-ru.resx" />
+    <EmbeddedResource Remove="Resources\F4LabsAboutWindow.uk-UA.resx" />
+    <EmbeddedResource Include="Resources\F4LabsAboutWindow.uk-ua.resx" />
+    <None Remove="Resources\MainWindow.xaml" />
+    <EmbeddedResource Remove="Resources\MainWindow.ru-RU.resx" />
+    <EmbeddedResource Include="Resources\MainWindow.ru-ru.resx" />
+    <EmbeddedResource Remove="Resources\MainWindow.uk-UA.resx" />
+    <EmbeddedResource Include="Resources\MainWindow.uk-ua.resx" />
+    <EmbeddedResource Remove="Resources\SettingWindow.ru-RU.resx" />
+    <EmbeddedResource Include="Resources\SettingWindow.ru-ru.resx" />
+    <EmbeddedResource Remove="Resources\SettingWindow.uk-UA.resx" />
+    <EmbeddedResource Include="Resources\SettingWindow.uk-ua.resx" />
+    <EmbeddedResource Remove="Resources\ShopManagerWindow.ru-RU.resx" />
+    <EmbeddedResource Include="Resources\ShopManagerWindow.ru-ru.resx" />
+    <EmbeddedResource Remove="Resources\ShopManagerWindow.uk-UA.resx" />
+    <EmbeddedResource Include="Resources\ShopManagerWindow.uk-ua.resx" />
+    <EmbeddedResource Update="Resources\Errors.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Errors.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\SettingWindow.resx">
-      <LastGenOutput>SettingWindow.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="Resources\MessagesBox.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\ShopManagerWindow.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ShopManagerWindow.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\DataBaseViewer.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>DataBaseViewer.Designer.cs</LastGenOutput>
+      <LastGenOutput>MessagesBox.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

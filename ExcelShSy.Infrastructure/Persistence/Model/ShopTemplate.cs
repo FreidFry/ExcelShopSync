@@ -1,15 +1,16 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ExcelShSy.Core.Interfaces.Shop;
 
-namespace ExcelShSy.Infrastructure.Persistance.Model
+namespace ExcelShSy.Infrastructure.Persistence.Model
 {
     public class ShopTemplate : IShopTemplate
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         private string _name;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         private List<string>? _unmappedHeaders;
-        private IReadOnlyDictionary<string, string>? _availabilityMap;
+        private Dictionary<string, string?>? _availabilityMap;
         private string? _dataFormat;
         private string? _article;
         private string? _price;
@@ -37,9 +38,9 @@ namespace ExcelShSy.Infrastructure.Persistance.Model
                 OnPropertyChanged();
             } }
 
-        public IReadOnlyDictionary<string, string> AvailabilityMap
+        public Dictionary<string, string?> AvailabilityMap
         {
-            get => _availabilityMap ??= new Dictionary<string, string>(4);
+            get => _availabilityMap ??= new Dictionary<string, string?>();
             set
             {
                 _availabilityMap = value;

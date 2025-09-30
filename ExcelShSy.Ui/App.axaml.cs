@@ -7,11 +7,10 @@ using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using ExcelShSy.Core.Interfaces.Common;
-using ExcelShSy.Core.Interfaces.DataBase;
 
 namespace ExcelShSy.Ui
 {
-    public partial class App : Application
+    public class App : Application
     {
         private readonly ServiceProvider _serviceProvider;
         private readonly ILocalizationManager _localizationManager;

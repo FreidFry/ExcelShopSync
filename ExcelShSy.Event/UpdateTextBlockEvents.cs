@@ -5,18 +5,18 @@ namespace ExcelShSy.Event
 {
     public static class UpdateTextBlockEvents
     {
-        public static event Action<string, string> OnTextUpdate;
+        public static event Action<string, string>? OnTextUpdate;
 
         public static void UpdateText(string key, string newText)
         {
             OnTextUpdate?.Invoke(key, newText);
         }
         
-        private static void RegestrationTextBlockEvent(string key, TextBlock textBlock)
+        public static void RegistrationTextBlockEvent(string key, TextBlock textBlock)
         {
-            UpdateTextBlockEvents.OnTextUpdate += (tarketKey, text) =>
+            OnTextUpdate += (targetKey, text) =>
             {
-                if (tarketKey == key)
+                if (targetKey == key)
                     textBlock.Text = text;
             };
         }

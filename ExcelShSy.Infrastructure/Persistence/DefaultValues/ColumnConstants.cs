@@ -1,4 +1,4 @@
-﻿namespace ExcelShSy.Infrastructure.Persistance.DefaultValues
+﻿namespace ExcelShSy.Infrastructure.Persistence.DefaultValues
 {
     public static class ColumnConstants
     {

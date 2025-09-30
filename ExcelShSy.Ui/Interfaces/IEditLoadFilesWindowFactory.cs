@@ -3,5 +3,6 @@
     public interface IEditLoadFilesWindowFactory
     {
         EditLoadFilesWindow Create(string name);
+        EditLoadFilesWindow Create();
     }
 }

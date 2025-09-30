@@ -168,4 +168,40 @@
   <data name="Title" xml:space="preserve">
     <value>Header Mapping Editor</value>
   </data>
+  <data name="CreateNewShop" xml:space="preserve">
+    <value>Create new shop</value>
+  </data>
+  <data name="CreateNewShopTitle" xml:space="preserve">
+    <value>Create new shop</value>
+  </data>
+  <data name="CreateNewShopText" xml:space="preserve">
+    <value>Enter shop name</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CreateButton" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="UnsavedChanges" xml:space="preserve">
+    <value>Unsaved changes</value>
+  </data>
+  <data name="UnsavedChangesText" xml:space="preserve">
+    <value>You have unsaved changes. Do you want to save them?</value>
+  </data>
+  <data name="RemoveButton" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="ConfirmSaveTitle" xml:space="preserve">
+    <value>Confirm Save</value>
+  </data>
+  <data name="ConfirmSaveText" xml:space="preserve">
+    <value>Are you sure you want to save the changes?</value>
+  </data>
+  <data name="ShopEdit" xml:space="preserve">
+    <value>Edit shop</value>
+  </data>
+  <data name="GetFirstLine" xml:space="preserve">
+    <value>Get shop headers</value>
+  </data>
 </root>

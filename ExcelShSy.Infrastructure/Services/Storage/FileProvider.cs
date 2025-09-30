@@ -5,30 +5,19 @@ using static ExcelShSy.Core.WindowHelper;
 
 namespace ExcelShSy.Infrastructure.Services.Storage
 {
-    public class FileProvider : IFileProvider
+    public class FileProvider(IExcelFileFactory excelFileFactory) : IFileProvider
     {
-        private readonly IExcelFileFactory _excelFileFactory;
-        
-        public FileProvider(IExcelFileFactory excelFileFactory)
-        {
-            _excelFileFactory = excelFileFactory;
-        }
-
         public List<IExcelFile> FetchExcelFile(List<string> paths)
         {
             List<IExcelFile> result = [];
-
-            foreach (var path in paths)
-            {
-                var instance = _excelFileFactory.Create(path);
-                if (instance != null)
-                    result.Add(instance);
-            }
+            result.AddRange(paths.Select(excelFileFactory.Create));
 
             return result;
         }
 
-        [Obsolete("Obsolete")]
+        public IExcelFile FetchExcelFile(string path) => excelFileFactory.Create(path);
+        
+
         public async Task<List<string>?> PickExcelFilePaths()
         {
             var fileDialog = new OpenFileDialog
@@ -36,13 +25,37 @@ namespace ExcelShSy.Infrastructure.Services.Storage
                 AllowMultiple = true,
                 Filters = [new FileDialogFilter { Name = "Excel Files", Extensions = { "xls", "xlsx", "xlsm" } }]
             };
-
-            var fileNames = await fileDialog.ShowAsync(GetActiveWindow());
+            var mainWindow = GetActiveWindow();
+            if (mainWindow == null)
+            {
+                await MsBox.Avalonia.MessageBoxManager.GetMessageBoxStandard("Error", "No found active window. \n[ExcelShSy.Infrastructure.Services.Storage.PickExcelFilePaths()]").ShowAsync();
+                return null;
+            }
+            var fileNames = await fileDialog.ShowAsync(mainWindow);
             if (fileNames == null || fileNames.Length == 0)
                 return null;
 
             return [..fileNames];
+        }
 
+        public async Task<string?> PickExcelFilePath()
+        {
+            var fileDialog = new OpenFileDialog
+            {
+                AllowMultiple = false,
+                Filters = [new FileDialogFilter { Name = "Excel Files", Extensions = { "xls", "xlsx", "xlsm" } }]
+            };
+            var mainWindow = GetActiveWindow();
+            if (mainWindow == null)
+            {
+                await MsBox.Avalonia.MessageBoxManager.GetMessageBoxStandard("Error", "No found active window. \n[ExcelShSy.Infrastructure.Services.Storage.PickExcelFilePaths()]").ShowAsync();
+                return null;
+            }
+            
+            var filename = await fileDialog.ShowAsync(mainWindow);
+            if (filename == null || filename.Length == 0)
+                return null;
+            return filename[0];
         }
     }
 }

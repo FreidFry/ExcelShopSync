@@ -4,7 +4,7 @@
     {
         string Name { get; set; }
         List<string> UnmappedHeaders { get; set; }
-        IReadOnlyDictionary<string, string> AvailabilityMap { get; set; }
+        Dictionary<string, string?> AvailabilityMap { get; set; }
         string? DataFormat { get; set; }
 
         string? Article { get; set; }

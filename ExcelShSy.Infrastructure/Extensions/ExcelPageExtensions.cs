@@ -10,12 +10,12 @@ namespace ExcelShSy.Infrastructure.Extensions
         public static string GetShop(this IExcelSheet? page, IShopStorage shopStorage)
         {
             var headerCount = page?.UnmappedHeaders?.Count;
-            if (headerCount == null || headerCount == 0) return string.Empty;
+            if (headerCount is null or 0) return string.Empty;
 
             Dictionary<string, int> shopScore = [];
-            var ShopKeys = shopStorage.GetShopList();
+            var shopKeys = shopStorage.GetShopList();
 
-            foreach (var shopKey in ShopKeys)
+            foreach (var shopKey in shopKeys)
             {
                 var shopColumn = shopStorage.GetShopMapping(shopKey)?.UnmappedHeaders;
                 if (shopColumn == null || shopColumn.Count == 0) continue;
@@ -28,7 +28,7 @@ namespace ExcelShSy.Infrastructure.Extensions
             return shopScore[shopName] > 0 ? shopName : string.Empty;
         }
 
-        public static string GetLanguague(this IExcelSheet? page)
+        public static string GetLanguage(this IExcelSheet? page)
         {
             if (page?.UnmappedHeaders == null || page.UnmappedHeaders.Count == 0)
                 return "unknown";
@@ -62,17 +62,12 @@ namespace ExcelShSy.Infrastructure.Extensions
         {
             var toColumn = worksheet.Dimension.End.Column;
             var range = worksheet.Cells[fromRow, 1, fromRow, toColumn];
-            bool HasEmpty = range.Any(cell => cell.Value != null);
+            var hasEmpty = range.Any(cell => cell.Value != null);
 
-            if (HasEmpty)
-            {
-                var RowValues = range.Where(cell => !string.IsNullOrWhiteSpace(cell.Value?.ToString()))
+            if (!hasEmpty) return null;
+            return range.Where(cell => !string.IsNullOrWhiteSpace(cell.Value?.ToString()))
                     .GroupBy(cell => cell.Value.ToString())
                     .ToDictionary(g => g.Key, g => g.First().Start.Column);
-                return RowValues;
-            }
-
-            return null;
         }
     }
 }
