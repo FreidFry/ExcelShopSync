@@ -14,7 +14,7 @@ public class SqliteDbContext : ISqliteDbContext, IDisposable
     {
         _appSettings = appSettings;
         OpenConnection();
-        _appSettings.SettingsChanged += Reconnect;
+        _appSettings.SettingsChanged += MoveDb;
     }
     
     private void OpenConnection()
@@ -30,10 +30,12 @@ public class SqliteDbContext : ISqliteDbContext, IDisposable
         pragma.CommandText = "PRAGMA foreign_keys = ON;";
         pragma.ExecuteNonQuery();
     }
-    
-    private void Reconnect()
+
+    private void MoveDb()
     {
-        _connection?.Dispose();
+        var currentPath = _connection.DataSource;
+        _connection.Dispose();
+        File.Move(currentPath, Path.Combine(_appSettings.DataBasePath, "Products.db"), true);
         OpenConnection();
     }
 
@@ -45,7 +47,6 @@ public class SqliteDbContext : ISqliteDbContext, IDisposable
         command.SetCommandText(commandText);
         return command;
     }
-    
 
     public string? ExecuteScalar(string sql)
     {
@@ -64,6 +65,6 @@ public class SqliteDbContext : ISqliteDbContext, IDisposable
     public void Dispose()
     {
         _connection.Dispose();
-        _appSettings.SettingsChanged -= Reconnect;
+        _appSettings.SettingsChanged -= MoveDb;
     }
 }

@@ -21,7 +21,9 @@ using ExcelShSy.Ui.Factories;
 using ExcelShSy.Ui.Interfaces;
 using ExcelShSy.Localization;
 using ExcelShSy.Settings.Properties;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using IConfigurationManager = ExcelShSy.Core.Interfaces.Common.IConfigurationManager;
 
 namespace ExcelShSy.Ui.AppConfigs
 {
@@ -60,7 +62,8 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddScoped<IShopTemplate, ShopTemplate>();
 
             #endregion
-            
+
+            services.AddTransient<IConfigurationManager, ConfigManager>();
             
             services.AddScoped<ILanguageIdentifier, LanguageIdentifier>();
             services.AddScoped<IGetProductManager, ProductImporterSelector>();

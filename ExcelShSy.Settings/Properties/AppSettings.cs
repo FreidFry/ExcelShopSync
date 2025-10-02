@@ -10,21 +10,9 @@ public class AppSettings : IAppSettings
     private static readonly string CONFIG_FILE = Path.Combine(Environment.CurrentDirectory, CONFIG_FILE_NAME);
     
     public string Language { get; set; } = "";
-    
-    private string _dataBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "F4Labs");
-    public string DataBasePath
-    {
-        get => _dataBasePath;
-        set
-        {
-            if (_dataBasePath != value)
-            {
-                _dataBasePath = value;
-                SettingsChanged?.Invoke();
-            }
-        }
-    }
-    
+
+    public string DataBasePath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "F4Labs");
+
     public bool CreateNewFileWhileSave { get; set; } = true;
     public event Action? SettingsChanged;
 
@@ -32,7 +20,23 @@ public class AppSettings : IAppSettings
     {
         var json = JsonSerializer.Serialize(settings);
         File.WriteAllText(CONFIG_FILE, json);
+        Reload();
         SettingsChanged?.Invoke();
     }
 
+    private void Reload()
+    {
+        if (!File.Exists(CONFIG_FILE))
+            return;
+
+        var json = File.ReadAllText(CONFIG_FILE);
+        var loaded = JsonSerializer.Deserialize<AppSettings>(json);
+
+        if (loaded is not null)
+        {
+            Language = loaded.Language;
+            DataBasePath = loaded.DataBasePath;
+            CreateNewFileWhileSave = loaded.CreateNewFileWhileSave;
+        }
+    }
 }

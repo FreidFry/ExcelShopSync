@@ -1,15 +1,18 @@
+using System.ComponentModel;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Settings.Properties;
 
 namespace ExcelShSy.Ui.AppConfigs;
 
-public class ConfigManager
+public class ConfigManager : IConfigurationManager, INotifyPropertyChanged
 {
     private static readonly string CONFIG_FILE_NAME = $"settings.json";
     private static readonly string CONFIG_FILE = Path.Combine(Environment.CurrentDirectory, CONFIG_FILE_NAME);
-
-    public static AppSettings Load()
+    
+    public IAppSettings Load()
     {
         var defaults =  new AppSettings();
         
@@ -70,5 +73,12 @@ public class ConfigManager
         }
 
         return result;
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

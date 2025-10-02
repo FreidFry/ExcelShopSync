@@ -7,6 +7,8 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using ExcelShSy.Core.Interfaces.Common;
+using ExcelShSy.LocalDataBaseModule.Services;
+
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace ExcelShSy.Ui
@@ -28,10 +30,10 @@ namespace ExcelShSy.Ui
 
         #region Dipedency Injection
 
-        private readonly string _currentLocalization;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILocalizationManager _localizationManager;
         private readonly IAppSettings _settings;
+        private readonly IAppSettings _newSettings;
 
         #endregion
 
@@ -43,9 +45,11 @@ namespace ExcelShSy.Ui
         public SettingWindow(IServiceProvider serviceProvider, ILocalizationManager localizationManager, IAppSettings settings)
         {
             _settings = settings;
-            _currentLocalization = _settings.Language;
             _serviceProvider = serviceProvider;
             _localizationManager = localizationManager;
+            
+            _newSettings = serviceProvider.GetRequiredService<IConfigurationManager>().Load();
+            
             InitializeControls();
             DataContext = this;
             _isInitialized = true;
@@ -67,11 +71,11 @@ namespace ExcelShSy.Ui
             {
                 var cbi = new ComboBoxItem
                 {
-                    Content = Helpers.GetDescription(language),
+                    Content = language.GetDescription(),
                     Tag = language,
                 };
                 CBLanguagues.Items.Add(cbi);
-                if (language.GetLangCode() == _settings.Language)
+                if (language.GetLangCode() == _newSettings.Language)
                 {
                     CBLanguagues.SelectedItem = cbi;
                 }
@@ -79,7 +83,7 @@ namespace ExcelShSy.Ui
         }
         
         private void InitializeDbPath() =>
-            DataBasePath.Text = _settings.DataBasePath;
+            DataBasePath.Text = _newSettings.DataBasePath;
 
         #endregion
 
@@ -89,14 +93,10 @@ namespace ExcelShSy.Ui
         
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
-            _settings.SaveSettings(_settings);
+            if (_shouldLangChanged && _settings.Language != _newSettings.Language)
+                _localizationManager.SetCulture(_newSettings.Language);
             
-            if (_shouldLangChanged && _settings.Language != _currentLocalization)
-                _localizationManager.SetCulture(_settings.Language);
-            
-            if(_shouldMoveDatabase)
-            {
-            }
+            _settings.SaveSettings(_newSettings);
             
             Close();
         }
@@ -122,7 +122,7 @@ namespace ExcelShSy.Ui
             
             var selectedFolderPath = folders[0].Path.LocalPath;
             DataBasePath.Text = selectedFolderPath;
-            _settings.DataBasePath = selectedFolderPath;
+            _newSettings.DataBasePath = selectedFolderPath;
             _shouldMoveDatabase = true;
         }
         
@@ -130,12 +130,12 @@ namespace ExcelShSy.Ui
         
         public bool CreateNewFileWhileSave
         {
-            get => _settings.CreateNewFileWhileSave;
+            get => _newSettings.CreateNewFileWhileSave;
             set
             {
-                if (_settings.CreateNewFileWhileSave != value)
+                if (_newSettings.CreateNewFileWhileSave != value)
                 {
-                    _settings.CreateNewFileWhileSave = value;
+                    _newSettings.CreateNewFileWhileSave = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CreateNewFileWhileSave)));
                 }
             }
@@ -146,7 +146,7 @@ namespace ExcelShSy.Ui
             if (_isInitialized && sender is ComboBox { SelectedItem: ComboBoxItem { Tag: Enums.SupportedLanguagues selectedLang } })
             {
                 var code = selectedLang.GetLangCode();
-                _settings.Language = code;
+                _newSettings.Language = code;
                 _shouldLangChanged = true;
             }
         }

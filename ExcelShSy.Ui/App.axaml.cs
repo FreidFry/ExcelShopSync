@@ -20,7 +20,7 @@ namespace ExcelShSy.Ui
             var services = new ServiceCollection();
             services.AddDependencyInjection();
             
-            _appSettings = ConfigManager.Load();
+            _appSettings = new ConfigManager().Load();
             services.AddSingleton(_appSettings);
             
             _serviceProvider = services.BuildServiceProvider();
