@@ -16,7 +16,7 @@
                 <HeaderedContentControl Header="{loc:Loc ShopManagerWindow.ShopEdit}" FontWeight="SemiBold" HorizontalAlignment="Stretch"
                                         BorderThickness="1" BorderBrush="#cccccc" HorizontalContentAlignment="Center"
                                         FontSize="20" Background="{Binding Background, ElementName=MagazineSelector}">
-                        <ListBox x:Name="MagazineSelector" MinWidth="300" MaxWidth="300"
+                        <ListBox x:Name="MagazineSelector" MinWidth="300" MaxWidth="300" ItemsSource="{Binding LoadedShops, Mode=TwoWay}"
                                  SelectionChanged="SelectMagazine_Changed" MaxHeight="600" FontSize="14" />
                 </HeaderedContentControl>
                 <Button Grid.Row="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
@@ -56,7 +56,7 @@
                     <StackPanel Grid.Row="2" Grid.Column="1" Margin="0 0 15 15">
                         <TextBlock Text="{loc:Loc ShopManagerWindow.Quantity}" FontWeight="SemiBold" />
                         <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding CurrentShopHeaders}"
-                                  SelectedItem="{Binding CurrentShop.Availability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding CurrentShop.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                   SelectionChanged="IsChanged_Changed" />
                     </StackPanel>
 
@@ -64,7 +64,7 @@
                     <StackPanel Grid.Row="2" Grid.Column="0" Margin="0 0 15 15">
                         <TextBlock Text="{loc:Loc ShopManagerWindow.Availability}" FontWeight="SemiBold" />
                         <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding CurrentShopHeaders}"
-                                  SelectedItem="{Binding CurrentShop.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding CurrentShop.Availability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                   SelectionChanged="IsChanged_Changed" />
                     </StackPanel>
 

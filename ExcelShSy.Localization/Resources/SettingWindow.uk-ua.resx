@@ -129,4 +129,13 @@
   <data name="UserShopManager" xml:space="preserve">
     <value>Відкрити менеджер магазинів</value>
   </data>
+  <data name="SelectPath" xml:space="preserve">
+    <value>Вибрати шлях</value>
+  </data>
+  <data name="SaveOnNewFileCheckBox" xml:space="preserve">
+    <value>Усі зміни в новий файл</value>
+  </data>
+  <data name="DatabasePath" xml:space="preserve">
+    <value>Шлях до дата бази</value>
+  </data>
 </root>

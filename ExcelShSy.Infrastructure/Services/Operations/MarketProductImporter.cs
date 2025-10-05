@@ -1,5 +1,6 @@
 ﻿using ExcelShSy.Core.Abstracts;
 using ExcelShSy.Core.Interfaces.Common;
+using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Shop;
@@ -13,10 +14,11 @@ namespace ExcelShSy.Infrastructure.Services.Operations
 {
     public class MarketProductImporter : BaseProductImporter, IFetchMarketProduct
     {
-        private readonly IShopTemplate? _shopTemplate;
-        public MarketProductImporter(IProductStorage dataProduct, ILogger logger, IShopStorage _) : base(dataProduct, _, logger)
+        private readonly IDatabaseSearcher _databaseSearcher;
+        
+        public MarketProductImporter(IProductStorage dataProduct, ILogger logger, IShopStorage _, IDatabaseSearcher databaseSearcher) : base(dataProduct, _, logger)
         {
-            _shopTemplate = ShopStorage.GetShopMapping(ShopName);
+            _databaseSearcher = databaseSearcher;
         }
 
         protected override void ProcessPage(IExcelSheet page)
@@ -40,12 +42,13 @@ namespace ExcelShSy.Infrastructure.Services.Operations
             }
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
-                var article = worksheet.GetArticle(row, articleCol);
-                if (string.IsNullOrEmpty(article))
+                var localArticle = worksheet.GetArticle(row, articleCol);
+                if (string.IsNullOrEmpty(localArticle))
                 {
                     Logger.LogWarning($"In {row} row empty atricle");
                     continue;
                 }
+                var article = _databaseSearcher.SearchProduct(ShopName, localArticle);
 
                 SetProductData(article, priceCol, quantityCol, availabilityCol, discountCol, discountFromCol, discountToCol, row, worksheet);
             }
@@ -71,7 +74,7 @@ namespace ExcelShSy.Infrastructure.Services.Operations
             {
                 var val = ws.GetString(row, availCol);
                 if (val != null) DataProduct.AddProductAvailability(article,
-                    _shopTemplate?.AvailabilityMap
+                    ShopTemplate?.AvailabilityMap
                     .FirstOrDefault(a => a.Value == val)
                     .Key ?? AvailabilityConstant.OnOrder);
             }
@@ -84,14 +87,14 @@ namespace ExcelShSy.Infrastructure.Services.Operations
 
             if (ProductProcessingOptions.ShouldSyncDiscountDate && discountFrom > 0)
             {
-                var val = ws.GetDate(row, discountFrom);
-                if (val != null) if (val > ProductProcessingOptions.MinDateActually) DataProduct.AddProductDiscountFrom(article, (DateOnly)val);
+                var val = ws.GetDate(row, discountFrom, ShopTemplate?.DataFormat);
+                if (val != null) if (val > ProductProcessingOptions.MinDateActually) DataProduct.AddProductDiscountFrom(article, (DateTime)val);
             }
 
             if (ProductProcessingOptions.ShouldSyncDiscountDate && discountTo > 0)
             {
-                var val = ws.GetDate(row, discountTo);
-                if (val != null) if (val > ProductProcessingOptions.MinDateActually) DataProduct.AddProductDiscountTo(article, (DateOnly)val);
+                var val = ws.GetDate(row, discountTo, ShopTemplate?.DataFormat);
+                if (val != null) if (val > ProductProcessingOptions.MinDateActually) DataProduct.AddProductDiscountTo(article, (DateTime)val);
             }
         }
     }

@@ -23,9 +23,10 @@ namespace ExcelShSy.Infrastructure.Extensions
                 shopScore.Add(shopKey, score ?? 0);
                 if (score >= headerCount / 2 && headerCount > 10) return shopKey;
             }
-
-            var shopName = shopScore.OrderByDescending(x => x.Value).First().Key;
-            return shopScore[shopName] > 0 ? shopName : string.Empty;
+            if (shopScore.Count == 0) return string.Empty;
+            var shopName = shopScore.OrderByDescending(x => x.Value).FirstOrDefault().Key;
+            shopScore.TryGetValue(shopName, out var totalScore);
+            return totalScore > 0 ? shopName : string.Empty;
         }
 
         public static string GetLanguage(this IExcelSheet? page)

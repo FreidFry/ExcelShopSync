@@ -23,4 +23,16 @@
     <data name="ShopNotFound" xml:space="preserve">
         <value>Магазин {0} не найден. Хочете додати його?</value>
     </data>
+    <data name="NoShopFile" xml:space="preserve">
+        <value>Файл магазину не знайдено</value>
+    </data>
+    <data name="NoShopFileText" xml:space="preserve">
+        <value>Файл цього магазину не знайдено</value>
+    </data>
+    <data name="ShopExistText" xml:space="preserve">
+        <value>Магазин з такою назвою вже існує.</value>
+    </data>
+    <data name="ShopExist" xml:space="preserve">
+        <value>Конфлікт імені магазину</value>
+    </data>
 </root>

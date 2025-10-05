@@ -10,17 +10,20 @@ namespace ExcelShSy.Core.Abstracts
         protected readonly IProductStorage DataProduct = dataProduct;
         protected readonly IShopStorage ShopStorage = shopStorage;
         protected readonly ILogger Logger = logger;
+        protected IShopTemplate? ShopTemplate;
         protected string? ShopName = string.Empty;
 
         public void FetchAllProducts(IExcelFile file)
         {
             ShopName = file.ShopName;
+            ShopTemplate = ShopStorage.GetShopMapping(ShopName);
             if (file.SheetList == null) return;
             foreach (var page in file.SheetList)
             {
                 Logger.Log($"{page.SheetName}");
                 ProcessPage(page);
             }
+            ShopTemplate = null;
         }
 
         protected abstract void ProcessPage(IExcelSheet page);

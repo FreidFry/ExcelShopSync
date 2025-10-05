@@ -55,8 +55,8 @@ namespace ExcelShSy.Infrastructure.Services
                 if (localArticle == null) continue;
                 
                 var article = _databaseSearcher.SearchProduct(_shopName, localArticle);
-
-                if (_dataProduct.Price.TryGetValue(article, out var value)) 
+                
+                if (_dataProduct.Price.TryGetValue(article, out var value))
                     worksheet.WriteCell(row, headers.neededColumn, value);
             }
         }

@@ -56,17 +56,10 @@ public class ConfigManager : IConfigurationManager, INotifyPropertyChanged
             {
                 finalValue = string.IsNullOrWhiteSpace((string?)loadedValue) ? defaultValue : loadedValue;
             }
-            else if (prop.PropertyType.IsValueType)
-            {
-                // если это число/структура и равно "дефолту", то берём из defaults
-                finalValue = loadedValue.Equals(Activator.CreateInstance(prop.PropertyType))
-                    ? defaultValue
-                    : loadedValue;
-            }
             else
             {
                 // на всякий fallback
-                finalValue = loadedValue ?? defaultValue;
+                finalValue = loadedValue == null ? defaultValue : loadedValue;
             }
 
             prop.SetValue(result, finalValue);

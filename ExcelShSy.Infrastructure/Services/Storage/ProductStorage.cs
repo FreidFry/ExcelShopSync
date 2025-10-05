@@ -9,8 +9,8 @@ namespace ExcelShSy.Infrastructure.Services.Storage
         public Dictionary<string, decimal> Quantity { get; set; } = [];
         public Dictionary<string, string> Availability { get; set; } = [];
         public Dictionary<string, decimal> Discount { get; set; } = [];
-        public Dictionary<string, DateOnly> DiscountFrom { get; set; } = [];
-        public Dictionary<string, DateOnly> DiscountTo { get; set; } = [];
+        public Dictionary<string, DateTime> DiscountFrom { get; set; } = [];
+        public Dictionary<string, DateTime> DiscountTo { get; set; } = [];
 
         public List<string> Collisions { get; set; } = [];
 
@@ -46,7 +46,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             }
         }
 
-        public void AddProductDiscountFrom(string productName, DateOnly discount)
+        public void AddProductDiscountFrom(string productName, DateTime discount)
         {
             if (!DiscountFrom.TryAdd(productName, discount))
             {
@@ -54,7 +54,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             }
         }
 
-        public void AddProductDiscountTo(string productName, DateOnly discount)
+        public void AddProductDiscountTo(string productName, DateTime discount)
         {
             if (!DiscountTo.TryAdd(productName, discount))
             {

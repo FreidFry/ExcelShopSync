@@ -81,21 +81,21 @@ namespace ExcelShSy.Infrastructure.Extensions
             return Math.Round(value, NumbersAfterDot, MidpointRounding.AwayFromZero);
         }
 
-        public static DateOnly? GetDate(this ExcelWorksheet worksheet, int row, int needColumn)
+        public static DateTime? GetDate(this ExcelWorksheet worksheet, int row, int needColumn, string? format)
         {
             try
             {
                 var value = worksheet.GetString(row, needColumn);
-                if (string.IsNullOrEmpty(value)) return null;
-                DateOnly.TryParse(value, out var time);
-                return time;
+                if (string.IsNullOrWhiteSpace(value) && string.IsNullOrWhiteSpace(format)) return null;
+                if (DateTime.TryParseExact(value, format, CultureInfo.InvariantCulture,
+                        DateTimeStyles.None, out var date))
+                    return date;
+                return null;
             }
             catch
             {
                 return null;
             }
         }
-
-
     }
 }

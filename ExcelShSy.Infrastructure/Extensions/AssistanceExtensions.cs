@@ -64,16 +64,6 @@ namespace ExcelShSy.Infrastructure.Extensions
             }
         }
 
-        public static void WriteCell(this ExcelWorksheet worksheet, int row, int column, DateOnly value)
-        {
-            var currentValue = worksheet.GetDate(row, column);
-            if (currentValue != value)
-            {
-                worksheet.Cells[row, column].Value = value;
-                worksheet.ChangeCellColor(row, column);
-            }
-        }
-
         private static void ChangeCellColor(this ExcelWorksheet worksheet, int row, int column)
         {
             worksheet.Cells[row, column].Style.Fill.PatternType = ExcelFillStyle.Solid;

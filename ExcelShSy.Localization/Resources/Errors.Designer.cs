@@ -68,5 +68,29 @@ namespace ExcelShSy.Localization.Resources {
                 return ResourceManager.GetString("CloseWarningText", resourceCulture);
             }
         }
+        
+        internal static string NoShopFile {
+            get {
+                return ResourceManager.GetString("NoShopFile", resourceCulture);
+            }
+        }
+        
+        internal static string NoShopFileText {
+            get {
+                return ResourceManager.GetString("NoShopFileText", resourceCulture);
+            }
+        }
+        
+        internal static string ShopExist {
+            get {
+                return ResourceManager.GetString("ShopExist", resourceCulture);
+            }
+        }
+        
+        internal static string ShopExistText {
+            get {
+                return ResourceManager.GetString("ShopExistText", resourceCulture);
+            }
+        }
     }
 }

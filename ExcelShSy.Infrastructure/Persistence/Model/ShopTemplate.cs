@@ -26,7 +26,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             get => _name;
             set
             {
-                _name = value;
+                _name = value.Replace(" ", "_").ToUpper();
                 OnPropertyChanged();
             }
         }
@@ -141,8 +141,8 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             return new ShopTemplate
             {
                 Name = this.Name,
-                UnmappedHeaders = this.UnmappedHeaders,
-                AvailabilityMap = this.AvailabilityMap,
+                UnmappedHeaders = [..this.UnmappedHeaders],
+                AvailabilityMap = new Dictionary<string, string?>(this.AvailabilityMap),
                 DataFormat = this.DataFormat,
                 Article = this.Article,
                 Price = this.Price,

@@ -8,9 +8,9 @@ namespace ExcelShSy.Infrastructure.Persistence.ShopData.Mappings
         {
             [ColumnConstants.Article] = ["Article", "Артикул"],
             [ColumnConstants.Price] = ["Price", "Ціна", "Цена"],
+            [ColumnConstants.Availability] = ["Availability", "Наличие", "Наявність"],
             [ColumnConstants.ComplectArticle] = ["ArticleComplect", "Артикул комплекта", "Артикул комплекту"],
             [ColumnConstants.ComplectPrice] = ["PriceComplect", "Цена комплекта", "Ціна комплекту"],
-            [ColumnConstants.Availability] = ["Availability", "Наличие", "Наявність"],
             [ColumnConstants.ComplectAvailability] = ["AvailabilityComplect", "Наличие комплекта", "Наявність комплекту"]
         };
     }

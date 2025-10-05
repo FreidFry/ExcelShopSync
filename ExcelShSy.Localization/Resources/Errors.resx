@@ -30,4 +30,16 @@
     <data name="CloseWarningText" xml:space="preserve">
         <value>Please close {0}!</value>
     </data>
+    <data name="NoShopFile" xml:space="preserve">
+        <value>File store not found</value>
+    </data>
+    <data name="NoShopFileText" xml:space="preserve">
+        <value>The file for this store was not found.</value>
+    </data>
+    <data name="ShopExist" xml:space="preserve">
+        <value>Conflict over the name of the store</value>
+    </data>
+    <data name="ShopExistText" xml:space="preserve">
+        <value>A store with that name already exists.</value>
+    </data>
 </root>

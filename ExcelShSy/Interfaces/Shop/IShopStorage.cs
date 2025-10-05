@@ -9,7 +9,8 @@
         List<IShopTemplate> Shops { get; set; }
         void AddShop(string shopName);
         event Action<string>? ShopsChanged;
-        void AddShop(IShopTemplate shop);
-        void RemoveShop(IShopTemplate shop);
+        void RemoveShop(string shopName);
+        void RenameShop(string oldName, string newName);
+        bool IsFileNotExist(string path);
     }
 }

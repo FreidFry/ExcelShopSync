@@ -16,6 +16,22 @@ public class SqliteDbContext : ISqliteDbContext, IDisposable
         OpenConnection();
         _appSettings.SettingsChanged += MoveDb;
     }
+
+    public void RenameColumn(string table, string column, string newColumn)
+    {
+        var sql = $@"ALTER TABLE {table} RENAME COLUMN {column} TO {newColumn}";
+        using var command = _connection.CreateCommand();
+        command.CommandText = sql;
+        command.ExecuteNonQuery();
+    }
+
+    public void RemoveColumn(string table, string column)
+    {
+        var sql = $@"UPDATE {table} SET {column} = NULL";
+        using var command = _connection.CreateCommand();
+        command.CommandText = sql;
+        command.ExecuteNonQuery();
+    }
     
     private void OpenConnection()
     {

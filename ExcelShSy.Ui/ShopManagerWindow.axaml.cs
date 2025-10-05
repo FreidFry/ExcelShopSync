@@ -7,8 +7,11 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using DynamicData;
+using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Persistence.Model;
+using ExcelShSy.LocalDataBaseModule.Persistance;
+using Microsoft.Data.Sqlite;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
@@ -27,7 +30,8 @@ namespace ExcelShSy.Ui
         private readonly ILogger _logger;
         private readonly IFileProvider _fileProvider;
         private readonly ILocalizationService _localizationService;
-
+        private readonly ISqliteDbContext _sqliteDbContext;
+        
         #endregion
         
         #region State
@@ -39,6 +43,8 @@ namespace ExcelShSy.Ui
         #endregion
         
         #region Fields
+        
+        public ObservableCollection<string> LoadedShops { get; set; } = [];
         
         #region Current Shop
 
@@ -59,23 +65,14 @@ namespace ExcelShSy.Ui
         #endregion
 
         #region Shop Headers
-        private ObservableCollection<string>? _currentShopHeaders = [];
-        public ObservableCollection<string>? CurrentShopHeaders
-        {
-            get => _currentShopHeaders;
-            set
-            {
-                if (_currentShopHeaders == value) return;
-                _currentShopHeaders = value;
-                OnPropertyChanged();
-            }
-        }
+
+        public ObservableCollection<string?> CurrentShopHeaders { get; set; } = [];
+
         #endregion
         
         private readonly ObservableCollection<string> _magazineSelectorItems = [];
         
         #endregion
-        
 
         public new event PropertyChangedEventHandler? PropertyChanged;
         
@@ -84,12 +81,13 @@ namespace ExcelShSy.Ui
             InitializeComponent();
         }
         
-        public ShopManagerWindow(IShopStorage shopStorage, ILogger logger, IFileProvider fileProvider, ILocalizationService localizationService) 
+        public ShopManagerWindow(IShopStorage shopStorage, ILogger logger, IFileProvider fileProvider, ILocalizationService localizationService, ISqliteDbContext sqliteDbContext) 
         {
             _shopStorage = shopStorage;
             _logger = logger;
             _fileProvider = fileProvider;
             _localizationService = localizationService;
+            _sqliteDbContext = sqliteDbContext;
             
             Initialize();
             
@@ -106,7 +104,9 @@ namespace ExcelShSy.Ui
             DataContext = this;
             Closing += OnClosing;
 
-            AllColumnList.ContextMenu = CreateContextMenu(AllColumnList);
+            AllColumnList.ContextMenu = CreateAllColumnContextMenu(AllColumnList);
+            MagazineSelector.ContextMenu = CreateShopSelectorContextMenu(MagazineSelector);
+            MagazineSelector.SelectedIndex = 0;
         }
 
         private void RegistrationEvents()
@@ -127,14 +127,11 @@ namespace ExcelShSy.Ui
 
         private void InitializeShopSelector()
         {
-            var shopList = _shopStorage.GetShopList();
-            foreach (var shopName in shopList) _magazineSelectorItems.Add(shopName);
-            
-            MagazineSelector.ItemsSource = _magazineSelectorItems;
-            MagazineSelector.SelectedIndex = 0;
+            LoadedShops.Clear();
+            LoadedShops.AddRange(_shopStorage.GetShopList());
         }
 
-        private ContextMenu CreateContextMenu(ListBox list) => new()
+        private ContextMenu CreateAllColumnContextMenu(ListBox list) => new()
         {
             ItemsSource = new List<MenuItem>
             {
@@ -155,7 +152,31 @@ namespace ExcelShSy.Ui
                 }
             }
         };
-        
+
+        private ContextMenu CreateShopSelectorContextMenu(ListBox list) => new()
+        {
+            ItemsSource = new List<MenuItem>
+            {
+                new()
+                {
+                    Header = _localizationService.GetString(nameof(ShopManagerWindow), "Rename"),
+                    Command = new RelayCommand(_ =>
+                    {
+                        if(list.SelectedItem is string selected) RenameShopCommand(selected);
+                    })
+                },
+                new()
+                {
+                    Header = _localizationService.GetString(nameof(ShopManagerWindow), "DeleteButton"),
+                    Command = new RelayCommand(_ =>
+                    {
+                        if (list.SelectedItem is string selected) DeleteShopCommand(selected);
+                    })
+                }
+            }
+                
+        };
+
         #endregion
         
         #region Handlers
@@ -187,6 +208,7 @@ namespace ExcelShSy.Ui
                 _ready = false;
                 var shop = _shopStorage.GetShopMapping(selectedShop);
                 CurrentShopHeaders!.Clear();
+                CurrentShopHeaders.Add(null);
                 CurrentShopHeaders.AddRange(shop!.UnmappedHeaders);
                 CurrentShop = shop;
                 _currentSelection = MagazineSelector.SelectedIndex;
@@ -252,50 +274,22 @@ namespace ExcelShSy.Ui
                     SizeToContent = SizeToContent.WidthAndHeight
                 });
                 userAction = await msBox.ShowWindowDialogAsync(this);
-                shopName = msBox.InputValue;
+                //make it global when creating a store and everything related to it
+                //now realized in ShopTemplate class
+                //                             VVVVVVVVVVVVVVVVVVVVVVVVVVV
+                shopName = msBox.InputValue.Replace(" ", "_").ToUpper();
+                if (userAction == cancelButton || userAction == null) break;
             } 
             while (string.IsNullOrWhiteSpace(shopName));
-
             if (userAction != createButton) return;
-
+            if (_shopStorage.IsFileNotExist(shopName)) return;
             var shop = new ShopTemplate { Name = shopName };
 
             _shopStorage.SaveShopTemplate(shop);
-            _shopStorage.AddShop(shopName);
+            _shopStorage.AddShop(shop.Name);
+            InitializeShopSelector();
         }
         
-        #endregion
-
-        private async Task SaveShop()
-        {
-            if (!_shopChanged)
-            {
-                var windowName = nameof(ShopManagerWindow);
-                var title = _localizationService.GetString(windowName, "ConfirmSaveTitle");
-                var msg = _localizationService.GetString(windowName, "ConfirmSaveText");
-                
-                var msBox = MessageBoxManager.GetMessageBoxStandard( title, msg, ButtonEnum.YesNo);
-                var result = await msBox.ShowWindowDialogAsync(this);
-                if (result != ButtonResult.Yes)
-                    return;
-            }
-            
-            if (CurrentShop == null)
-            {
-                if (MagazineSelector.SelectedItem != null)
-                {
-                    var msg = $"Shop save error shop name: {MagazineSelector.SelectedItem} ";
-                    _logger.LogError(msg);
-                }
-                return;
-            }
-
-            CurrentShop.UnmappedHeaders = CurrentShopHeaders.ToList();
-            _shopStorage.UpdateShop(CurrentShop);
-            _shopStorage.SaveShopTemplate(CurrentShop);
-            _shopChanged = false;
-        }
-
         private async void GetFirstLineFromFile_Click(object? sender, RoutedEventArgs e)
         {
             var path = await _fileProvider.PickExcelFilePath();
@@ -316,10 +310,114 @@ namespace ExcelShSy.Ui
                 .Select(cell => cell.Value?.ToString())
                 .ToList();
 
-            CurrentShopHeaders ??= [];
             CurrentShopHeaders.Clear();
-            CurrentShopHeaders!.AddRange(values);
+            CurrentShopHeaders.AddRange(values);
             _shopChanged = true;
+        }
+        
+        #endregion
+
+        private async Task SaveShop()
+        {
+            if (!_shopChanged)
+            {
+                var windowName = nameof(ShopManagerWindow);
+                var title = _localizationService.GetString(windowName, "ConfirmSaveTitle");
+                var msg = _localizationService.GetString(windowName, "ConfirmSaveText");
+                
+                var msBox = MessageBoxManager.GetMessageBoxStandard( title, msg, ButtonEnum.YesNo);
+                var result = await msBox.ShowWindowDialogAsync(this);
+                if (result != ButtonResult.Yes)
+                    return;
+            }
+
+            if (CurrentShop == null)
+            {
+                if (MagazineSelector.SelectedItem != null)
+                {
+                    var msg = $"Shop save error shop name: {MagazineSelector.SelectedItem} ";
+                    _logger.LogError(msg);
+                }
+
+                return;
+            }
+
+            var list = CurrentShopHeaders.ToList();
+            while (list.Remove(null)) ;
+            CurrentShop.UnmappedHeaders = list;
+            _shopStorage.UpdateShop(CurrentShop);
+            _shopStorage.SaveShopTemplate(CurrentShop);
+            _shopChanged = false;
+        }
+
+        private async void RenameShopCommand(string oldName)
+        {
+            string? userAction;
+            var windowName = nameof(ShopManagerWindow);
+            var renameButton = _localizationService.GetString(windowName, "RenameButton");
+            var cancelButton = _localizationService.GetString(windowName, "CancelButton");
+            var title = _localizationService.GetString(windowName, "RenameShopTitle");
+            var msg = _localizationService.GetString(windowName, "RenameShopText");
+            var formattedMsg = string.Format(msg, oldName);
+            
+            string? renamedShop;
+            do
+            {
+                var msBox = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
+                {
+                    ButtonDefinitions =
+                    [
+                        new ButtonDefinition { Name = renameButton },
+                        new ButtonDefinition { Name = cancelButton }
+                    ],
+                    ContentTitle = title,
+                    ContentMessage = formattedMsg,
+                    InputParams = new InputParams(),
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    CanResize = false,
+                    MaxWidth = 800,
+                    MaxHeight = 300,
+                    SizeToContent = SizeToContent.WidthAndHeight
+                });
+                userAction = await msBox.ShowWindowDialogAsync(this);
+                //make it global when creating a store and everything related to it
+                //now realized in ShopTemplate class
+                //                             VVVVVVVVVVVVVVVVVVVVVVVVVVV
+                renamedShop = msBox.InputValue.Replace(" ", "_").ToUpper();
+                if (userAction == cancelButton || userAction == null!) break;
+            }
+            while (string.IsNullOrWhiteSpace(renamedShop));
+            
+            if (userAction != renameButton) return;
+            _currentShop.Name = renamedShop;
+            _shopStorage.RenameShop(oldName!, renamedShop);
+            try
+            {
+                _sqliteDbContext.RenameColumn($"{Enums.Tables.ProductShopMapping}", oldName, renamedShop);
+            }
+            catch (SqliteException ex) when (ex.SqliteErrorCode == 1)
+            { }
+            InitializeShopSelector();
+            MagazineSelector.SelectedItem = _shopStorage.Shops.FindIndex(x => x.Name == renamedShop);
+        }
+        
+        private async void DeleteShopCommand(string selected)
+        {
+            var windowName = nameof(ShopManagerWindow);
+            var title = _localizationService.GetString(windowName, "DeleteShopTitle");
+            var msg = _localizationService.GetString(windowName, "DeleteShopText");
+            
+            var userAction = await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.YesNo).ShowWindowDialogAsync(this);
+            
+            if (userAction != ButtonResult.Yes || userAction == null!) return;
+            _shopStorage.RemoveShop(selected);
+            try
+            {
+                _sqliteDbContext.RemoveColumn($"{Enums.Tables.ProductShopMapping}", selected);
+            }
+            catch (SqliteException ex) when (ex.SqliteErrorCode == 1)
+            { }
+            InitializeShopSelector();
         }
     }
 }

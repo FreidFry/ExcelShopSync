@@ -178,13 +178,13 @@
     <value>Подтвердить сохранение</value>
   </data>
   <data name="ConfirmSaveText" xml:space="preserve">
-    <value>Вы уверены, что хотите сохранить изменения?</value>
+    <value>Вы уверены, что хотите сохранить изменения? После внесения изменений перезапустите программу.</value>
   </data>
   <data name="CreateButton" xml:space="preserve">
     <value>Создать</value>
   </data>
   <data name="CreateNewShopText" xml:space="preserve">
-    <value>Введите название магазина</value>
+    <value>Введите название магазина. После внесения изменений перезапустите программу.</value>
   </data>
   <data name="CreateNewShopTitle" xml:space="preserve">
     <value>Создать новый магазин</value>
@@ -203,5 +203,20 @@
   </data>
   <data name="GetFirstLine" xml:space="preserve">
     <value>Получить заголовки магазина</value>
+  </data>
+  <data name="DeleteShopText" xml:space="preserve">
+    <value>Вы дейсвительно хотите удалить этот магазин. (данные про него не сохранятся)</value>
+  </data>
+  <data name="DeleteShopTitle" xml:space="preserve">
+    <value>Подтверждение удаления</value>
+  </data>
+  <data name="RenameButton" xml:space="preserve">
+    <value>Переименовать</value>
+  </data>
+  <data name="RenameShopTitle" xml:space="preserve">
+    <value>Переименование магазина</value>
+  </data>
+  <data name="RenameShopText" xml:space="preserve">
+    <value>Введите новое название для магазина {0}</value>
   </data>
 </root>

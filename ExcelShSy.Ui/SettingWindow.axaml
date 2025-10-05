@@ -15,14 +15,14 @@
             </StackPanel>
             
             <StackPanel Margin="0 5" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" >
-                <TextBlock Text="Data base path" VerticalAlignment="Center"/>
+                <TextBlock Text="{local:Loc SettingWindow.DatabasePath}" VerticalAlignment="Center"/>
                 <TextBox x:Name="DataBasePath" IsReadOnly="True" ContextFlyout="{x:Null}" Focusable="False" MinWidth="150" MaxWidth="300" Margin="10 0"/>
-                <Button Content="Select path" Click="SelectDataBasePath_Click"/>
+                <Button Content="{local:Loc SettingWindow.SelectPath}" Click="SelectDataBasePath_Click"/>
             </StackPanel>
 
         <Button Margin="0 5" VerticalAlignment="Top" HorizontalAlignment="Left" Content="{local:Loc SettingWindow.UserShopManager}" Padding="10 2" Click="ShopManagerOpen_Click"/>
         
-        <CheckBox Content="Save" IsChecked="{Binding CreateNewFileWhileSave, Mode=TwoWay}" />
+        <CheckBox Content="{local:Loc SettingWindow.SaveOnNewFileCheckBox}" IsChecked="{Binding CreateNewFileWhileSave, Mode=TwoWay}" />
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" >

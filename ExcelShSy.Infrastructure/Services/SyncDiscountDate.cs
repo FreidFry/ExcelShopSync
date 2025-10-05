@@ -92,13 +92,13 @@ namespace ExcelShSy.Infrastructure.Services
                 if (localArticle == null) continue;
                 var article = _databaseSearcher.SearchProduct(_shopName, localArticle);
 
-                if (_dataProduct.DiscountFrom.TryGetValue(article, out DateOnly valueFrom))
+                if (_dataProduct.DiscountFrom.TryGetValue(article, out DateTime valueFrom) && dataStart != 0)
                     worksheet.WriteCell(row, dataStart, ConvertDate(valueFrom));
-                if (_dataProduct.DiscountTo.TryGetValue(article, out DateOnly valueTo))
+                if (_dataProduct.DiscountTo.TryGetValue(article, out DateTime valueTo) && dataEnd != 0)
                     worksheet.WriteCell(row, dataEnd, ConvertDate(valueTo));
                 else productTo.Add(article);
 
-                if (valueFrom > ProductProcessingOptions.MinDateActually && valueFrom < valueTo)
+                if (valueFrom >= ProductProcessingOptions.MinDateActually && valueFrom < valueTo)
                     errorDate.Add(article);
             }
 
@@ -110,7 +110,7 @@ namespace ExcelShSy.Infrastructure.Services
             _logger.Log($"Products where errors {string.Join(",", products)}");
         }
 
-        private string ConvertDate(DateOnly date)
+        private string ConvertDate(DateTime date)
         {
             return date.ToString(_shopFormat);
         }

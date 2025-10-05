@@ -129,4 +129,13 @@
   <data name="UserShopManager" xml:space="preserve">
     <value>Open user shop manager</value>
   </data>
+  <data name="DatabasePath" xml:space="preserve">
+    <value>Path to database</value>
+  </data>
+  <data name="SelectPath" xml:space="preserve">
+    <value>Choose a path</value>
+  </data>
+  <data name="SaveOnNewFileCheckBox" xml:space="preserve">
+    <value>All changes to the new file</value>
+  </data>
 </root>

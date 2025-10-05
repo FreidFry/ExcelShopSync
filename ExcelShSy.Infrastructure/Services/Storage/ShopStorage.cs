@@ -5,7 +5,6 @@ using ExcelShSy.Infrastructure.Persistence.Model;
 using Newtonsoft.Json;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
-using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Infrastructure.Services.Storage
 {
@@ -30,7 +29,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
         {
             var result = new List<IShopTemplate>();
 
-            CheckExistPath();
+            CheckExistDirectory();
 
             var fullShopPath = Directory.GetFiles(_directoryPath, "*.json").ToList();
 
@@ -46,8 +45,8 @@ namespace ExcelShSy.Infrastructure.Services.Storage
 
             if (result.Count < 1)
             {
-                var title = _localizationService.GetMessageString("NoFetchShops");
-                var msg = _localizationService.GetMessageString("NoFetchShops");
+                var title = _localizationService.GetErrorString("NoFetchShops");
+                var msg = _localizationService.GetErrorString("NoFetchShops");
                 MessageBoxManager.GetMessageBoxStandard(title, msg)
                     .ShowAsync();
             }
@@ -64,13 +63,58 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             AddShop(shop);
             _columnMappingStorage.AddColumn(shop);
         }
+
+        public void RenameShop(string oldName, string newName)
+        {
+            var path = Path.Combine(_directoryPath, $"{oldName}.json");
+            if (!File.Exists(path))
+            {
+                var title = _localizationService.GetErrorString("NoShopFile");
+                var msg = _localizationService.GetErrorString("NoShopFileText");
+                MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error).ShowAsync();
+                return;
+            }
+
+            var renamedPath = Path.Combine(_directoryPath, $"{newName}.json");
+            if (IsFileNotExist(renamedPath)) return;
+            File.Move(path, renamedPath);
+            var serializer = CreateJsonSerializer();
+            var shop = FetchShopTemplate(renamedPath, serializer);
+            if (shop == null) return;
+            shop.Name = newName;
+            SaveShopTemplate(shop);
+            ReplaceShopWithName(oldName, shop);
+        }
+
+        public bool IsFileNotExist(string path)
+        {
+            if (!path.EndsWith(".json"))
+                path = Path.Combine(_directoryPath, $"{path}.json");
+            if (File.Exists(path))
+            {
+                var title = _localizationService.GetErrorString("ShopExist");
+                var msg = _localizationService.GetErrorString("ShopExistText");
+                MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error).ShowAsync();
+                return true;
+            } 
+            return false;
+        }
+        
+        private bool ReplaceShopWithName(string previousShop, IShopTemplate newShop)
+        {
+            var index = Shops.FindIndex(s => s.Name == previousShop);
+            if (index == -1) return false;
+            Shops[index] = newShop.Clone();
+            return true;
+        }
+        
         public IShopTemplate? GetShopMapping(string shopName) => Shops.FirstOrDefault(s => s.Name == shopName)?.Clone();
 
         private IShopTemplate? FetchShopTemplate(string shopPath, JsonSerializer serializer)
         {
             using var stream = new FileStream(shopPath, FileMode.Open);
             using var reader = new StreamReader(stream);
-            using var jsonReader = new JsonTextReader(reader);
+            using var jsonReader = new JsonTextReader(reader); 
 
             var shop = serializer.Deserialize<ShopTemplate>(jsonReader) ?? _shopFactory.Create();
 
@@ -83,26 +127,21 @@ namespace ExcelShSy.Infrastructure.Services.Storage
 
         public async void UpdateShop(IShopTemplate updatedShop)
         {
-            var index = Shops.FindIndex(s => s.Name == updatedShop.Name);
-            if (index != -1)
-                Shops[index] = updatedShop;
-            else
-            {
-                var title = _localizationService.GetErrorString("ShopNotFound");
-                var msg = _localizationService.GetErrorString("ShopNotFoundText");
-                var formatedText = string.Format(msg, updatedShop.Name);
-                
-                var msBox = MessageBoxManager.GetMessageBoxStandard(title, formatedText, ButtonEnum.YesNo);
-                var result = await msBox.ShowAsync();
-                if (result == ButtonResult.Yes)
-                    Shops.Add(updatedShop);
-            }
+            if (ReplaceShopWithName(updatedShop.Name, updatedShop)) return;
+            var title = _localizationService.GetErrorString("ShopNotFound");
+            var msg = _localizationService.GetErrorString("ShopNotFoundText");
+            var formatedText = string.Format(msg, updatedShop.Name);
+            
+            var msBox = MessageBoxManager.GetMessageBoxStandard(title, formatedText, ButtonEnum.YesNo);
+            var result = await msBox.ShowAsync();
+            if (result == ButtonResult.Yes)
+                Shops.Add(updatedShop);
         }
         
         public void SaveShopTemplate(IShopTemplate? shop)
         {
             if (shop == null) return;
-            CheckExistPath();
+            CheckExistDirectory();
 
             var fullShopPath = Path.Combine(_directoryPath, $"{shop.Name}.json");
             using var stream = new FileStream(fullShopPath, FileMode.Create);
@@ -117,7 +156,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             
         };
 
-        private void CheckExistPath()
+        private void CheckExistDirectory()
         {
             if (Directory.Exists(_directoryPath)) return;
             Directory.CreateDirectory(_directoryPath);
@@ -133,10 +172,13 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             ShopsChanged?.Invoke(shop.Name);
         }
         
-        public void RemoveShop(IShopTemplate shop)
+        public void RemoveShop(string shopName)
         {
+            var shop = Shops.First(s => s.Name == shopName);
             Shops.Remove(shop);
-            ShopsChanged?.Invoke(shop.Name);
+            var path = Path.Combine(_directoryPath, $"{shopName}.json");
+            File.Delete(path);
+            ShopsChanged?.Invoke(shopName);
         }
     }
 }

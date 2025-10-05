@@ -9,7 +9,7 @@
         public static bool ShouldSyncDiscounts { get; set; } = false;
         public static bool ShouldIncreasePrices { get; set; } = false;
         public static bool ShouldSyncDiscountDate { get; set; } = false;
-        public static DateOnly MinDateActually { get; set; } = new DateOnly(2025, 1, 1);
+        public static DateTime MinDateActually { get; set; } = new DateTime(2025, 1, 1);
         public static decimal priceIncreasePercentage { get;set; }
         public static bool ShouldFindMissingProducts { get; set; } = false;
     }
