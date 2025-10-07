@@ -48,9 +48,9 @@ jobs:
             ./publish/${{ matrix.os }}/*
 
   release:
-  runs-on: ubuntu-latest
-  needs: build
-  steps:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
     - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
@@ -66,4 +66,3 @@ jobs:
           ./artifacts/ExShSy-linux-x64/ExShSy-linux-x64.tar.gz
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          asset_content_type: application/gzip
