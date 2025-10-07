@@ -3,6 +3,11 @@ name: Build
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - "**/*.md"
+      - "**/*.gitignore"
+      - "**/*.gitattributes"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,24 +15,73 @@ jobs:
       matrix:
         os: [linux-x64, win-x64]
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 8.0
+      - uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+          
+      - name: Restore
+        run: dotnet restore
         
-    - name: Restore
-      run: dotnet restore
-      
-    - name: Build
-      run: dotnet build
-      
-    - name: Publish
-      run: dotnet publish -c Release -r ${{ matrix.os }} /p:PublishSingleFile=false -o ./publish/${{ matrix.os }}
-      
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: ExShSy-${{ matrix.os }}
-        path: ./publish/${{ matrix.os }}
+      - name: Build
+        run: dotnet build
+        
+      - name: Publish
+        run: dotnet publish -c Release -r ${{ matrix.os }} /p:PublishSingleFile=false -o ./publish/${{ matrix.os }}
+        
+      - name: Archive output
+        run: |
+          cd publish/${{ matrix.os }}
+          if [[ "${{ matrix.os }}" == "win-x64" ]]; then
+            zip -r ../../ExShSy-${{ matrix.os }}.zip .
+          else
+            tar -czf ../../ExShSy-${{ matrix.os }}.tar.gz .
+          fi
+          
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ExShSy-${{ matrix.os }}
+          path: |
+            ${{ matrix.os }}.zip
+            ${{ matrix.os }}.tar.gz
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+
+      - name: Upload Windows Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/win-x64/ExShSy-win-x64.zip
+          asset_name: ExShSy-win-x64.zip
+          asset_content_type: application/zip
+
+      - name: Upload Linux Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/linux-x64/ExShSy-linux-x64.tar.gz
+          asset_name: ExShSy-linux-x64.tar.gz
+          asset_content_type: application/gzip
