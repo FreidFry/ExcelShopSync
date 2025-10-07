@@ -1,0 +1,163 @@
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using ExcelShSy.Core.Interfaces.Shop;
+
+namespace ExcelShSy.Infrastructure.Persistence.Model
+{
+    public class ShopTemplate : IShopTemplate
+    {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+        private string _name;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+        private List<string>? _unmappedHeaders;
+        private Dictionary<string, string?>? _availabilityMap;
+        private string? _dataFormat;
+        private string? _article;
+        private string? _price;
+        private string? _oldPrice;
+        private string? _availability;
+        private string? _quantity;
+        private string? _discount;
+        private string? _discountDateStart;
+        private string? _discountDateEnd;
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value.Replace(" ", "_").ToUpper();
+                OnPropertyChanged();
+            }
+        }
+
+        public List<string> UnmappedHeaders { get => _unmappedHeaders ??= [];
+            set
+            {
+                _unmappedHeaders = value;
+                OnPropertyChanged();
+            } }
+
+        public Dictionary<string, string?> AvailabilityMap
+        {
+            get => _availabilityMap ??= new Dictionary<string, string?>();
+            set
+            {
+                _availabilityMap = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string? DataFormat { get => _dataFormat;
+            set
+            {
+                if (value != null) _dataFormat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string? Article
+        {
+            get => _article;
+            set
+            {
+                _article = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string? Price
+        {
+            get => _price;
+            set
+            {
+                _price = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string? OldPrice
+        {
+            get => _oldPrice;
+            set
+            {
+                _oldPrice = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string? Availability
+        {
+            get => _availability;
+            set
+            {
+                _availability = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string? Quantity
+        {
+            get => _quantity;
+            set
+            {
+                _quantity = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string? Discount
+        {
+            get => _discount;
+            set
+            {
+                _discount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string? DiscountDateStart
+        {
+            get => _discountDateStart;
+            set
+            {
+                _discountDateStart = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string? DiscountDateEnd
+        {
+            get => _discountDateEnd;
+            set
+            {
+                _discountDateEnd = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public IShopTemplate Clone()
+        {
+            return new ShopTemplate
+            {
+                Name = this.Name,
+                UnmappedHeaders = [..this.UnmappedHeaders],
+                AvailabilityMap = new Dictionary<string, string?>(this.AvailabilityMap),
+                DataFormat = this.DataFormat,
+                Article = this.Article,
+                Price = this.Price,
+                OldPrice = this.OldPrice,
+                Availability = this.Availability,
+                Quantity = this.Quantity,
+                Discount = this.Discount,
+                DiscountDateStart = this.DiscountDateStart,
+                DiscountDateEnd = this.DiscountDateEnd
+            };
+        }
+        
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+    }
+}

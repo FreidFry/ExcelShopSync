@@ -1,0 +1,32 @@
+﻿<Window x:Class="ExcelShSy.Ui.SettingWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:ExcelShSy.Ui"
+        xmlns:local="clr-namespace:ExcelShSy.Localization;assembly=ExcelShSy.Localization"
+        Title="{local:Loc SettingWindow.Title}" MinHeight="450" MinWidth="300" WindowStartupLocation="CenterScreen"
+        SizeToContent="WidthAndHeight" x:DataType="loc:SettingWindow">
+    <Grid Margin="10" RowDefinitions="*,Auto">
+
+        <StackPanel Margin="10" >
+
+            <StackPanel Margin="0 5" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBlock Text="{local:Loc SettingWindow.Language}" VerticalAlignment="Center" />
+                <ComboBox x:Name="CBLanguagues" Width="150" Margin="10 0" SelectionChanged="CBLanguagues_SelectionChanged" />
+            </StackPanel>
+            
+            <StackPanel Margin="0 5" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                <TextBlock Text="{local:Loc SettingWindow.DatabasePath}" VerticalAlignment="Center"/>
+                <TextBox x:Name="DataBasePath" IsReadOnly="True" ContextFlyout="{x:Null}" Focusable="False" MinWidth="150" MaxWidth="300" Margin="10 0"/>
+                <Button Content="{local:Loc SettingWindow.SelectPath}" Click="SelectDataBasePath_Click"/>
+            </StackPanel>
+
+        <Button Margin="0 5" VerticalAlignment="Top" HorizontalAlignment="Left" Content="{local:Loc SettingWindow.UserShopManager}" Padding="10 2" Click="ShopManagerOpen_Click"/>
+        
+        <CheckBox Content="{local:Loc SettingWindow.SaveOnNewFileCheckBox}" IsChecked="{Binding CreateNewFileWhileSave, Mode=TwoWay}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" >
+            <Button Content="{local:Loc SettingWindow.ApplyButton}" Width="80" Click="Apply_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

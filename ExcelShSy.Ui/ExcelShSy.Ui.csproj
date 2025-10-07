@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyVersion>2.3.5.0</AssemblyVersion>
+		<FileVersion>2.3.5.0</FileVersion>
+		<NeutralLanguage>en</NeutralLanguage>
+		<Product>ExcelShSy</Product>
+		<Company>F4Labs</Company>
+		<Authors>F4Labs</Authors>
+		<ApplicationIcon>AppIco.ico</ApplicationIcon>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+	</PropertyGroup>
+
+	<ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.3.6" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.6" />
+        <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.6" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.6"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.6"/>
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.6" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.6">
+            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">NONE</IncludeAssets>
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+        </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\ExcelShSy.LocalDataBaseModule\ExcelShSy.LocalDataBaseModule.csproj" />
+		<ProjectReference Include="..\ExcelShSy.Localization\ExcelShSy.Localization.csproj" />
+		<ProjectReference Include="..\WPFAboutF4Labs\WPFAboutF4Labs.csproj" />
+		<ProjectReference Include="..\ExcelShSy.Infrastructure\ExcelShSy.Infrastructure.csproj" />
+		<ProjectReference Include="..\ExcelShSy\ExcelShSy.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AssemblyMetadata Include="ReleaseYear" Value="2025" />
+	</ItemGroup>
+    
+    <ItemGroup>
+	  <Content Include="AppIco.ico" />
+	</ItemGroup>
+    
+    <ItemGroup>
+      <None Update="Web\img\excel_template_full.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Web\img\excel_template_hide.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Web\Guid.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Web\Guid.ru-RU.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Web\Guid.uk-UA.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Web\Style.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,153 @@
+﻿<Window x:Class="ExcelShSy.Ui.ShopManagerWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:ExcelShSy.Localization;assembly=ExcelShSy.Localization"
+        xmlns:local="clr-namespace:ExcelShSy.Ui"
+        x:DataType="local:ShopManagerWindow"
+        Title="{loc:Loc ShopManagerWindow.Title}"
+        WindowStartupLocation="CenterScreen"
+        SizeToContent="Width"
+        Height="520"
+        CanResize="False">
+
+    <Grid Margin="10">
+        <StackPanel Orientation="Horizontal">
+            <Grid RowDefinitions="*,Auto" Margin="0, 0, 20, 0">
+                <HeaderedContentControl Header="{loc:Loc ShopManagerWindow.ShopEdit}" FontWeight="SemiBold" HorizontalAlignment="Stretch"
+                                        BorderThickness="1" BorderBrush="#cccccc" HorizontalContentAlignment="Center"
+                                        FontSize="20" Background="{Binding Background, ElementName=MagazineSelector}">
+                        <ListBox x:Name="MagazineSelector" MinWidth="300" MaxWidth="300" ItemsSource="{Binding LoadedShops, Mode=TwoWay}"
+                                 SelectionChanged="SelectMagazine_Changed" MaxHeight="600" FontSize="14" />
+                </HeaderedContentControl>
+                <Button Grid.Row="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        Content="{loc:Loc ShopManagerWindow.CreateNewShop}" Padding="40 8" Click="AddNewShop_OnClick"
+                        Margin="0 10 0 0" />
+            </Grid>
+
+            <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="*, Auto">
+
+                <Grid Margin="0,0,0,20" ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+
+                    <!-- Колонка с артикулом -->
+                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="0 0 15 15" Grid.ColumnSpan="2">
+                        <TextBlock Text="{loc:Loc ShopManagerWindow.Article}" HorizontalAlignment="Center"
+                                   FontWeight="SemiBold" />
+                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding CurrentShopHeaders}"
+                                  SelectedItem="{Binding CurrentShop.Article, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="IsChanged_Changed" />
+                    </StackPanel>
+
+                    <!-- Колонка с ценой -->
+                    <StackPanel Grid.Row="1" Grid.Column="0" Margin="0 0 15 15">
+                        <TextBlock Text="{loc:Loc ShopManagerWindow.Price}" FontWeight="SemiBold" />
+                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding CurrentShopHeaders}"
+                                  SelectedItem="{Binding CurrentShop.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectionChanged="IsChanged_Changed" />
+                    </StackPanel>
+
+                    <!-- Колонка с старой ценой -->
+                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="0 0 15 15">
+                        <TextBlock Text="{loc:Loc ShopManagerWindow.OldPrice}" FontWeight="SemiBold" />
+                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding CurrentShopHeaders}"
+                                  SelectedItem="{Binding CurrentShop.OldPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectionChanged="IsChanged_Changed" />
+                    </StackPanel>
+
+                    <!-- Колонка с количеством -->
+                    <StackPanel Grid.Row="2" Grid.Column="1" Margin="0 0 15 15">
+                        <TextBlock Text="{loc:Loc ShopManagerWindow.Quantity}" FontWeight="SemiBold" />
+                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding CurrentShopHeaders}"
+                                  SelectedItem="{Binding CurrentShop.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectionChanged="IsChanged_Changed" />
+                    </StackPanel>
+
+                    <!-- Колонка с наличием -->
+                    <StackPanel Grid.Row="2" Grid.Column="0" Margin="0 0 15 15">
+                        <TextBlock Text="{loc:Loc ShopManagerWindow.Availability}" FontWeight="SemiBold" />
+                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding CurrentShopHeaders}"
+                                  SelectedItem="{Binding CurrentShop.Availability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectionChanged="IsChanged_Changed" />
+                    </StackPanel>
+
+                    <!-- Колонка с датой начала акции -->
+                    <StackPanel Grid.Row="3" Grid.Column="1" Margin="0 0 15 15">
+                        <TextBlock Text="{loc:Loc ShopManagerWindow.DiscountStart}" FontWeight="SemiBold" />
+                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding CurrentShopHeaders}"
+                                  SelectedItem="{Binding CurrentShop.DiscountDateStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectionChanged="IsChanged_Changed" />
+                    </StackPanel>
+
+                    <!-- Скидка -->
+                    <StackPanel Grid.Row="3" Grid.Column="0" Margin="0 0 15 15">
+                        <TextBlock Text="{loc:Loc ShopManagerWindow.Discount}" FontWeight="SemiBold" />
+                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding CurrentShopHeaders}"
+                                  SelectedItem="{Binding CurrentShop.Discount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectionChanged="IsChanged_Changed" />
+                    </StackPanel>
+
+                    <!-- Колонка с датой конца акции -->
+                    <StackPanel Grid.Row="4" Grid.Column="1" Margin="0 0 15 15">
+                        <TextBlock Text="{loc:Loc ShopManagerWindow.DiscountEnd}" FontWeight="SemiBold" />
+                        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding CurrentShopHeaders}"
+                                  SelectedItem="{Binding CurrentShop.DiscountDateEnd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectionChanged="IsChanged_Changed" />
+                    </StackPanel>
+
+                    <!-- Формат даты -->
+                    <StackPanel Grid.Row="4" Grid.Column="0" Margin="0 0 15 15">
+                        <TextBlock Text="{loc:Loc ShopManagerWindow.DataFormat}" FontWeight="SemiBold" />
+                        <TextBox HorizontalAlignment="Stretch"
+                                 Text="{Binding CurrentShop.DataFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 TextChanged="IsChanged_Changed" />
+                    </StackPanel>
+
+                    <!-- Значение “в наличии” -->
+                    <StackPanel Grid.Row="5" Grid.Column="0" Margin="0 0 15 15">
+                        <TextBlock Text="{loc:Loc ShopManagerWindow.InStock}" FontWeight="SemiBold" />
+                        <TextBox HorizontalAlignment="Stretch"
+                                 Text="{Binding CurrentShop.AvailabilityMap[InStock], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 TextChanged="IsChanged_Changed" />
+                    </StackPanel>
+
+                    <!-- Значение “Под заказ” -->
+                    <StackPanel Grid.Row="5" Grid.Column="1" Margin="0 0 15 15">
+                        <TextBlock Text="{loc:Loc ShopManagerWindow.OnOrder}" FontWeight="SemiBold" />
+                        <TextBox HorizontalAlignment="Stretch"
+                                 Text="{Binding CurrentShop.AvailabilityMap[OnOrder], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 TextChanged="IsChanged_Changed" />
+                    </StackPanel>
+
+                    <!-- Значение “нет в наличии” -->
+                    <StackPanel Grid.Row="6" Grid.Column="0" Margin="0 0 15 15">
+                        <TextBlock Text="{loc:Loc ShopManagerWindow.OutOfStock}" FontWeight="SemiBold" />
+                        <TextBox HorizontalAlignment="Stretch"
+                                 Text="{Binding CurrentShop.AvailabilityMap[OutOfStock], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 TextChanged="IsChanged_Changed" />
+                    </StackPanel>
+
+                    <!-- Значение “Готово к отправке” -->
+                    <StackPanel Grid.Row="6" Grid.Column="1" Margin="0 0 15 15">
+                        <TextBlock Text="{loc:Loc ShopManagerWindow.ReadyToGo}" FontWeight="SemiBold" />
+                        <TextBox HorizontalAlignment="Stretch"
+                                 Text="{Binding CurrentShop.AvailabilityMap[ReadyToGo], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 TextChanged="IsChanged_Changed" />
+                    </StackPanel>
+                </Grid>
+                
+                <!-- Список всех колонок -->
+                <HeaderedContentControl Grid.Column="1" Grid.Row="0" Header="{loc:Loc ShopManagerWindow.AllColumnList}" FontWeight="SemiBold"
+                                        HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"
+                                        Background="{Binding Background, ElementName=AllColumnList}"
+                                        BorderBrush="#cccccc" BorderThickness="1" CornerRadius="5" Margin="0, 0, 0, 10" MinWidth="252" MaxWidth="252">
+                        <ListBox x:Name="AllColumnList" MinWidth="250" MaxWidth="250" SelectionMode="Multiple"
+                                 BorderThickness="0" ItemsSource="{Binding CurrentShopHeaders}" FontSize="11"
+                                 MaxHeight="600" />
+                </HeaderedContentControl>
+                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="{loc:Loc ShopManagerWindow.GetFirstLine}" Padding="20 8" Margin="0, 0, 10, 0" Click="GetFirstLineFromFile_Click" HorizontalAlignment="Right" />
+                <Button Content="{loc:Loc ShopManagerWindow.Save}" Padding="40 8" Background="#0078D7"
+                        Foreground="White" FontWeight="SemiBold" BorderThickness="0" Click="SaveShopTemplate_Click" />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>

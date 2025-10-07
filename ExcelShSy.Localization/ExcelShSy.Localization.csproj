@@ -1,0 +1,93 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExcelShSy.Settings\ExcelShSy.Settings.csproj" />
+    <ProjectReference Include="..\ExcelShSy\ExcelShSy.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\EditLoadFilesWindow.Designer.cs">
+      <DependentUpon>EditLoadFilesWindow.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\MainWindow.Designer.cs">
+      <DependentUpon>MainWindow.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\F4LabsAboutWindow.Designer.cs">
+      <DependentUpon>F4LabsAboutWindow.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\SettingWindow.Designer.cs">
+      <DependentUpon>SettingWindow.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\ShopManagerWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ShopManagerWindow.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\DataBaseViewer.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DataBaseViewer.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Errors.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Errors.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\MessagesBox.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MessagesBox.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Resources\DataBaseViewer.ru-RU.resx" />
+    <EmbeddedResource Include="Resources\DataBaseViewer.ru-ru.resx" />
+    <EmbeddedResource Remove="Resources\DataBaseViewer.uk-UA.resx" />
+    <EmbeddedResource Include="Resources\DataBaseViewer.uk-ua.resx" />
+    <EmbeddedResource Remove="Resources\EditLoadFilesWindow.ru-RU.resx" />
+    <EmbeddedResource Include="Resources\EditLoadFilesWindow.ru-ru.resx" />
+    <EmbeddedResource Remove="Resources\EditLoadFilesWindow.uk-UA.resx" />
+    <EmbeddedResource Include="Resources\EditLoadFilesWindow.uk-ua.resx" />
+    <EmbeddedResource Remove="Resources\F4LabsAboutWindow.ru-RU.resx" />
+    <EmbeddedResource Include="Resources\F4LabsAboutWindow.ru-ru.resx" />
+    <EmbeddedResource Remove="Resources\F4LabsAboutWindow.uk-UA.resx" />
+    <EmbeddedResource Include="Resources\F4LabsAboutWindow.uk-ua.resx" />
+    <None Remove="Resources\MainWindow.xaml" />
+    <EmbeddedResource Remove="Resources\MainWindow.ru-RU.resx" />
+    <EmbeddedResource Include="Resources\MainWindow.ru-ru.resx" />
+    <EmbeddedResource Remove="Resources\MainWindow.uk-UA.resx" />
+    <EmbeddedResource Include="Resources\MainWindow.uk-ua.resx" />
+    <EmbeddedResource Remove="Resources\SettingWindow.ru-RU.resx" />
+    <EmbeddedResource Include="Resources\SettingWindow.ru-ru.resx" />
+    <EmbeddedResource Remove="Resources\SettingWindow.uk-UA.resx" />
+    <EmbeddedResource Include="Resources\SettingWindow.uk-ua.resx" />
+    <EmbeddedResource Remove="Resources\ShopManagerWindow.ru-RU.resx" />
+    <EmbeddedResource Include="Resources\ShopManagerWindow.ru-ru.resx" />
+    <EmbeddedResource Remove="Resources\ShopManagerWindow.uk-UA.resx" />
+    <EmbeddedResource Include="Resources\ShopManagerWindow.uk-ua.resx" />
+    <EmbeddedResource Update="Resources\Errors.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Errors.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\MessagesBox.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessagesBox.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
