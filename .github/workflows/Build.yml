@@ -45,8 +45,7 @@ jobs:
         with:
           name: ExShSy-${{ matrix.os }}
           path: |
-            ${{ matrix.os }}.zip
-            ${{ matrix.os }}.tar.gz
+            ./publish/${{ matrix.os }}/*
 
   release:
     runs-on: ubuntu-latest
