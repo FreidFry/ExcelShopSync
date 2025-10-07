@@ -62,8 +62,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: 2.4.0
+          release_name: Release 2.4.0
 
       - name: Upload Windows Asset
         uses: actions/upload-release-asset@v1
