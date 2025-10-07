@@ -5,8 +5,8 @@
         <TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<AssemblyVersion>2.4.0</AssemblyVersion>
-		<FileVersion>2.4.0</FileVersion>
+		<AssemblyVersion>2.4.2</AssemblyVersion>
+		<FileVersion>2.4.2</FileVersion>
 		<NeutralLanguage>en</NeutralLanguage>
 		<Product>ExcelShSy</Product>
 		<Company>F4Labs</Company>
