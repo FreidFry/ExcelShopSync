@@ -29,5 +29,5 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: MyApp-${{ matrix.os }}
+        name: ExShSy-${{ matrix.os }}
         path: ./publish/${{ matrix.os }}
