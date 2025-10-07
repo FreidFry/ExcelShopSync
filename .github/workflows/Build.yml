@@ -59,8 +59,8 @@ jobs:
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: 2.4.0
-        name: Release 2.4.0
+        tag_name: 2.4.1
+        name: Release 2.4.1
         files: |
           ./artifacts/ExShSy-win-x64/ExShSy-win-x64.zip
           ./artifacts/ExShSy-linux-x64/ExShSy-linux-x64.tar.gz
