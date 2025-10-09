@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel;
 using ExcelShSy.Core.Interfaces;
-using ExcelShSy.Ui.Resources;
-using ExcelShSy.Ui.Utils;
 using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using ExcelShSy.Core.Interfaces.Common;
-using ExcelShSy.LocalDataBaseModule.Services;
+using ExcelShSy.Localization;
+using ExcelShSy.Localization.Resources;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
@@ -19,6 +18,36 @@ namespace ExcelShSy.Ui
         
         private readonly bool _isInitialized;
 
+        #endregion
+        
+        #region Fields
+        
+        public bool CreateNewFileWhileSave
+        {
+            get => _newSettings.CreateNewFileWhileSave;
+            set
+            {
+                if (_newSettings.CreateNewFileWhileSave != value)
+                {
+                    _newSettings.CreateNewFileWhileSave = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CreateNewFileWhileSave)));
+                }
+            }
+        }
+        
+        public bool AutoCheckUpdate
+        {
+            get => _newSettings.CheckForUpdates;
+            set
+            {
+                if (_newSettings.CheckForUpdates != value)
+                {
+                    _newSettings.CheckForUpdates = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AutoCheckUpdate)));
+                }
+            }
+        }
+        
         #endregion
         
         #region Actions
@@ -127,19 +156,6 @@ namespace ExcelShSy.Ui
         }
         
         #endregion
-        
-        public bool CreateNewFileWhileSave
-        {
-            get => _newSettings.CreateNewFileWhileSave;
-            set
-            {
-                if (_newSettings.CreateNewFileWhileSave != value)
-                {
-                    _newSettings.CreateNewFileWhileSave = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CreateNewFileWhileSave)));
-                }
-            }
-        }
 
         private void CBLanguagues_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

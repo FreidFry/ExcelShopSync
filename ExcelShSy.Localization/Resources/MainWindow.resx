@@ -183,4 +183,7 @@
   <data name="Database" xml:space="preserve">
     <value>Products links table</value>
   </data>
+  <data name="CheckUpdates" xml:space="preserve">
+    <value>Check Updates</value>
+  </data>
 </root>

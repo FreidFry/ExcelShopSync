@@ -14,6 +14,9 @@ public class AppSettings : IAppSettings
     public string DataBasePath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "F4Labs");
 
     public bool CreateNewFileWhileSave { get; set; } = true;
+
+    public bool CheckForUpdates { get; set; } = true;
+    public DateTime LastUpdateCheck { get; set; } = DateTime.Now.Date;
     public event Action? SettingsChanged;
 
     public void SaveSettings(IAppSettings settings)

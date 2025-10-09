@@ -6,6 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\ExcelShSy.Settings\ExcelShSy.Settings.csproj" />
     <ProjectReference Include="..\ExcelShSy\ExcelShSy.Core.csproj" />

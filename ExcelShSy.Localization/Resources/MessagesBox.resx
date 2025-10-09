@@ -36,4 +36,16 @@
     <data name="FinishWithProblemsText" xml:space="preserve">
         <value>Finished with on problems:</value>
     </data>
+    <data name="ThisVersionLatestTitle" xml:space="preserve">
+        <value>No Update Needed</value>
+    </data>
+    <data name="ThisVersionLatestText" xml:space="preserve">
+        <value>You already have the latest version of the application.</value>
+    </data>
+    <data name="UpdatesAvailableTitle" xml:space="preserve">
+        <value>Updates Available</value>
+    </data>
+    <data name="UpdatesAvailableText" xml:space="preserve">
+        <value>A new version of the application is available. Would you like to update now?</value>
+    </data>
 </root>

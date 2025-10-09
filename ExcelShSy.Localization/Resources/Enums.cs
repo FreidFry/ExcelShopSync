@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
-using ExcelShSy.Ui.Attributes;
+using ExcelShSy.Localization.Attributes;
 
-namespace ExcelShSy.Ui.Resources
+namespace ExcelShSy.Localization.Resources
 {
-    internal class Enums
+    public class Enums
     {
-        internal enum SupportedLanguagues
+        public enum SupportedLanguagues
         {
             Automatic,
             [Description("Українська (Ukrainian)")]

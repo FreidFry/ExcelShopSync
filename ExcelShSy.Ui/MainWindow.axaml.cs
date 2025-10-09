@@ -10,12 +10,14 @@ using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using Avalonia.Interactivity;
 using ExcelShSy.Core.Properties;
+using ExcelShSy.Ui.Utils;
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace ExcelShSy.Ui
 {
     public partial class MainWindow : Window
     {
+        private readonly IAppSettings _appSettings;
         private readonly IFileManager _fileManager;
         private readonly IOperationTaskFactory _taskFactory;
         private readonly ILogger _logger;
@@ -29,11 +31,12 @@ namespace ExcelShSy.Ui
         {
             InitializeComponent();
         }
-        public MainWindow(IFileManager fileManager, IOperationTaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory, IDataBaseViewerFactory dataBaseViewer,
+        public MainWindow(IAppSettings appSettings, IFileManager fileManager, IOperationTaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory, IDataBaseViewerFactory dataBaseViewer,
            IF4LabsAboutWindowFactory f4LabsAboutWindowFactory,ILocalizationService localizationService)
         {
             InitializeComponent();
-            
+
+            _appSettings = appSettings;
             _fileManager = fileManager;
             _taskFactory = taskFactory;
             _logger = logger;
@@ -45,6 +48,28 @@ namespace ExcelShSy.Ui
 
             UpdateTextBlockEvents.RegistrationTextBlockEvent("TargetLb", TargetLastFile);
             UpdateTextBlockEvents.RegistrationTextBlockEvent("SourceLb", SourceLastFile);
+
+            Loaded += UpdateCheck;
+        }
+
+        private async void UpdateCheck(object? sender, RoutedEventArgs e)
+        {
+            if (_appSettings.CheckForUpdates 
+                && _appSettings.LastUpdateCheck < DateTime.Now.Date
+               )
+            {
+                var updater = new UpdateManager(_localizationService, _appSettings);
+                var isUpdateAvailable = await updater.Check();
+                if (!isUpdateAvailable)
+                    return;
+
+                var titleYes = _localizationService.GetMessageString("UpdatesAvailableTitle");
+                var msgYes = _localizationService.GetMessageString("UpdatesAvailableText");
+                var resultYes = await MessageBoxManager
+                    .GetMessageBoxStandard(titleYes, msgYes, ButtonEnum.YesNo)
+                    .ShowWindowAsync();
+                if (resultYes == ButtonResult.Yes) updater.UpdateApp();
+            }
         }
 
         #region OtherWindows
@@ -172,5 +197,22 @@ namespace ExcelShSy.Ui
 
         private static string IsTextAllowed(string? newInput) =>
             new(newInput?.Where(c => char.IsDigit(c) || c == '.' || c == ',').ToArray());
+
+        private async void CheckForUpdates_Click(object? sender, RoutedEventArgs e)
+        {
+            var updater = new UpdateManager(_localizationService, _appSettings);
+            if (await updater.Check())
+            {
+                var title = _localizationService.GetMessageString("UpdatesAvailableTitle");
+                var msg = _localizationService.GetMessageString("UpdatesAvailableText"); 
+                var result = await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.YesNo).ShowAsync();
+                if (result == ButtonResult.Yes)
+                    updater.UpdateApp();
+                return;
+            }
+            var titleNo = _localizationService.GetMessageString("ThisVersionLatestTitle");
+            var msgNo = _localizationService.GetMessageString("ThisVersionLatestText");
+            await MessageBoxManager.GetMessageBoxStandard(titleNo, msgNo).ShowWindowAsync();
+        }
     }
 }

@@ -42,4 +42,22 @@
     <data name="ShopExistText" xml:space="preserve">
         <value>A store with that name already exists.</value>
     </data>
+    <data name="NetworkErrorTitle" xml:space="preserve">
+        <value>Network Error</value>
+    </data>
+    <data name="NetworkErrorText" xml:space="preserve">
+        <value>A network error occurred. Please check your internet connection and try again.</value>
+    </data>
+    <data name="UnknownErrorTitle" xml:space="preserve">
+        <value>Unknown Error</value>
+    </data>
+    <data name="UnknownErrorText" xml:space="preserve">
+        <value>An unexpected error occurred. Please try again or contact the developer if the problem persists.</value>
+    </data>
+    <data name="UnsupportedOSUpdateTitle" xml:space="preserve">
+        <value>Update Not Supported</value>
+    </data>
+    <data name="UnsupportedOSUpdateText" xml:space="preserve">
+        <value>Your operating system version is not supported for this update. Please update your OS or contact the developer.</value>
+    </data>
 </root>

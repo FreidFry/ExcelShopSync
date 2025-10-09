@@ -183,4 +183,7 @@
   <data name="Database" xml:space="preserve">
     <value>Таблица связей продуктов</value>
   </data>
+  <data name="CheckUpdates" xml:space="preserve">
+    <value>Проверить обновления</value>
+  </data>
 </root>

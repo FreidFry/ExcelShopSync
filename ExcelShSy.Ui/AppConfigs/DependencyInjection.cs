@@ -21,7 +21,6 @@ using ExcelShSy.Ui.Factories;
 using ExcelShSy.Ui.Interfaces;
 using ExcelShSy.Localization;
 using ExcelShSy.Settings.Properties;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using IConfigurationManager = ExcelShSy.Core.Interfaces.Common.IConfigurationManager;
 
@@ -29,7 +28,7 @@ namespace ExcelShSy.Ui.AppConfigs
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddDependencyInjection(this IServiceCollection services)
+        public static void AddDependencyInjection(this IServiceCollection services)
         {
             #region Singleton
 
@@ -120,8 +119,6 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddTransient<ShopManagerWindow>();
             services.AddTransient<DataBaseViewer>();
             #endregion
-            
-            return services;
         }
     }
 }

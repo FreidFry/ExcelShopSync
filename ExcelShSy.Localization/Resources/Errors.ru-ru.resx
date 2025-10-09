@@ -35,4 +35,22 @@
     <data name="ShopExist" xml:space="preserve">
         <value>Конфликт имени магазина</value>
     </data>
+    <data name="NetworkErrorTitle" xml:space="preserve">
+        <value>Ошибка сети</value>
+    </data>
+    <data name="NetworkErrorText" xml:space="preserve">
+        <value>Произошла ошибка сети. Проверьте подключение к интернету и попробуйте снова.</value>
+    </data>
+    <data name="UnknownErrorTitle" xml:space="preserve">
+        <value>Неизвестная ошибка</value>
+    </data>
+    <data name="UnknownErrorText" xml:space="preserve">
+        <value>Произошла непредвиденная ошибка. Попробуйте снова или свяжитесь с разработчиком, если проблема сохраняется.</value>
+    </data>
+    <data name="UnsupportedOSUpdateTitle" xml:space="preserve">
+        <value>Обновление не поддерживается</value>
+    </data>
+    <data name="UnsupportedOSUpdateText" xml:space="preserve">
+        <value>Ваша версия операционной системы не поддерживается для этого обновления. Пожалуйста, обновите ОС или свяжитесь с разработчиком.</value>
+    </data>
 </root>

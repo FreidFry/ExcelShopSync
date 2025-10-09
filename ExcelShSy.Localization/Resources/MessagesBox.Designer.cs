@@ -80,5 +80,29 @@ namespace ExcelShSy.Localization.Resources {
                 return ResourceManager.GetString("FinishWithProblemsText", resourceCulture);
             }
         }
+        
+        internal static string ThisVersionLatestTitle {
+            get {
+                return ResourceManager.GetString("ThisVersionLatestTitle", resourceCulture);
+            }
+        }
+        
+        internal static string ThisVersionLatestText {
+            get {
+                return ResourceManager.GetString("ThisVersionLatestText", resourceCulture);
+            }
+        }
+        
+        internal static string UpdatesAvailableTitle {
+            get {
+                return ResourceManager.GetString("UpdatesAvailableTitle", resourceCulture);
+            }
+        }
+        
+        internal static string UpdatesAvailableText {
+            get {
+                return ResourceManager.GetString("UpdatesAvailableText", resourceCulture);
+            }
+        }
     }
 }

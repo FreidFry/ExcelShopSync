@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy.Event", "ExcelShS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy.Settings", "ExcelShSy.Settings\ExcelShSy.Settings.csproj", "{FBA51CC3-4BAE-4E14-8DD9-43854ED24C60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy.Setup", "ExcelShSy.Setup\ExcelShSy.Setup.csproj", "{576C0348-D017-4627-B701-CDE8C7F90215}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{FBA51CC3-4BAE-4E14-8DD9-43854ED24C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBA51CC3-4BAE-4E14-8DD9-43854ED24C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBA51CC3-4BAE-4E14-8DD9-43854ED24C60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{576C0348-D017-4627-B701-CDE8C7F90215}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{576C0348-D017-4627-B701-CDE8C7F90215}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{576C0348-D017-4627-B701-CDE8C7F90215}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{576C0348-D017-4627-B701-CDE8C7F90215}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

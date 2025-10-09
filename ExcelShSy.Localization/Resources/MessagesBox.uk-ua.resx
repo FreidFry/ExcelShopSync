@@ -29,4 +29,16 @@
     <data name="FinishWithProblemsText" xml:space="preserve">
         <value>Завершено з проблемами:</value>
     </data>
+    <data name="ThisVersionLatestTitle" xml:space="preserve">
+        <value>Оновлення не потрібне</value>
+    </data>
+    <data name="ThisVersionLatestText" xml:space="preserve">
+        <value>У вас вже встановлена остання версія програми.</value>
+    </data>
+    <data name="UpdatesAvailableTitle" xml:space="preserve">
+        <value>Доступні оновлення</value>
+    </data>
+    <data name="UpdatesAvailableText" xml:space="preserve">
+        <value>Доступна нова версія програми. Бажаєте оновити зараз?</value>
+    </data>
 </root>

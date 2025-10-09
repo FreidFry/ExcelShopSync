@@ -138,4 +138,7 @@
   <data name="DatabasePath" xml:space="preserve">
     <value>Шлях до дата бази</value>
   </data>
+  <data name="AutoCheckUpdate" xml:space="preserve">
+    <value>Авто-перевірка оновлень</value>
+  </data>
 </root>

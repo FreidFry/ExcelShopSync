@@ -39,7 +39,7 @@ namespace ExcelShSy.Ui
             {
                 var culture = new CultureInfo(_appSettings.Language);
                 _localizationManager.SetCulture(culture);
-
+                
                 // Создание главного окна
                 var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
                 desktop.MainWindow = mainWindow;

@@ -92,5 +92,41 @@ namespace ExcelShSy.Localization.Resources {
                 return ResourceManager.GetString("ShopExistText", resourceCulture);
             }
         }
+        
+        internal static string NetworkErrorTitle {
+            get {
+                return ResourceManager.GetString("NetworkErrorTitle", resourceCulture);
+            }
+        }
+        
+        internal static string NetworkErrorText {
+            get {
+                return ResourceManager.GetString("NetworkErrorText", resourceCulture);
+            }
+        }
+        
+        internal static string UnknownErrorTitle {
+            get {
+                return ResourceManager.GetString("UnknownErrorTitle", resourceCulture);
+            }
+        }
+        
+        internal static string UnknownErrorText {
+            get {
+                return ResourceManager.GetString("UnknownErrorText", resourceCulture);
+            }
+        }
+        
+        internal static string UnsupportedOSUpdateTitle {
+            get {
+                return ResourceManager.GetString("UnsupportedOSUpdateTitle", resourceCulture);
+            }
+        }
+        
+        internal static string UnsupportedOSUpdateText {
+            get {
+                return ResourceManager.GetString("UnsupportedOSUpdateText", resourceCulture);
+            }
+        }
     }
 }

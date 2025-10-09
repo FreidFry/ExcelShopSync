@@ -5,16 +5,23 @@
         <TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+        
+        <Version>2.4.2</Version>
 		<AssemblyVersion>2.4.2</AssemblyVersion>
-		<FileVersion>2.4.2</FileVersion>
+		<FileVersion>2.4.2.0</FileVersion>
+        
 		<NeutralLanguage>en</NeutralLanguage>
-		<Product>ExcelShSy</Product>
+		<Product>Excel Shop Synchronizer</Product>
 		<Company>F4Labs</Company>
 		<Authors>F4Labs</Authors>
 		<ApplicationIcon>AppIco.ico</ApplicationIcon>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+	  <DebugType>none</DebugType>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -35,6 +42,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\ExcelShSy.LocalDataBaseModule\ExcelShSy.LocalDataBaseModule.csproj" />
 		<ProjectReference Include="..\ExcelShSy.Localization\ExcelShSy.Localization.csproj" />
+		<ProjectReference Include="..\ExcelShSy.Setup\ExcelShSy.Setup.csproj" />
 		<ProjectReference Include="..\WPFAboutF4Labs\WPFAboutF4Labs.csproj" />
 		<ProjectReference Include="..\ExcelShSy.Infrastructure\ExcelShSy.Infrastructure.csproj" />
 		<ProjectReference Include="..\ExcelShSy\ExcelShSy.Core.csproj" />
@@ -68,5 +76,21 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Resources\" />
+    </ItemGroup>
+
+    <Target Name="CopyUpdater" AfterTargets="Publish">
+        <PropertyGroup>
+            <UpdaterFileName Condition="'$(RuntimeIdentifier)' == 'win-x64'">ExcelShSy.Setup.exe</UpdaterFileName>
+            <UpdaterFileName Condition="'$(RuntimeIdentifier)' == 'linux-x64'">ExcelShSy.Setup</UpdaterFileName>
+        </PropertyGroup>
+        
+        <Copy
+                SourceFiles="..\ExcelShSy.Setup\bin\$(Configuration)\net8.0\$(RuntimeIdentifier)\publish\$(UpdaterFileName)"
+                DestinationFolder="$(PublishDir)"
+                SkipUnchangedFiles="true" />
+    </Target>
 
 </Project>

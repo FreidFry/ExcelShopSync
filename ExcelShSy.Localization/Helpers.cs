@@ -1,18 +1,18 @@
-﻿using ExcelShSy.Ui.Attributes;
-using ExcelShSy.Ui.Resources;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
+using ExcelShSy.Localization.Attributes;
+using ExcelShSy.Localization.Resources;
 
-namespace ExcelShSy.Ui.Utils
+namespace ExcelShSy.Localization
 {
-    internal static class Helpers
+    public static class Helpers
     {
-        internal static T[] GetEnums<T>()
+        public static T[] GetEnums<T>()
         {
             return (T[])Enum.GetValues(typeof(T));
         }
 
-        internal static string GetDescription(this Enum value)
+        public static string GetDescription(this Enum value)
         {
             var fi = value.GetType().GetField(value.ToString());
 

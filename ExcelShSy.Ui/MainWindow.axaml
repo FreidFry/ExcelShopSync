@@ -18,6 +18,7 @@
                 <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.About}">
                     <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.AboutApp}" Click="AboutWindowOpen_Click" />
                     <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Guid}" Click="GuideWindowOpen_Click" />
+                    <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.CheckUpdates}" Click="CheckForUpdates_Click" />
                 </MenuItem>
                 <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Database}" Click="OpenDbManager_Click"/>
             </Menu>

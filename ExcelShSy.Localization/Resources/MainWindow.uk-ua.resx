@@ -183,4 +183,7 @@
   <data name="Database" xml:space="preserve">
     <value>Таблиця зв'язку продуктів</value>
   </data>
+  <data name="CheckUpdates" xml:space="preserve">
+    <value>Перевірити оновлення</value>
+  </data>
 </root>

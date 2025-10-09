@@ -23,7 +23,11 @@
         <Button Margin="0 5" VerticalAlignment="Top" HorizontalAlignment="Left" Content="{local:Loc SettingWindow.UserShopManager}" Padding="10 2" Click="ShopManagerOpen_Click"/>
         
         <CheckBox Content="{local:Loc SettingWindow.SaveOnNewFileCheckBox}" IsChecked="{Binding CreateNewFileWhileSave, Mode=TwoWay}" />
+        
+        <CheckBox Content="{local:Loc SettingWindow.AutoCheckUpdate}" IsChecked="{Binding AutoCheckUpdate, Mode=TwoWay}" />
+        
         </StackPanel>
+        
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" >
             <Button Content="{local:Loc SettingWindow.ApplyButton}" Width="80" Click="Apply_Click" />
