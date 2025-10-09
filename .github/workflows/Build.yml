@@ -19,7 +19,7 @@ jobs:
       matrix:
         os: [linux-x64, win-x64]
     env:
-      ASSEMBLY_INFO_PATH: ExcelShSy.Ui/ExcelShSy.Ui.csproj
+      ASSEMBLY_INFO_PATH: Directory.Build.props
     outputs:
       APP_VERSION: ${{ env.APP_VERSION }}
     steps:
