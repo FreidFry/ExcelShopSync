@@ -11,7 +11,6 @@ using MsBox.Avalonia.Enums;
 using Avalonia.Interactivity;
 using ExcelShSy.Core.Properties;
 using ExcelShSy.Ui.Utils;
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace ExcelShSy.Ui
 {
@@ -27,10 +26,13 @@ namespace ExcelShSy.Ui
         private readonly IF4LabsAboutWindowFactory _f4LabsAboutWindowFactory;
         private readonly ILocalizationService _localizationService;
 
+        #if DESIGNER
         public MainWindow()
         {
             InitializeComponent();
         }
+        #endif
+        
         public MainWindow(IAppSettings appSettings, IFileManager fileManager, IOperationTaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory, IDataBaseViewerFactory dataBaseViewer,
            IF4LabsAboutWindowFactory f4LabsAboutWindowFactory,ILocalizationService localizationService)
         {

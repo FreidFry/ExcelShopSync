@@ -66,10 +66,12 @@ namespace ExcelShSy.Ui
 
         #endregion
 
+#if DESIGNER
         public SettingWindow()
         {
             InitializeComponent();
         }
+#endif
         
         public SettingWindow(IServiceProvider serviceProvider, ILocalizationManager localizationManager, IAppSettings settings)
         {

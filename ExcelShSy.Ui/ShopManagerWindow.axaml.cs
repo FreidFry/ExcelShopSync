@@ -76,10 +76,12 @@ namespace ExcelShSy.Ui
 
         public new event PropertyChangedEventHandler? PropertyChanged;
         
+#if DESIGNER
         public ShopManagerWindow()
         {
             InitializeComponent();
         }
+#endif
         
         public ShopManagerWindow(IShopStorage shopStorage, ILogger logger, IFileProvider fileProvider, ILocalizationService localizationService, ISqliteDbContext sqliteDbContext) 
         {

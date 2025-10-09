@@ -2,26 +2,12 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
-		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+        <ApplicationIcon>AppIco.ico</ApplicationIcon>
         
-        <Version>2.4.3</Version>
-		<AssemblyVersion>2.4.2</AssemblyVersion>
-		<FileVersion>2.4.2.0</FileVersion>
-        
-		<NeutralLanguage>en</NeutralLanguage>
-		<Product>Excel Shop Synchronizer</Product>
-		<Company>F4Labs</Company>
-		<Authors>F4Labs</Authors>
-		<ApplicationIcon>AppIco.ico</ApplicationIcon>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-	</PropertyGroup>
-
-	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-	  <DebugType>none</DebugType>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -46,10 +32,6 @@
 		<ProjectReference Include="..\WPFAboutF4Labs\WPFAboutF4Labs.csproj" />
 		<ProjectReference Include="..\ExcelShSy.Infrastructure\ExcelShSy.Infrastructure.csproj" />
 		<ProjectReference Include="..\ExcelShSy\ExcelShSy.Core.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<AssemblyMetadata Include="ReleaseYear" Value="2025" />
 	</ItemGroup>
     
     <ItemGroup>

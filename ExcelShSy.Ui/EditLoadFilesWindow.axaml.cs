@@ -24,11 +24,13 @@ namespace ExcelShSy.Ui
         private readonly IExcelFileFactory _excelFileFactory;
         private readonly ILocalizationService _localizationService;
 
+#if DESIGNER
         public EditLoadFilesWindow()
         {
             InitializeComponent();
         }
-
+#endif
+        
         public EditLoadFilesWindow(IFileManager fileManager, IFileProvider fileProvider,
             IExcelFileFactory fileFactory, ILocalizationService localizationService)
             : this("Target", fileManager, fileProvider, fileFactory, localizationService) { }

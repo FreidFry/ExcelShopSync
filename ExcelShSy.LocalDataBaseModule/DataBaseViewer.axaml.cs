@@ -20,10 +20,12 @@ namespace ExcelShSy.LocalDataBaseModule
         private ObservableCollection<DynamicRow> Rows { get; } = [];
         private int _productCounter;
 
+#if DESIGNER
         public DataBaseViewer()
         {
             InitializeComponent();
         }
+#endif
         
         public DataBaseViewer(IDataBaseInitializer dataBaseInitializer, IShopStorage shopStorage, ISqliteDbContext sqliteDbContext, IDatabaseUpdateManager updateManager)
         {
