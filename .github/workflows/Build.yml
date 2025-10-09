@@ -52,15 +52,15 @@ jobs:
         run: |
           cd publish/${{ matrix.os }}
           if [[ "${{ matrix.os }}" == "win-x64" ]]; then
-            zip -r ../../ExShSy-${{ env.APP_VERSION }}-${{ matrix.os }}.zip .
+            zip -r ../../ExShSy-${{ matrix.os }}.zip .
           else
-            tar -czf ../../ExShSy-${{ env.APP_VERSION }}-${{ matrix.os }}.tar.gz .
+            tar -czf ../../ExShSy-${{ matrix.os }}.tar.gz .
           fi
           
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ExShSy-${{ matrix.os }}
+          name: ExShSy-${{ env.APP_VERSION }}-${{ matrix.os }}
           path: ExShSy-${{ matrix.os }}.*
 
 #-------------------------------------------------------------------------------------|
