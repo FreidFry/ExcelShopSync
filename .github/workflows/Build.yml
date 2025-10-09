@@ -33,8 +33,9 @@ jobs:
         run: dotnet build
         
       - name: Publish Setup
-        run: |
-          dotnet publish ./ExcelShSy.Setup/ExcelShSy.Setup.csproj -c Release -r ${{ matrix.os }} --self-contained true /p:PublishSingleFile=true -o ./publish/${{ matrix.os }}
+        run: dotnet publish ./ExcelShSy.Setup/ExcelShSy.Setup.csproj -c Release -r ${{ matrix.os }} --self-contained true /p:PublishSingleFile=true -o ./publish/${{ matrix.os }}
+
+      - name: Publish UI
           dotnet publish ./ExcelShSy.Ui/ExcelShSy.Ui.csproj -c Release -r ${{ matrix.os }} --self-contained true /p:PublishSingleFile=true -o ./publish/${{ matrix.os }}
         
       - name: Archive output
