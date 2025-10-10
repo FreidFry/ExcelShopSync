@@ -10,32 +10,30 @@ using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 using MsBox.Avalonia.Enums;
 using MsBox.Avalonia;
 using static ExcelShSy.Infrastructure.Extensions.ExcelRangeExtensions;
-using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Infrastructure.Services
 {
     [Task(nameof(ProductProcessingOptions.ShouldIncreasePrices))]
-    public class IncreasePricePercent : IExecuteOperation
+    public class IncreasePricePercent(IFileStorage fileStorage, ILocalizationService localizationService)
+        : IExecuteOperation
     {
-        private readonly IFileStorage _fileStorage;
-        private readonly ILocalizationService _localizationService;
-
-        public IncreasePricePercent(IFileStorage fileStorage, ILocalizationService localizationService)
-        {
-            _fileStorage = fileStorage;
-            _localizationService = localizationService;
-        }
-
         public List<string> Errors { get; } = [];
 
         public void Execute()
         {
-            foreach (var file in _fileStorage.Target) ProcessFile(file);
+            foreach (var file in fileStorage.Target) ProcessFile(file);
         }
 
         private void ProcessFile(IExcelFile file)
         {
-            foreach (var page in file.SheetList) OperationWraper.Try(() => ProcessPage(page), Errors, file.FileName);
+            if (file.SheetList == null)
+            {
+                var msg = localizationService.GetErrorString("ErrorNoSheets");
+                var formatted = string.Format(msg, file.FileName);
+                Errors.Add(formatted);
+                return;
+            }
+            foreach (var page in file.SheetList) OperationWrapper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
         private async void ProcessPage(IExcelSheet page)
@@ -57,8 +55,8 @@ namespace ExcelShSy.Infrastructure.Services
             {
                 if(ProductProcessingOptions.priceIncreasePercentage >= 200)
                 {
-                    var title = _localizationService.GetMessageString("Confirm");
-                    var msg = _localizationService.GetMessageString("ConfirmText");
+                    var title = localizationService.GetMessageString("Confirm");
+                    var msg = localizationService.GetMessageString("ConfirmText");
                     var formatedText = string.Format(msg, ProductProcessingOptions.priceIncreasePercentage.ToString(CultureInfo.InvariantCulture));
                     
                     var msBox = MessageBoxManager.GetMessageBoxStandard(title,

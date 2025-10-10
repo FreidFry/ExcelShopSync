@@ -1,7 +1,3 @@
-using System.Globalization;
-using System.Reflection;
-using System.Resources;
-
 namespace ExcelShSy.Core.Interfaces.Common;
 
 public interface ILocalizationService

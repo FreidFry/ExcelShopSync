@@ -11,7 +11,7 @@
 
             <StackPanel Margin="0 5" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <TextBlock Text="{local:Loc SettingWindow.Language}" VerticalAlignment="Center" />
-                <ComboBox x:Name="CBLanguagues" Width="150" Margin="10 0" SelectionChanged="CBLanguagues_SelectionChanged" />
+                <ComboBox x:Name="CBLanguagues" Width="150" Margin="10 0" SelectionChanged="CBLanguages_SelectionChanged" />
             </StackPanel>
             
             <StackPanel Margin="0 5" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" >

@@ -1,8 +1,6 @@
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
-using Avalonia.Data;
 using ExcelShSy.Core.Interfaces.DataBase;
-using ExcelShSy.LocalDataBaseModule.Data;
 using ExcelShSy.LocalDataBaseModule.Persistance;
 using ExcelShSy.LocalDataBaseModule.Persistance.Models;
 using MsBox.Avalonia.ViewModels.Commands;
@@ -22,7 +20,7 @@ internal static class DataGridCommands
     internal static RelayCommand ClearCellCommand(DataGrid grid, IDatabaseUpdateManager updateManager) => 
         new(_ =>
         {
-            if (grid?.SelectedItem is not DynamicRow row || grid.CurrentColumn?.Tag is not string columnName) return;
+            if (grid.SelectedItem is not DynamicRow row || grid.CurrentColumn?.Tag is not string columnName) return;
             if (grid.ItemsSource is not ObservableCollection<DynamicRow> rows) return;
                 
             row[columnName] = null;
@@ -43,7 +41,7 @@ internal static class DataGridCommands
 
     internal static RelayCommand RemoveProductCommand(DataGrid grid, ISqliteDbContext connection) => new(_ =>
     {
-            if (grid?.SelectedItem is not DynamicRow row || grid.CurrentColumn?.Tag is not string columnName) return;
+            if (grid.SelectedItem is not DynamicRow row || grid.CurrentColumn?.Tag is not string) return;
             if (grid.ItemsSource is not ObservableCollection<DynamicRow> rows) return;
 
             try
@@ -62,13 +60,13 @@ internal static class DataGridCommands
     }, _ => IsMasterColumn(grid));
     
     private static bool IsMasterColumn(DataGrid grid) =>
-        grid?.CurrentColumn?.Tag?.ToString() == $"{Enums.MappingColumns.MasterArticle}";
+        grid.CurrentColumn?.Tag?.ToString() == $"{Enums.MappingColumns.MasterArticle}";
         
 
     internal static RelayCommand CopyCommand(DataGrid grid) => 
         new(_ =>
         {
-            if (grid?.SelectedItem is null) return;
+            if (grid.SelectedItem is null) return;
             var cell = grid.CurrentColumn.GetCellContent(grid.SelectedItem) as TextBlock;
             var rowText = cell?.Text ?? string.Empty;
             

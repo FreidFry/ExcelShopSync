@@ -18,8 +18,6 @@ using MsBox.Avalonia.Enums;
 using MsBox.Avalonia.Models;
 using MsBox.Avalonia.ViewModels.Commands;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-
 namespace ExcelShSy.Ui
 {
     public partial class ShopManagerWindow : Window, INotifyPropertyChanged
@@ -146,6 +144,7 @@ namespace ExcelShSy.Ui
 
                         if (list.ItemsSource is ObservableCollection<string> items)
                         {
+                            if (list.SelectedItems == null) return;
                             foreach (var selected in list.SelectedItems.Cast<string>().ToList())
                                 items.Remove(selected);
                             _shopChanged = true;
@@ -209,7 +208,7 @@ namespace ExcelShSy.Ui
             {
                 _ready = false;
                 var shop = _shopStorage.GetShopMapping(selectedShop);
-                CurrentShopHeaders!.Clear();
+                CurrentShopHeaders.Clear();
                 CurrentShopHeaders.Add(null);
                 CurrentShopHeaders.AddRange(shop!.UnmappedHeaders);
                 CurrentShop = shop;
@@ -280,7 +279,7 @@ namespace ExcelShSy.Ui
                 //now realized in ShopTemplate class
                 //                             VVVVVVVVVVVVVVVVVVVVVVVVVVV
                 shopName = msBox.InputValue.Replace(" ", "_").ToUpper();
-                if (userAction == cancelButton || userAction == null) break;
+                if (userAction == cancelButton || userAction == null!) break;
             } 
             while (string.IsNullOrWhiteSpace(shopName));
             if (userAction != createButton) return;
@@ -346,7 +345,7 @@ namespace ExcelShSy.Ui
 
             var list = CurrentShopHeaders.ToList();
             while (list.Remove(null)) ;
-            CurrentShop.UnmappedHeaders = list;
+            CurrentShop.UnmappedHeaders = list!;
             _shopStorage.UpdateShop(CurrentShop);
             _shopStorage.SaveShopTemplate(CurrentShop);
             _shopChanged = false;
@@ -391,8 +390,8 @@ namespace ExcelShSy.Ui
             while (string.IsNullOrWhiteSpace(renamedShop));
             
             if (userAction != renameButton) return;
-            _currentShop.Name = renamedShop;
-            _shopStorage.RenameShop(oldName!, renamedShop);
+            _currentShop!.Name = renamedShop;
+            _shopStorage.RenameShop(oldName, renamedShop);
             try
             {
                 _sqliteDbContext.RenameColumn($"{Enums.Tables.ProductShopMapping}", oldName, renamedShop);
@@ -405,13 +404,13 @@ namespace ExcelShSy.Ui
         
         private async void DeleteShopCommand(string selected)
         {
-            var windowName = nameof(ShopManagerWindow);
+            const string windowName = nameof(ShopManagerWindow);
             var title = _localizationService.GetString(windowName, "DeleteShopTitle");
             var msg = _localizationService.GetString(windowName, "DeleteShopText");
             
             var userAction = await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.YesNo).ShowWindowDialogAsync(this);
             
-            if (userAction != ButtonResult.Yes || userAction == null!) return;
+            if (userAction != ButtonResult.Yes) return;
             _shopStorage.RemoveShop(selected);
             try
             {

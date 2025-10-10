@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using ExcelShSy.Core.Interfaces.Common;
 
 namespace ExcelShSy.Core.Interfaces
 {

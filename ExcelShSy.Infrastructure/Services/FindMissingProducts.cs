@@ -1,4 +1,5 @@
 ﻿using ExcelShSy.Core.Attributes;
+using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
@@ -9,24 +10,15 @@ using ExcelShSy.Core.Properties;
 namespace ExcelShSy.Infrastructure.Services
 {
     [Task(nameof(ProductProcessingOptions.ShouldFindMissingProducts))]
-    public class FindMissingProducts : IExecuteOperation
+    public class FindMissingProducts(IProductStorage dataProduct, IFileStorage fileStorage, IDatabaseSearcher searcher, ILocalizationService localizationService)
+        : IExecuteOperation
     {
-        private readonly IProductStorage _dataProduct;
-        private readonly IFileStorage _fileStorage;
-        private readonly IDatabaseSearcher _searcher;
         private FileStream? _fileStream;
         private StreamWriter? _writer;
 
-        private string _shopName = string.Empty;
+        private string? _shopName = string.Empty;
         
         public List<string> Errors { get; } = [];
-
-        public FindMissingProducts(IProductStorage dataProduct, IFileStorage fileStorage, IDatabaseSearcher searcher)
-        {
-            _dataProduct = dataProduct;
-            _fileStorage = fileStorage;
-            _searcher = searcher;
-        }
 
 
         public void Execute()
@@ -34,7 +26,7 @@ namespace ExcelShSy.Infrastructure.Services
             var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "missing.txt");
             _fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
             _writer = new StreamWriter(_fileStream, leaveOpen: true);
-            foreach (var file in _fileStorage.Target)
+            foreach (var file in fileStorage.Target)
             {
                 _writer.WriteLine(CenterText(file.FileName));
                 _shopName = file.ShopName;
@@ -47,10 +39,17 @@ namespace ExcelShSy.Infrastructure.Services
 
         private void ProcessFile(IExcelFile file)
         {
+            if (file.SheetList == null)
+            {
+                var msg = localizationService.GetErrorString("ErrorNoSheets");
+                var formatted = string.Format(msg, file.FileName);
+                Errors.Add(formatted);
+                return;
+            }
             foreach (var page in file.SheetList)
             {
                 _writer!.WriteLine(CenterText(page.SheetName));
-                OperationWraper.Try(() => ProcessPage(page), Errors, file.FileName);
+                OperationWrapper.Try(() => ProcessPage(page), Errors, file.FileName);
             }
         }
 
@@ -72,9 +71,9 @@ namespace ExcelShSy.Infrastructure.Services
                     continue;
                 }
                 
-                var article = _searcher.SearchProduct(_shopName, localArticle);
+                var article = searcher.SearchProduct(_shopName, localArticle);
                 
-                if (!_dataProduct.Articles.Contains(article)) missing.Add($"row: {row} - {localArticle} not found");
+                if (!dataProduct.Articles.Contains(article)) missing.Add($"row: {row} - {localArticle} not found");
             }
             _writer!.WriteLine(string.Join(Environment.NewLine, missing));
             var totalRow = worksheet.Dimension.Rows - 1;

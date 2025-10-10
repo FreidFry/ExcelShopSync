@@ -12,33 +12,32 @@ using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 namespace ExcelShSy.Infrastructure.Services
 {
     [Task(nameof(ProductProcessingOptions.ShouldSyncDiscountDate))]
-    public class SyncDiscountDate : IExecuteOperation
+    public class SyncDiscountDate(
+        IProductStorage dataProduct,
+        IFileStorage fileStorage,
+        ILogger logger,
+        IShopStorage shopMapping,
+        IDatabaseSearcher databaseSearcher,
+        ILocalizationService localizationService)
+        : IExecuteOperation
     {
-        private readonly IProductStorage _dataProduct;
-        private readonly IFileStorage _fileStorage;
-        private readonly IShopStorage _shopMapping;
-        private readonly ILogger _logger;
-        private readonly IDatabaseSearcher _databaseSearcher;
         private string? _shopFormat;
         
         private string _shopName = string.Empty;
         
         public List<string> Errors { get; } = [];
 
-        public SyncDiscountDate(IProductStorage dataProduct, IFileStorage fileStorage, ILogger logger, IShopStorage shopMapping, IDatabaseSearcher databaseSearcher)
-        {
-            _dataProduct = dataProduct;
-            _fileStorage = fileStorage;
-            _logger = logger;
-            _databaseSearcher = databaseSearcher;
-
-            _shopMapping = shopMapping;
-        }
-
         public void Execute()
         {
-            foreach (var file in _fileStorage.Target)
+            foreach (var file in fileStorage.Target)
             {
+                if (file.ShopName == null)
+                {
+                    var msg = localizationService.GetErrorString("ErrorNoShopName");
+                    var formatted = string.Format(msg, file.FileName);
+                    Errors.Add(formatted);
+                    continue;
+                }
                 _shopFormat = SetDataFormat(file.ShopName);
                 _shopName = file.ShopName;
                 ProcessFile(file);
@@ -47,13 +46,20 @@ namespace ExcelShSy.Infrastructure.Services
 
         private string SetDataFormat(string shopName)
         {
-            var shopTemplate = _shopMapping.GetShopMapping(shopName);
-            return shopTemplate.DataFormat;
+            var shopTemplate = shopMapping.GetShopMapping(shopName);
+            return shopTemplate!.DataFormat!;
         }
 
         private void ProcessFile(IExcelFile file)
         {
-            foreach (var page in file.SheetList) OperationWraper.Try(() => ProcessPage(page), Errors, file.FileName);
+            if (file.SheetList == null)
+            {
+                var msg = localizationService.GetErrorString("ErrorNoSheets");
+                var formatted = string.Format(msg, file.FileName);
+                Errors.Add(formatted);
+                return;
+            }
+            foreach (var page in file.SheetList) OperationWrapper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
         private void ProcessPage(IExcelSheet page)
@@ -70,7 +76,7 @@ namespace ExcelShSy.Infrastructure.Services
             }
             catch
             {
-                _logger.Log($"No column {ColumnConstants.DiscountFrom} in {page.SheetName}");
+                logger.Log($"No column {ColumnConstants.DiscountFrom} in {page.SheetName}");
             }
             try
             {
@@ -79,7 +85,7 @@ namespace ExcelShSy.Infrastructure.Services
             }
             catch
             {
-                _logger.Log($"No column {ColumnConstants.DiscountTo} in {page.SheetName}");
+                logger.Log($"No column {ColumnConstants.DiscountTo} in {page.SheetName}");
             }
 
             if (dataStart == 0 && dataEnd == 0) return;
@@ -90,11 +96,11 @@ namespace ExcelShSy.Infrastructure.Services
             {
                 var localArticle = worksheet.GetArticle(row, articleCol);
                 if (localArticle == null) continue;
-                var article = _databaseSearcher.SearchProduct(_shopName, localArticle);
+                var article = databaseSearcher.SearchProduct(_shopName, localArticle);
 
-                if (_dataProduct.DiscountFrom.TryGetValue(article, out DateTime valueFrom) && dataStart != 0)
+                if (dataProduct.DiscountFrom.TryGetValue(article, out DateTime valueFrom) && dataStart != 0)
                     worksheet.WriteCell(row, dataStart, ConvertDate(valueFrom));
-                if (_dataProduct.DiscountTo.TryGetValue(article, out DateTime valueTo) && dataEnd != 0)
+                if (dataProduct.DiscountTo.TryGetValue(article, out DateTime valueTo) && dataEnd != 0)
                     worksheet.WriteCell(row, dataEnd, ConvertDate(valueTo));
                 else productTo.Add(article);
 
@@ -107,7 +113,7 @@ namespace ExcelShSy.Infrastructure.Services
                 .Distinct()
                 .ToList();
 
-            _logger.Log($"Products where errors {string.Join(",", products)}");
+            logger.Log($"Products where errors {string.Join(",", products)}");
         }
 
         private string ConvertDate(DateTime date)

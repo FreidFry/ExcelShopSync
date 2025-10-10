@@ -10,7 +10,6 @@ using Avalonia;
 using MsBox.Avalonia;
 using Avalonia.Controls;
 using Avalonia.VisualTree;
-using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Infrastructure.Factories
 {

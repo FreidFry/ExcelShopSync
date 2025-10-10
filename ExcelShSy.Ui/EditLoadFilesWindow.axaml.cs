@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Media;
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Storage;
@@ -10,8 +9,6 @@ using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Ui.Models.EditLoadFiles;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
-using static ExcelShSy.Localization.GetLocalizationInCode;
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace ExcelShSy.Ui
 {

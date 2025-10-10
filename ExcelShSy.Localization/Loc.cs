@@ -9,8 +9,8 @@ namespace ExcelShSy.Localization
     {
         private readonly string? _assemblyName;
         private readonly Dictionary<string, ResourceManager> _cache = new();
-        
-        public Loc()
+
+        private Loc()
         {
             _assemblyName = Assembly.GetAssembly(GetType())?.GetName().Name;
         }

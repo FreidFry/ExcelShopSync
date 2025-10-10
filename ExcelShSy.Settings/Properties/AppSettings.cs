@@ -6,8 +6,8 @@ namespace ExcelShSy.Settings.Properties;
 public class AppSettings : IAppSettings
 {
     
-    private static readonly string CONFIG_FILE_NAME = $"settings.json";
-    private static readonly string CONFIG_FILE = Path.Combine(Environment.CurrentDirectory, CONFIG_FILE_NAME);
+    private static readonly string ConfigFileName = $"settings.json";
+    private static readonly string ConfigFile = Path.Combine(Environment.CurrentDirectory, ConfigFileName);
     
     public string Language { get; set; } = "";
 
@@ -22,17 +22,17 @@ public class AppSettings : IAppSettings
     public void SaveSettings(IAppSettings settings)
     {
         var json = JsonSerializer.Serialize(settings);
-        File.WriteAllText(CONFIG_FILE, json);
+        File.WriteAllText(ConfigFile, json);
         Reload();
         SettingsChanged?.Invoke();
     }
 
     private void Reload()
     {
-        if (!File.Exists(CONFIG_FILE))
+        if (!File.Exists(ConfigFile))
             return;
 
-        var json = File.ReadAllText(CONFIG_FILE);
+        var json = File.ReadAllText(ConfigFile);
         var loaded = JsonSerializer.Deserialize<AppSettings>(json);
 
         if (loaded is not null)

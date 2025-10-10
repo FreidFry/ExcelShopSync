@@ -8,8 +8,6 @@ using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Localization;
 using ExcelShSy.Localization.Resources;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-
 namespace ExcelShSy.Ui
 {
     public partial class SettingWindow : Window, INotifyPropertyChanged
@@ -53,7 +51,6 @@ namespace ExcelShSy.Ui
         #region Actions
 
         private bool _shouldLangChanged;
-        private bool _shouldMoveDatabase;
 
         #endregion
 
@@ -154,12 +151,11 @@ namespace ExcelShSy.Ui
             var selectedFolderPath = folders[0].Path.LocalPath;
             DataBasePath.Text = selectedFolderPath;
             _newSettings.DataBasePath = selectedFolderPath;
-            _shouldMoveDatabase = true;
         }
         
         #endregion
 
-        private void CBLanguagues_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CBLanguages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_isInitialized && sender is ComboBox { SelectedItem: ComboBoxItem { Tag: Enums.SupportedLanguagues selectedLang } })
             {

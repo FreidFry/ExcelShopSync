@@ -95,7 +95,8 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
                     .ShowWindowAsync();
                 return;
             }
-            FileInfo fi = new FileInfo(updateFile);
+
+            var fi = new FileInfo(updateFile!);
             while (!fi.Exists || fi.Length == 0)
                 await Task.Delay(50);
 

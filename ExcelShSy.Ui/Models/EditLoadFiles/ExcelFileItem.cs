@@ -1,7 +1,4 @@
-﻿
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+﻿using System.ComponentModel;
 
 namespace ExcelShSy.Ui.Models.EditLoadFiles
 {
@@ -61,9 +58,10 @@ namespace ExcelShSy.Ui.Models.EditLoadFiles
             IsSelectedToRemove = false;
             FilePath = path;
         }
-
+#if DESIGNER
         public ExcelFileItem()
         { }
+#endif
 
         
         public event PropertyChangedEventHandler? PropertyChanged;

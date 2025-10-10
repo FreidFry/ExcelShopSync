@@ -1,7 +1,6 @@
 ﻿using OfficeOpenXml;
 using System.Globalization;
 using ExcelShSy.Core.Properties;
-using ExcelShSy.LocalDataBaseModule.Data;
 
 namespace ExcelShSy.Infrastructure.Extensions
 {
@@ -76,9 +75,9 @@ namespace ExcelShSy.Infrastructure.Extensions
             }
         }
 
-        public static decimal RoundDecimal(decimal value, int NumbersAfterDot)
+        public static decimal RoundDecimal(decimal value, int numbersAfterDot)
         {
-            return Math.Round(value, NumbersAfterDot, MidpointRounding.AwayFromZero);
+            return Math.Round(value, numbersAfterDot, MidpointRounding.AwayFromZero);
         }
 
         public static DateTime? GetDate(this ExcelWorksheet worksheet, int row, int needColumn, string? format)

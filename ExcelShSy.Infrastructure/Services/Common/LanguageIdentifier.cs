@@ -4,17 +4,12 @@ namespace ExcelShSy.Infrastructure.Services.Common
 {
     public class LanguageIdentifier : ILanguageIdentifier
     {
-        private readonly Dictionary<string, HashSet<char>> _languageChars;
-
-        public LanguageIdentifier()
+        private readonly Dictionary<string, HashSet<char>> _languageChars = new()
         {
-            _languageChars = new Dictionary<string, HashSet<char>>
-            {
-                ["ru"] = [.. "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"],
-                ["uk"] = [.. "абвгґдеєжзиіїйклмнопрстуфхцчшщьюя"],
-                ["en"] = [.. "abcdefghijklmnopqrstuvwxyz"]
-            };
-        }
+            ["ru"] = [.. "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"],
+            ["uk"] = [.. "абвгґдеєжзиіїйклмнопрстуфхцчшщьюя"],
+            ["en"] = [.. "abcdefghijklmnopqrstuvwxyz"]
+        };
 
         public string IdentifyLanguage(string text)
         {
@@ -23,17 +18,15 @@ namespace ExcelShSy.Infrastructure.Services.Common
 
             var lowerText = text.ToLower();
 
-            string bestLang = "unknown";
-            int maxCount = 0;
+            var bestLang = "unknown";
+            var maxCount = 0;
 
             foreach (var lang in _languageChars)
             {
-                int count = lowerText.Count(c => lang.Value.Contains(c));
-                if (count > maxCount)
-                {
-                    maxCount = count;
-                    bestLang = lang.Key;
-                }
+                var count = lowerText.Count(c => lang.Value.Contains(c));
+                if (count <= maxCount) continue;
+                maxCount = count;
+                bestLang = lang.Key;
             }
 
             return bestLang;

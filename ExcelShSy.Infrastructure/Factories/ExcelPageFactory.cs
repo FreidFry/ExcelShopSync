@@ -6,14 +6,8 @@ using OfficeOpenXml;
 
 namespace ExcelShSy.Infrastructure.Factories
 {
-    public class ExcelPageFactory : IExcelPageFactory
+    public class ExcelPageFactory(IColumnMappingStorage columnMappingStorage) : IExcelPageFactory
     {
-        private readonly IColumnMappingStorage _columnMappingStorage;
-        public ExcelPageFactory(IColumnMappingStorage columnMappingStorage)
-        {
-            _columnMappingStorage = columnMappingStorage;
-        }
-
         public IExcelSheet Create(ExcelWorksheet worksheet)
         {
             var page = new ExcelPage(worksheet)
@@ -25,17 +19,17 @@ namespace ExcelShSy.Infrastructure.Factories
             return page;
         }
 
-        static Dictionary<string, int>? GetTempHeaders(ExcelWorksheet worksheet)
+        private static Dictionary<string, int>? GetTempHeaders(ExcelWorksheet? worksheet)
         {
-            if (worksheet == null || worksheet.Dimension == null)
+            if (worksheet?.Dimension == null)
                 return [];
 
             return worksheet.GetRowValueColumnMap(worksheet.Dimension.Start.Row);
         }
 
-        Dictionary<string, int>? GetRealHeaders(Dictionary<string, int>? undefinedHeaders)
+        private Dictionary<string, int> GetRealHeaders(Dictionary<string, int>? undefinedHeaders)
         {
-            var template = _columnMappingStorage.Columns;
+            var template = columnMappingStorage.Columns;
 
             return undefinedHeaders == null ? [] : template
             .SelectMany(pair => pair.Value, (pair, name) => new { pair.Key, Name = name })

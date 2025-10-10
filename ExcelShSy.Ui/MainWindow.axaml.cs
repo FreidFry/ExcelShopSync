@@ -19,7 +19,6 @@ namespace ExcelShSy.Ui
         private readonly IAppSettings _appSettings;
         private readonly IFileManager _fileManager;
         private readonly IOperationTaskFactory _taskFactory;
-        private readonly ILogger _logger;
         private readonly IEditLoadFilesWindowFactory _editLoadFilesWindowFactory;
         private readonly ISettingWindowFactory _settingWindowFactory;
         private readonly IDataBaseViewerFactory _dataBaseViewer;
@@ -33,7 +32,7 @@ namespace ExcelShSy.Ui
         }
         #endif
         
-        public MainWindow(IAppSettings appSettings, IFileManager fileManager, IOperationTaskFactory taskFactory, ILogger logger, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory, IDataBaseViewerFactory dataBaseViewer,
+        public MainWindow(IAppSettings appSettings, IFileManager fileManager, IOperationTaskFactory taskFactory, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory, IDataBaseViewerFactory dataBaseViewer,
            IF4LabsAboutWindowFactory f4LabsAboutWindowFactory,ILocalizationService localizationService)
         {
             InitializeComponent();
@@ -41,7 +40,6 @@ namespace ExcelShSy.Ui
             _appSettings = appSettings;
             _fileManager = fileManager;
             _taskFactory = taskFactory;
-            _logger = logger;
             _editLoadFilesWindowFactory = editLoadFilesWindowFactory;
             _settingWindowFactory = settingWindowFactory;
             _dataBaseViewer = dataBaseViewer;

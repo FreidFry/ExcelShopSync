@@ -1,4 +1,5 @@
 ﻿using ExcelShSy.Core.Attributes;
+using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
@@ -10,27 +11,24 @@ using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 namespace ExcelShSy.Infrastructure.Services
 {
     [Task(nameof(ProductProcessingOptions.ShouldSyncQuantities))]
-    public class SyncQuantity : IExecuteOperation
+    public class SyncQuantity(IProductStorage dataProduct, IFileStorage fileStorage, IDatabaseSearcher databaseSearcher, ILocalizationService localizationService)
+        : IExecuteOperation
     {
-        private readonly IProductStorage _dataProduct;
-        private readonly IFileStorage _fileStorage;
-        private readonly IDatabaseSearcher _databaseSearcher;
-
         private string _shopName = string.Empty;
-        
-        public SyncQuantity(IProductStorage dataProduct, IFileStorage fileStorage, IDatabaseSearcher databaseSearcher)
-        {
-            _dataProduct = dataProduct;
-            _fileStorage = fileStorage;
-            _databaseSearcher = databaseSearcher;
-        }
 
         public List<string> Errors { get; } = [];
 
         public void Execute()
         {
-            foreach (var file in _fileStorage.Target)
+            foreach (var file in fileStorage.Target)
             {
+                if (file.ShopName == null)
+                {
+                    var msg = localizationService.GetErrorString("ErrorNoShopName");
+                    var formatted = string.Format(msg, file.FileName);
+                    Errors.Add(formatted);
+                    continue;
+                }
                 _shopName = file.ShopName;
                 ProcessFile(file);
             }
@@ -38,7 +36,14 @@ namespace ExcelShSy.Infrastructure.Services
 
         private void ProcessFile(IExcelFile file)
         {
-            foreach (var page in file.SheetList) OperationWraper.Try(() => ProcessPage(page), Errors, file.FileName);
+            if (file.SheetList == null)
+            {
+                var msg = localizationService.GetErrorString("ErrorNoSheets");
+                var formatted = string.Format(msg, file.FileName);
+                Errors.Add(formatted);
+                return;
+            }
+            foreach (var page in file.SheetList) OperationWrapper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
         private void ProcessPage(IExcelSheet page)
@@ -53,11 +58,11 @@ namespace ExcelShSy.Infrastructure.Services
             {
                 var localArticle = worksheet.GetArticle(row, headers.articleColumn);
                 if (localArticle == null) continue;
-                var article = _databaseSearcher.SearchProduct(_shopName, localArticle);
+                var article = databaseSearcher.SearchProduct(_shopName, localArticle);
                 
 
-                if (_dataProduct.Quantity.TryGetValue(article, out var value))
-                    worksheet.WriteCell(row, headers.neededColumn, _dataProduct.Quantity[article]);
+                if (dataProduct.Quantity.TryGetValue(article, out var value))
+                    worksheet.WriteCell(row, headers.neededColumn, dataProduct.Quantity[article]);
             }
         }
     }

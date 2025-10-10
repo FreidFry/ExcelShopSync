@@ -53,4 +53,10 @@
     <data name="UnsupportedOSUpdateText" xml:space="preserve">
         <value>Ваша версия операционной системы не поддерживается для этого обновления. Пожалуйста, обновите ОС или свяжитесь с разработчиком.</value>
     </data>
+    <data name="ErrorNoSheets" xml:space="preserve">
+        <value>В файле "{0}" отсутствуют листы.</value>
+    </data>
+    <data name="ErrorNoShopName" xml:space="preserve">
+        <value>Для магазина из файла "{0}" не найден подходящий шаблон. Пожалуйста, проверьте содержимое файла или создайте шаблон.</value>
+    </data>
 </root>

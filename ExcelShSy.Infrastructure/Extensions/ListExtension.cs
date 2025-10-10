@@ -27,8 +27,7 @@ namespace ExcelShSy.Infrastructure.Extensions
                             tasksToRun.Add(task);
                     }
                     catch
-                    {
-                    }
+                    { }
                 }
 
                 // рекурсивно для дочерних элементов

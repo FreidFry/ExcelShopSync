@@ -5,12 +5,12 @@ namespace ExcelShSy.Infrastructure.Services.Logger
 {
     public class Logger : ILogger
     {
-        private readonly string date = DateTime.Now.ToString("y-MM-dd HH-mm-ss");
-        private readonly string LogFilePath;
+        private readonly string _date = DateTime.Now.ToString("y-MM-dd HH-mm-ss");
+        private readonly string _logFilePath;
 
         public Logger()
         {
-            LogFilePath = Init();
+            _logFilePath = Init();
         }
 
         public string Init()
@@ -18,9 +18,10 @@ namespace ExcelShSy.Infrastructure.Services.Logger
             var logDirectory = Path.Combine(Environment.CurrentDirectory, "Logs");
 
             if (!Path.Exists(logDirectory)) Directory.CreateDirectory(logDirectory);
-            var logPath = Path.Combine(logDirectory, "Log_" + date + ".log");
+            var logPath = Path.Combine(logDirectory, "Log_" + _date + ".log");
 
-            using (var stream = new FileStream(logPath, FileMode.CreateNew, FileAccess.Write)) { }
+            using (new FileStream(logPath, FileMode.CreateNew, FileAccess.Write))
+            { }
 
             var logFiles = Directory.GetFiles(logDirectory, "*.log")
                                     .OrderBy(File.GetCreationTime)
@@ -41,11 +42,11 @@ namespace ExcelShSy.Infrastructure.Services.Logger
 
             try
             {
-                File.AppendAllText(LogFilePath, logEntry + Environment.NewLine, Encoding.UTF8);
+                File.AppendAllText(_logFilePath, logEntry + Environment.NewLine, Encoding.UTF8);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Ошибка при записи в лог: " + ex.Message);
+                Console.WriteLine(@"Ошибка при записи в лог: " + ex.Message);
             }
         }
 

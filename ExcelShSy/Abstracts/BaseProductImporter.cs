@@ -16,7 +16,7 @@ namespace ExcelShSy.Core.Abstracts
         public void FetchAllProducts(IExcelFile file)
         {
             ShopName = file.ShopName;
-            ShopTemplate = ShopStorage.GetShopMapping(ShopName);
+            if (!string.IsNullOrWhiteSpace(ShopName)) ShopTemplate = ShopStorage.GetShopMapping(ShopName);
             if (file.SheetList == null) return;
             foreach (var page in file.SheetList)
             {

@@ -1,8 +1,8 @@
-﻿using ExcelShSy.Core.Exeptions;
+﻿using ExcelShSy.Core.Exceptions;
 
 namespace ExcelShSy.Infrastructure.Extensions
 {
-    public class OperationWraper
+    public static class OperationWrapper
     {
         public static void Try(Action action, List<string> errors, string context = "")
         {

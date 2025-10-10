@@ -5,7 +5,7 @@ namespace ExcelShSy.Infrastructure.Extensions
 {
     public static class ExcelFileExtensions
     {
-        public static string IndetifyShop(this IList<IExcelSheet?> pages, IShopStorage shopStorage)
+        public static string IdentifyShop(this IList<IExcelSheet?> pages, IShopStorage shopStorage)
         {
             List<string> shops = [];
             foreach (var page in pages)
@@ -22,16 +22,16 @@ namespace ExcelShSy.Infrastructure.Extensions
             return thisShop;
         }
 
-        public static string LanguagueDetect(this IList<IExcelSheet?> pages)
+        public static string LanguageDetect(this IList<IExcelSheet?> pages)
         {
-            List<string> languagues = [];
+            List<string> languages = [];
             foreach (var page in pages)
             {
-                languagues.Add(page.GetLanguage());
-                if (languagues.Count > 15) break;
+                languages.Add(page.GetLanguage());
+                if (languages.Count > 15) break;
             }
 
-            var thisLanguage = languagues.GroupBy(x => x)
+            var thisLanguage = languages.GroupBy(x => x)
                 .OrderByDescending(g => g.Count())
                 .First()
                 .Key;

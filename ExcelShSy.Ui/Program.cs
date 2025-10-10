@@ -11,8 +11,8 @@ public static class Program
             ExcelPackage.License.SetNonCommercialPersonal("Freid4");
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         }
-    
-        public static AppBuilder BuildAvaloniaApp()
+
+        private static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
                 .WithInterFont()

@@ -12,15 +12,13 @@ using OfficeOpenXml;
 
 namespace ExcelShSy.Infrastructure.Services.Operations
 {
-    public class MarketProductImporter : BaseProductImporter, IFetchMarketProduct
+    public class MarketProductImporter(
+        IProductStorage dataProduct,
+        ILogger logger,
+        IShopStorage unknown,
+        IDatabaseSearcher databaseSearcher)
+        : BaseProductImporter(dataProduct, unknown, logger), IFetchMarketProduct
     {
-        private readonly IDatabaseSearcher _databaseSearcher;
-        
-        public MarketProductImporter(IProductStorage dataProduct, ILogger logger, IShopStorage _, IDatabaseSearcher databaseSearcher) : base(dataProduct, _, logger)
-        {
-            _databaseSearcher = databaseSearcher;
-        }
-
         protected override void ProcessPage(IExcelSheet page)
         {
             var headers = page.MappedHeaders;
@@ -45,10 +43,12 @@ namespace ExcelShSy.Infrastructure.Services.Operations
                 var localArticle = worksheet.GetArticle(row, articleCol);
                 if (string.IsNullOrEmpty(localArticle))
                 {
-                    Logger.LogWarning($"In {row} row empty atricle");
+                    Logger.LogWarning($"In {row} row empty article");
                     continue;
                 }
-                var article = _databaseSearcher.SearchProduct(ShopName, localArticle);
+                var article = ShopName == null
+                    ? localArticle
+                    : databaseSearcher.SearchProduct(ShopName, localArticle);
 
                 SetProductData(article, priceCol, quantityCol, availabilityCol, discountCol, discountFromCol, discountToCol, row, worksheet);
             }

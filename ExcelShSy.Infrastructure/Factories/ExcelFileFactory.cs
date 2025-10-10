@@ -15,7 +15,7 @@ namespace ExcelShSy.Infrastructure.Factories
 
             file.SheetList = GetPages(file.ExcelPackage);
 
-            file.ShopName = IndetifyShop(file.SheetList);
+            file.ShopName = IdentifyShop(file.SheetList);
             file.Language = LanguageDetect(file.SheetList);
 
             return file;
@@ -31,7 +31,7 @@ namespace ExcelShSy.Infrastructure.Factories
             return pages;
         }
 
-        private string IndetifyShop(List<IExcelSheet> pages)
+        private string IdentifyShop(List<IExcelSheet> pages)
         {
             List<string> shops = [];
             foreach (var page in pages)

@@ -4,13 +4,10 @@ using Microsoft.Data.Sqlite;
 
 namespace ExcelShSy.LocalDataBaseModule.Wrappers;
 
-public class SqliteDataReaderWrapper : IDataReaderWrapper
+public class SqliteDataReaderWrapper(SqliteDataReader reader) : IDataReaderWrapper
 {
-    private readonly SqliteDataReader _reader;
-    public SqliteDataReaderWrapper(SqliteDataReader reader) => _reader = reader;
-
-    public bool Read() => _reader.Read();
-    public IDataReader GetReader() => _reader;
-    public string GetString(int ordinal) => _reader.GetString(ordinal);
-    public void Dispose() => _reader.Dispose();
+    public bool Read() => reader.Read();
+    public IDataReader GetReader() => reader;
+    public string GetString(int ordinal) => reader.GetString(ordinal);
+    public void Dispose() => reader.Dispose();
 }

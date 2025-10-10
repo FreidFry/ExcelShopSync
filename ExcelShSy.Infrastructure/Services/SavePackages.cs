@@ -2,7 +2,6 @@
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
-using static ExcelShSy.Localization.GetLocalizationInCode;
 
 namespace ExcelShSy.Infrastructure.Services
 {

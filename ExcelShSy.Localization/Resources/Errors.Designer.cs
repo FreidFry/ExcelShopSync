@@ -128,5 +128,17 @@ namespace ExcelShSy.Localization.Resources {
                 return ResourceManager.GetString("UnsupportedOSUpdateText", resourceCulture);
             }
         }
+        
+        internal static string ErrorNoSheets {
+            get {
+                return ResourceManager.GetString("ErrorNoSheets", resourceCulture);
+            }
+        }
+        
+        internal static string ErrorNoShopName {
+            get {
+                return ResourceManager.GetString("ErrorNoShopName", resourceCulture);
+            }
+        }
     }
 }

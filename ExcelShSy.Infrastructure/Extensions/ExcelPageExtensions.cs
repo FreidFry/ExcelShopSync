@@ -67,8 +67,8 @@ namespace ExcelShSy.Infrastructure.Extensions
 
             if (!hasEmpty) return null;
             return range.Where(cell => !string.IsNullOrWhiteSpace(cell.Value?.ToString()))
-                    .GroupBy(cell => cell.Value.ToString())
-                    .ToDictionary(g => g.Key, g => g.First().Start.Column);
+                .GroupBy(cell => cell.Value.ToString())
+                .ToDictionary(g => g.Key, g => g.First().Start.Column)!;
         }
     }
 }

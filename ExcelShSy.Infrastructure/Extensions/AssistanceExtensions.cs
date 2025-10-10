@@ -1,4 +1,4 @@
-﻿using ExcelShSy.Core.Exeptions;
+﻿using ExcelShSy.Core.Exceptions;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 using OfficeOpenXml;

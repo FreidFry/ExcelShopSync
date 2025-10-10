@@ -86,12 +86,12 @@ namespace ExcelShSy.Infrastructure.Services.Operations
             if (ProductProcessingOptions.ShouldSyncAvailability && availCol > 0)
             {
                 var unidentified = ws.GetString(row, availCol);
-                var val = IndetifyAvailability(unidentified);
+                var val = IdentifyAvailability(unidentified);
                 if (val != null) DataProduct.AddProductAvailability(article, val);
             }
         }
 
-        static string? IndetifyAvailability(string? availability)
+        private static string? IdentifyAvailability(string? availability)
         {
             if (availability == null) return null;
             var result = AvailabilityMappingPriceList.Template

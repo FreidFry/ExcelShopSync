@@ -60,4 +60,10 @@
     <data name="UnsupportedOSUpdateText" xml:space="preserve">
         <value>Your operating system version is not supported for this update. Please update your OS or contact the developer.</value>
     </data>
+    <data name="ErrorNoSheets" xml:space="preserve">
+        <value>No sheets found in file "{0}".</value>
+    </data>
+    <data name="ErrorNoShopName" xml:space="preserve">
+        <value>No suitable template was found for the shop in file "{0}". Please check the file contents or create a template.</value>
+    </data>
 </root>

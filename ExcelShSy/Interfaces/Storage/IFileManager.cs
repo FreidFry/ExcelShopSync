@@ -1,6 +1,4 @@
-﻿using ExcelShSy.Core.Interfaces.Excel;
-
-namespace ExcelShSy.Core.Interfaces.Storage
+﻿namespace ExcelShSy.Core.Interfaces.Storage
 {
     public interface IFileManager
     {
