@@ -1,7 +1,9 @@
-# ExcelShopSync
+<h3 align="center">ExcelShopSync</h3>
 
-![License](https://img.shields.io/github/license/FreidFry/ExcelShopSync?style=square&color=brightgreen&cacheSeconds=3600)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/FreidFry/ExcelShopSync?style=square&color=brightgreen&cacheSeconds=3600)  
+<div align="center">
+    <a href="./LICENSE"><img src="https://img.shields.io/github/license/FreidFry/ExcelShopSync?label=License&color=brightgreen&cacheSeconds=3600" alt="License"/></a>
+    <a href="http://github.com/FreidFry/ExcelShopSync/releases/latest"><img src="https://img.shields.io/github/v/release/FreidFry/ExcelShopSync?style=square&color=brightgreen&cacheSeconds=3600" alt="Release"/></a>
+</div>
 
 #### Інші мови  
 - [English](README.md)
