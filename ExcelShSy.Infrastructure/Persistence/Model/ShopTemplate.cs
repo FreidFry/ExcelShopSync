@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ExcelShSy.Core.Interfaces.Shop;
+using static ExcelShSy.Infrastructure.Persistence.DefaultValues.AvailabilityConstant;
 
 namespace ExcelShSy.Infrastructure.Persistence.Model
 {
@@ -40,7 +41,13 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
 
         public Dictionary<string, string?> AvailabilityMap
         {
-            get => _availabilityMap ??= new Dictionary<string, string?>();
+            get => _availabilityMap ??= new Dictionary<string, string?>
+            {
+                {InStock, null},
+                {OutOfStock, null},
+                {OnOrder, null},
+                {ReadyToGo, null}
+            };
             set
             {
                 _availabilityMap = value;

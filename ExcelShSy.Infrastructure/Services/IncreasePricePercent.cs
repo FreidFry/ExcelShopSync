@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using ExcelShSy.Core;
 using ExcelShSy.Core.Attributes;
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
@@ -36,9 +37,8 @@ namespace ExcelShSy.Infrastructure.Services
             foreach (var page in file.SheetList) OperationWrapper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
-        private async void ProcessPage(IExcelSheet page)
+        private void ProcessPage(IExcelSheet page)
         {
-
             var worksheet = page.Worksheet;
 
             var headers = page.InitialHeadersTuple(ColumnConstants.Price);
@@ -48,32 +48,11 @@ namespace ExcelShSy.Infrastructure.Services
             var oldPriceColumn = page.InitialNeedColumn(ColumnConstants.PriceOld);
             if (oldPriceColumn == 0) oldPriceColumn = page.InitialNeedColumn(ColumnConstants.Price);
 
-            decimal priceIncrease;
-            if (ProductProcessingOptions.priceIncreasePercentage < 100)
-                priceIncrease = (ProductProcessingOptions.priceIncreasePercentage + 100) / 100;
-            else
-            {
-                if(ProductProcessingOptions.priceIncreasePercentage >= 200)
-                {
-                    var title = localizationService.GetMessageString("Confirm");
-                    var msg = localizationService.GetMessageString("ConfirmText");
-                    var formatedText = string.Format(msg, ProductProcessingOptions.priceIncreasePercentage.ToString(CultureInfo.InvariantCulture));
-                    
-                    var msBox = MessageBoxManager.GetMessageBoxStandard(title,
-                        formatedText,
-                        ButtonEnum.YesNo);
-                    var result = await msBox.ShowAsync();
-                    if (result == ButtonResult.No) return;
-                }
-
-                priceIncrease = ProductProcessingOptions.priceIncreasePercentage / 100;
-            }
-
             foreach (var row in worksheet.GetFullRowRangeWithoutFirstRow())
             {
                 var price = worksheet.GetDecimal(row, headers.neededColumn);
                 if (price == null) continue;
-                var priceValue = (decimal)price * priceIncrease;
+                var priceValue = (decimal)price * ProductProcessingOptions.priceIncreasePercentage;
 
                 priceValue = RoundDecimal(priceValue, ProductProcessingOptions.ShouldRoundPrices ? 0 : 2);
 

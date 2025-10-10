@@ -17,12 +17,10 @@ public class SqliteUpdateManager(ISqliteDbContext dbContext) : IDatabaseUpdateMa
     {
         lock (_lock)
         {
-            // сохраняем последнее значение
             _pendingChanges[(rowId, column)] = newValue;
 
-            // сбрасываем/перезапускаем общий таймер
             _timer?.Stop();
-            _timer = new Timer(5000); // 5 секунд
+            _timer = new Timer(5000);
             _timer.Elapsed += (_, _) => Flush();
             _timer.AutoReset = false;
             _timer.Start();
@@ -52,7 +50,7 @@ public class SqliteUpdateManager(ISqliteDbContext dbContext) : IDatabaseUpdateMa
                 _cmd.SetCommandText(updateQuery);
 
                 _cmd.ClearParameters();
-                _cmd.AddParametersWithValue("@val", value);
+                _cmd.AddParametersWithValue("@val", value.Trim());
                 _cmd.AddParametersWithValue("@id", rowId);
 
                 _cmd.ExecuteNonQuery();

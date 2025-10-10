@@ -6,12 +6,7 @@ namespace ExcelShSy.Localization;
 public class LocExtension(string key) : MarkupExtension
 {
         private string Key { get; } = key;
-
-#if DESIGNER
-        public LocExtension()
-        { }
-#endif
-
+        
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             if (serviceProvider.GetService(typeof(IProvideValueTarget)) is not IProvideValueTarget

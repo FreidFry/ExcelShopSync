@@ -143,19 +143,63 @@ namespace ExcelShSy.Ui
             _fileManager.AddSourcePath();
         }
 
-        private void ExecuteTasks_Click(object sender, RoutedEventArgs e)
+        private async void ExecuteTasks_Click(object sender, RoutedEventArgs e)
         {
-            if (!_taskFactory.HasCheckedCheckbox(TasksContainer))
+            try
             {
-                var message = _localizationService.GetString("MainWindow", "NoSetExecute_");
-                var title = _localizationService.GetString("MainWindow", "NoSetExecuteTitle_");
-                var msBox = MessageBoxManager.GetMessageBoxStandard(title,message, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error);
-                msBox.ShowAsync();
-                return;
+                if (!_taskFactory.HasCheckedCheckbox(TasksContainer))
+                {
+                    var message = _localizationService.GetString("MainWindow", "NoSetExecute_");
+                    var title = _localizationService.GetString("MainWindow", "NoSetExecuteTitle_");
+                    var msBox = MessageBoxManager.GetMessageBoxStandard(title, message, ButtonEnum.Ok,
+                        MsBox.Avalonia.Enums.Icon.Error);
+                    await msBox.ShowWindowDialogAsync(this);
+                    return;
+                }
+
+                await ValidateDecimalTextBox();
+
+                _fileManager.InitializeAllFiles();
+                _taskFactory.ExecuteOperations(TasksContainer);
+                _fileManager.ClearAfterComplete();
             }
-            _fileManager.InitializeAllFiles();
-            _taskFactory.ExecuteOperations(TasksContainer);
-            _fileManager.ClearAfterComplete();
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                throw;
+            }
+            finally
+            {
+                if(decimal.TryParse(IncreasePercentTextBox.Text, out var increasePercentage))
+                    ProductProcessingOptions.priceIncreasePercentage = increasePercentage;
+            }
+            
+        }
+        
+        private async Task ValidateDecimalTextBox()
+        {
+            switch (ProductProcessingOptions.priceIncreasePercentage)
+            {
+                case < 100:
+                    ProductProcessingOptions.priceIncreasePercentage /= 10;
+                    break;
+                case >= 200:
+                {
+                    var title = _localizationService.GetMessageString("Confirm");
+                    var msg = _localizationService.GetMessageString("ConfirmText");
+                    var formatedText = string.Format(msg, ProductProcessingOptions.priceIncreasePercentage.ToString(CultureInfo.InvariantCulture));
+                    
+                    var msBox = MessageBoxManager.GetMessageBoxStandard(title,
+                        formatedText,
+                        ButtonEnum.YesNo);
+                    var result = await msBox.ShowWindowDialogAsync(this);
+                    if (result != ButtonResult.Yes) ProductProcessingOptions.priceIncreasePercentage = 1;
+                    break;
+                }
+                default:
+                    ProductProcessingOptions.priceIncreasePercentage /= 100;
+                    break;
+            }
         }
 
         private void CheckBox_Click(object sender, RoutedEventArgs e)

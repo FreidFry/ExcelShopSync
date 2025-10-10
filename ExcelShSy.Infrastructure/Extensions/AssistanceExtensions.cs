@@ -37,8 +37,9 @@ namespace ExcelShSy.Infrastructure.Extensions
 
         private static int FindColumnInHeaders(this IExcelSheet page, string columnName)
         {
-            if (page.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty() || !page.MappedHeaders.TryGetValue(columnName, out var value))
-                throw new ShopDataException($"page \"{page.SheetName}\" - {columnName} not found! Please check your file.");
+            if (page.MappedHeaders == null || page.MappedHeaders.IsNullOrEmpty())
+                throw new ShopDataException($"page \"{page.SheetName}\" - \"{columnName}\" not found! Please check your file.");
+            page.MappedHeaders.TryGetValue(columnName, out var value);
             return value;
         }
 
