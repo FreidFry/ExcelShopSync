@@ -9,328 +9,332 @@
 - [Українська](README_ua.md)
 - [Русский](README_ru.md)
 
-This program is designed to simplify and partially automate the process of updating price lists and product availability on marketplaces and in online stores. It helps to quickly and efficiently synchronize data between different sources, minimizing manual labor and reducing the likelihood of human errors.
-
-### The provided functionality allows:
-- Transferring by article numbers:
-    - Product prices
-    - Product availability and quantity
-    - Discounts (with dates and without)
-    - Product statuses (e.g., "Ready to ship")
-- Increasing prices by a certain percentage.
-- Specifying links for different article numbers to a product.
-- Working with multiple files simultaneously.
+Конечно, вот перевод текста на русский язык с сохранением всего форматирования Markdown.
 
 ---
 
-## Program Usage Instructions
+Эта программа предназначена для упрощения и частичной автоматизации процесса обновления прайс-листов и наличия товаров на маркетплейсах и в интернет-магазинах. Она помогает быстро и эффективно синхронизировать данные между различными источниками, минимизируя ручной труд и снижая вероятность человеческих ошибок.
 
-The program is intended for processing data from Excel files — synchronizing prices, availability, discounts, and other parameters between price lists and marketplaces.
-
-⚠️ **Important:** The program works **by article numbers**, exact match is mandatory unless a link is specified. Even a difference in one character (e.g., `K` and `К`) is critical.
-
----
-
-## Preface:
-- It is recommended to create backup copies of files before processing.
-- The program does not support macros and complex formulas in Excel files.
-- Processing large files may take some time, please be patient.
-- The program is not intended for processing password-protected files.
-- If you encounter problems or have questions, please contact the details at the end of the instructions.
-
-### Recommendations before starting
-
-- Follow the instructions below.
-- All Excel files must be **closed** before starting processing.
-- Use files in the formats: `.xlsx`, `.xls`.
-- If errors occur, check the correctness of the headers and the presence of all necessary columns.
+### Предоставляемый функционал позволяет:
+- Переносить по артикулам:
+    - Цены товаров
+    - Наличие и количество товаров
+    - Скидки (с датами и без)
+    - Статусы товаров (например, «Готов к отгрузке»)
+- Повышать цены на определенный процент.
+- Указывать ссылки для разных артикулов на товар.
+- Работать с несколькими файлами одновременно.
 
 ---
 
-#### Description of subsequent terms:
-- **Target** — the file(s) where changes will be made.
-- **Source** — the file(s) from which data for changes will be taken.
-- **Article Number** — a unique product identifier used for matching between Target and Source.
-- **Price List** — the Source file containing current product prices.
+## Инструкция по использованию программы
 
-- **Required fields** — columns that must be present in the files for the program to work correctly.
-- **Additional fields** — columns that can be used for extended functionality but are not mandatory.
+Программа предназначена для обработки данных из файлов Excel — синхронизации цен, наличия, скидок и других параметров между прайс-листами и маркетплейсами.
+
+⚠️ **Важно:** Программа работает **по артикулам**, обязательное точное совпадение, если не указана связь. Даже разница в один символ (например, `K` и `К`) критична.
 
 ---
 
-## Usage
+## Предисловие:
+- Рекомендуется создавать резервные копии файлов перед обработкой.
+- Программа не поддерживает макросы и сложные формулы в файлах Excel.
+- Обработка больших файлов может занять некоторое время, пожалуйста, наберитесь терпения.
+- Программа не предназначена для обработки защищенных паролем файлов.
+- Если вы столкнулись с проблемами или у вас есть вопросы, пожалуйста, обратитесь к контактам в конце инструкции.
+
+### Рекомендации перед началом работы
+
+- Следуйте инструкциям ниже.
+- Все файлы Excel должны быть **закрыты** перед началом обработки.
+- Используйте файлы в форматах: `.xlsx`, `.xls`.
+- При возникновении ошибок проверьте правильность заголовков и наличие всех необходимых столбцов.
+
+---
+
+#### Описание последующих терминов:
+- **Целевой файл (Target)** — файл(ы), в которые будут вноситься изменения.
+- **Источник (Source)** — файл(ы), из которых будут браться данные для изменений.
+- **Артикул (Article Number)** — уникальный идентификатор товара, используемый для сопоставления между Целевым файлом и Источником.
+- **Прайс-лист (Price List)** — файл-Источник, содержащий актуальные цены на товары.
+
+- **Обязательные поля (Required fields)** — столбцы, которые должны присутствовать в файлах для корректной работы программы.
+- **Дополнительные поля (Additional fields)** — столбцы, которые можно использовать для расширенного функционала, но которые не являются обязательными.
+
+---
+
+## Использование
 
 <details>
-<summary>Main Window</summary>
+<summary>Главное окно</summary>
 
-### 1. Loading Target Files
-- Button: **Add File for Changes**
-- Used for making changes.
+### 1. Загрузка Целевых файлов
+- Кнопка: **Добавить файл для изменений**
+- Используется для внесения изменений.
 
-### 2. Loading Source Files
-- Button: **Add Source File**
-- Used as data sources.
+### 2. Загрузка файлов-Источников
+- Кнопка: **Добавить файл-источник**
+- Используются как источники данных.
 
-> **Recommendation:** use a minimal number of Source files with duplicate article numbers to avoid conflicts.
-> - **Reason:** if the same article number appears in several Source files, the value from the first found product with this article number will be used.
+> **Рекомендация:** используйте минимальное количество файлов-Источников с дублирующимися артикулами, чтобы избежать конфликтов.
+> - **Причина:** если один и тот же артикул встречается в нескольких файлах-Источниках, будет использовано значение из первого найденного товара с этим артикулом.
 
-> **Tip:** if you have several price lists **WITH THE SAME PRODUCTS**, merge them into one file before processing to get the expected result.
-> - If you have no matching article numbers between files, then you can use multiple Source files.
-
----
-
-## Operation Selection
-
-### Price Transfer
-- **Checkbox:** `Transfer Prices`
-#### Required Fields:
-- `Article`, `Price`
-- Additionally: `ArticleComplect`, `PriceComplect` (in the price list)
-
-> **Mandatory:** if you are transferring values from a price list, the values must be **under the corresponding columns**.
-
----
-### Availability Transfer
-- **Checkbox:** `Transfer Availability`
-#### Required Fields:
-- `Availability`
-- Additionally: `Availability Complect` (in the price list)
+> **Совет:** если у вас несколько прайс-листов **С ОДИНАКОВЫМИ ТОВАРАМИ**, объедините их в один файл перед обработкой, чтобы получить ожидаемый результат.
+> - Если у вас нет совпадающих артикулов между файлами, то вы можете использовать несколько файлов-Источников.
 
 ---
 
-### Price Increase
-- **Checkbox:** `Increase Price (Pseudo Discount)`
-- Specify the markup percentage within the range from `1` to `200`.
+## Выбор операции
 
-> **Details:** Treated as a percentage. 1 == 101%, 2 == 102%, 99 == 199%, 100 == 100%, 101 == 101%... 200 == 200%, 201 == 201%...  
-> entering `0` or `100` - the price will not change.
+### Перенос цен
+- **Галочка:** `Переносить цены`
+#### Обязательные поля:
+- `Артикул`, `Цена`
+- Дополнительно: `АртикулКомплекта`, `ЦенаКомплекта` (в прайс-листе)
 
-> **Hint:** if you want to increase the price by 10%, enter `10` or `110`. But if you enter more than 200, you will be asked for confirmation.
+> **Обязательно:** если вы переносите значения из прайс-листа, значения должны находиться **под соответствующими столбцами**.
+
+---
+### Перенос наличия
+- **Галочка:** `Переносить наличие`
+#### Обязательные поля:
+- `Наличие`
+- Дополнительно: `НаличиеКомплекта` (в прайс-листе)
 
 ---
 
-### Discount Transfer
-- **Checkbox:** `Transfer Discount`
-#### Required Fields:
-- `Discount` (only from store to store)
+### Повышение цен
+- **Галочка:** `Повысить цену (Псевдо-скидка)`
+- Укажите процент наценки в диапазоне от `1` до `200`.
 
-> **Important:** the transfer of discount percentages works in such a way that it **does not convert 110% to 10%**, but simply **copies the value from one column to another.** Be careful when using.
+> **Подробности:** Расценивается как процент. 1 == 101%, 2 == 102%, 99 == 199%, 100 == 100%, 101 == 101%... 200 == 200%, 201 == 201%...
+> ввод `0` или `100` - цена не изменится.
 
----
-
-### Discount Date Transfer
-- **Checkbox:** `Transfer Discount Date`
-#### Additional Fields:
-- `discount from/to` (only from store to store)
-
-> **Mandatory:** The store settings must specify the `Date Format` column.  
-> `Discount End Date` and `Discount Start Date` are used only if they are present in the store.  
-> There is actually no such field as "Discount Date". The date is taken from a column in one store and transferred to a column in another store if it is present.
+> **Подсказка:** если вы хотите увеличить цену на 10%, введите `10` или `110`. Но если вы введете больше 200, у вас спросят подтверждение.
 
 ---
 
-### Finding Missing Article Numbers
-- **Checkbox:** `Find Missing`
-- Allows finding article numbers that are in the Target files but are missing in the Source files.
-- The result is saved in the `missing.txt` file on the desktop.
+### Перенос скидок
+- **Галочка:** `Переносить скидку`
+#### Обязательные поля:
+- `Скидка` (только из магазина в магазин)
+
+> **Важно:** перенос процентов скидки работает таким образом, что **не преобразует 110% в 10%**, а просто **копирует значение из одного столбца в другой.** Будьте внимательны при использовании.
 
 ---
 
-### Launch
-- Button: **Start**
-1. Make sure files are loaded
-2. Set parameters
-3. Click "Start"
-4. Wait for the `Done` message
+### Перенос дат скидок
+- **Галочка:** `Переносить дату скидки`
+#### Дополнительные поля:
+- `скидка от/до` (только из магазина в магазин)
+
+> **Обязательно:** В настройках магазина должен быть указан столбец `ФорматДаты`.
+> `ДатаОкончанияСкидки` и `ДатаНачалаСкидки` используются только если они присутствуют в магазине.
+> На самом деле нет такого поля как «Дата скидки». Дата берется из столбца в одном магазине и переносится в столбец в другом магазине, если он присутствует.
 
 ---
 
-## Mandatory Conditions
+### Поиск отсутствующих артикулов
+- **Галочка:** `Найти отсутствующие`
+- Позволяет найти артикулы, которые есть в Целевых файлах, но отсутствуют в файлах-Источниках.
+- Результат сохраняется в файле `missing.txt` на рабочем столе.
 
-- Column names must be correct (If it's a price list):
-    - **Article Number:** `Article`, `Артикул`, `ArticleComplect`
-    - **Price:** `Price`, `Ціна`, `Price Complect`
-    - **Availability:** `Availability`, `Наличие`, `Availability Complect`
+---
 
-❗All headers must be written **exactly**, without extra characters, spaces, or errors.
+### Запуск
+- Кнопка: **Старт**
+1. Убедитесь, что файлы загружены
+2. Установите параметры
+3. Нажмите «Старт»
+4. Дождитесь сообщения `Готово`
+
+---
+
+## Обязательные условия
+
+- Названия столбцов должны быть правильными (Если это прайс-лист):
+    - **Артикул:** `Артикул`, `Article`, `АртикулКомплекта`
+    - **Цена:** `Цена`, `Price`, `ЦенаКомплекта`
+    - **Наличие:** `Наличие`, `Availability`, `НаличиеКомплекта`
+
+❗Все заголовки должны быть написаны **точно**, без лишних символов, пробелов или ошибок.
 
 </details>
 
 <details>
-<summary> Store Manager </summary>
+<summary> Менеджер магазинов </summary>
 
-### Opening the Store Manager
-- `Settings` -> `Store Manager`
+### Открытие Менеджера магазинов
+- `Настройки` -> `Менеджер магазинов`
 
-### Window Description
-- **Left:** list of stores with the ability to select for editing. (Unnecessary stores can be deleted)
-- **Button bottom-left:** Allows adding stores.
-- **Right:** list of available columns from the loaded file.
-- **Center:** Fields for column names corresponding to various parameters (values are taken from the column on the right).
+### Описание окна
+- **Слева:** список магазинов с возможностью выбора для редактирования. (Ненужные магазины можно удалить)
+- **Кнопка внизу слева:** Позволяет добавлять магазины.
+- **Справа:** список доступных столбцов из загруженного файла.
+- **В центре:** Поля для названий столбцов, соответствующих различным параметрам (значения берутся из столбца справа).
 
-> **Mandatory:** since the program uses the list on the right (All Columns) to identify the store - leave only those columns that are in your file and are ALWAYS IN EVERY FILE.  
-> Columns that depend on the product category (e.g., `color`, `size`, `material`, `material|45234`, etc.) - will interfere with normal operation, so they need to be removed from the list.
+> **Обязательно:** поскольку программа использует список справа (Все столбцы) для идентификации магазина - оставляйте только те столбцы, которые есть в вашем файле и ВСЕГДА В КАЖДОМ ФАЙЛЕ.
+> Столбцы, которые зависят от категории товара (например, `цвет`, `размер`, `материал`, `материал|45234` и т.д.) - будут мешать нормальной работе, поэтому их нужно удалить из списка.
 
-### Purpose
-- Allows saving column settings for various stores.
-- You can add, delete, and edit stores.
+### Назначение
+- Позволяет сохранять настройки столбцов для различных магазинов.
+- Вы можете добавлять, удалять и редактировать магазины.
 
-> **Please note:** When saving, **changes will be available on the next program launch.**
+> **Обратите внимание:** При сохранении **изменения будут доступны при следующем запуске программы.**
 
-### Adding a Store
-- Button: `Add Store`
-- Enter the store name.
-- Click the `Get Store Headers` button
-- Specify the column names for the article number, price, availability, and other parameters present in the store.
+### Добавление магазина
+- Кнопка: `Добавить магазин`
+- Введите название магазина.
+- Нажмите кнопку `Получить заголовки магазина`
+- Укажите названия столбцов для артикула, цены, наличия и других параметров, присутствующих в магазине.
 
 </details>
 
 <details>
-<summary>Product Link Table</summary>
+<summary>Таблица связей товаров</summary>
 
-### Opening the Product Link Table
-- `Product Link Table`
+### Открытие Таблицы связей товаров
+- `Таблица связей товаров`
 
-### Window Description
-- **Button: `Add New Product`**
-- Table with columns:
-> **Master** - the main product article number to which other article numbers will be linked. **(article number from the price list)**  
-> **Linked Article** - the article number that will be linked to the main one. **(article number from the store)** The column name is the store where this article number is used.
+### Описание окна
+- **Кнопка: `Добавить новый товар`**
+- Таблица со столбцами:
+> **Основной (Master)** — основной артикул товара, к которому будут привязаны другие артикулы. **(артикул из прайс-листа)**
+> **Связанный артикул (Linked Article)** — артикул, который будет привязан к основному. **(артикул из магазина)** Название столбца — это магазин, в котором используется этот артикул.
 
-> **Attention:** if you have multiple stores, then for each store there should be its own column with the store name.  
-> If your article number in the store matches the article number in the price list - you do not need to add a link.
-> If your article number in a specific store matches the article number in the price list - add links only for those stores where the article number differs. (but you can add for all stores if you wish)
+> **Внимание:** если у вас несколько магазинов, то для каждого магазина должен быть свой столбец с названием магазина.
+> Если ваш артикул в магазине совпадает с артикулом в прайс-листе — вам не нужно добавлять связь.
+> Если ваш артикул в конкретном магазине совпадает с артикулом в прайс-листе — добавляйте связи только для тех магазинов, где артикул отличается. (но вы можете добавить для всех магазинов при желании)
 
 </details>
 
 ---
 
-## Examples
+## Примеры
 
-### Example 1
+### Пример 1
 
-✅ Correct View:
+✅ Правильный вид:
 
-| Article | Price | Article Complect | Price Complect |
+| Артикул | Цена | АртикулКомплекта | ЦенаКомплекта |
  |---------|-------|------------------|----------------|
 | A001    | 100   | A001-C           | 80             |
 
-❌ Error:
+❌ Ошибка:
 
 | Артикул | Article | Цена |
  |---------|---------|------|
 | A001    |         | 100  |
 
-> In this case, only the `Article` column will be processed. And since it has no value
->     - the product will not be found and processed.
+> В этом случае будет обрабатываться только столбец `Article`. И поскольку у него нет значения
+>     - товар не будет найден и обработан.
 
-### Example 2
+### Пример 2
 
-✅ Correct View:
+✅ Правильный вид:
 
-| Article  | Price    | Availability | any | any   | any |
+| Артикул  | Цена    | Наличие | любой | любой   | любой |
  |----------|----------|--------------|-----|-------|-----|
 | Product1 | 200      | +            | ... | ...   | ... |
-| any      | Article  | Availability | any | Price | any |
+| любой      | Артикул  | Наличие | любой | Цена | любой |
 | ...      | product2 | +            | ... | 300   | ... |
 | ...      | product3 | +            | ... | 700   | ... |
 
-❌ Error:
+❌ Ошибка:
 
-| Article  | Price    | Availability | any | any   | any |
+| Артикул  | Цена    | Наличие | любой | любой   | любой |
  |----------|----------|--------------|-----|-------|-----|
 | Product1 | 200      | +            | ... | ...   | ... |
-| any      | Article  | Availability | any | Price | any |
+| любой      | Артикул  | Наличие | любой | Цена | любой |
 | ...      | product2 | +            | ... | 300   | ... |
 | product3 | 700      | +            | ... | ...   | ... |
 
-> The output will be -> Product1 with price 200 in stock, Product2 with price 300 in stock, Product3 - ignored
+> На выходе будет -> Product1 с ценой 200 в наличии, Product2 с ценой 300 в наличии, Product3 - проигнорирован
 
-### More details in the instruction located in the application.
-`More` -> `Instruction`
-
----
-
-## Reiteration of Important Points
-
-<details>
-<summary>General</summary>
-
-> - Double-check the results after processing.
-
-> - Follow the instructions below.
-
-> - All Excel files must be **closed** before starting processing.
-
-> - Use files in the formats: `.xlsx`, `.xls`.
-
-> - If errors occur, check the correctness of the headers and the presence of all necessary columns.
-
-> - The program works **by article numbers**, exact match is mandatory unless a link is specified. Even a difference in one character (e.g., `K` and `К`) is critical.
-
-> - It is recommended to create backup copies of files before processing.
-
-> - The program does not support macros and complex formulas in Excel files.
-
-> - Processing large files may take some time, please be patient.
-
-</details>
-
-<details>
-<summary> Operations </summary>
-
-> **Recommendation:** use a minimal number of Source files with duplicate article numbers to avoid conflicts.
-> - **Reason:** if the same article number appears in several Source files, the value from the first found product with this article number will be used.
-
-> **Tip:** if you have several price lists **WITH THE SAME PRODUCTS**, merge them into one file before processing to get the expected result.
-> - If you have no matching article numbers between files, then you can use multiple Source files.
-
-> **Mandatory:** if you are transferring values from a price list, the values must be **under the corresponding columns**. (relevant for price lists, stores usually adhere to the standard anyway)
-
-### Price Increase
-> **Details:** Treated as a percentage. 1 == 101%, 2 == 102%, 99 == 199%, 100 == 100%, 101 == 101%... 200 == 200%, 201 == 201%...  
-> entering `0` or `100` - the price will not change.
-
-> **Hint:** if you want to increase the price by 10%, enter `10` or `110`. But if you enter more than 200, you will be asked for confirmation.
-
-### Discount Transfer
-
-> **Important:** the transfer of discount percentages works in such a way that it **does not convert 110% to 10%**, but simply **copies the value from one column to another.** Be careful when using.
-
-### Discount Date Transfer
-> **Mandatory:** The store settings must specify the `Date Format` column.  
-> `Discount End Date` and `Discount Start Date` are used only if they are present in the store.  
-> There is actually no such field as "Discount Date". The date is taken from a column in one store and transferred to a column in another store if it is present.
-
-</details>
-
-<details>
-<summary>Store Manager</summary>
-
-> **Mandatory:** since the program uses the list on the right (All Columns) to identify the store - leave only those columns that are in your file and are ALWAYS IN EVERY FILE.  
-> Columns that depend on the product category (e.g., `color`, `size`, `material`, `material|45234`, etc.) - will interfere with normal operation, so they need to be removed from the list.
-
-</details>
-
-<details>
-<summary>Product Link Table</summary>
-
-> **Attention:** if you have multiple stores, then for each store there should be its own column with the store name.  
-> If your article number in the store matches the article number in the price list - you do not need to add a link.
-> If your article number in a specific store matches the article number in the price list - add links only for those stores where the article number differs. (but you can add for all stores if you wish)
-
-</details>
+### Более подробно в инструкции, расположенной в приложении.
+`Еще` -> `Инструкция`
 
 ---
 
-## Contacts
+## Повторение важных моментов
 
-Questions/Suggestions?  
-Write to:  
-[Telegram](https://t.me/Freid4)  
+<details>
+<summary>Общее</summary>
+
+> - Перепроверяйте результаты после обработки.
+
+> - Следуйте инструкциям ниже.
+
+> - Все файлы Excel должны быть **закрыты** перед началом обработки.
+
+> - Используйте файлы в форматах: `.xlsx`, `.xls`.
+
+> - При возникновении ошибок проверьте правильность заголовков и наличие всех необходимых столбцов.
+
+> - Программа работает **по артикулам**, обязательное точное совпадение, если не указана связь. Даже разница в один символ (например, `K` и `К`) критична.
+
+> - Рекомендуется создавать резервные копии файлов перед обработкой.
+
+> - Программа не поддерживает макросы и сложные формулы в файлах Excel.
+
+> - Обработка больших файлов может занять некоторое время, пожалуйста, наберитесь терпения.
+
+</details>
+
+<details>
+<summary> Операции </summary>
+
+> **Рекомендация:** используйте минимальное количество файлов-Источников с дублирующимися артикулами, чтобы избежать конфликтов.
+> - **Причина:** если один и тот же артикул встречается в нескольких файлах-Источниках, будет использовано значение из первого найденного товара с этим артикулом.
+
+> **Совет:** если у вас несколько прайс-листов **С ОДИНАКОВЫМИ ТОВАРАМИ**, объедините их в один файл перед обработкой, чтобы получить ожидаемый результат.
+> - Если у вас нет совпадающих артикулов между файлами, то вы можете использовать несколько файлов-Источников.
+
+> **Обязательно:** если вы переносите значения из прайс-листа, значения должны находиться **под соответствующими столбцами**. (актуально для прайс-листов, магазины обычно и так придерживаются стандарта)
+
+### Повышение цен
+> **Подробности:** Расценивается как процент. 1 == 101%, 2 == 102%, 99 == 199%, 100 == 100%, 101 == 101%... 200 == 200%, 201 == 201%...
+> ввод `0` или `100` - цена не изменится.
+
+> **Подсказка:** если вы хотите увеличить цену на 10%, введите `10` или `110`. Но если вы введете больше 200, у вас спросят подтверждение.
+
+### Перенос скидок
+
+> **Важно:** перенос процентов скидки работает таким образом, что **не преобразует 110% в 10%**, а просто **копирует значение из одного столбца в другой.** Будьте внимательны при использовании.
+
+### Перенос дат скидок
+> **Обязательно:** В настройках магазина должен быть указан столбец `ФорматДаты`.
+> `ДатаОкончанияСкидки` и `ДатаНачалаСкидки` используются только если они присутствуют в магазине.
+> На самом деле нет такого поля как «Дата скидки». Дата берется из столбца в одном магазине и переносится в столбец в другом магазине, если он присутствует.
+
+</details>
+
+<details>
+<summary>Менеджер магазинов</summary>
+
+> **Обязательно:** поскольку программа использует список справа (Все столбцы) для идентификации магазина - оставляйте только те столбцы, которые есть в вашем файле и ВСЕГДА В КАЖДОМ ФАЙЛЕ.
+> Столбцы, которые зависят от категории товара (например, `цвет`, `размер`, `материал`, `материал|45234` и т.д.) - будут мешать нормальной работе, поэтому их нужно удалить из списка.
+
+</details>
+
+<details>
+<summary>Таблица связей товаров</summary>
+
+> **Внимание:** если у вас несколько магазинов, то для каждого магазина должен быть свой столбец с названием магазина.
+> Если ваш артикул в магазине совпадает с артикулом в прайс-листе — вам не нужно добавлять связь.
+> Если ваш артикул в конкретном магазине совпадает с артикулом в прайс-листе — добавляйте связи только для тех магазинов, где артикул отличается. (но вы можете добавить для всех магазинов при желании)
+
+</details>
+
+---
+
+## Контакты
+
+Вопросы/Предложения?
+Пишите:
+[Telegram](https://t.me/Freid4)
 [Email](mailto:f4labs.study@gmail.com)
 
 ---
 
-# Disclaimer:
-Use of this program is at your own risk. The author is not responsible for any losses or damages arising from the use of the program. Any errors or problems encountered during the use of the program cannot be presented to the author as claims or demands for compensation. Furthermore, the author does not guarantee that the program will work without failures or errors and is not responsible for any consequences arising from the use of the program. Errors in the program may be fixed in future versions, but the author is not obligated to provide support or updates for the program. Users must independently assess the risks and take precautions when using the program. Any errors related to incorrect results are the result of your inattention and cannot be used against the author.
+# Отказ от ответственности:
+Использование этой программы осуществляется на ваш страх и риск. Автор не несет ответственности за любые убытки или ущерб, возникшие в результате использования программы. Любые ошибки или проблемы, возникшие при использовании программы, не могут быть предъявлены автору в качестве претензий или требований о компенсации. Кроме того, автор не гарантирует, что программа будет работать без сбоев или ошибок и не несет ответственности за любые последствия, возникшие в результате использования программы. Ошибки в программе могут быть исправлены в будущих версиях, но автор не обязан предоставлять поддержку или обновления для программы. Пользователи должны самостоятельно оценивать риски и принимать меры предосторожности при использовании программы. Любые ошибки, связанные с некорректными результатами, являются следствием вашей невнимательности и не могут быть использованы против автора.

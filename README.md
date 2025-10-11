@@ -5,7 +5,7 @@
     <a href="http://github.com/FreidFry/ExcelShopSync/releases/latest"><img src="https://img.shields.io/github/v/release/FreidFry/ExcelShopSync?style=square&color=brightgreen&cacheSeconds=3600" alt="Release"/></a>
 </div>
 
-#### Другие языки
+#### Other languages
 - [Українська](README_ua.md)
 - [Русский](README_ru.md)
 
