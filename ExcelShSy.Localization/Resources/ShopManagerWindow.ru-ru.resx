@@ -171,8 +171,26 @@
   <data name="CreateNewShop" xml:space="preserve">
     <value>Создать новый магазин</value>
   </data>
+  <data name="CreateNewShopTitle" xml:space="preserve">
+    <value>Создать новый магазин</value>
+  </data>
+  <data name="CreateNewShopText" xml:space="preserve">
+    <value>Введите название магазина. После внесения изменений перезапустите программу.</value>
+  </data>
   <data name="CancelButton" xml:space="preserve">
     <value>Отмена</value>
+  </data>
+  <data name="CreateButton" xml:space="preserve">
+    <value>Создать</value>
+  </data>
+  <data name="UnsavedChanges" xml:space="preserve">
+    <value>Несохраненные изменения</value>
+  </data>
+  <data name="UnsavedChangesText" xml:space="preserve">
+    <value>У вас есть несохраненные изменения. Хотите их сохранить?</value>
+  </data>
+  <data name="RemoveButton" xml:space="preserve">
+    <value>Удалить</value>
   </data>
   <data name="ConfirmSaveTitle" xml:space="preserve">
     <value>Подтвердить сохранение</value>
@@ -180,35 +198,17 @@
   <data name="ConfirmSaveText" xml:space="preserve">
     <value>Вы уверены, что хотите сохранить изменения? После внесения изменений перезапустите программу.</value>
   </data>
-  <data name="CreateButton" xml:space="preserve">
-    <value>Создать</value>
-  </data>
-  <data name="CreateNewShopText" xml:space="preserve">
-    <value>Введите название магазина. После внесения изменений перезапустите программу.</value>
-  </data>
-  <data name="CreateNewShopTitle" xml:space="preserve">
-    <value>Создать новый магазин</value>
-  </data>
-  <data name="RemoveButton" xml:space="preserve">
-    <value>Удалить</value>
-  </data>
-  <data name="UnsavedChangesText" xml:space="preserve">
-    <value>У вас есть несохраненные изменения. Хотите их сохранить?</value>
-  </data>
-  <data name="UnsavedChanges" xml:space="preserve">
-    <value>Несохраненные изменения</value>
-  </data>
   <data name="ShopEdit" xml:space="preserve">
     <value>Редиктировать магазин</value>
   </data>
   <data name="GetFirstLine" xml:space="preserve">
     <value>Получить заголовки магазина</value>
   </data>
-  <data name="DeleteShopText" xml:space="preserve">
-    <value>Вы дейсвительно хотите удалить этот магазин. (данные про него не сохранятся)</value>
-  </data>
   <data name="DeleteShopTitle" xml:space="preserve">
     <value>Подтверждение удаления</value>
+  </data>
+  <data name="DeleteShopText" xml:space="preserve">
+    <value>Вы дейсвительно хотите удалить этот магазин. (данные про него не сохранятся)</value>
   </data>
   <data name="RenameButton" xml:space="preserve">
     <value>Переименовать</value>

@@ -11,4 +11,5 @@ public interface ISqliteDbContext
     void ExecuteNonQuery(string sql);
     void RenameColumn(string table, string column, string newColumn);
     void RemoveColumn(string table, string column);
+    void CreateColumn(string columnName);
 }

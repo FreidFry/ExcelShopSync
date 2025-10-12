@@ -1,7 +1,9 @@
-using ExcelShSy.Core.Interfaces.Common;
+﻿using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.LocalDataBaseModule.Wrappers;
 using Microsoft.Data.Sqlite;
+using SQLitePCL;
+using static ExcelShSy.LocalDataBaseModule.Persistance.Enums;
 
 namespace ExcelShSy.LocalDataBaseModule.Persistance;
 
@@ -9,12 +11,37 @@ public class SqliteDbContext : ISqliteDbContext, IDisposable
 {
     private SqliteConnection _connection = null!;
     private readonly IAppSettings _appSettings;
+    private readonly List<string> availableColumn = [];
 
     public SqliteDbContext(IAppSettings appSettings)
     {
         _appSettings = appSettings;
         OpenConnection();
         _appSettings.SettingsChanged += MoveDb;
+    }
+
+    public void CreateColumn(string columnName)
+    {
+        if (availableColumn.Contains(columnName)) return;
+        using var cmd = _connection.CreateCommand();
+        var sqlCheck = $"PRAGMA table_info({Tables.ProductShopMapping})";
+        cmd.CommandText = sqlCheck;
+        var reader = cmd.ExecuteReader();
+
+        var exists = false;
+        while (reader.Read())
+        {
+            if (reader.GetString(1) != columnName) continue; // имя колонки в 2-й колонке
+            exists = true;
+            availableColumn.Add(columnName);
+            break;
+        }
+        reader.Dispose();
+
+        if (exists) return;
+        var sql = $@"ALTER TABLE {Tables.ProductShopMapping} ADD COLUMN {columnName} VARCHAR(100)";
+        cmd.CommandText = sql;
+        cmd.ExecuteNonQuery();
     }
 
     public void RenameColumn(string table, string column, string newColumn)
@@ -50,8 +77,10 @@ public class SqliteDbContext : ISqliteDbContext, IDisposable
     private void MoveDb()
     {
         var currentPath = _connection.DataSource;
+        var finalPath = Path.Combine(_appSettings.DataBasePath, "Products.db");
+        if (currentPath == finalPath) return;
         _connection.Dispose();
-        File.Move(currentPath, Path.Combine(_appSettings.DataBasePath, "Products.db"), true);
+        File.Move(currentPath, finalPath, true);
         OpenConnection();
     }
 

@@ -27,7 +27,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             for (var page = 0; page < (SheetList?.Count ?? 0); page++)
             {
                 var response = SheetList![page].ShowPageDetails();
-                var msgBox = MessageBoxManager.GetMessageBoxStandard($"{FileName} ({ShopName}) {page+1}/{SheetList.Count}", response, ButtonEnum.OkCancel);
+                var msgBox = MessageBoxManager.GetMessageBoxStandard(FileName, $"{FileName} ({ShopName}) {page + 1}/{SheetList.Count}\n{response}", ButtonEnum.OkCancel);
 
                 var result = await msgBox.ShowAsync();
                 if (result == ButtonResult.Ok) continue; //show next message

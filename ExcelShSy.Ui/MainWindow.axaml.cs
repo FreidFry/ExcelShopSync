@@ -178,6 +178,7 @@ namespace ExcelShSy.Ui
         
         private async Task ValidateDecimalTextBox()
         {
+            if (!ProductProcessingOptions.ShouldIncreasePrices) return;
             switch (ProductProcessingOptions.priceIncreasePercentage)
             {
                 case < 100:

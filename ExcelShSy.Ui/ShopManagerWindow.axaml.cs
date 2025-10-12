@@ -36,14 +36,13 @@ namespace ExcelShSy.Ui
 
         private bool _shopChanged;
         private bool _ready;
+        private bool _shouldShowMessage;
         private int _currentSelection;
 
         #endregion
         
         #region Fields
-        
-        public ObservableCollection<string> LoadedShops { get; set; } = [];
-        
+                
         #region Current Shop
 
         private IShopTemplate? _currentShop;
@@ -68,7 +67,7 @@ namespace ExcelShSy.Ui
 
         #endregion
         
-        private readonly ObservableCollection<string> _magazineSelectorItems = [];
+        public ObservableCollection<string> MagazineSelectorItems = [];
         
         #endregion
 
@@ -120,15 +119,40 @@ namespace ExcelShSy.Ui
             {
                 e.Cancel = true;
                 _shopChanged = false;
-                await SaveShop();
-                Close();
+                SaveShop();
             }
+
+            if (_shouldShowMessage)
+            {
+                e.Cancel = true;
+                var ConfirmClose = await ShowMessage();
+                if (ConfirmClose)
+                {
+                    _shouldShowMessage = false;
+                    Close();
+                }
+            }
+        }
+
+        private async Task<bool> ShowMessage()
+        {
+            var windowName = nameof(ShopManagerWindow);
+            var title = _localizationService.GetString(windowName, "ConfirmSaveTitle");
+            var msg = _localizationService.GetString(windowName, "ConfirmSaveText");
+
+            var msBox = await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.YesNo).ShowWindowDialogAsync(this);
+            if (msBox == ButtonResult.Yes) return true;
+            return false;
         }
 
         private void InitializeShopSelector()
         {
-            LoadedShops.Clear();
-            LoadedShops.AddRange(_shopStorage.GetShopList());
+            MagazineSelector.Items.Clear();
+            foreach(var shop in _shopStorage.GetShopList())
+                MagazineSelector.Items.Add(shop);
+            var count = MagazineSelector.Items.Count;
+            if (count != 0)
+                MagazineSelector.SelectedIndex = count - 1;
         }
 
         private ContextMenu CreateAllColumnContextMenu(ListBox list) => new()
@@ -197,7 +221,7 @@ namespace ExcelShSy.Ui
                 switch (result)
                 {
                     case ButtonResult.Yes:
-                        await SaveShop();
+                        SaveShop();
                         break;
                     case ButtonResult.Cancel:
                         MagazineSelector.SelectedIndex = _currentSelection;
@@ -220,8 +244,8 @@ namespace ExcelShSy.Ui
         
         private void OnShopChanged(string shopName)
         {
-            _magazineSelectorItems.Add(shopName);
-            MagazineSelector.SelectedItem = _magazineSelectorItems.Count - 1;
+            MagazineSelectorItems.Add(shopName);
+            MagazineSelector.SelectedItem = MagazineSelectorItems.Count - 1;
         }
         
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -241,9 +265,9 @@ namespace ExcelShSy.Ui
 
         #region Clicks
 
-        private async void SaveShopTemplate_Click(object sender, RoutedEventArgs e)
+        private void SaveShopTemplate_Click(object sender, RoutedEventArgs e)
         {
-            await SaveShop();
+            SaveShop();
         }
 
         private async void AddNewShop_OnClick(object? sender, RoutedEventArgs e)
@@ -318,20 +342,8 @@ namespace ExcelShSy.Ui
         
         #endregion
 
-        private async Task SaveShop()
+        private void SaveShop()
         {
-            if (!_shopChanged)
-            {
-                var windowName = nameof(ShopManagerWindow);
-                var title = _localizationService.GetString(windowName, "ConfirmSaveTitle");
-                var msg = _localizationService.GetString(windowName, "ConfirmSaveText");
-                
-                var msBox = MessageBoxManager.GetMessageBoxStandard( title, msg, ButtonEnum.YesNo);
-                var result = await msBox.ShowWindowDialogAsync(this);
-                if (result != ButtonResult.Yes)
-                    return;
-            }
-
             if (CurrentShop == null)
             {
                 if (MagazineSelector.SelectedItem != null)
@@ -348,7 +360,9 @@ namespace ExcelShSy.Ui
             CurrentShop.UnmappedHeaders = list!;
             _shopStorage.UpdateShop(CurrentShop);
             _shopStorage.SaveShopTemplate(CurrentShop);
+            _sqliteDbContext.CreateColumn(CurrentShop.Name);
             _shopChanged = false;
+            _shouldShowMessage = true;
         }
 
         private async void RenameShopCommand(string oldName)
