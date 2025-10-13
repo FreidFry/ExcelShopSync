@@ -85,7 +85,7 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
     {
         try
         {
-            var (success, updateFile) = await Download();
+            var (success, updateArchive) = await Download();
             if (!success)
             {
                 var title = localizationService.GetErrorString("UnsupportedOSUpdateTitle");
@@ -96,23 +96,23 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
                 return;
             }
 
-            var fi = new FileInfo(updateFile!);
+            var fi = new FileInfo(updateArchive!);
             while (!fi.Exists || fi.Length == 0)
                 await Task.Delay(50);
 
             appSettings.LastUpdateCheck = DateTime.Now.Date;
             appSettings.SaveSettings(appSettings);
-            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
-            var updaterPath = isWindows
-                ? Path.Combine(Environment.CurrentDirectory, "ExcelShSy.Setup.exe")
-                : Path.Combine(Environment.CurrentDirectory, "ExcelShSy.Setup");
-            var finalExecutable = isWindows ? "ExcelShSy.Ui.exe" : "ExcelShSy.Ui";
+            var updaterAsm = Assembly.GetAssembly(typeof(Setup.Updater));
+            var updName = updaterAsm!.GetName().Name;
+            var updaterFilePath = Path.Combine(Environment.CurrentDirectory, $"{updName}");
+
+            var finalFileName = Assembly.GetEntryAssembly()!.GetName().Name;
 
             var psi = new ProcessStartInfo
             {
-                FileName = updaterPath,
-                Arguments = $"\"{updateFile}\" \"{Environment.CurrentDirectory}\" \"{finalExecutable}\"",
+                FileName = updaterFilePath,
+                Arguments = $"\"{updateArchive}\" \"{Environment.CurrentDirectory}\" \"{finalFileName}\"",
                 UseShellExecute = true
             };
 

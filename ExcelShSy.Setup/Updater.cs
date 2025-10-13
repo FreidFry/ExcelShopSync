@@ -7,39 +7,27 @@ namespace ExcelShSy.Setup
 {
     public static class Updater
     {
+        // args[0] - path to archive
+        // args[1] - target directory
+        // args[2] - name executable file to start after unpacking args[1]+args[2] = path to exe
         public static void Main(string[] args)
         {
             if (args.Length < 3)
             {
-                Console.WriteLine("Usage: ExShSy.Setup <archive> <targetDir> <executableFileName>");
+                Console.WriteLine("Usage: Updater <archive> <targetDir> <executableFileName>");
                 return;
             }
-            // args[0] - path to archive
-            // args[1] - target directory
-            // args[2] - name executable file to start after unpacking args[1]+args[2] = path to exe
-            
-#if DEBUG
-            var finalDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "TestUnpack");
-#else
-                    var finalDir = args[1];
-#endif
+            var finalDir = args[1];
             Thread.Sleep(2000);
             try
             {
-
+                if (!Directory.Exists(finalDir))
+                    Directory.CreateDirectory(finalDir);
+                
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    if (!Directory.Exists(finalDir))
-                        Directory.CreateDirectory(finalDir);
                     UnpackZip(args[0], finalDir);
-                }
                 else
-                {
-                    if (!Directory.Exists(finalDir))
-                        Directory.CreateDirectory(finalDir);
                     UnpackTarGz(args[0], finalDir);
-                    
-                }
             }
             finally
             {
