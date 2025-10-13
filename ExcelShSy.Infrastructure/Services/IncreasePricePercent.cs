@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using ExcelShSy.Core;
-using ExcelShSy.Core.Attributes;
+﻿using ExcelShSy.Core.Attributes;
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
@@ -8,8 +6,6 @@ using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Core.Properties;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Infrastructure.Persistence.DefaultValues;
-using MsBox.Avalonia.Enums;
-using MsBox.Avalonia;
 using static ExcelShSy.Infrastructure.Extensions.ExcelRangeExtensions;
 
 namespace ExcelShSy.Infrastructure.Services

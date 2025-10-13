@@ -1,10 +1,8 @@
-﻿using Avalonia.Media;
-using ExcelShSy.Core.Attributes;
+﻿using ExcelShSy.Core.Attributes;
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
-using ReactiveUI;
 
 namespace ExcelShSy.Infrastructure.Services
 {
@@ -18,12 +16,9 @@ namespace ExcelShSy.Infrastructure.Services
         public async Task Execute()
         {
             if (appSettings.CreateNewFileWhileSave)
-            {
                 await Save(file => file.ExcelPackage.SaveAs(GetNewPath(file.FileLocation)));
-                return;
-            }
-
-            await Save(file => file.ExcelPackage.Save());
+            else
+                await Save(file => file.ExcelPackage.Save());
         }
 
         private async Task Save(Action<IExcelFile> action)

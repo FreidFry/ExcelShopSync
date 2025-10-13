@@ -2,6 +2,7 @@
 using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Common;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -302,7 +303,7 @@ namespace ExcelShSy.Ui
                 //make it global when creating a store and everything related to it
                 //now realized in ShopTemplate class
                 //                             VVVVVVVVVVVVVVVVVVVVVVVVVVV
-                shopName = msBox.InputValue.Replace(" ", "_").ToUpper();
+                shopName = msBox.InputValue.Trim().Replace(" ", "_").ToUpper();
                 if (userAction == cancelButton || userAction == null!) break;
             } 
             while (string.IsNullOrWhiteSpace(shopName));
@@ -397,8 +398,8 @@ namespace ExcelShSy.Ui
                 userAction = await msBox.ShowWindowDialogAsync(this);
                 //make it global when creating a store and everything related to it
                 //now realized in ShopTemplate class
-                //                             VVVVVVVVVVVVVVVVVVVVVVVVVVV
-                renamedShop = msBox.InputValue.Replace(" ", "_").ToUpper();
+                //                             VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+                renamedShop = msBox.InputValue.Trim().Replace(" ", "_").ToUpper();
                 if (userAction == cancelButton || userAction == null!) break;
             }
             while (string.IsNullOrWhiteSpace(renamedShop));
@@ -433,6 +434,27 @@ namespace ExcelShSy.Ui
             catch (SqliteException ex) when (ex.SqliteErrorCode == 1)
             { }
             InitializeShopSelector();
+        }
+
+        private void ShowDataFormatTooltip(object? sender, RoutedEventArgs e)
+        {
+            var psi = new ProcessStartInfo()
+            {
+                FileName = SelectGuidePage(),
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+        }
+        
+        private static string SelectGuidePage()
+        {
+            var language = Thread.CurrentThread.CurrentCulture.Name;
+            const string fileName = "Formats";
+            var fileDirectory = Path.Combine(Environment.CurrentDirectory, "Web", "DataFormats");
+            var path = Path.Combine(fileDirectory, $"{fileName}.{language}.html");
+            var baseFile = Path.Combine(fileDirectory, $"{fileName}.html");
+
+            return File.Exists(path) ? path : baseFile;
         }
     }
 }

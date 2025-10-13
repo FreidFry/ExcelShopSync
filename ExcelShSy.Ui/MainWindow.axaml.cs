@@ -24,7 +24,8 @@ namespace ExcelShSy.Ui
         private readonly IDataBaseViewerFactory _dataBaseViewer;
         private readonly IF4LabsAboutWindowFactory _f4LabsAboutWindowFactory;
         private readonly ILocalizationService _localizationService;
-
+        private readonly ILogger _logger;
+        
         #if DESIGNER
         public MainWindow()
         {
@@ -33,7 +34,7 @@ namespace ExcelShSy.Ui
         #endif
         
         public MainWindow(IAppSettings appSettings, IFileManager fileManager, IOperationTaskFactory taskFactory, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory, IDataBaseViewerFactory dataBaseViewer,
-           IF4LabsAboutWindowFactory f4LabsAboutWindowFactory,ILocalizationService localizationService)
+           IF4LabsAboutWindowFactory f4LabsAboutWindowFactory,ILocalizationService localizationService, ILogger logger)
         {
             InitializeComponent();
 
@@ -45,6 +46,7 @@ namespace ExcelShSy.Ui
             _dataBaseViewer = dataBaseViewer;
             _f4LabsAboutWindowFactory = f4LabsAboutWindowFactory;
             _localizationService = localizationService;
+            _logger = logger;
 
             UpdateTextBlockEvents.RegistrationTextBlockEvent("TargetLb", TargetLastFile);
             UpdateTextBlockEvents.RegistrationTextBlockEvent("SourceLb", SourceLastFile);
@@ -166,7 +168,7 @@ namespace ExcelShSy.Ui
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
-                throw;
+                _logger.LogError(exception.Message);
             }
             finally
             {

@@ -94,7 +94,10 @@
 
                     <!-- Формат даты -->
                     <StackPanel Grid.Row="4" Grid.Column="0" Margin="0 0 15 15">
-                        <TextBlock Text="{loc:Loc ShopManagerWindow.DataFormat}" FontWeight="SemiBold" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{loc:Loc ShopManagerWindow.DataFormat}" FontWeight="SemiBold" />
+                            <Button Content="i" Padding="7 0" FontStyle="Italic" Margin="5, 0, 0, 0" Click="ShowDataFormatTooltip"/>
+                        </StackPanel>
                         <TextBox HorizontalAlignment="Stretch"
                                  Text="{Binding CurrentShop.DataFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  TextChanged="IsChanged_Changed" />
@@ -143,8 +146,8 @@
                                  MaxHeight="600" />
                 </HeaderedContentControl>
                 <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="{loc:Loc ShopManagerWindow.GetFirstLine}" Padding="20 8" Margin="0, 0, 10, 0" Click="GetFirstLineFromFile_Click" HorizontalAlignment="Right" />
-                <Button Content="{loc:Loc ShopManagerWindow.Save}" Padding="40 8" Background="#0078D7"
+                    <Button Content="{loc:Loc ShopManagerWindow.GetFirstLine}" Padding="20 8" Margin="0, 0, 10, 0" Click="GetFirstLineFromFile_Click" HorizontalAlignment="Right" />
+                    <Button Content="{loc:Loc ShopManagerWindow.Save}" Padding="40 8" Background="#0078D7"
                         Foreground="White" FontWeight="SemiBold" BorderThickness="0" Click="SaveShopTemplate_Click" />
                 </StackPanel>
             </Grid>

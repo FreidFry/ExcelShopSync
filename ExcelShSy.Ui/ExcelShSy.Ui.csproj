@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+        <AssemblyName>ExcelShopSyncronizer</AssemblyName>
 		<OutputType>WinExe</OutputType>
 		<ImplicitUsings>enable</ImplicitUsings>
         <ApplicationIcon>AppIco.ico</ApplicationIcon>
@@ -57,12 +58,21 @@
       <None Update="Web\Style.css">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Web\DataFormats\Formats.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Web\DataFormats\Formats.ru-RU.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Web\DataFormats\Formats.uk-UA.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <Target Name="CopyUpdater" AfterTargets="Publish">
         <PropertyGroup>
-            <UpdaterFileName Condition="'$(RuntimeIdentifier)' == 'win-x64'">ExcelShSy.Setup.exe</UpdaterFileName>
-            <UpdaterFileName Condition="'$(RuntimeIdentifier)' == 'linux-x64'">ExcelShSy.Setup</UpdaterFileName>
+            <UpdaterFileName Condition="'$(RuntimeIdentifier)' == 'win-x64'">Updater.exe</UpdaterFileName>
+            <UpdaterFileName Condition="'$(RuntimeIdentifier)' == 'linux-x64'">Updater</UpdaterFileName>
         </PropertyGroup>
         
         <Copy
