@@ -104,34 +104,43 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
             appSettings.SaveSettings(appSettings);
 
             var updaterAsm = Assembly.GetAssembly(typeof(Setup.Updater));
-            var updName = updaterAsm!.GetName().Name;
-            var updaterFilePath = Path.Combine(Environment.CurrentDirectory, $"{updName}");
+            var updPath = updaterAsm!.Location;
+            
+            var tempUpdater = Path.Combine(
+                Path.GetDirectoryName(updPath)!,
+                Path.GetFileNameWithoutExtension(updPath) + "_tmp" + Path.GetExtension(updPath));
+
+            File.Copy(updPath, tempUpdater, true);
 
             var finalFileName = Assembly.GetEntryAssembly()!.GetName().Name;
 
             var psi = new ProcessStartInfo
             {
-                FileName = updaterFilePath,
+                FileName = tempUpdater,
                 Arguments = $"\"{updateArchive}\" \"{Environment.CurrentDirectory}\" \"{finalFileName}\"",
-                UseShellExecute = true
+                UseShellExecute = false
             };
 
             Process.Start(psi);
             Environment.Exit(0);
         }
-        catch (Exception ex) when (ex is HttpRequestException)
+        catch (HttpRequestException)
         {
-            var title = localizationService.GetErrorString("NetworkErrorTitle");
-            var msg = localizationService.GetErrorString("NetworkErrorText");
-            await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
-                .ShowWindowAsync();
+            await ShowError("NetworkErrorTitle", "NetworkErrorText");
         }
         catch (Exception ex)
         {
-            var title = localizationService.GetErrorString("UnknownErrorTitle");
-            var msg = localizationService.GetErrorString("UnknownErrorText") + $"\n\n{ex.Message}";
-            await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
-                .ShowWindowAsync();
+            await ShowError("UnknownErrorTitle", "UnknownErrorText", ex.Message);
         }
+    }
+    private async Task ShowError(string titleKey, string msgKey, string? extra = null)
+    {
+        var title = localizationService.GetErrorString(titleKey);
+        var msg = localizationService.GetErrorString(msgKey);
+        if (extra != null) msg += $"\n\n{extra}";
+
+        await MessageBoxManager
+            .GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
+            .ShowWindowAsync();
     }
 }
