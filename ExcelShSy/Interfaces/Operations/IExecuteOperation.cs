@@ -2,7 +2,7 @@
 {
     public interface IExecuteOperation
     {
-        void Execute();
+        Task Execute();
         List<string> Errors { get; }
     }
 }

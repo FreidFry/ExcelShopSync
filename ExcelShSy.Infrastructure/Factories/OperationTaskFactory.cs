@@ -49,7 +49,7 @@ namespace ExcelShSy.Infrastructure.Factories
             }
         }
 
-        public void ExecuteOperations(Visual parent)
+        public async Task ExecuteOperations(Visual parent)
         {
             HashSet<string> errors = [];
 
@@ -62,7 +62,7 @@ namespace ExcelShSy.Infrastructure.Factories
             foreach (var task in tasksToRun)
             {
                 _logger.LogInfo($"Start {task.GetType().Name}");
-                task.Execute();
+                await task.Execute();
                 if (task.Errors.Count != 0)
                     foreach (var error in task.Errors)
                         errors.Add(error);
@@ -75,7 +75,7 @@ namespace ExcelShSy.Infrastructure.Factories
                 _logger.LogInfo("Finish without errors.");
                 var title = _localizationService.GetMessageString("Finish");
                 var msg = _localizationService.GetMessageString("FinishText");
-                MessageBoxManager.GetMessageBoxStandard(title, msg).ShowAsync();
+                await MessageBoxManager.GetMessageBoxStandard(title, msg).ShowAsync();
             }
             else
             {
@@ -83,7 +83,7 @@ namespace ExcelShSy.Infrastructure.Factories
                 var title = _localizationService.GetMessageString("FinishWithProblems");
                 var msg = _localizationService.GetMessageString("FinishWithProblemsText");
                 foreach (var error in errors) _logger.LogWarning(error);
-                MessageBoxManager.GetMessageBoxStandard(title, $"{msg}\n" + string.Join("\n", errors)).ShowAsync();
+                await MessageBoxManager.GetMessageBoxStandard(title, $"{msg}\n" + string.Join("\n", errors)).ShowAsync();
             }
         }
 

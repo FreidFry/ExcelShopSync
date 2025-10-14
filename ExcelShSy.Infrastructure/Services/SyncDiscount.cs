@@ -18,7 +18,7 @@ namespace ExcelShSy.Infrastructure.Services
 
         public List<string> Errors { get; } = [];
 
-        public void Execute()
+        public async Task Execute()
         {
             foreach (var file in fileStorage.Target)
             {

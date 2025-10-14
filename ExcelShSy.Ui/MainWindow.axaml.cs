@@ -160,7 +160,7 @@ namespace ExcelShSy.Ui
                 await ValidateDecimalTextBox();
 
                 _fileManager.InitializeAllFiles();
-                _taskFactory.ExecuteOperations(TasksContainer);
+                await _taskFactory.ExecuteOperations(TasksContainer);
                 _fileManager.ClearAfterComplete();
             }
             catch (Exception exception)
@@ -182,7 +182,7 @@ namespace ExcelShSy.Ui
             switch (ProductProcessingOptions.priceIncreasePercentage)
             {
                 case < 100:
-                    ProductProcessingOptions.priceIncreasePercentage /= 10;
+                    ProductProcessingOptions.priceIncreasePercentage = ProductProcessingOptions.priceIncreasePercentage / 100 + 1;
                     break;
                 case >= 200:
                 {
@@ -195,7 +195,8 @@ namespace ExcelShSy.Ui
                         ButtonEnum.YesNo);
                     var result = await msBox.ShowWindowDialogAsync(this);
                     if (result != ButtonResult.Yes) ProductProcessingOptions.priceIncreasePercentage = 1;
-                    break;
+                        ProductProcessingOptions.priceIncreasePercentage /= 100;
+                        break;
                 }
                 default:
                     ProductProcessingOptions.priceIncreasePercentage /= 100;

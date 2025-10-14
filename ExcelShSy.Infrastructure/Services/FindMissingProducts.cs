@@ -21,7 +21,7 @@ namespace ExcelShSy.Infrastructure.Services
         public List<string> Errors { get; } = [];
 
 
-        public void Execute()
+        public async Task Execute()
         {
             var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "missing.txt");
             _fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);

@@ -26,7 +26,9 @@ namespace WPFAboutF4Labs
         private string GetAssemblyVersion()
         {
             var text = _localizationService.GetString("F4LabsAboutWindow","Version");
-            return$"{text} {Assembly.GetEntryAssembly()?.GetName().Name?.Split(".")[0]} {Assembly.GetEntryAssembly()?.GetName().Version}\n";
+            var version = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location).ProductVersion!
+                .Split("+")[0];
+            return$"{text} {Assembly.GetEntryAssembly()?.GetName().Name?.Split(".")[0]} {version}\n";
         }
 
         private string SetCopyright()
