@@ -97,27 +97,30 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
             }
 
             var fi = new FileInfo(updateArchive!);
-            while (!fi.Exists || fi.Length == 0)
-                await Task.Delay(50);
 
             appSettings.LastUpdateCheck = DateTime.Now.Date;
             appSettings.SaveSettings(appSettings);
+            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            var curDir = Environment.CurrentDirectory;
 
             var updaterAsm = Assembly.GetAssembly(typeof(Setup.Updater));
-            var updPath = updaterAsm!.Location;
-            
+            var updName = updaterAsm!.GetName().Name;
+            var updPath = Path.Combine(curDir, $"{updName}{SetupWindowsOrLinuxExtension(isWindows)}");
+
             var tempUpdater = Path.Combine(
-                Path.GetDirectoryName(updPath)!,
+                curDir,
                 Path.GetFileNameWithoutExtension(updPath) + "_tmp" + Path.GetExtension(updPath));
 
             File.Copy(updPath, tempUpdater, true);
 
-            var finalFileName = Assembly.GetEntryAssembly()!.GetName().Name;
+            var finalFileName = Path.Combine(curDir, $"{Assembly.GetEntryAssembly().GetName().Name}{SetupWindowsOrLinuxExtension(isWindows)}");
+
+            var updateDir = Path.Combine(curDir);
 
             var psi = new ProcessStartInfo
             {
                 FileName = tempUpdater,
-                Arguments = $"\"{updateArchive}\" \"{Environment.CurrentDirectory}\" \"{finalFileName}\"",
+                Arguments = $"\"{updateArchive}\" \"{updateDir}\" \"{finalFileName}\"",
                 UseShellExecute = false
             };
 
@@ -133,6 +136,19 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
             await ShowError("UnknownErrorTitle", "UnknownErrorText", ex.Message);
         }
     }
+
+    private string SetupBatOrShExtension(bool check)
+    {
+        if (check) return ".bat";
+        return ".sh";
+    }
+
+    private string SetupWindowsOrLinuxExtension(bool check)
+    {
+        if (check) return ".exe";
+        return "";
+    }
+
     private async Task ShowError(string titleKey, string msgKey, string? extra = null)
     {
         var title = localizationService.GetErrorString(titleKey);

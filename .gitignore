@@ -7,3 +7,4 @@ obj/
 /ExcelShSy.LocalDataBaseModule/ExcelShSy.LocalDataBaseModule.csproj
 /ShopsJsons
 .idea
+/ExcelShSy.Setup/Properties/launchSettings.json

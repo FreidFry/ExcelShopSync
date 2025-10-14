@@ -4,7 +4,7 @@ using WPFAboutF4Labs;
 
 namespace ExcelShSy.Ui.Factories;
 
-public class F4LabsAboutWindowFactory(ILocalizationService localizationService) : IF4LabsAboutWindowFactory
+public class F4LabsAboutWindowFactory(ILocalizationService localizationService, ILogger logger) : IF4LabsAboutWindowFactory
 {
-    public F4LabsAboutWindow Create() => new(localizationService);
+    public F4LabsAboutWindow Create() => new(localizationService, logger);
 }
