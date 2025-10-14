@@ -20,7 +20,8 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
             var json = await client.GetStringAsync("https://api.github.com/repos/FreidFry/ExcelShopSync/releases/latest");
             using var doc = JsonDocument.Parse(json);
             var gitVerse = doc.RootElement.GetProperty("tag_name").GetString()?.Replace("v", "");
-            var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+            var currentVersion = Version.Parse(Assembly.GetEntryAssembly()!.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion
+                    .Split("+")[0]);
             if (!Version.TryParse(gitVerse, out var latestVersion))
                 throw new Exception("Failed to parse version from GitHub.");
 
