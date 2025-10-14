@@ -31,7 +31,7 @@ namespace ExcelShSy.Setup
             }
             finally
             {
-                //File.Delete(args[0]);
+                File.Delete(args[0]);
                 
                 var psi = new ProcessStartInfo
                 {
