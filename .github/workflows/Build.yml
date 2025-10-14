@@ -32,7 +32,8 @@ jobs:
 
       - name: Set APP_VERSION
         run: |
-          VERSION=$(grep -oP '<Version>\K[0-9]+(?:\.[0-9]+){1,3}(?=</Version>)' "${{ env.ASSEMBLY_INFO_PATH }}" | head -1)
+          VERSION=$(grep -oP '<Version>\Kv?[0-9]+(?:\.[0-9]+)*(?=</Version>)' "${{ env.ASSEMBLY_INFO_PATH }}" | head -1)
+                              
           echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
           echo "Version set to: $VERSION"
           
