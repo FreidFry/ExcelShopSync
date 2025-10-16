@@ -53,16 +53,16 @@ jobs:
         run: |
           cd publish/${{ matrix.os }}
           if [[ "${{ matrix.os }}" == "win-x64" ]]; then
-            zip -r ../../ExShSy-${{ matrix.os }}.zip .
+            zip -r ../../ExShSy-${{ env.APP_VERSION }}-${{ matrix.os }}.zip .
           else
-            tar -czf ../../ExShSy-${{ matrix.os }}.tar.gz .
+            tar -czf ../../ExShSy-${{ env.APP_VERSION }}-${{ matrix.os }}.tar.gz .
           fi
           
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ExShSy-${{ env.APP_VERSION }}-${{ matrix.os }}
-          path: ExShSy-${{ matrix.os }}.*
+          path: ExShSy-${{ env.APP_VERSION }}-${{ matrix.os }}.*
 
 #-------------------------------------------------------------------------------------|
 
@@ -89,7 +89,7 @@ jobs:
         tag_name: v${{ env.APP_VERSION }}
         name: Excel Shop Sync v${{ env.APP_VERSION }}
         files: |
-          ./artifacts/ExShSy-win-x64/ExShSy-${{ env.APP_VERSION }}-win-x64.zip
-          ./artifacts/ExShSy-linux-x64/ExShSy-${{ env.APP_VERSION }}-linux-x64.tar.gz
+          ./artifacts/ExShSy-${{ env.APP_VERSION }}-win-x64/ExShSy-${{ env.APP_VERSION }}-win-x64.zip
+          ./artifacts/ExShSy-${{ env.APP_VERSION }}-linux-x64/ExShSy-${{ env.APP_VERSION }}-linux-x64.tar.gz
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
