@@ -44,10 +44,10 @@ jobs:
         run: dotnet build
         
       - name: Publish Setup
-        run: dotnet publish ./ExcelShSy.Setup/ExcelShSy.Setup.csproj -c Release -r ${{ matrix.os }} --self-contained true /p:PublishSingleFile=true /p:IncludeAllContentForSelfExtract=true
+        run: dotnet publish ./ExcelShSy.Setup/ExcelShSy.Setup.csproj -c Release -r ${{ matrix.os }} --self-contained true
 
       - name: Publish UI
-        run: dotnet publish ./ExcelShSy.Ui/ExcelShSy.Ui.csproj -c Release -r ${{ matrix.os }} --self-contained true /p:PublishSingleFile=true /p:IncludeAllContentForSelfExtract=true -o ./publish/${{ matrix.os }}
+        run: dotnet publish ./ExcelShSy.Ui/ExcelShSy.Ui.csproj -c Release -r ${{ matrix.os }} --self-contained true -o ./publish/${{ matrix.os }}
         
       - name: Archive output
         run: |
