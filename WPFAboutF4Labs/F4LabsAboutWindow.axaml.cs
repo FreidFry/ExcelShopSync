@@ -33,10 +33,19 @@ namespace WPFAboutF4Labs
 
         private string GetAssemblyVersion()
         {
-            var text = _localizationService.GetString("F4LabsAboutWindow","Version");
-            var version = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location).ProductVersion!
-                .Split("+")[0];
-            return$"{text} {Assembly.GetEntryAssembly()?.GetName().Name?.Split(".")[0]} {version}\n";
+            try
+            {
+                var text = _localizationService.GetString("F4LabsAboutWindow", "Version");
+                var version = Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                    ?.InformationalVersion
+                    .Split("+")[0];
+                return $"{text} {Assembly.GetEntryAssembly()?.GetName().Name?.Split(".")[0]} {version}\n";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return string.Empty;
+            }
         }
 
         private string SetCopyright()
