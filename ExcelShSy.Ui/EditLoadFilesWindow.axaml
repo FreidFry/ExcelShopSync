@@ -1,6 +1,9 @@
 <Window x:Class="ExcelShSy.Ui.EditLoadFilesWindow"
         xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
         xmlns:loc="clr-namespace:ExcelShSy.Localization;assembly=ExcelShSy.Localization"
         xmlns:local="clr-namespace:ExcelShSy.Ui"
         x:DataType="local:EditLoadFilesWindow"
@@ -27,7 +30,7 @@
                         <Button Padding="5 0" Tag="Target" Click="AddFile_Click" Margin="2 0" Content="{loc:Loc EditLoadFilesWindow.AddFile}" />
                     </StackPanel>
 
-                    <DataGrid IsReadOnly="False" Grid.Row="1" ItemsSource="{Binding TemporaryTargetFiles}" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserReorderColumns="False" CanUserSortColumns="False" GridLinesVisibility="Horizontal"  >
+                    <DataGrid IsReadOnly="False" Grid.Row="1" ItemsSource="{Binding TemporaryTargetFiles}" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserSortColumns="False" GridLinesVisibility="Horizontal"  >
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Header="{loc:Loc EditLoadFilesWindow.CheckBox}" Binding="{Binding IsSelectedToRemove}"/>
                             
@@ -42,7 +45,8 @@
                             <DataGridTemplateColumn Header="{loc:Loc EditLoadFilesWindow.Info}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="i" Click="ShowInfo_Click" FontWeight="DemiBold" FontStyle="Italic" FontSize="15" Width="40" Height="40" Background="Transparent" BorderThickness="0"/>
+                                        <Button Content="i" Click="ShowInfo_Click" HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center" FontFamily="Times New Roman" FontWeight="DemiBold" FontSize="15" Width="40" Height="40" Background="Transparent" BorderThickness="0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -74,7 +78,8 @@
                             <DataGridTemplateColumn Header="{loc:Loc EditLoadFilesWindow.Info}">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="i" Click="ShowInfo_Click" FontWeight="DemiBold" FontStyle="Italic" FontSize="15" Width="40" Height="40" Background="Transparent" BorderThickness="0"/>
+                                        <Button Content="i" Click="ShowInfo_Click" HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center" FontFamily="Times New Roman" FontWeight="DemiBold" FontSize="15" Width="40" Height="40" Background="Transparent" BorderThickness="0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

@@ -10,6 +10,12 @@ namespace WPFAboutF4Labs
     {
         private readonly ILocalizationService _localizationService;
         private readonly ILogger _logger;
+        
+#if DESIGNER
+        public F4LabsAboutWindow()
+        { }        
+#endif
+        
         public F4LabsAboutWindow(ILocalizationService localizationService, ILogger logger)
         {
             _localizationService = localizationService;
@@ -27,18 +33,10 @@ namespace WPFAboutF4Labs
 
         private string GetAssemblyVersion()
         {
-            try
-            {
-                var text = _localizationService.GetString("F4LabsAboutWindow","Version");
-                var version = Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
-                    .Split("+")[0];
-                return$"{text} {Assembly.GetEntryAssembly()?.GetName().Name?.Split(".")[0]} {version}\n";
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return string.Empty;
-            }
+            var text = _localizationService.GetString("F4LabsAboutWindow","Version");
+            var version = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location).ProductVersion!
+                .Split("+")[0];
+            return$"{text} {Assembly.GetEntryAssembly()?.GetName().Name?.Split(".")[0]} {version}\n";
         }
 
         private string SetCopyright()
