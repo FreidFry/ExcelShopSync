@@ -21,6 +21,7 @@ using ExcelShSy.Ui.Factories;
 using ExcelShSy.Ui.Interfaces;
 using ExcelShSy.Localization;
 using ExcelShSy.Settings.Properties;
+using ExcelShSy.Ui.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using IConfigurationManager = ExcelShSy.Core.Interfaces.Common.IConfigurationManager;
 
@@ -107,6 +108,7 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddTransient<ISettingWindowFactory, SettingWindowFactory>();
             services.AddTransient<IDataBaseViewerFactory, DataBaseViewerFactory>();
             services.AddTransient<IF4LabsAboutWindowFactory, F4LabsAboutWindowFactory>();
+            services.AddTransient<ICheckConnectionFactory, CheckConnectionFactory>();
             
             services.AddScoped<IShopTemplateFactory, ShopTemplateFactory>();
             #endregion

@@ -10,46 +10,72 @@ namespace ExcelShSy.Ui.Utils;
 
 public class UpdateManager(ILocalizationService localizationService, IAppSettings appSettings)
 {
-    public async Task<bool> Check()
+    private string? GitVersion;
+
+    public async Task<bool> CheckUpdateAsync(bool withErrorsMessage)
     {
         try
         {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.UserAgent.ParseAdd("request");
-            client.Timeout = new TimeSpan(0, 0, 10);
+            client.Timeout = TimeSpan.FromSeconds(10);
             var json = await client.GetStringAsync("https://api.github.com/repos/FreidFry/ExcelShopSync/releases/latest");
             using var doc = JsonDocument.Parse(json);
-            var gitVerse = doc.RootElement.GetProperty("tag_name").GetString()?.Replace("v", "");
-            var currentVersion = Version.Parse(Assembly.GetEntryAssembly()!.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion
-                    .Split("+")[0]);
-            if (!Version.TryParse(gitVerse, out var latestVersion))
-                throw new Exception("Failed to parse version from GitHub.");
-
-            return currentVersion < latestVersion;
+            GitVersion = doc.RootElement.GetProperty("tag_name").GetString()?.Replace("v", "");
+#if  DEBUG
+            return true;
+#endif
+            return !string.IsNullOrEmpty(GitVersion);
         }
         catch (Exception e) when (e is HttpRequestException or TaskCanceledException)
         {
-            var title = localizationService.GetErrorString("NetworkErrorTitle");
-            var msg = localizationService.GetErrorString("NetworkErrorText");
-            await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
-                .ShowWindowAsync();
+            if (withErrorsMessage)
+            {
+                var title = localizationService.GetErrorString("NetworkErrorTitle");
+                var msg = localizationService.GetErrorString("NetworkErrorText");
+                await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
+                    .ShowWindowAsync();
+            }
             return false;
         }
         catch (Exception e)
         {
-            var title = localizationService.GetErrorString("UnknownErrorTitle");
-            var msg = localizationService.GetErrorString("UnknownErrorText") + $"\n\n{e.Message}";
-            await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
-                .ShowWindowAsync();
+            if (withErrorsMessage)
+            {
+                var title = localizationService.GetErrorString("UnknownErrorTitle");
+                var msg = localizationService.GetErrorString("UnknownErrorText") + $"\n\n{e.Message}";
+                await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
+                    .ShowWindowAsync();
+            }
+            return false;
+        }
+        
+    }
+    
+    public bool CheckVersion()
+    {
+        try
+        {
+            var currentVersion = Version.Parse(Assembly.GetEntryAssembly()!.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion
+                .Split("+")[0]);
+            if (!Version.TryParse(GitVersion, out var latestVersion))
+                throw new Exception("Failed to parse version from GitHub.");
+            #if DEBUG
+            return true;
+#endif
+            return currentVersion < latestVersion;
+        }
+        catch (Exception e)
+        {
             return false;
         }
     }
 
-    private async Task<(bool isSuccess, string? filePath)> Download()
+    private async Task<(bool isSuccess, string? filePath)> DownloadAsync()
     {
         var assetName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? "ExShSy-win-x64.zip"
-            : "ExShSy-linux-x64.tar.gz";
+            ? $"ExShSy-{GitVersion}-win-x64.zip"
+            : $"ExShSy-{GitVersion}-linux-x64.tar.gz";
         var savePath = Path.Combine(Path.GetTempPath(), assetName);
 
         var client = new HttpClient();
@@ -77,16 +103,20 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
             return (false, null);
         }
 
-        var data = await client.GetByteArrayAsync(downloadUrl);
-        await File.WriteAllBytesAsync(savePath, data);
+        using var response = await client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
+        response.EnsureSuccessStatusCode();
+        
+        await using var stream = await response.Content.ReadAsStreamAsync();
+        await using var file = File.Create(savePath);
+        await stream.CopyToAsync(file);
         return (true, savePath);
     }
 
-    public async void UpdateApp()
+    public async Task UpdateAppAsync()
     {
         try
         {
-            var (success, updateArchive) = await Download();
+            var (success, updateArchive) = await DownloadAsync();
             if (!success)
             {
                 var title = localizationService.GetErrorString("UnsupportedOSUpdateTitle");
@@ -130,27 +160,21 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
         }
         catch (HttpRequestException)
         {
-            await ShowError("NetworkErrorTitle", "NetworkErrorText");
+            await ShowErrorAsync("NetworkErrorTitle", "NetworkErrorText");
+            
         }
         catch (Exception ex)
         {
-            await ShowError("UnknownErrorTitle", "UnknownErrorText", ex.Message);
+            await ShowErrorAsync("UnknownErrorTitle", "UnknownErrorText", ex.Message);
         }
     }
 
-    private string SetupBatOrShExtension(bool check)
+    private static string SetupWindowsOrLinuxExtension(bool check)
     {
-        if (check) return ".bat";
-        return ".sh";
+        return check ? ".exe" : "";
     }
 
-    private string SetupWindowsOrLinuxExtension(bool check)
-    {
-        if (check) return ".exe";
-        return "";
-    }
-
-    private async Task ShowError(string titleKey, string msgKey, string? extra = null)
+    private async Task ShowErrorAsync(string titleKey, string msgKey, string? extra = null)
     {
         var title = localizationService.GetErrorString(titleKey);
         var msg = localizationService.GetErrorString(msgKey);

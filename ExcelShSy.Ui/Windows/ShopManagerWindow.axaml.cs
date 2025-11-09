@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using ExcelShSy.Core.Interfaces.Shop;
-using ExcelShSy.Core.Interfaces.Common;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -8,7 +6,9 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using DynamicData;
+using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.DataBase;
+using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Persistence.Model;
 using ExcelShSy.LocalDataBaseModule.Persistance;
@@ -19,7 +19,7 @@ using MsBox.Avalonia.Enums;
 using MsBox.Avalonia.Models;
 using MsBox.Avalonia.ViewModels.Commands;
 
-namespace ExcelShSy.Ui
+namespace ExcelShSy.Ui.Windows
 {
     public partial class ShopManagerWindow : Window, INotifyPropertyChanged
     {

@@ -10,7 +10,7 @@ using ExcelShSy.Ui.Models.EditLoadFiles;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 
-namespace ExcelShSy.Ui
+namespace ExcelShSy.Ui.Windows
 {
     public partial class EditLoadFilesWindow : Window
     {

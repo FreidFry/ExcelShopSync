@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel;
-using ExcelShSy.Core.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using ExcelShSy.Core.Interfaces;
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Localization;
 using ExcelShSy.Localization.Resources;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace ExcelShSy.Ui
+namespace ExcelShSy.Ui.Windows
 {
     public partial class SettingWindow : Window, INotifyPropertyChanged
     {

@@ -68,6 +68,25 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
+    
+    <ItemGroup>
+      <Compile Update="Windows\EditLoadFilesWindow.axaml.cs">
+        <DependentUpon>EditLoadFilesWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Windows\MainWindow.axaml.cs">
+        <DependentUpon>MainWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Windows\SettingWindow.axaml.cs">
+        <DependentUpon>SettingWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Windows\ShopManagerWindow.axaml.cs">
+        <DependentUpon>ShopManagerWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
 
     <Target Name="CopyUpdater" AfterTargets="Publish">
         <PropertyGroup>

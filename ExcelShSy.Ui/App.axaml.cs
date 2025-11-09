@@ -7,6 +7,7 @@ using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using ExcelShSy.Core.Interfaces.Common;
+using ExcelShSy.Ui.Windows;
 
 namespace ExcelShSy.Ui
 {

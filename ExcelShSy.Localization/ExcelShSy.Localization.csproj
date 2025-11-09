@@ -50,6 +50,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>MessagesBox.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\CheckConnectionWindow.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CheckConnectionWindow.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -85,6 +90,10 @@
     <EmbeddedResource Update="Resources\MessagesBox.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MessagesBox.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\CheckConnectionWindow.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CheckConnectionWindow.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

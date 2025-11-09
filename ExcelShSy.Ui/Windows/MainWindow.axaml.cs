@@ -1,18 +1,18 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
+using ExcelShSy.Core.Properties;
 using ExcelShSy.Event;
 using ExcelShSy.Ui.Interfaces;
-using Avalonia.Controls;
+using ExcelShSy.Ui.Utils;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
-using Avalonia.Interactivity;
-using ExcelShSy.Core.Properties;
-using ExcelShSy.Ui.Utils;
 
-namespace ExcelShSy.Ui
+namespace ExcelShSy.Ui.Windows
 {
     public partial class MainWindow : Window
     {
@@ -23,6 +23,7 @@ namespace ExcelShSy.Ui
         private readonly ISettingWindowFactory _settingWindowFactory;
         private readonly IDataBaseViewerFactory _dataBaseViewer;
         private readonly IF4LabsAboutWindowFactory _f4LabsAboutWindowFactory;
+        private readonly ICheckConnectionFactory _checkConnectionFactory;
         private readonly ILocalizationService _localizationService;
         private readonly ILogger _logger;
         
@@ -34,7 +35,7 @@ namespace ExcelShSy.Ui
         #endif
         
         public MainWindow(IAppSettings appSettings, IFileManager fileManager, IOperationTaskFactory taskFactory, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory, IDataBaseViewerFactory dataBaseViewer,
-           IF4LabsAboutWindowFactory f4LabsAboutWindowFactory,ILocalizationService localizationService, ILogger logger)
+           IF4LabsAboutWindowFactory f4LabsAboutWindowFactory, ICheckConnectionFactory checkConnectionFactory, ILocalizationService localizationService, ILogger logger)
         {
             InitializeComponent();
 
@@ -45,33 +46,33 @@ namespace ExcelShSy.Ui
             _settingWindowFactory = settingWindowFactory;
             _dataBaseViewer = dataBaseViewer;
             _f4LabsAboutWindowFactory = f4LabsAboutWindowFactory;
+            _checkConnectionFactory = checkConnectionFactory;
             _localizationService = localizationService;
             _logger = logger;
 
             UpdateTextBlockEvents.RegistrationTextBlockEvent("TargetLb", TargetLastFile);
             UpdateTextBlockEvents.RegistrationTextBlockEvent("SourceLb", SourceLastFile);
 
-            Loaded += UpdateCheck;
+            Loaded += UpdateCheckAsync;
         }
 
-        private async void UpdateCheck(object? sender, RoutedEventArgs e)
+        private async void UpdateCheckAsync(object? sender, RoutedEventArgs e)
         {
-            if (_appSettings.CheckForUpdates 
-                && _appSettings.LastUpdateCheck < DateTime.Now.Date
-               )
-            {
-                var updater = new UpdateManager(_localizationService, _appSettings);
-                var isUpdateAvailable = await updater.Check();
-                if (!isUpdateAvailable)
-                    return;
+#if RELEASE
+            if (!_appSettings.CheckForUpdates
+                || _appSettings.LastUpdateCheck >= DateTime.Now.Date || !await _checkConnectionFactory.Create().CheckGitHubConnection()) return;
+#endif
+            
+            var updater = new UpdateManager(_localizationService, _appSettings);
+            
+            if (await updater.CheckUpdateAsync(false) && !updater.CheckVersion()) return;
 
-                var titleYes = _localizationService.GetMessageString("UpdatesAvailableTitle");
-                var msgYes = _localizationService.GetMessageString("UpdatesAvailableText");
-                var resultYes = await MessageBoxManager
-                    .GetMessageBoxStandard(titleYes, msgYes, ButtonEnum.YesNo)
-                    .ShowWindowAsync();
-                if (resultYes == ButtonResult.Yes) updater.UpdateApp();
-            }
+            var titleYes = _localizationService.GetMessageString("UpdatesAvailableTitle");
+            var msgYes = _localizationService.GetMessageString("UpdatesAvailableText");
+            var resultYes = await MessageBoxManager
+                .GetMessageBoxStandard(titleYes, msgYes, ButtonEnum.YesNo)
+                .ShowWindowAsync();
+            if (resultYes == ButtonResult.Yes) await updater.UpdateAppAsync();
         }
 
         #region OtherWindows
@@ -248,14 +249,32 @@ namespace ExcelShSy.Ui
 
         private async void CheckForUpdates_Click(object? sender, RoutedEventArgs e)
         {
+            var process = true;
+            var showProgress = false;
+            
+            var window = _checkConnectionFactory.Create();
+            window.CancelToken += (_, _) => process = false;
+            Task.Delay(1000).ContinueWith(_ => showProgress = true);
+            var task = window.CheckGitHubConnection(window.TimerBlock, window.ProgressBar);
+            while (process)
+            {
+                if (task.IsCompleted) break;
+                if (showProgress)
+                    await window.ShowDialog(this);
+                await Task.Delay(100);
+            }
+            if (!await task) return;
+            
+            
             var updater = new UpdateManager(_localizationService, _appSettings);
-            if (await updater.Check())
+            if (await updater.CheckUpdateAsync(true)) return;
+            if (updater.CheckVersion())
             {
                 var title = _localizationService.GetMessageString("UpdatesAvailableTitle");
-                var msg = _localizationService.GetMessageString("UpdatesAvailableText"); 
+                var msg = _localizationService.GetMessageString("UpdatesAvailableText");
                 var result = await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.YesNo).ShowAsync();
                 if (result == ButtonResult.Yes)
-                    updater.UpdateApp();
+                    await updater.UpdateAppAsync();
                 return;
             }
             var titleNo = _localizationService.GetMessageString("ThisVersionLatestTitle");

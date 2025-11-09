@@ -1,10 +1,10 @@
-﻿<Window x:Class="ExcelShSy.Ui.SettingWindow"
+﻿<Window x:Class="ExcelShSy.Ui.Windows.SettingWindow"
         xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:loc="clr-namespace:ExcelShSy.Ui"
         xmlns:local="clr-namespace:ExcelShSy.Localization;assembly=ExcelShSy.Localization"
+        xmlns:windows="clr-namespace:ExcelShSy.Ui.Windows"
         Title="{local:Loc SettingWindow.Title}" MinHeight="450" MinWidth="300" WindowStartupLocation="CenterScreen"
-        SizeToContent="WidthAndHeight" x:DataType="loc:SettingWindow">
+        SizeToContent="WidthAndHeight" x:DataType="windows:SettingWindow">
     <Grid Margin="10" RowDefinitions="*,Auto">
 
         <StackPanel Margin="10" >

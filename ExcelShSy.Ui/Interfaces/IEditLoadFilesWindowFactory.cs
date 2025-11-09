@@ -1,4 +1,6 @@
-﻿namespace ExcelShSy.Ui.Interfaces
+﻿using ExcelShSy.Ui.Windows;
+
+namespace ExcelShSy.Ui.Interfaces
 {
     public interface IEditLoadFilesWindowFactory
     {
