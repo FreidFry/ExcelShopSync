@@ -24,6 +24,7 @@ namespace ExcelShSy.Ui.Windows
         private readonly IDataBaseViewerFactory _dataBaseViewer;
         private readonly IF4LabsAboutWindowFactory _f4LabsAboutWindowFactory;
         private readonly ICheckConnectionFactory _checkConnectionFactory;
+        private readonly IUpdateManagerFactory _updateManagerFactory;
         private readonly ILocalizationService _localizationService;
         private readonly ILogger _logger;
         
@@ -35,7 +36,7 @@ namespace ExcelShSy.Ui.Windows
         #endif
         
         public MainWindow(IAppSettings appSettings, IFileManager fileManager, IOperationTaskFactory taskFactory, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory, IDataBaseViewerFactory dataBaseViewer,
-           IF4LabsAboutWindowFactory f4LabsAboutWindowFactory, ICheckConnectionFactory checkConnectionFactory, ILocalizationService localizationService, ILogger logger)
+           IF4LabsAboutWindowFactory f4LabsAboutWindowFactory, ICheckConnectionFactory checkConnectionFactory, IUpdateManagerFactory updateManagerFactory, ILocalizationService localizationService, ILogger logger)
         {
             InitializeComponent();
 
@@ -47,6 +48,7 @@ namespace ExcelShSy.Ui.Windows
             _dataBaseViewer = dataBaseViewer;
             _f4LabsAboutWindowFactory = f4LabsAboutWindowFactory;
             _checkConnectionFactory = checkConnectionFactory;
+            _updateManagerFactory =  updateManagerFactory;
             _localizationService = localizationService;
             _logger = logger;
 
@@ -63,7 +65,7 @@ namespace ExcelShSy.Ui.Windows
                 || _appSettings.LastUpdateCheck >= DateTime.Now.Date || !await _checkConnectionFactory.Create().CheckGitHubConnection()) return;
 #endif
             
-            var updater = new UpdateManager(_localizationService, _appSettings);
+            var updater = _updateManagerFactory.Create();
             
             if (await updater.CheckUpdateAsync(false) && !updater.CheckVersion()) return;
 
@@ -266,7 +268,7 @@ namespace ExcelShSy.Ui.Windows
             if (!await task) return;
             
             
-            var updater = new UpdateManager(_localizationService, _appSettings);
+            var updater = _updateManagerFactory.Create();
             if (await updater.CheckUpdateAsync(true)) return;
             if (updater.CheckVersion())
             {

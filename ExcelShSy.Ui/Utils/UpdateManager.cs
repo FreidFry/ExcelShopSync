@@ -8,7 +8,7 @@ using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Ui.Utils;
 
-public class UpdateManager(ILocalizationService localizationService, IAppSettings appSettings)
+public class UpdateManager(ILocalizationService localizationService, IAppSettings appSettings, ILogger logger)
 {
     private string? GitVersion;
 
@@ -29,6 +29,7 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
         }
         catch (Exception e) when (e is HttpRequestException or TaskCanceledException)
         {
+            logger.LogError(e.Message);
             if (withErrorsMessage)
             {
                 var title = localizationService.GetErrorString("NetworkErrorTitle");
@@ -40,6 +41,7 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
         }
         catch (Exception e)
         {
+            logger.LogError(e.Message);
             if (withErrorsMessage)
             {
                 var title = localizationService.GetErrorString("UnknownErrorTitle");
@@ -67,49 +69,59 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
         }
         catch (Exception e)
         {
+            logger.LogError(e.Message);
             return false;
         }
     }
 
     private async Task<(bool isSuccess, string? filePath)> DownloadAsync()
     {
-        var assetName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? $"ExShSy-{GitVersion}-win-x64.zip"
-            : $"ExShSy-{GitVersion}-linux-x64.tar.gz";
-        var savePath = Path.Combine(Path.GetTempPath(), assetName);
-
-        var client = new HttpClient();
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("request");
-
-        var json = await client.GetStringAsync("https://api.github.com/repos/FreidFry/ExcelShopSync/releases/latest");
-        using var doc = JsonDocument.Parse(json);
-
-        string? downloadUrl = null;
-        foreach (var asset in doc.RootElement.GetProperty("assets").EnumerateArray())
+        try
         {
-            if (asset.GetProperty("name").GetString() != assetName) continue;
+            var assetName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                ? $"ExShSy-{GitVersion}-win-x64.zip"
+                : $"ExShSy-{GitVersion}-linux-x64.tar.gz";
+            var savePath = Path.Combine(Path.GetTempPath(), assetName);
 
-            downloadUrl = asset.GetProperty("browser_download_url").GetString();
-            break;
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("request");
+
+            var json = await client.GetStringAsync("https://api.github.com/repos/FreidFry/ExcelShopSync/releases/latest");
+            using var doc = JsonDocument.Parse(json);
+
+            string? downloadUrl = null;
+            foreach (var asset in doc.RootElement.GetProperty("assets").EnumerateArray())
+            {
+                if (asset.GetProperty("name").GetString() != assetName) continue;
+
+                downloadUrl = asset.GetProperty("browser_download_url").GetString();
+                break;
+            }
+
+            if (downloadUrl == null)
+            {
+                var title = localizationService.GetErrorString("UnsupportedOSUpdateTitle");
+                var msg = localizationService.GetErrorString("UnsupportedOSUpdateText");
+                await MessageBoxManager
+                    .GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
+                    .ShowWindowAsync();
+                return (false, null);
+            }
+
+            using var response = await client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
+            response.EnsureSuccessStatusCode();
+        
+            await using var stream = await response.Content.ReadAsStreamAsync();
+            await using var file = File.Create(savePath);
+            await stream.CopyToAsync(file);
+            return (true, savePath);
         }
-
-        if (downloadUrl == null)
+        catch (Exception e)
         {
-            var title = localizationService.GetErrorString("UnsupportedOSUpdateTitle");
-            var msg = localizationService.GetErrorString("UnsupportedOSUpdateText");
-            await MessageBoxManager
-                .GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
-                .ShowWindowAsync();
+            logger.LogError(e.Message);
             return (false, null);
         }
-
-        using var response = await client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
-        response.EnsureSuccessStatusCode();
         
-        await using var stream = await response.Content.ReadAsStreamAsync();
-        await using var file = File.Create(savePath);
-        await stream.CopyToAsync(file);
-        return (true, savePath);
     }
 
     public async Task UpdateAppAsync()
@@ -158,14 +170,16 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
             Process.Start(psi);
             Environment.Exit(0);
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException e)
         {
+            logger.LogError(e.Message);
             await ShowErrorAsync("NetworkErrorTitle", "NetworkErrorText");
             
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            await ShowErrorAsync("UnknownErrorTitle", "UnknownErrorText", ex.Message);
+            logger.LogError(e.Message);
+            await ShowErrorAsync("UnknownErrorTitle", "UnknownErrorText", e.Message);
         }
     }
 

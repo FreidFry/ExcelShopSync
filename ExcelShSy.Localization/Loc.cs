@@ -40,7 +40,7 @@ namespace ExcelShSy.Localization
         {
             if (!_cache.TryGetValue(baseName, out var rm))
             {
-                rm = new ResourceManager(
+                rm = new SingleFileResourceManager(
                     $"{_assemblyName}.Resources.{baseName}",
                     typeof(Loc).Assembly);
                 _cache[baseName] = rm;

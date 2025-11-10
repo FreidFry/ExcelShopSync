@@ -109,6 +109,7 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddTransient<IDataBaseViewerFactory, DataBaseViewerFactory>();
             services.AddTransient<IF4LabsAboutWindowFactory, F4LabsAboutWindowFactory>();
             services.AddTransient<ICheckConnectionFactory, CheckConnectionFactory>();
+            services.AddTransient<IUpdateManagerFactory, UpdateManagerFactory>();
             
             services.AddScoped<IShopTemplateFactory, ShopTemplateFactory>();
             #endregion

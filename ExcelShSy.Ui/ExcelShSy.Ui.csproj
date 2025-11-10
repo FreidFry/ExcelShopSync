@@ -9,6 +9,10 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        
+        <!-- Настройки для single-file публикации с поддержкой локализации -->
+        <!-- Включаем извлечение всех ресурсов для поддержки динамической смены языка -->
+        <IncludeAllContentForSelfExtract Condition="'$(PublishSingleFile)' == 'true'">true</IncludeAllContentForSelfExtract>
 	</PropertyGroup>
 
 	<ItemGroup>

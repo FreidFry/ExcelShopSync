@@ -36,7 +36,7 @@ public class LocalizationService : ILocalizationService
     {
         if (!_cache.TryGetValue(baseName, out var rm))
         {
-            rm = new ResourceManager(
+            rm = new SingleFileResourceManager(
                 $"{AssemblyName}.Resources.{baseName}",
                 typeof(Loc).Assembly);
             _cache[baseName] = rm;
