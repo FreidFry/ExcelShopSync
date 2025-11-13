@@ -13,7 +13,7 @@ namespace WPFAboutF4Labs
         
 #if DESIGNER
         public F4LabsAboutWindow()
-        { }        
+        { }
 #endif
         
         public F4LabsAboutWindow(ILocalizationService localizationService, ILogger logger)

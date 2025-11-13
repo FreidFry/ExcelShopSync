@@ -185,7 +185,7 @@ namespace ExcelShSy.Ui.Windows
             {
                 new()
                 {
-                    Header = _localizationService.GetString(nameof(ShopManagerWindow), "Rename"),
+                    Header = _localizationService.GetString(nameof(ShopManagerWindow), "RenameButton"),
                     Command = new RelayCommand(_ =>
                     {
                         if(list.SelectedItem is string selected) RenameShopCommand(selected);
@@ -193,7 +193,7 @@ namespace ExcelShSy.Ui.Windows
                 },
                 new()
                 {
-                    Header = _localizationService.GetString(nameof(ShopManagerWindow), "DeleteButton"),
+                    Header = _localizationService.GetString(nameof(ShopManagerWindow), "RemoveButton"),
                     Command = new RelayCommand(_ =>
                     {
                         if (list.SelectedItem is string selected) DeleteShopCommand(selected);

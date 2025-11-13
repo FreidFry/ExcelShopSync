@@ -5,5 +5,9 @@
         <OutputType>WinExe</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Avalonia.Desktop" Version="11.3.8" />
+    </ItemGroup>
     
 </Project>

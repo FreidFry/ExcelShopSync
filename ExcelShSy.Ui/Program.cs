@@ -9,7 +9,8 @@ public static class Program
         public static void Main(string[] args)
         {
             ExcelPackage.License.SetNonCommercialPersonal("Freid4");
-            BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args);
         }
 
         private static AppBuilder BuildAvaloniaApp()
