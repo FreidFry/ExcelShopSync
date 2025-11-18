@@ -160,19 +160,17 @@ namespace ExcelShSy.Infrastructure.Extensions
         /// <returns>The parsed date or <c>null</c>.</returns>
         public static DateTime? GetDate(this ExcelWorksheet worksheet, int row, int needColumn, string? format)
         {
-            try
-            {
                 var value = worksheet.GetString(row, needColumn);
                 if (string.IsNullOrWhiteSpace(value) && string.IsNullOrWhiteSpace(format)) return null;
-                if (DateTime.TryParseExact(value, format, CultureInfo.InvariantCulture,
-                        DateTimeStyles.None, out var date))
-                    return date;
-                return null;
-            }
-            catch
-            {
-                return null;
-            }
+                return DateFromString(value, format);
+        }
+
+        internal static DateTime? DateFromString(string? dateString, string? format)
+        {
+            if (DateTime.TryParseExact(dateString, format, CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out var date))
+                return date;
+            return null;
         }
     }
 }

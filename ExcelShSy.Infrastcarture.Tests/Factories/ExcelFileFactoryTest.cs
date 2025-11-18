@@ -6,7 +6,7 @@ namespace ExcelShSy.Tests.Factories
     public class ExcelFileFactoryTest
     {
         [Theory]
-        [InlineData("Files\\Rozetka.xlsx")]
+        [InlineData("Files\\shop1.xlsx")]
         public void Create_ValidFile_ReturnsExcelPackage(string filePath)
         {
             // Arrange

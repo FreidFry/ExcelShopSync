@@ -27,5 +27,15 @@ namespace ExcelShSy.Tests.Extensions
 
             Assert.Equal(expected, result);
         }
+        [Theory]
+        [InlineData("2001 23 11 15 06 11", "yyyy dd MM HH mm ss", 2001, 11, 23, 15, 06, 11)]
+        [InlineData("2001.23.11.15.06.11", "yyyy.dd.MM.HH.mm.ss", 2001, 11, 23, 15, 06, 11)]
+
+        public void GetData(string dataString, string format, int year, int month, int day, int hour, int minute, int second)
+        {
+            var expected = new DateTime(year, month, day, hour, minute, second);
+            var result = Infrastructure.Extensions.ExcelRangeExtensions.DateFromString(dataString, format);
+            Assert.Equal(expected, result);
+        }
     }
 }
