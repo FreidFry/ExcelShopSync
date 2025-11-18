@@ -5,8 +5,8 @@
         
         <AssemblyVersion>2.4.2</AssemblyVersion>
         <FileVersion>2.4.2.0</FileVersion>
-        <Version>2.5.8.1</Version>
-		<InformationalVersion>2.5.8.1</InformationalVersion>
+        <Version>2.5.8.2</Version>
+		<InformationalVersion>2.5.8.2</InformationalVersion>
         
         <NeutralLanguage>en</NeutralLanguage>
         <Product>Excel Shop Synchronizer</Product>
