@@ -7,6 +7,9 @@ using static ExcelShSy.Infrastructure.Extensions.FileNameExtensions;
 
 namespace ExcelShSy.Infrastructure.Services.Storage
 {
+    /// <summary>
+    /// Coordinates file selection, loading, and cleanup for synchronization operations.
+    /// </summary>
     public class FileManager : IFileManager
     {
         private readonly IFileProvider _fileProvider;
@@ -16,7 +19,9 @@ namespace ExcelShSy.Infrastructure.Services.Storage
 
         private readonly IGetProductManager _getProductManager;
 
+        /// <inheritdoc />
         public List<string> TargetPaths { get; set; } = [];
+        /// <inheritdoc />
         public List<string> SourcePaths { get; set; } = [];
 
         public FileManager(IFileProvider fileProvider,
@@ -34,23 +39,35 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             _getProductManager = getProductManager;
         }
 
+        /// <summary>
+        /// Retrieves file details for the provided path.
+        /// </summary>
+        /// <param name="path">The Excel file path.</param>
+        /// <returns>The file abstraction.</returns>
         public IExcelFile GetFileDetails(string path)
         {
             return _fileProvider.FetchExcelFile([path])[0];
         }
 
+        /// <summary>
+        /// Loads target files into the shared file storage.
+        /// </summary>
         public void InitializeTargetFiles()
         {
             var files = _fileProvider.FetchExcelFile(TargetPaths);
             _fileStorage.AddTarget(files);
         }
 
+        /// <summary>
+        /// Loads source files into the shared file storage.
+        /// </summary>
         public void InitializeSourceFiles()
         {
             var files = _fileProvider.FetchExcelFile(SourcePaths);
             _fileStorage.AddSource(files);
         }
 
+        /// <inheritdoc />
         public void InitializeAllFiles()
         {
             InitializeTargetFiles();
@@ -58,6 +75,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             _getProductManager.FetchAllProducts();
         }
 
+        /// <inheritdoc />
         public void ClearAfterComplete()
         {
             _dataProduct.ClearData();
@@ -66,6 +84,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             _logger.LogInfo("All files cleared");
         }
 
+        /// <inheritdoc />
         public async void AddSourcePath()
         {
             var paths = await _fileProvider.PickExcelFilePaths();
@@ -80,6 +99,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             SetLastPath("SourceLb", SourcePaths);
         }
 
+        /// <inheritdoc />
         public async void AddTargetPath()
         {
             var paths = await _fileProvider.PickExcelFilePaths();
@@ -93,6 +113,10 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             SetLastPath("TargetLb", TargetPaths);
         }
 
+        /// <summary>
+        /// Removes the specified source path and logs the action.
+        /// </summary>
+        /// <param name="path">The source file path to remove.</param>
         public void RemoveSourcePath(string path)
         {
             if (SourcePaths.Contains(path))
@@ -102,6 +126,10 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             }
         }
 
+        /// <summary>
+        /// Removes the specified target path and logs the action.
+        /// </summary>
+        /// <param name="path">The target file path to remove.</param>
         public void RemoveTargetPath(string path)
         {
             if (TargetPaths.Contains(path))

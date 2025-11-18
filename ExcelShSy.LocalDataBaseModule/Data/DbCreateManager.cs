@@ -25,8 +25,8 @@ namespace ExcelShSy.LocalDataBaseModule.Data
         {
             using var cmd = sqliteDbContext.CreateCommand();
             var sql = $"""
-                       CREATE TABLE IF NOT EXISTS {Tables.ProductShopMapping} (
-                           {MappingColumns.Id} INTEGER PRIMARY KEY AUTOINCREMENT,
+                       CREATE TABLE IF NOT EXISTS "{Tables.ProductShopMapping}" (
+                           "{MappingColumns.Id}" INTEGER PRIMARY KEY AUTOINCREMENT,
                            MasterArticle VARCHAR(100) UNIQUE NOT NULL
                        );
                        """;

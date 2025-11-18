@@ -2,14 +2,14 @@
 using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using ExcelShSy.Core.Enums;
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Core.Properties;
 using ExcelShSy.Event;
 using ExcelShSy.Ui.Interfaces;
-using ExcelShSy.Ui.Utils;
-using MsBox.Avalonia;
+using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Ui.Windows
@@ -27,8 +27,9 @@ namespace ExcelShSy.Ui.Windows
         private readonly IUpdateManagerFactory _updateManagerFactory;
         private readonly ILocalizationService _localizationService;
         private readonly ILogger _logger;
-        
-        #if DESIGNER
+        private readonly IMessages<IMsBox<ButtonResult>> _messages;
+
+#if DESIGNER
         public MainWindow()
         {
             InitializeComponent();
@@ -36,7 +37,7 @@ namespace ExcelShSy.Ui.Windows
         #endif
         
         public MainWindow(IAppSettings appSettings, IFileManager fileManager, IOperationTaskFactory taskFactory, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory, IDataBaseViewerFactory dataBaseViewer,
-           IF4LabsAboutWindowFactory f4LabsAboutWindowFactory, ICheckConnectionFactory checkConnectionFactory, IUpdateManagerFactory updateManagerFactory, ILocalizationService localizationService, ILogger logger)
+           IF4LabsAboutWindowFactory f4LabsAboutWindowFactory, ICheckConnectionFactory checkConnectionFactory, IUpdateManagerFactory updateManagerFactory, ILocalizationService localizationService, ILogger logger, IMessages<IMsBox<ButtonResult>> messages)
         {
             InitializeComponent();
 
@@ -51,6 +52,7 @@ namespace ExcelShSy.Ui.Windows
             _updateManagerFactory =  updateManagerFactory;
             _localizationService = localizationService;
             _logger = logger;
+            _messages = messages;
 
             UpdateTextBlockEvents.RegistrationTextBlockEvent("TargetLb", TargetLastFile);
             UpdateTextBlockEvents.RegistrationTextBlockEvent("SourceLb", SourceLastFile);
@@ -71,8 +73,8 @@ namespace ExcelShSy.Ui.Windows
 
             var titleYes = _localizationService.GetMessageString("UpdatesAvailableTitle");
             var msgYes = _localizationService.GetMessageString("UpdatesAvailableText");
-            var resultYes = await MessageBoxManager
-                .GetMessageBoxStandard(titleYes, msgYes, ButtonEnum.YesNo)
+            var resultYes = await _messages
+                .GetMessageBoxStandard(titleYes, msgYes, Core.Enums.MyButtonEnum.YesNo)
                 .ShowWindowAsync();
             if (resultYes == ButtonResult.Yes) await updater.UpdateAppAsync();
         }
@@ -156,8 +158,8 @@ namespace ExcelShSy.Ui.Windows
                 {
                     var message = _localizationService.GetString("MainWindow", "NoSetExecute_");
                     var title = _localizationService.GetString("MainWindow", "NoSetExecuteTitle_");
-                    var msBox = MessageBoxManager.GetMessageBoxStandard(title, message, ButtonEnum.Ok,
-                        MsBox.Avalonia.Enums.Icon.Error);
+                    var msBox = _messages.GetMessageBoxStandard(title, message, ExcelShSy.Core.Enums.MyButtonEnum.Ok,
+                        ExcelShSy.Core.Enums.MyIcon.Error);
                     await msBox.ShowWindowDialogAsync(this);
                     return;
                 }
@@ -195,9 +197,9 @@ namespace ExcelShSy.Ui.Windows
                     var msg = _localizationService.GetMessageString("ConfirmText");
                     var formatedText = string.Format(msg, ProductProcessingOptions.priceIncreasePercentage.ToString(CultureInfo.InvariantCulture));
                     
-                    var msBox = MessageBoxManager.GetMessageBoxStandard(title,
+                    var msBox = _messages.GetMessageBoxStandard(title,
                         formatedText,
-                        ButtonEnum.YesNo);
+                        ExcelShSy.Core.Enums.MyButtonEnum.YesNo);
                     var result = await msBox.ShowWindowDialogAsync(this);
                     if (result != ButtonResult.Yes) ProductProcessingOptions.priceIncreasePercentage = 1;
                         ProductProcessingOptions.priceIncreasePercentage /= 100;
@@ -274,14 +276,14 @@ namespace ExcelShSy.Ui.Windows
             {
                 var title = _localizationService.GetMessageString("UpdatesAvailableTitle");
                 var msg = _localizationService.GetMessageString("UpdatesAvailableText");
-                var result = await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.YesNo).ShowAsync();
+                var result = await _messages.GetMessageBoxStandard(title, msg, MyButtonEnum.YesNo).ShowAsync();
                 if (result == ButtonResult.Yes)
                     await updater.UpdateAppAsync();
                 return;
             }
             var titleNo = _localizationService.GetMessageString("ThisVersionLatestTitle");
             var msgNo = _localizationService.GetMessageString("ThisVersionLatestText");
-            await MessageBoxManager.GetMessageBoxStandard(titleNo, msgNo).ShowWindowAsync();
+            await _messages.GetMessageBoxStandard(titleNo, msgNo).ShowWindowAsync();
         }
     }
 }

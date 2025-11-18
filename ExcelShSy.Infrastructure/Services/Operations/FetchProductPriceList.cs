@@ -12,9 +12,16 @@ using ExcelShSy.Infrastructure.Persistence.ShopData.Mappings;
 
 namespace ExcelShSy.Infrastructure.Services.Operations
 {
+    /// <summary>
+    /// Imports product data from price list spreadsheets, including complementary product rows.
+    /// </summary>
     public class FetchProductPriceList(IProductStorage dataProduct, IShopStorage shopStorage, ILogger logger)
         : BaseProductImporter(dataProduct, shopStorage, logger), IFetchPriceListProduct
     {
+        /// <summary>
+        /// Processes the supplied worksheet by detecting headers and reading relevant columns.
+        /// </summary>
+        /// <param name="page">The worksheet abstraction to process.</param>
         protected override void ProcessPage(IExcelSheet page)
         {
             var worksheet = page.Worksheet;
@@ -67,6 +74,15 @@ namespace ExcelShSy.Infrastructure.Services.Operations
             }
         }
 
+        /// <summary>
+        /// Stores the product data extracted from the specified row.
+        /// </summary>
+        /// <param name="article">The product article identifier.</param>
+        /// <param name="priceCol">The column index containing price information.</param>
+        /// <param name="qtyCol">The column index containing quantity information.</param>
+        /// <param name="availCol">The column index containing availability information.</param>
+        /// <param name="row">The row being inspected.</param>
+        /// <param name="ws">The worksheet instance used for reading values.</param>
         private void SetProductData(string article, int priceCol, int qtyCol, int availCol, int row, ExcelWorksheet ws)
         {
             DataProduct.AddProductArticle(article);
@@ -91,6 +107,11 @@ namespace ExcelShSy.Infrastructure.Services.Operations
             }
         }
 
+        /// <summary>
+        /// Attempts to map an availability description from a price list to a standardized value.
+        /// </summary>
+        /// <param name="availability">The raw availability string.</param>
+        /// <returns>The standardized availability key, or <c>null</c> if none matched.</returns>
         private static string? IdentifyAvailability(string? availability)
         {
             if (availability == null) return null;

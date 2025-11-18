@@ -11,6 +11,9 @@ using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 
 namespace ExcelShSy.Infrastructure.Services
 {
+    /// <summary>
+    /// Synchronizes discount start and end dates into target Excel files using stored product data.
+    /// </summary>
     [Task(nameof(ProductProcessingOptions.ShouldSyncDiscountDate))]
     public class SyncDiscountDate(
         IProductStorage dataProduct,
@@ -21,12 +24,24 @@ namespace ExcelShSy.Infrastructure.Services
         ILocalizationService localizationService)
         : IExecuteOperation
     {
+        /// <summary>
+        /// Defines the date format string required by the current shop.
+        /// </summary>
         private string? _shopFormat;
         
+        /// <summary>
+        /// Stores the name of the shop currently being processed.
+        /// </summary>
         private string _shopName = string.Empty;
         
+        /// <summary>
+        /// Gets the collection of errors recorded while synchronizing.
+        /// </summary>
         public List<string> Errors { get; } = [];
 
+        /// <summary>
+        /// Iterates through all target files and synchronizes discount dates.
+        /// </summary>
         public async Task Execute()
         {
             foreach (var file in fileStorage.Target)
@@ -44,12 +59,21 @@ namespace ExcelShSy.Infrastructure.Services
             }
         }
 
+        /// <summary>
+        /// Fetches the date format configured for the specified shop.
+        /// </summary>
+        /// <param name="shopName">The shop whose format should be used.</param>
+        /// <returns>The date format string.</returns>
         private string SetDataFormat(string shopName)
         {
             var shopTemplate = shopMapping.GetShopMapping(shopName);
             return shopTemplate!.DataFormat!;
         }
 
+        /// <summary>
+        /// Processes a single file by updating discount dates on each worksheet.
+        /// </summary>
+        /// <param name="file">The file to process.</param>
         private void ProcessFile(IExcelFile file)
         {
             if (file.SheetList == null)
@@ -62,6 +86,10 @@ namespace ExcelShSy.Infrastructure.Services
             foreach (var page in file.SheetList) OperationWrapper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
+        /// <summary>
+        /// Updates discount date columns on the provided worksheet.
+        /// </summary>
+        /// <param name="page">The worksheet abstraction to update.</param>
         private void ProcessPage(IExcelSheet page)
         {
             var worksheet = page.Worksheet;
@@ -116,6 +144,11 @@ namespace ExcelShSy.Infrastructure.Services
             logger.Log($"Products where errors {string.Join(",", products)}");
         }
 
+        /// <summary>
+        /// Converts the supplied date to the current shop's format.
+        /// </summary>
+        /// <param name="date">The date to convert.</param>
+        /// <returns>The formatted date string.</returns>
         private string ConvertDate(DateTime date)
         {
             return date.ToString(_shopFormat);

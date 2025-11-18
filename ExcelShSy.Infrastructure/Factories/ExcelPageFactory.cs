@@ -6,8 +6,12 @@ using OfficeOpenXml;
 
 namespace ExcelShSy.Infrastructure.Factories
 {
+    /// <summary>
+    /// Creates sheet abstractions and resolves column mappings using configured templates.
+    /// </summary>
     public class ExcelPageFactory(IColumnMappingStorage columnMappingStorage) : IExcelPageFactory
     {
+        /// <inheritdoc />
         public IExcelSheet Create(ExcelWorksheet worksheet)
         {
             var page = new ExcelPage(worksheet)
@@ -19,6 +23,11 @@ namespace ExcelShSy.Infrastructure.Factories
             return page;
         }
 
+        /// <summary>
+        /// Retrieves the raw header map from the first row of the worksheet.
+        /// </summary>
+        /// <param name="worksheet">The worksheet to inspect.</param>
+        /// <returns>A dictionary mapping header names to column indexes.</returns>
         private static Dictionary<string, int>? GetTempHeaders(ExcelWorksheet? worksheet)
         {
             if (worksheet?.Dimension == null)
@@ -27,6 +36,11 @@ namespace ExcelShSy.Infrastructure.Factories
             return worksheet.GetRowValueColumnMap(worksheet.Dimension.Start.Row);
         }
 
+        /// <summary>
+        /// Generates mapped headers by matching discovered headers with known column templates.
+        /// </summary>
+        /// <param name="undefinedHeaders">The headers discovered from the worksheet.</param>
+        /// <returns>A dictionary keyed by logical column name with associated column indexes.</returns>
         private Dictionary<string, int> GetRealHeaders(Dictionary<string, int>? undefinedHeaders)
         {
             var template = columnMappingStorage.Columns;

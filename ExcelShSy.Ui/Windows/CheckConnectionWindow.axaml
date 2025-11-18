@@ -10,13 +10,14 @@
     
     <StackPanel Margin="10" >
         
-        <Grid>
-            <TextBlock x:Name="TimerBlock"/>
+        <Grid Margin="0,0,10,0">
+            <TextBlock x:Name="TimerBlock" />
             <TextBlock x:Name="TextBlock" HorizontalAlignment="Right" Padding="10,0"/>
         </Grid>
         
+        <ProgressBar x:Name="ProgressBar" Height="20" />
         
-        <ProgressBar Maximum="1" x:Name="ProgressBar" Margin="0,10" Height="20" />
+        <TextBox x:Name="RuntimeLogs" IsReadOnly="True" Margin="0,10" CaretBrush="Transparent" Focusable="False" />
         
         <Button Content="Stop" HorizontalAlignment="Right" Click="CancelButton_OnClick"/>
     </StackPanel>

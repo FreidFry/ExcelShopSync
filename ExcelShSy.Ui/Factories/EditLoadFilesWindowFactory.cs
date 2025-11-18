@@ -3,6 +3,8 @@ using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Ui.Interfaces;
 using ExcelShSy.Ui.Windows;
+using MsBox.Avalonia.Base;
+using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Ui.Factories
 {
@@ -10,12 +12,12 @@ namespace ExcelShSy.Ui.Factories
         IFileManager fileManager,
         IFileProvider fileProvider,
         IExcelFileFactory excelFileFactory,
-        ILocalizationService localizationService)
+        ILocalizationService localizationService, IMessages<IMsBox<ButtonResult>> messages)
         : IEditLoadFilesWindowFactory
     {
         public EditLoadFilesWindow Create(string page) =>
-            new(page, fileManager, fileProvider, excelFileFactory, localizationService);
+            new(page, fileManager, fileProvider, excelFileFactory, localizationService, messages);
         public EditLoadFilesWindow Create() =>
-            new(fileManager, fileProvider, excelFileFactory, localizationService);
+            new(fileManager, fileProvider, excelFileFactory, localizationService, messages);
     }
 }

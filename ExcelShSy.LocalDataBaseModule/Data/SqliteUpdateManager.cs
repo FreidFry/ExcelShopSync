@@ -1,12 +1,15 @@
+using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.LocalDataBaseModule.Extensions;
 using ExcelShSy.LocalDataBaseModule.Persistance;
 using Microsoft.Data.Sqlite;
+using MsBox.Avalonia.Base;
+using MsBox.Avalonia.Enums;
 using Timer = System.Timers.Timer;
 
 namespace ExcelShSy.LocalDataBaseModule.Data;
 
-public class SqliteUpdateManager(ISqliteDbContext dbContext) : IDatabaseUpdateManager
+public class SqliteUpdateManager(ISqliteDbContext dbContext, IMessages<IMsBox<ButtonResult>> messages) : IDatabaseUpdateManager
 {
     private readonly IDbCommandWrapper _cmd = dbContext.CreateCommand();
     private readonly object _lock = new();
@@ -46,7 +49,7 @@ public class SqliteUpdateManager(ISqliteDbContext dbContext) : IDatabaseUpdateMa
         {
             try
             {
-                var updateQuery = $"UPDATE {Enums.Tables.ProductShopMapping} SET [{column}] = @val WHERE Id = @id;";
+                var updateQuery = $"UPDATE \"{Enums.Tables.ProductShopMapping}\" SET \"[{column}]\" = @val WHERE Id = @id;";
                 _cmd.SetCommandText(updateQuery);
 
                 _cmd.ClearParameters();
@@ -57,7 +60,7 @@ public class SqliteUpdateManager(ISqliteDbContext dbContext) : IDatabaseUpdateMa
             }
             catch (SqliteException ex) when (ex.SqliteErrorCode == 19) //Exist in the table
             {
-                ErrorHelper.ShowError(ex.Message);
+                new ErrorHelper(messages).ShowError(ex.Message);
             }
         }
     }

@@ -91,27 +91,27 @@ public class DataGridBuilder(ISqliteDbContext context)
         try
         {
             var sql =
-                $@"INSERT INTO {Enums.Tables.ProductShopMapping} (MasterArticle) VALUES ('Product{productCount++}');";
+                $@"INSERT INTO ""{Enums.Tables.ProductShopMapping}"" (MasterArticle) VALUES ('Product{productCount++}');";
             context.ExecuteNonQuery(sql);
         }
         catch (SqliteException ex) when (ex.SqliteErrorCode == 19) //Exist in the table
         {
             var existSql = $"""
-                            SELECT {Enums.MappingColumns.MasterArticle} FROM {Enums.Tables.ProductShopMapping}
-                            WHERE {Enums.MappingColumns.MasterArticle}
+                            SELECT "{Enums.MappingColumns.MasterArticle}" FROM "{Enums.Tables.ProductShopMapping}"
+                            WHERE "{Enums.MappingColumns.MasterArticle}"
                             LIKE 'Product%'
-                            ORDER BY {Enums.MappingColumns.Id} DESC
+                            ORDER BY "{Enums.MappingColumns.Id}" DESC
                             LIMIT 1;
                             """;
             var result = context.ExecuteScalar(existSql)!;
             productCount = int.Parse(result["Product".Length..]) + 1;
             var sql =
-                $@"INSERT INTO {Enums.Tables.ProductShopMapping} (MasterArticle) VALUES ('Product{productCount++}');";
+                $"INSERT INTO \"{Enums.Tables.ProductShopMapping}\" (MasterArticle) VALUES ('Product{productCount++}');";
             context.ExecuteNonQuery(sql);
         }
         finally
         {
-            var getLast = $@"SELECT * FROM {Enums.Tables.ProductShopMapping} ORDER BY {Enums.MappingColumns.Id} DESC;";
+            var getLast = $"SELECT * FROM \"{Enums.Tables.ProductShopMapping}\" ORDER BY \"{Enums.MappingColumns.Id}\" DESC;";
             var reader = context.CreateCommand(getLast).ExecuteReader().GetReader();
             reader.Read();
 

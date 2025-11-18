@@ -4,10 +4,15 @@ using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 
 namespace ExcelShSy.Infrastructure.Services.Storage
 {
+    /// <summary>
+    /// Stores column mappings discovered from shop templates and manual additions.
+    /// </summary>
     public class ColumnMappingStorage : IColumnMappingStorage
     {
+        /// <inheritdoc />
         public Dictionary<string, List<string>> Columns { get; private set; } = [];
 
+        /// <inheritdoc />
         public void AddColumn(string key, List<string> values)
         {
             if (Columns.ContainsKey(key))
@@ -20,6 +25,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             }
         }
 
+        /// <inheritdoc />
         public void AddColumn(string key, string? value)
         {
             if (string.IsNullOrEmpty(value))
@@ -30,6 +36,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
                 Columns[key] = [value];
         }
 
+        /// <inheritdoc />
         public void AddColumn(IShopTemplate shop)
         {
             AddColumn(ColumnConstants.Article, shop.Article);

@@ -1,15 +1,17 @@
 using Avalonia.Threading;
-using MsBox.Avalonia;
+using ExcelShSy.Core.Interfaces.Common;
+using MsBox.Avalonia.Base;
+using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.LocalDataBaseModule.Extensions;
 
-public static class ErrorHelper
+public class ErrorHelper(IMessages<IMsBox<ButtonResult>> messages)
 {
-    public static void ShowError(string message)
+    public void ShowError(string message)
     {
         Dispatcher.UIThread.Post(() =>
         {
-            MessageBoxManager
+            messages
                 .GetMessageBoxStandard("Error", message)
                 .ShowAsync();
         });

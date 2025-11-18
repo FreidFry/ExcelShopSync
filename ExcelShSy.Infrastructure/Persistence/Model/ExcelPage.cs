@@ -4,12 +4,19 @@ using OfficeOpenXml;
 
 namespace ExcelShSy.Infrastructure.Persistence.Model
 {
+    /// <summary>
+    /// Represents an Excel worksheet along with header metadata.
+    /// </summary>
     public class ExcelPage : IExcelSheet
     {
         
+        /// <inheritdoc />
         public string SheetName { get; set; }
+        /// <inheritdoc />
         public ExcelWorksheet Worksheet { get; set; }
+        /// <inheritdoc />
         public Dictionary<string, int>? UnmappedHeaders { get; set; }
+        /// <inheritdoc />
         public Dictionary<string, int>? MappedHeaders { get; set; }
 
         public ExcelPage(ExcelWorksheet worksheet)
@@ -18,6 +25,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             Worksheet = worksheet;
         }
 
+        /// <inheritdoc />
         public string ShowPageDetails()
         {
             string response;

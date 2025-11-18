@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.13.35818.85
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11205.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy.Core", "ExcelShSy\ExcelShSy.Core.csproj", "{1111CB76-D0CE-4420-87A1-BB83382F3E4C}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy.Settings", "ExcelShSy.Settings\ExcelShSy.Settings.csproj", "{FBA51CC3-4BAE-4E14-8DD9-43854ED24C60}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy.Setup", "ExcelShSy.Setup\ExcelShSy.Setup.csproj", "{576C0348-D017-4627-B701-CDE8C7F90215}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelShSy.Tests", "ExcelShSy.Infrastcarture.Tests\ExcelShSy.Tests.csproj", "{2D056D29-D106-43B1-957A-6DFDDD33F10B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{576C0348-D017-4627-B701-CDE8C7F90215}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{576C0348-D017-4627-B701-CDE8C7F90215}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{576C0348-D017-4627-B701-CDE8C7F90215}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D056D29-D106-43B1-957A-6DFDDD33F10B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D056D29-D106-43B1-957A-6DFDDD33F10B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D056D29-D106-43B1-957A-6DFDDD33F10B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D056D29-D106-43B1-957A-6DFDDD33F10B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

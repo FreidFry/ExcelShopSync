@@ -1,17 +1,24 @@
-﻿using ExcelShSy.Core.Interfaces.Excel;
+﻿using ExcelShSy.Core.Interfaces.Common;
+using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Infrastructure.Persistence.Model;
+using MsBox.Avalonia.Base;
+using MsBox.Avalonia.Enums;
 using OfficeOpenXml;
 
 namespace ExcelShSy.Infrastructure.Factories
 {
-    public class ExcelFileFactory(IExcelPageFactory excelPageFactory, IShopStorage shopStorage)
+    /// <summary>
+    /// Creates <see cref="IExcelFile"/> instances and infers metadata such as shop and language.
+    /// </summary>
+    public class ExcelFileFactory(IMessages<IMsBox<ButtonResult>> messages, IExcelPageFactory excelPageFactory, IShopStorage shopStorage)
         : IExcelFileFactory
     {
+        /// <inheritdoc />
         public IExcelFile Create(string path)
         {
-            var file = new ExcelFile(path);
+            var file = new ExcelFile(messages, path);
 
             file.SheetList = GetPages(file.ExcelPackage);
 
@@ -21,6 +28,11 @@ namespace ExcelShSy.Infrastructure.Factories
             return file;
         }
 
+        /// <summary>
+        /// Builds page abstractions for all worksheets in the package.
+        /// </summary>
+        /// <param name="package">The Excel package to inspect.</param>
+        /// <returns>The list of sheet abstractions.</returns>
         private List<IExcelSheet> GetPages(ExcelPackage package)
         {
             ExcelWorkbook workbook = package.Workbook;
@@ -31,7 +43,12 @@ namespace ExcelShSy.Infrastructure.Factories
             return pages;
         }
 
-        private string IdentifyShop(List<IExcelSheet> pages)
+        /// <summary>
+        /// Attempts to identify the shop for the provided pages by majority vote.
+        /// </summary>
+        /// <param name="pages">The pages to evaluate.</param>
+        /// <returns>The inferred shop name.</returns>
+        private string? IdentifyShop(List<IExcelSheet> pages)
         {
             List<string> shops = [];
             foreach (var page in pages)
@@ -42,13 +59,18 @@ namespace ExcelShSy.Infrastructure.Factories
 
             var thisShop = shops.GroupBy(x => x)
                 .OrderByDescending(g => g.Count())
-                .First()
+                .FirstOrDefault()?
                 .Key;
 
             return thisShop;
         }
 
-        private static string LanguageDetect(List<IExcelSheet> pages)
+        /// <summary>
+        /// Detects the predominant language across the provided pages.
+        /// </summary>
+        /// <param name="pages">The pages to evaluate.</param>
+        /// <returns>The inferred language identifier.</returns>
+        private static string? LanguageDetect(List<IExcelSheet> pages)
         {
             List<string> languages = [];
             foreach (var page in pages)
@@ -59,7 +81,7 @@ namespace ExcelShSy.Infrastructure.Factories
 
             var thisLanguage = languages.GroupBy(x => x)
                 .OrderByDescending(g => g.Count())
-                .First()
+                .FirstOrDefault()?
                 .Key;
 
             return thisLanguage;

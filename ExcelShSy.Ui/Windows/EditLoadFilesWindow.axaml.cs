@@ -1,14 +1,15 @@
-using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Storage;
+using ExcelShSy.Core.Enums;
 using ExcelShSy.Event;
 using ExcelShSy.Infrastructure.Extensions;
 using ExcelShSy.Ui.Models.EditLoadFiles;
-using MsBox.Avalonia;
+using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Enums;
+using System.Collections.ObjectModel;
 
 namespace ExcelShSy.Ui.Windows
 {
@@ -20,6 +21,7 @@ namespace ExcelShSy.Ui.Windows
         private readonly IFileProvider _fileProvider;
         private readonly IExcelFileFactory _excelFileFactory;
         private readonly ILocalizationService _localizationService;
+        private readonly IMessages<IMsBox<ButtonResult>> _messages;
 
 #if DESIGNER
         public EditLoadFilesWindow()
@@ -29,9 +31,9 @@ namespace ExcelShSy.Ui.Windows
 #endif
         
         public EditLoadFilesWindow(IFileManager fileManager, IFileProvider fileProvider,
-            IExcelFileFactory fileFactory, ILocalizationService localizationService)
-            : this("Target", fileManager, fileProvider, fileFactory, localizationService) { }
-        public EditLoadFilesWindow(string tabName, IFileManager fileManager, IFileProvider fileProvider, IExcelFileFactory fileFactory, ILocalizationService localizationService)
+            IExcelFileFactory fileFactory, ILocalizationService localizationService, IMessages<IMsBox<ButtonResult>> messages)
+            : this("Target", fileManager, fileProvider, fileFactory, localizationService, messages) { }
+        public EditLoadFilesWindow(string tabName, IFileManager fileManager, IFileProvider fileProvider, IExcelFileFactory fileFactory, ILocalizationService localizationService, IMessages<IMsBox<ButtonResult>> messages)
         {
             InitializeComponent();
             
@@ -39,6 +41,7 @@ namespace ExcelShSy.Ui.Windows
             _fileProvider = fileProvider;
             _excelFileFactory = fileFactory;
             _localizationService = localizationService;
+            _messages = messages;
 
             SetFileNameList(TemporaryTargetFiles, _fileManager.TargetPaths);
             SetFileNameList(TemporarySourceFiles, _fileManager.SourcePaths);
@@ -148,9 +151,9 @@ namespace ExcelShSy.Ui.Windows
             }
         }
 
-        private static async Task<bool> CreateMessageBoxYesNoWarning(string message, string windowName)
+        private async Task<bool> CreateMessageBoxYesNoWarning(string message, string windowName)
         {
-            var msBox = MessageBoxManager.GetMessageBoxStandard(windowName, message, ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Warning);
+            var msBox = _messages.GetMessageBoxStandard(windowName, message, Core.Enums.MyButtonEnum.YesNo, Core.Enums.MyIcon.Warning);
             var result = await msBox.ShowAsync();
             return result == ButtonResult.No;
         }

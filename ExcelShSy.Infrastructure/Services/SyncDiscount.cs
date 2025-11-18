@@ -10,14 +10,26 @@ using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 
 namespace ExcelShSy.Infrastructure.Services
 {
+    /// <summary>
+    /// Synchronizes product discount values into target Excel files.
+    /// </summary>
     [Task(nameof(ProductProcessingOptions.ShouldSyncDiscounts))]
     public class SyncDiscount(IProductStorage dataProduct, IFileStorage fileStorage, IDatabaseSearcher databaseSearcher, ILocalizationService localizationService)
         : IExecuteOperation
     {
+        /// <summary>
+        /// Tracks the shop currently being processed.
+        /// </summary>
         private string _shopName = string.Empty;
 
+        /// <summary>
+        /// Gets the list of errors produced during synchronization.
+        /// </summary>
         public List<string> Errors { get; } = [];
 
+        /// <summary>
+        /// Applies discount updates across all target files.
+        /// </summary>
         public async Task Execute()
         {
             foreach (var file in fileStorage.Target)
@@ -34,6 +46,10 @@ namespace ExcelShSy.Infrastructure.Services
             }
         }
 
+        /// <summary>
+        /// Updates discount values in the specified file.
+        /// </summary>
+        /// <param name="file">The file to modify.</param>
         private void ProcessFile(IExcelFile file)
         {
             if (file.SheetList == null)
@@ -46,6 +62,10 @@ namespace ExcelShSy.Infrastructure.Services
             foreach (var page in file.SheetList) OperationWrapper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
+        /// <summary>
+        /// Writes discount values for the given worksheet.
+        /// </summary>
+        /// <param name="page">The worksheet abstraction to update.</param>
         private void ProcessPage(IExcelSheet page)
         {
 

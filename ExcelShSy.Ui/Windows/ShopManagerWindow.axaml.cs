@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using DynamicData;
+using ExcelShSy.Core.Enums;
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.Core.Interfaces.Shop;
@@ -13,7 +14,7 @@ using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Infrastructure.Persistence.Model;
 using ExcelShSy.LocalDataBaseModule.Persistance;
 using Microsoft.Data.Sqlite;
-using MsBox.Avalonia;
+using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
 using MsBox.Avalonia.Models;
@@ -30,9 +31,12 @@ namespace ExcelShSy.Ui.Windows
         private readonly IFileProvider _fileProvider;
         private readonly ILocalizationService _localizationService;
         private readonly ISqliteDbContext _sqliteDbContext;
-        
+        private readonly IMessages<IMsBox<ButtonResult>> _messages;
+        private readonly IMessageCustom<IMsBox<string>, MessageBoxCustomParams> _customMessages;
+
+
         #endregion
-        
+
         #region State
 
         private bool _shopChanged;
@@ -81,14 +85,16 @@ namespace ExcelShSy.Ui.Windows
         }
 #endif
         
-        public ShopManagerWindow(IShopStorage shopStorage, ILogger logger, IFileProvider fileProvider, ILocalizationService localizationService, ISqliteDbContext sqliteDbContext) 
+        public ShopManagerWindow(IShopStorage shopStorage, ILogger logger, IFileProvider fileProvider, ILocalizationService localizationService, ISqliteDbContext sqliteDbContext, IMessages<IMsBox<ButtonResult>> messages, IMessageCustom<IMsBox<string>, MessageBoxCustomParams> messageCustom) 
         {
             _shopStorage = shopStorage;
             _logger = logger;
             _fileProvider = fileProvider;
             _localizationService = localizationService;
             _sqliteDbContext = sqliteDbContext;
-            
+            _messages = messages;
+            _customMessages = messageCustom;
+
             Initialize();
             
             Loaded += (_, _) => Dispatcher.UIThread.Post(() => _ready = true, DispatcherPriority.Background);
@@ -141,7 +147,7 @@ namespace ExcelShSy.Ui.Windows
             var title = _localizationService.GetString(windowName, "ConfirmSaveTitle");
             var msg = _localizationService.GetString(windowName, "ConfirmSaveText");
 
-            var msBox = await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.YesNo).ShowWindowDialogAsync(this);
+            var msBox = await _messages.GetMessageBoxStandard(title, msg, MyButtonEnum.YesNo).ShowWindowDialogAsync(this);
             if (msBox == ButtonResult.Yes) return true;
             return false;
         }
@@ -153,7 +159,7 @@ namespace ExcelShSy.Ui.Windows
                 MagazineSelector.Items.Add(shop);
             var count = MagazineSelector.Items.Count;
             if (count != 0)
-                MagazineSelector.SelectedIndex = count - 1;
+                MagazineSelector.SelectedItem = MagazineSelector.Items.Last();
         }
 
         private ContextMenu CreateAllColumnContextMenu(ListBox list) => new()
@@ -210,14 +216,13 @@ namespace ExcelShSy.Ui.Windows
         #region Events
         private async void SelectMagazine_Changed(object sender, SelectionChangedEventArgs e)
         {
-            if (MagazineSelector.SelectedIndex == _currentSelection && _ready) return;
             if (_shopChanged && MagazineSelector.SelectedIndex != _currentSelection)
             {
                 const string windowName = nameof(ShopManagerWindow);
                 var title = _localizationService.GetString(windowName, "UnsavedChanges");
                 var msg = _localizationService.GetString(windowName, "UnsavedChangesText");
                 
-                var msBox = MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.YesNoCancel);
+                var msBox = _messages.GetMessageBoxStandard(title, msg, MyButtonEnum.YesNoCancel);
                 var result = await msBox.ShowWindowDialogAsync(this);
                 switch (result)
                 {
@@ -283,7 +288,7 @@ namespace ExcelShSy.Ui.Windows
             
             do
             {
-                var msBox = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
+                var msBox = _customMessages.GetMessageBoxCustom(new MessageBoxCustomParams
                 {
                     ButtonDefinitions =
                     [
@@ -291,7 +296,7 @@ namespace ExcelShSy.Ui.Windows
                         new ButtonDefinition { Name = cancelButton }
                     ],
                     ContentTitle = title,
-                    ContentMessage = msg,
+                    ContentMessage = $"{msg}\n",
                     InputParams = new InputParams(),
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
                     CanResize = false,
@@ -379,7 +384,7 @@ namespace ExcelShSy.Ui.Windows
             string? renamedShop;
             do
             {
-                var msBox = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
+                var msBox = _customMessages.GetMessageBoxCustom(new MessageBoxCustomParams
                 {
                     ButtonDefinitions =
                     [
@@ -387,7 +392,7 @@ namespace ExcelShSy.Ui.Windows
                         new ButtonDefinition { Name = cancelButton }
                     ],
                     ContentTitle = title,
-                    ContentMessage = formattedMsg,
+                    ContentMessage = $"{formattedMsg}\n",
                     InputParams = new InputParams(),
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
                     CanResize = false,
@@ -423,7 +428,7 @@ namespace ExcelShSy.Ui.Windows
             var title = _localizationService.GetString(windowName, "DeleteShopTitle");
             var msg = _localizationService.GetString(windowName, "DeleteShopText");
             
-            var userAction = await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.YesNo).ShowWindowDialogAsync(this);
+            var userAction = await _messages.GetMessageBoxStandard(title, msg, MyButtonEnum.YesNo).ShowWindowDialogAsync(this);
             
             if (userAction != ButtonResult.Yes) return;
             _shopStorage.RemoveShop(selected);

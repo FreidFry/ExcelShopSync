@@ -10,14 +10,26 @@ using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 
 namespace ExcelShSy.Infrastructure.Services
 {
+    /// <summary>
+    /// Synchronizes product prices into target Excel files using fetched product data.
+    /// </summary>
     [Task(nameof(ProductProcessingOptions.ShouldSyncPrices))]
     public class SyncPrice(IProductStorage dataProduct, IFileStorage fileStorage, IDatabaseSearcher databaseSearcher, ILocalizationService localizationService)
         : IExecuteOperation
     {
+        /// <summary>
+        /// Stores the shop currently being processed.
+        /// </summary>
         private string _shopName = string.Empty;
 
+        /// <summary>
+        /// Gets the collection of errors generated during execution.
+        /// </summary>
         public List<string> Errors { get; } = [];
 
+        /// <summary>
+        /// Iterates over all target files and applies price updates.
+        /// </summary>
         public async Task Execute()
         {
             foreach (var file in fileStorage.Target)
@@ -34,6 +46,10 @@ namespace ExcelShSy.Infrastructure.Services
             }
         }
 
+        /// <summary>
+        /// Updates price values in the provided file across all worksheets.
+        /// </summary>
+        /// <param name="file">The target file to modify.</param>
         private void ProcessFile(IExcelFile file)
         {
             if (file.SheetList == null)
@@ -46,6 +62,10 @@ namespace ExcelShSy.Infrastructure.Services
             foreach (var page in file.SheetList) OperationWrapper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
+        /// <summary>
+        /// Writes price values for each row in the specified worksheet.
+        /// </summary>
+        /// <param name="page">The worksheet abstraction to update.</param>
         private void ProcessPage(IExcelSheet page)
         {
             var worksheet = page.Worksheet;

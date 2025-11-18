@@ -5,6 +5,9 @@ using static ExcelShSy.Infrastructure.Persistence.DefaultValues.AvailabilityCons
 
 namespace ExcelShSy.Infrastructure.Persistence.Model
 {
+    /// <summary>
+    /// Concrete implementation of <see cref="IShopTemplate"/> that raises change notifications for UI bindings.
+    /// </summary>
     public class ShopTemplate : IShopTemplate
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
@@ -22,6 +25,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
         private string? _discountDateStart;
         private string? _discountDateEnd;
 
+        /// <inheritdoc />
         public string Name
         {
             get => _name;
@@ -32,6 +36,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             }
         }
 
+        /// <inheritdoc />
         public List<string> UnmappedHeaders { get => _unmappedHeaders ??= [];
             set
             {
@@ -39,6 +44,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
                 OnPropertyChanged();
             } }
 
+        /// <inheritdoc />
         public Dictionary<string, string?> AvailabilityMap
         {
             get => _availabilityMap ??= new Dictionary<string, string?>
@@ -55,6 +61,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             }
         }
 
+        /// <inheritdoc />
         public string? DataFormat { get => _dataFormat;
             set
             {
@@ -63,6 +70,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             }
         }
 
+        /// <inheritdoc />
         public string? Article
         {
             get => _article;
@@ -73,6 +81,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             }
         }
 
+        /// <inheritdoc />
         public string? Price
         {
             get => _price;
@@ -83,6 +92,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             }
         }
 
+        /// <inheritdoc />
         public string? OldPrice
         {
             get => _oldPrice;
@@ -93,6 +103,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             }
         }
 
+        /// <inheritdoc />
         public string? Availability
         {
             get => _availability;
@@ -103,6 +114,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             }
         }
 
+        /// <inheritdoc />
         public string? Quantity
         {
             get => _quantity;
@@ -113,6 +125,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             }
         }
 
+        /// <inheritdoc />
         public string? Discount
         {
             get => _discount;
@@ -123,6 +136,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             }
         }
 
+        /// <inheritdoc />
         public string? DiscountDateStart
         {
             get => _discountDateStart;
@@ -133,6 +147,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             }
         }
 
+        /// <inheritdoc />
         public string? DiscountDateEnd
         {
             get => _discountDateEnd;
@@ -143,6 +158,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             }
         }
 
+        /// <inheritdoc />
         public IShopTemplate Clone()
         {
             return new ShopTemplate
@@ -163,6 +179,11 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
         }
         
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// Notifies subscribers that a property value has changed.
+        /// </summary>
+        /// <param name="propertyName">The name of the changed property.</param>
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 

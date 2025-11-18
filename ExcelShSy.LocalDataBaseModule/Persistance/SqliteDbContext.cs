@@ -2,7 +2,6 @@
 using ExcelShSy.Core.Interfaces.DataBase;
 using ExcelShSy.LocalDataBaseModule.Wrappers;
 using Microsoft.Data.Sqlite;
-using SQLitePCL;
 using static ExcelShSy.LocalDataBaseModule.Persistance.Enums;
 
 namespace ExcelShSy.LocalDataBaseModule.Persistance;
@@ -39,14 +38,14 @@ public class SqliteDbContext : ISqliteDbContext, IDisposable
         reader.Dispose();
 
         if (exists) return;
-        var sql = $@"ALTER TABLE {Tables.ProductShopMapping} ADD COLUMN {columnName} VARCHAR(100)";
+        var sql = $"ALTER TABLE \"{Tables.ProductShopMapping}\" ADD COLUMN \"{columnName}\" VARCHAR(100)";
         cmd.CommandText = sql;
         cmd.ExecuteNonQuery();
     }
 
     public void RenameColumn(string table, string column, string newColumn)
     {
-        var sql = $@"ALTER TABLE {table} RENAME COLUMN {column} TO {newColumn}";
+        var sql = $"ALTER TABLE \"{table}\" RENAME COLUMN \"{column}\" TO \"{newColumn}\"";
         using var command = _connection.CreateCommand();
         command.CommandText = sql;
         command.ExecuteNonQuery();
@@ -54,7 +53,7 @@ public class SqliteDbContext : ISqliteDbContext, IDisposable
 
     public void RemoveColumn(string table, string column)
     {
-        var sql = $@"UPDATE {table} SET {column} = NULL";
+        var sql = $"UPDATE \"{table}\" SET \"{column}\" = NULL";
         using var command = _connection.CreateCommand();
         command.CommandText = sql;
         command.ExecuteNonQuery();

@@ -10,14 +10,26 @@ using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 
 namespace ExcelShSy.Infrastructure.Services
 {
+    /// <summary>
+    /// Synchronizes product quantities into target Excel files using previously fetched data.
+    /// </summary>
     [Task(nameof(ProductProcessingOptions.ShouldSyncQuantities))]
     public class SyncQuantity(IProductStorage dataProduct, IFileStorage fileStorage, IDatabaseSearcher databaseSearcher, ILocalizationService localizationService)
         : IExecuteOperation
     {
+        /// <summary>
+        /// Holds the current shop name being processed.
+        /// </summary>
         private string _shopName = string.Empty;
 
+        /// <summary>
+        /// Gets the collection of error messages produced during execution.
+        /// </summary>
         public List<string> Errors { get; } = [];
 
+        /// <summary>
+        /// Iterates through all target files and writes updated quantity values.
+        /// </summary>
         public async Task Execute()
         {
             foreach (var file in fileStorage.Target)
@@ -34,6 +46,10 @@ namespace ExcelShSy.Infrastructure.Services
             }
         }
 
+        /// <summary>
+        /// Processes a single target file by updating quantity values across its sheets.
+        /// </summary>
+        /// <param name="file">The target file to process.</param>
         private void ProcessFile(IExcelFile file)
         {
             if (file.SheetList == null)
@@ -46,6 +62,10 @@ namespace ExcelShSy.Infrastructure.Services
             foreach (var page in file.SheetList) OperationWrapper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
+        /// <summary>
+        /// Updates quantity values on the provided worksheet using the stored product information.
+        /// </summary>
+        /// <param name="page">The worksheet abstraction to update.</param>
         private void ProcessPage(IExcelSheet page)
         {
             var worksheet = page.Worksheet;

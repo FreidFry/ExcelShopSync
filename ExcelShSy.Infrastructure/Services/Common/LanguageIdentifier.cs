@@ -2,6 +2,9 @@
 
 namespace ExcelShSy.Infrastructure.Services.Common
 {
+    /// <summary>
+    /// Simple heuristic-based language identifier that counts character occurrences for supported languages.
+    /// </summary>
     public class LanguageIdentifier : ILanguageIdentifier
     {
         private readonly Dictionary<string, HashSet<char>> _languageChars = new()
@@ -11,6 +14,7 @@ namespace ExcelShSy.Infrastructure.Services.Common
             ["en"] = [.. "abcdefghijklmnopqrstuvwxyz"]
         };
 
+        /// <inheritdoc />
         public string IdentifyLanguage(string text)
         {
             if (string.IsNullOrEmpty(text))

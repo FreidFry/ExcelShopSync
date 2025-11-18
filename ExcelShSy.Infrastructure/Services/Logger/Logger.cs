@@ -3,8 +3,14 @@ using System.Text;
 
 namespace ExcelShSy.Infrastructure.Services.Logger
 {
+    /// <summary>
+    /// Writes application log entries to rotating log files stored in the local file system.
+    /// </summary>
     public class Logger : ILogger
     {
+        /// <summary>
+        /// Stores the timestamp used in the current log file name.
+        /// </summary>
         private readonly string _date = DateTime.Now.ToString("y-MM-dd HH-mm-ss");
         private readonly string _logFilePath;
 
@@ -13,6 +19,7 @@ namespace ExcelShSy.Infrastructure.Services.Logger
             _logFilePath = Init();
         }
 
+        /// <inheritdoc />
         public string Init()
         {
             var logDirectory = Path.Combine(Environment.CurrentDirectory, "Logs");
@@ -36,6 +43,7 @@ namespace ExcelShSy.Infrastructure.Services.Logger
             return logPath;
         }
 
+        /// <inheritdoc />
         public void Log(string message)
         {
             var logEntry = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}";

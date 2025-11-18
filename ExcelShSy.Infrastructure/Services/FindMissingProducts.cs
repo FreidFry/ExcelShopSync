@@ -9,6 +9,9 @@ using ExcelShSy.Core.Properties;
 
 namespace ExcelShSy.Infrastructure.Services
 {
+    /// <summary>
+    /// Generates a report listing target products that are missing from the fetched data set.
+    /// </summary>
     [Task(nameof(ProductProcessingOptions.ShouldFindMissingProducts))]
     public class FindMissingProducts(IProductStorage dataProduct, IFileStorage fileStorage, IDatabaseSearcher searcher, ILocalizationService localizationService)
         : IExecuteOperation
@@ -16,11 +19,20 @@ namespace ExcelShSy.Infrastructure.Services
         private FileStream? _fileStream;
         private StreamWriter? _writer;
 
+        /// <summary>
+        /// Holds the shop name for the file currently being analyzed.
+        /// </summary>
         private string? _shopName = string.Empty;
         
+        /// <summary>
+        /// Gets the list of errors generated during processing.
+        /// </summary>
         public List<string> Errors { get; } = [];
 
 
+        /// <summary>
+        /// Creates a report file on the user's desktop and scans all target files for missing products.
+        /// </summary>
         public async Task Execute()
         {
             var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "missing.txt");
@@ -37,6 +49,10 @@ namespace ExcelShSy.Infrastructure.Services
             _fileStream.Dispose();
         }
 
+        /// <summary>
+        /// Processes each worksheet in the specified file and writes missing product information.
+        /// </summary>
+        /// <param name="file">The file to inspect.</param>
         private void ProcessFile(IExcelFile file)
         {
             if (file.SheetList == null)
@@ -53,6 +69,10 @@ namespace ExcelShSy.Infrastructure.Services
             }
         }
 
+        /// <summary>
+        /// Collects rows with missing products and writes results to the report.
+        /// </summary>
+        /// <param name="page">The worksheet abstraction to analyze.</param>
         private void ProcessPage(IExcelSheet page)
         {
             var worksheet = page.Worksheet;
@@ -80,6 +100,13 @@ namespace ExcelShSy.Infrastructure.Services
             _writer.WriteLine(CenterText($"{missing.Count}/{totalRow} not founded"));
         }
 
+        /// <summary>
+        /// Creates a centered header string padded with filler characters.
+        /// </summary>
+        /// <param name="text">The text to center.</param>
+        /// <param name="totalWidth">The total width of the resulting string.</param>
+        /// <param name="filler">The character used for padding.</param>
+        /// <returns>The centered text.</returns>
         private static string CenterText(string text, int totalWidth = 80, char filler = '-')
         {
             var padding = totalWidth - text.Length;

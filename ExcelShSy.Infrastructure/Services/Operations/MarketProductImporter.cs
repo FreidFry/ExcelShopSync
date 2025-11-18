@@ -12,6 +12,9 @@ using OfficeOpenXml;
 
 namespace ExcelShSy.Infrastructure.Services.Operations
 {
+    /// <summary>
+    /// Imports product data from marketplace exports using mapped headers.
+    /// </summary>
     public class MarketProductImporter(
         IProductStorage dataProduct,
         ILogger logger,
@@ -19,6 +22,10 @@ namespace ExcelShSy.Infrastructure.Services.Operations
         IDatabaseSearcher databaseSearcher)
         : BaseProductImporter(dataProduct, unknown, logger), IFetchMarketProduct
     {
+        /// <summary>
+        /// Processes a worksheet by reading mapped columns and storing product data.
+        /// </summary>
+        /// <param name="page">The worksheet abstraction to read.</param>
         protected override void ProcessPage(IExcelSheet page)
         {
             var headers = page.MappedHeaders;
@@ -54,6 +61,18 @@ namespace ExcelShSy.Infrastructure.Services.Operations
             }
         }
 
+        /// <summary>
+        /// Populates product storage with values extracted from the supplied row.
+        /// </summary>
+        /// <param name="article">The normalized product identifier.</param>
+        /// <param name="priceCol">The column index of the price.</param>
+        /// <param name="qtyCol">The column index of the quantity.</param>
+        /// <param name="availCol">The column index of availability.</param>
+        /// <param name="discount">The column index of the discount value.</param>
+        /// <param name="discountFrom">The column index of the discount start date.</param>
+        /// <param name="discountTo">The column index of the discount end date.</param>
+        /// <param name="row">The worksheet row being processed.</param>
+        /// <param name="ws">The worksheet instance used for reading values.</param>
         private void SetProductData(string article, int priceCol, int qtyCol, int availCol, int discount, int discountFrom, int discountTo, int row, ExcelWorksheet ws)
         {
             DataProduct.AddProductArticle(article);

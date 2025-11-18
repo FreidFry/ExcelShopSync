@@ -1,5 +1,8 @@
 ﻿namespace ExcelShSy.Infrastructure.Persistence.DefaultValues
 {
+    /// <summary>
+    /// Provides canonical names for logical columns used throughout the synchronization process.
+    /// </summary>
     public static class ColumnConstants
     {
         public const string Article = "Article";

@@ -2,8 +2,14 @@
 
 namespace ExcelShSy.Infrastructure.Persistence.ShopData.Mappings
 {
+    /// <summary>
+    /// Provides default column aliases for identifying fields within price list spreadsheets.
+    /// </summary>
     public static class ColumnMappingPriceList
     {
+        /// <summary>
+        /// Gets the predefined column mapping template keyed by logical field name.
+        /// </summary>
         public static readonly IReadOnlyDictionary<string, IReadOnlyList<string>> Template = new Dictionary<string, IReadOnlyList<string>>
         {
             [ColumnConstants.Article] = ["Article", "Артикул"],

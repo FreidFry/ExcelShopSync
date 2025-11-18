@@ -3,16 +3,27 @@ using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
+using MsBox.Avalonia.Base;
+using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Infrastructure.Services
 {
+    /// <summary>
+    /// Saves updated Excel packages, optionally creating new files to preserve originals.
+    /// </summary>
     [Task("SavePackages")]
-    public class SavePackages(IFileStorage fileStorage, IAppSettings appSettings, ILocalizationService localizationService) : IExecuteOperation
+    public class SavePackages(IFileStorage fileStorage, IAppSettings appSettings, ILocalizationService localizationService, IMessages<IMsBox<ButtonResult>> messages) : IExecuteOperation
     {
+        /// <summary>
+        /// Gets the list of errors that occurred during save operations.
+        /// </summary>
         public List<string> Errors { get; } = [];
         private readonly string _errorMsg = localizationService.GetErrorString("CloseWarningText");
         private readonly string _errorTitle = localizationService.GetErrorString("CloseWarning");
 
+        /// <summary>
+        /// Saves each target file according to the configured application settings.
+        /// </summary>
         public async Task Execute()
         {
             if (appSettings.CreateNewFileWhileSave)
@@ -21,6 +32,10 @@ namespace ExcelShSy.Infrastructure.Services
                 await Save(file => file.ExcelPackage.Save());
         }
 
+        /// <summary>
+        /// Executes the provided save action for each target file, retrying if the file is locked.
+        /// </summary>
+        /// <param name="action">The save action to perform.</param>
         private async Task Save(Action<IExcelFile> action)
         {
             foreach (var file in fileStorage.Target)
@@ -37,12 +52,17 @@ namespace ExcelShSy.Infrastructure.Services
                     }
                     catch
                     {
-                        await MsBox.Avalonia.MessageBoxManager.GetMessageBoxStandard(_errorTitle, formattedText).ShowWindowAsync();
+                        await messages.GetMessageBoxStandard(_errorTitle, formattedText).ShowWindowAsync();
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Generates a new file path by appending <c>New</c> to the original file name.
+        /// </summary>
+        /// <param name="oldPath">The existing file path.</param>
+        /// <returns>The newly generated file path.</returns>
         private static string GetNewPath(string oldPath)
         {
             var extension = Path.GetExtension(oldPath);

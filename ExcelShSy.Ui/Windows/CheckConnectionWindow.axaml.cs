@@ -1,8 +1,10 @@
 using System.Net;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using ExcelShSy.Core.Enums;
 using ExcelShSy.Core.Interfaces.Common;
 using MsBox.Avalonia;
+using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Ui.Windows;
@@ -15,20 +17,22 @@ public partial class CheckConnectionWindow : Window
 
     private readonly ILocalizationService _localizationService;
     private readonly ILogger _logger;
+    private readonly IMessages<IMsBox<ButtonResult>> _messages;
 #if DESIGNER
-    
+
     public CheckConnectionWindow()
     {
         InitializeComponent();
     }
 #endif
     
-    public CheckConnectionWindow(ILocalizationService localizationService, ILogger logger)
+    public CheckConnectionWindow(ILocalizationService localizationService, ILogger logger, IMessages<IMsBox<ButtonResult>> messages)
     {
         InitializeComponent();
         
         _localizationService = localizationService;
         _logger = logger;
+        _messages = messages;
     }
 
     public async Task<bool> CheckGitHubConnection(TextBlock? text = null, ProgressBar? progress = null)
@@ -61,7 +65,7 @@ public partial class CheckConnectionWindow : Window
             }
             var title = _localizationService.GetErrorString("NetworkErrorTitle");
             var msg = _localizationService.GetErrorString("NetworkErrorText");
-            await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error)
+            await _messages.GetMessageBoxStandard(title, msg, MyButtonEnum.Ok, MyIcon.Error)
                 .ShowWindowAsync();
             _logger.LogError(e.Message);
             return false;

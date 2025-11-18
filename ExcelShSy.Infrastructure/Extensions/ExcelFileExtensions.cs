@@ -3,8 +3,17 @@ using ExcelShSy.Core.Interfaces.Shop;
 
 namespace ExcelShSy.Infrastructure.Extensions
 {
+    /// <summary>
+    /// Provides helper methods for analyzing collections of Excel sheets.
+    /// </summary>
     public static class ExcelFileExtensions
     {
+        /// <summary>
+        /// Identifies the shop associated with the provided set of sheets.
+        /// </summary>
+        /// <param name="pages">The sheets to analyze.</param>
+        /// <param name="shopStorage">The shop storage used to match headers.</param>
+        /// <returns>The inferred shop name.</returns>
         public static string IdentifyShop(this IList<IExcelSheet?> pages, IShopStorage shopStorage)
         {
             List<string> shops = [];
@@ -22,6 +31,11 @@ namespace ExcelShSy.Infrastructure.Extensions
             return thisShop;
         }
 
+        /// <summary>
+        /// Determines the predominant language across the provided sheets.
+        /// </summary>
+        /// <param name="pages">The sheets to analyze.</param>
+        /// <returns>The detected language identifier.</returns>
         public static string LanguageDetect(this IList<IExcelSheet?> pages)
         {
             List<string> languages = [];

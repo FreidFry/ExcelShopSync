@@ -2,13 +2,14 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using ExcelShSy.Core.Enums;
 using ExcelShSy.Core.Interfaces.Common;
-using MsBox.Avalonia;
+using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Ui.Utils;
 
-public class UpdateManager(ILocalizationService localizationService, IAppSettings appSettings, ILogger logger)
+public class UpdateManager(ILocalizationService localizationService, IAppSettings appSettings, ILogger logger, IMessages<IMsBox<ButtonResult>> messages)
 {
     private string? GitVersion;
 
@@ -34,7 +35,7 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
             {
                 var title = localizationService.GetErrorString("NetworkErrorTitle");
                 var msg = localizationService.GetErrorString("NetworkErrorText");
-                await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
+                await messages.GetMessageBoxStandard(title, msg, MyButtonEnum.Ok, MyIcon.Error)
                     .ShowWindowAsync();
             }
             return false;
@@ -46,7 +47,7 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
             {
                 var title = localizationService.GetErrorString("UnknownErrorTitle");
                 var msg = localizationService.GetErrorString("UnknownErrorText") + $"\n\n{e.Message}";
-                await MessageBoxManager.GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
+                await messages.GetMessageBoxStandard(title, msg, MyButtonEnum.Ok, MyIcon.Error)
                     .ShowWindowAsync();
             }
             return false;
@@ -102,8 +103,8 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
             {
                 var title = localizationService.GetErrorString("UnsupportedOSUpdateTitle");
                 var msg = localizationService.GetErrorString("UnsupportedOSUpdateText");
-                await MessageBoxManager
-                    .GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
+                await messages
+                    .GetMessageBoxStandard(title, msg, MyButtonEnum.Ok, MyIcon.Error)
                     .ShowWindowAsync();
                 return (false, null);
             }
@@ -133,8 +134,8 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
             {
                 var title = localizationService.GetErrorString("UnsupportedOSUpdateTitle");
                 var msg = localizationService.GetErrorString("UnsupportedOSUpdateText");
-                await MessageBoxManager
-                    .GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
+                await messages
+                    .GetMessageBoxStandard(title, msg, MyButtonEnum.Ok, MyIcon.Error)
                     .ShowWindowAsync();
                 return;
             }
@@ -194,8 +195,8 @@ public class UpdateManager(ILocalizationService localizationService, IAppSetting
         var msg = localizationService.GetErrorString(msgKey);
         if (extra != null) msg += $"\n\n{extra}";
 
-        await MessageBoxManager
-            .GetMessageBoxStandard(title, msg, ButtonEnum.Ok, Icon.Error)
+        await messages
+            .GetMessageBoxStandard(title, msg, MyButtonEnum.Ok, MyIcon.Error)
             .ShowWindowAsync();
     }
 }

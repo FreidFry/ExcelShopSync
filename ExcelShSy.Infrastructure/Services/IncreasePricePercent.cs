@@ -10,17 +10,30 @@ using static ExcelShSy.Infrastructure.Extensions.ExcelRangeExtensions;
 
 namespace ExcelShSy.Infrastructure.Services
 {
+    /// <summary>
+    /// Increases prices in target Excel files by the configured percentage.
+    /// </summary>
     [Task(nameof(ProductProcessingOptions.ShouldIncreasePrices))]
     public class IncreasePricePercent(IFileStorage fileStorage, ILocalizationService localizationService)
         : IExecuteOperation
     {
+        /// <summary>
+        /// Gets the collection of errors generated while processing files.
+        /// </summary>
         public List<string> Errors { get; } = [];
 
+        /// <summary>
+        /// Applies the price increase across all target files.
+        /// </summary>
         public async Task Execute()
         {
             foreach (var file in fileStorage.Target) ProcessFile(file);
         }
 
+        /// <summary>
+        /// Handles price updates for a single file.
+        /// </summary>
+        /// <param name="file">The file to process.</param>
         private void ProcessFile(IExcelFile file)
         {
             if (file.SheetList == null)
@@ -33,6 +46,10 @@ namespace ExcelShSy.Infrastructure.Services
             foreach (var page in file.SheetList) OperationWrapper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
+        /// <summary>
+        /// Increases prices on the provided worksheet using the configured options.
+        /// </summary>
+        /// <param name="page">The worksheet abstraction to update.</param>
         private void ProcessPage(IExcelSheet page)
         {
             var worksheet = page.Worksheet;

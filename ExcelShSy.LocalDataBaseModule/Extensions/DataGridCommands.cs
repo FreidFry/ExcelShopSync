@@ -46,7 +46,7 @@ internal static class DataGridCommands
 
             try
             {
-                var sql = $@"DELETE FROM {Enums.Tables.ProductShopMapping} WHERE Id = @id;";
+                var sql = $"DELETE FROM \"{Enums.Tables.ProductShopMapping}\" WHERE Id = @id;";
                 var cmd = connection.CreateCommand(sql);
                 cmd.AddParametersWithValue("@id", row.Id);
                 cmd.ExecuteNonQuery();

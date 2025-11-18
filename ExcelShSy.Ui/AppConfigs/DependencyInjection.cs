@@ -17,12 +17,15 @@ using ExcelShSy.LocalDataBaseModule.Data;
 using ExcelShSy.LocalDataBaseModule.Persistance;
 using ExcelShSy.LocalDataBaseModule.Services;
 using ExcelShSy.LocalDataBaseModule.Wrappers;
-using ExcelShSy.Ui.Factories;
-using ExcelShSy.Ui.Interfaces;
 using ExcelShSy.Localization;
 using ExcelShSy.Settings.Properties;
+using ExcelShSy.Ui.Factories;
+using ExcelShSy.Ui.Interfaces;
 using ExcelShSy.Ui.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using MsBox.Avalonia.Base;
+using MsBox.Avalonia.Dto;
+using MsBox.Avalonia.Enums;
 using IConfigurationManager = ExcelShSy.Core.Interfaces.Common.IConfigurationManager;
 
 namespace ExcelShSy.Ui.AppConfigs
@@ -112,8 +115,11 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddTransient<IUpdateManagerFactory, UpdateManagerFactory>();
             
             services.AddScoped<IShopTemplateFactory, ShopTemplateFactory>();
+
+            services.AddTransient<IMessages<IMsBox<ButtonResult>>, Messages>();
+            services.AddTransient<IMessageCustom<IMsBox<string>, MessageBoxCustomParams>, Messages>();
             #endregion
-            
+
             #region UI
             services.AddTransient<ILocalizationManager, LocalizationManager>();
             services.AddTransient<EditLoadFilesWindow>();

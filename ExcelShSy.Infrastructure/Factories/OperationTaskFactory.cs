@@ -10,20 +10,27 @@ using Avalonia;
 using MsBox.Avalonia;
 using Avalonia.Controls;
 using Avalonia.VisualTree;
+using MsBox.Avalonia.Base;
+using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Infrastructure.Factories
 {
+    /// <summary>
+    /// Creates and executes synchronization tasks based on user selections in the UI.
+    /// </summary>
     public class OperationTaskFactory : IOperationTaskFactory
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILocalizationService _localizationService;
+        private readonly IMessages<IMsBox<ButtonResult>> _messages;
         private readonly ILogger _logger;
         private readonly Dictionary<string, Type> _tasksMap;
 
-        public OperationTaskFactory(IServiceProvider services, ILocalizationService localizationService, ILogger logger)
+        public OperationTaskFactory(IServiceProvider services, ILocalizationService localizationService, ILogger logger, IMessages<IMsBox<ButtonResult>> messages)
         {
             _serviceProvider = services;
             _localizationService = localizationService;
+            _messages = messages;
             _logger = logger;
 
             var allTasks = _serviceProvider.GetServices<IExecuteOperation>();
@@ -36,6 +43,7 @@ namespace ExcelShSy.Infrastructure.Factories
                     t => t);
         }
 
+        /// <inheritdoc />
         public IExecuteOperation? CreateTask(string taskName)
         {
             try
@@ -49,6 +57,7 @@ namespace ExcelShSy.Infrastructure.Factories
             }
         }
 
+        /// <inheritdoc />
         public async Task ExecuteOperations(Visual parent)
         {
             HashSet<string> errors = [];
@@ -75,7 +84,7 @@ namespace ExcelShSy.Infrastructure.Factories
                 _logger.LogInfo("Finish without errors.");
                 var title = _localizationService.GetMessageString("Finish");
                 var msg = _localizationService.GetMessageString("FinishText");
-                await MessageBoxManager.GetMessageBoxStandard(title, msg).ShowAsync();
+                await _messages.GetMessageBoxStandard(title, msg).ShowAsync();
             }
             else
             {
@@ -83,10 +92,11 @@ namespace ExcelShSy.Infrastructure.Factories
                 var title = _localizationService.GetMessageString("FinishWithProblems");
                 var msg = _localizationService.GetMessageString("FinishWithProblemsText");
                 foreach (var error in errors) _logger.LogWarning(error);
-                await MessageBoxManager.GetMessageBoxStandard(title, $"{msg}\n" + string.Join("\n", errors)).ShowAsync();
+                await _messages.GetMessageBoxStandard(title, $"{msg}\n" + string.Join("\n", errors)).ShowAsync();
             }
         }
 
+        /// <inheritdoc />
         public bool HasCheckedCheckbox(Visual parent)
         {
             foreach (var child in parent.GetVisualChildren())

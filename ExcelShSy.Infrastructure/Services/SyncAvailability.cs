@@ -11,6 +11,9 @@ using ExcelShSy.Infrastructure.Persistence.DefaultValues;
 
 namespace ExcelShSy.Infrastructure.Services
 {
+    /// <summary>
+    /// Synchronizes product availability values into target Excel files and maps them using shop-specific rules.
+    /// </summary>
     [Task(nameof(ProductProcessingOptions.ShouldSyncAvailability))]
     public class SyncAvailability(
         IProductStorage dataProduct,
@@ -20,10 +23,19 @@ namespace ExcelShSy.Infrastructure.Services
         ILocalizationService localizationService)
         : IExecuteOperation
     {
+        /// <summary>
+        /// Tracks the name of the shop currently being processed.
+        /// </summary>
         private string _shopName = string.Empty;
 
+        /// <summary>
+        /// Gets the collection of errors encountered during synchronization.
+        /// </summary>
         public List<string> Errors { get; } = [];
 
+        /// <summary>
+        /// Iterates through all target files and applies availability updates.
+        /// </summary>
         public async Task Execute()
         {
             foreach (var file in fileStorage.Target)
@@ -40,6 +52,10 @@ namespace ExcelShSy.Infrastructure.Services
             }
         }
 
+        /// <summary>
+        /// Updates availability values for the supplied file.
+        /// </summary>
+        /// <param name="file">The file to process.</param>
         private void ProcessFile(IExcelFile file)
         {
             if (file.SheetList == null)
@@ -52,6 +68,10 @@ namespace ExcelShSy.Infrastructure.Services
             foreach (var page in file.SheetList) OperationWrapper.Try(() => ProcessPage(page), Errors, file.FileName);
         }
 
+        /// <summary>
+        /// Writes availability values for each row in the provided worksheet using the shop mapping.
+        /// </summary>
+        /// <param name="page">The worksheet abstraction to update.</param>
         private void ProcessPage(IExcelSheet page)
         {
             var shopTemplate = shopMappings.GetShopMapping(_shopName);
