@@ -19,8 +19,8 @@
         <PackageReference Include="Avalonia" Version="11.3.8" />
         <PackageReference Include="Avalonia.Desktop" Version="11.3.8" />
         <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.8" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.8"/>
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.8"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.8" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.8" />
         <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.8" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
@@ -98,10 +98,7 @@
             <UpdaterFileName Condition="'$(RuntimeIdentifier)' == 'linux-x64'">Updater</UpdaterFileName>
         </PropertyGroup>
         
-        <Copy
-                SourceFiles="..\ExcelShSy.Setup\bin\$(Configuration)\net8.0\$(RuntimeIdentifier)\publish\$(UpdaterFileName)"
-                DestinationFolder="$(PublishDir)"
-                SkipUnchangedFiles="true" />
+        <Copy SourceFiles="..\ExcelShSy.Setup\bin\$(Configuration)\net8.0\$(RuntimeIdentifier)\publish\$(UpdaterFileName)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
     </Target>
 
 </Project>

@@ -10,7 +10,7 @@ public class DataBaseViewerFactory(
     IShopStorage shopStorage,
     ISqliteDbContext sqliteDbContext,
     IDatabaseUpdateManager updateManager)
-    : IDataBaseViewerFactory
+    : IWindowFactory<DataBaseViewer>
 {
     public DataBaseViewer Create() => new(dataBaseInitializer, shopStorage, sqliteDbContext, updateManager);
 }

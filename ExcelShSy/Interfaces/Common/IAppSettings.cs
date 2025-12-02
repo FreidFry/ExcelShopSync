@@ -1,3 +1,5 @@
+using ExcelShSy.Core.Enums;
+
 namespace ExcelShSy.Core.Interfaces.Common;
 
 /// <summary>
@@ -14,7 +16,12 @@ public interface IAppSettings
     /// <summary>
     /// Gets or sets the active UI language identifier.
     /// </summary>
-    string Language { get; set; }
+    string LanguageCode { get; set; }
+
+    /// <summary>
+    /// Gets or sets the active UI language identifier.
+    /// </summary>
+    LanguaguesEnum.SupportedLanguagues Language { get; set; }
 
     /// <summary>
     /// Gets or sets the path to the application database file.
@@ -29,7 +36,7 @@ public interface IAppSettings
     /// <summary>
     /// Gets or sets a value indicating whether the application should check for updates automatically.
     /// </summary>
-    bool CheckForUpdates { get; set; }
+    bool AutoCheckUpdate { get; set; }
 
     /// <summary>
     /// Gets or sets the timestamp of the last update check.

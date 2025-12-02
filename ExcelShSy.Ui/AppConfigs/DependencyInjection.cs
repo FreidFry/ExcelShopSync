@@ -26,6 +26,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
+using WPFAboutF4Labs;
 using IConfigurationManager = ExcelShSy.Core.Interfaces.Common.IConfigurationManager;
 
 namespace ExcelShSy.Ui.AppConfigs
@@ -108,9 +109,9 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddTransient<IExcelPageFactory, ExcelPageFactory>();
             services.AddTransient<IOperationTaskFactory, OperationTaskFactory>();
             services.AddTransient<IEditLoadFilesWindowFactory, EditLoadFilesWindowFactory>();
-            services.AddTransient<ISettingWindowFactory, SettingWindowFactory>();
-            services.AddTransient<IDataBaseViewerFactory, DataBaseViewerFactory>();
-            services.AddTransient<IF4LabsAboutWindowFactory, F4LabsAboutWindowFactory>();
+            services.AddTransient<IWindowFactory<SettingWindow>, SettingWindowFactory>();
+            services.AddTransient<IWindowFactory<DataBaseViewer>, DataBaseViewerFactory>();
+            services.AddTransient<IWindowFactory<F4LabsAboutWindow>, F4LabsAboutWindowFactory>();
             services.AddTransient<ICheckConnectionFactory, CheckConnectionFactory>();
             services.AddTransient<IUpdateManagerFactory, UpdateManagerFactory>();
             

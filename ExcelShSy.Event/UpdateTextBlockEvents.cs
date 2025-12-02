@@ -18,9 +18,9 @@ namespace ExcelShSy.Event
         /// </summary>
         /// <param name="key">The identifier of the text block to update.</param>
         /// <param name="newText">The new text to assign.</param>
-        public static void UpdateText(string key, string newText)
+        public static void UpdateText(string key, string? newText)
         {
-            OnTextUpdate?.Invoke(key, newText);
+            OnTextUpdate?.Invoke(key, newText ?? string.Empty);
         }
         
         /// <summary>

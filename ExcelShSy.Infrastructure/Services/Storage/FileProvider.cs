@@ -4,7 +4,7 @@ using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Storage;
 using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Enums;
-using static ExcelShSy.Core.WindowHelper;
+using static ExcelShSy.Core.Helpers.WindowHelper;
 
 namespace ExcelShSy.Infrastructure.Services.Storage
 {

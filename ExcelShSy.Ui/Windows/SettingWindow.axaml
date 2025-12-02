@@ -2,25 +2,35 @@
         xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:ExcelShSy.Localization;assembly=ExcelShSy.Localization"
-        xmlns:windows="clr-namespace:ExcelShSy.Ui.Windows"
+        xmlns:conv="clr-namespace:ExcelShSy.Ui.Utils"
+        xmlns:vm="clr-namespace:ExcelShSy.Ui.ModelView.View"
         Title="{local:Loc SettingWindow.Title}" MinHeight="450" MinWidth="300" WindowStartupLocation="CenterScreen"
-        SizeToContent="WidthAndHeight" x:DataType="windows:SettingWindow">
+        SizeToContent="WidthAndHeight" x:DataType="vm:SettingViewModel" >
+    <Window.Resources>
+        <conv:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+    </Window.Resources>
     <Grid Margin="10" RowDefinitions="*,Auto">
 
         <StackPanel Margin="10" >
 
             <StackPanel Margin="0 5" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <TextBlock Text="{local:Loc SettingWindow.Language}" VerticalAlignment="Center" />
-                <ComboBox x:Name="CBLanguagues" Width="150" Margin="10 0" SelectionChanged="CBLanguages_SelectionChanged" />
+                <ComboBox x:Name="CBLanguagues" Width="150" Margin="10 0" ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </StackPanel>
             
             <StackPanel Margin="0 5" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" >
                 <TextBlock Text="{local:Loc SettingWindow.DatabasePath}" VerticalAlignment="Center"/>
-                <TextBox x:Name="DataBasePath" IsReadOnly="True" ContextFlyout="{x:Null}" Focusable="False" MinWidth="150" MaxWidth="300" Margin="10 0"/>
-                <Button Content="{local:Loc SettingWindow.SelectPath}" Click="SelectDataBasePath_Click"/>
+                <TextBox x:Name="DataBasePath" Text="{Binding DataBasePath, Mode=TwoWay}" IsReadOnly="True" ContextFlyout="{x:Null}" Focusable="False" MinWidth="150" MaxWidth="300" Margin="10 0"/>
+                <Button Content="{local:Loc SettingWindow.SelectPath}" Command="{Binding SelectDataBasePathCommand, Mode=TwoWay}"/>
             </StackPanel>
 
-        <Button Margin="0 5" VerticalAlignment="Top" HorizontalAlignment="Left" Content="{local:Loc SettingWindow.UserShopManager}" Padding="10 2" Click="ShopManagerOpen_Click"/>
+        <Button Margin="0 5" VerticalAlignment="Top" HorizontalAlignment="Left" Content="{local:Loc SettingWindow.UserShopManager}" Padding="10 2" Command="{Binding OpenShopManagerCommand}"/>
         
         <CheckBox Content="{local:Loc SettingWindow.SaveOnNewFileCheckBox}" IsChecked="{Binding CreateNewFileWhileSave, Mode=TwoWay}" />
         
@@ -30,7 +40,7 @@
         
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" >
-            <Button Content="{local:Loc SettingWindow.ApplyButton}" Width="80" Click="Apply_Click" />
+            <Button Content="{local:Loc SettingWindow.ApplyButton}" Width="80" Command="{Binding ApplyCommand}" />
         </StackPanel>
     </Grid>
 </Window>

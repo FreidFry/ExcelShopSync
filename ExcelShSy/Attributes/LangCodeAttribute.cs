@@ -1,4 +1,4 @@
-﻿namespace ExcelShSy.Localization.Attributes
+﻿namespace ExcelShSy.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class LangCodeAttribute : Attribute

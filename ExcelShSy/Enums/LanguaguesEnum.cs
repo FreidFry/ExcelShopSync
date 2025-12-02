@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
-using ExcelShSy.Localization.Attributes;
+using ExcelShSy.Core.Attributes;
 
-namespace ExcelShSy.Localization.Resources
+namespace ExcelShSy.Core.Enums
 {
-    public class Enums
+    public class LanguaguesEnum
     {
         public enum SupportedLanguagues
         {

@@ -8,9 +8,11 @@ using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Core.Properties;
 using ExcelShSy.Event;
+using ExcelShSy.LocalDataBaseModule;
 using ExcelShSy.Ui.Interfaces;
 using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Enums;
+using WPFAboutF4Labs;
 
 namespace ExcelShSy.Ui.Windows
 {
@@ -20,9 +22,9 @@ namespace ExcelShSy.Ui.Windows
         private readonly IFileManager _fileManager;
         private readonly IOperationTaskFactory _taskFactory;
         private readonly IEditLoadFilesWindowFactory _editLoadFilesWindowFactory;
-        private readonly ISettingWindowFactory _settingWindowFactory;
-        private readonly IDataBaseViewerFactory _dataBaseViewer;
-        private readonly IF4LabsAboutWindowFactory _f4LabsAboutWindowFactory;
+        private readonly IWindowFactory<SettingWindow> _settingWindowFactory;
+        private readonly IWindowFactory<DataBaseViewer> _dataBaseViewer;
+        private readonly IWindowFactory<F4LabsAboutWindow> _f4LabsAboutWindowFactory;
         private readonly ICheckConnectionFactory _checkConnectionFactory;
         private readonly IUpdateManagerFactory _updateManagerFactory;
         private readonly ILocalizationService _localizationService;
@@ -36,8 +38,8 @@ namespace ExcelShSy.Ui.Windows
         }
         #endif
         
-        public MainWindow(IAppSettings appSettings, IFileManager fileManager, IOperationTaskFactory taskFactory, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, ISettingWindowFactory settingWindowFactory, IDataBaseViewerFactory dataBaseViewer,
-           IF4LabsAboutWindowFactory f4LabsAboutWindowFactory, ICheckConnectionFactory checkConnectionFactory, IUpdateManagerFactory updateManagerFactory, ILocalizationService localizationService, ILogger logger, IMessages<IMsBox<ButtonResult>> messages)
+        public MainWindow(IAppSettings appSettings, IFileManager fileManager, IOperationTaskFactory taskFactory, IEditLoadFilesWindowFactory editLoadFilesWindowFactory, IWindowFactory<SettingWindow> settingWindowFactory, IWindowFactory<DataBaseViewer> dataBaseViewer,
+           IWindowFactory<F4LabsAboutWindow> f4LabsAboutWindowFactory, ICheckConnectionFactory checkConnectionFactory, IUpdateManagerFactory updateManagerFactory, ILocalizationService localizationService, ILogger logger, IMessages<IMsBox<ButtonResult>> messages)
         {
             InitializeComponent();
 
@@ -87,9 +89,7 @@ namespace ExcelShSy.Ui.Windows
             var propertyName = btn?.Tag?.ToString();
 
 
-            var window = string.IsNullOrEmpty(propertyName)
-                ? _editLoadFilesWindowFactory.Create()
-                : _editLoadFilesWindowFactory.Create(propertyName);
+            var window = _editLoadFilesWindowFactory.Create();
             window.ShowDialog(this);
         }
 
@@ -158,8 +158,8 @@ namespace ExcelShSy.Ui.Windows
                 {
                     var message = _localizationService.GetString("MainWindow", "NoSetExecute_");
                     var title = _localizationService.GetString("MainWindow", "NoSetExecuteTitle_");
-                    var msBox = _messages.GetMessageBoxStandard(title, message, ExcelShSy.Core.Enums.MyButtonEnum.Ok,
-                        ExcelShSy.Core.Enums.MyIcon.Error);
+                    var msBox = _messages.GetMessageBoxStandard(title, message, MyButtonEnum.Ok,
+                        MyIcon.Error);
                     await msBox.ShowWindowDialogAsync(this);
                     return;
                 }

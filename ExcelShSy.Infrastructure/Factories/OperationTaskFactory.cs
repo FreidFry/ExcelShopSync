@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using System.Reflection;
 using Avalonia;
-using MsBox.Avalonia;
 using Avalonia.Controls;
 using Avalonia.VisualTree;
 using MsBox.Avalonia.Base;

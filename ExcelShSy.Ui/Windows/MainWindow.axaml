@@ -44,8 +44,7 @@
                 <Button Grid.Row="0" Grid.Column="0" Content="{local:Loc MainWindow.GetTargetFile}" HorizontalAlignment="Stretch" Padding="5,5" Click="GetTargetFile_Click" />
                 <Button Grid.Row="1" Grid.Column="0" Content="{local:Loc MainWindow.GetSourceFile}" HorizontalAlignment="Stretch" Padding="5,5" Click="GetSourceFile_Click" />
                 
-                <Button Grid.Row="0" Grid.Column="1" Content="{local:Loc MainWindow.EditFiles}" Margin="10 0" Padding="5,5" Click="ShowEditLoadFiles_Click" Tag="Target" />
-                <Button Grid.Row="1" Grid.Column="1" Content="{local:Loc MainWindow.EditFiles}" Margin="10 0" Padding="5,5" Click="ShowEditLoadFiles_Click" Tag="Source"/>
+                <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Content="{local:Loc MainWindow.EditFiles}" Margin="10 15" Padding="10" Click="ShowEditLoadFiles_Click" VerticalAlignment="Stretch" VerticalContentAlignment="Center" />
                 
                 <TextBlock Grid.Row="0" Grid.Column="2" x:Name="TargetLastFile" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
                 <TextBlock Grid.Row="1" Grid.Column="2" x:Name="SourceLastFile" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
@@ -76,7 +75,7 @@
         <!-- EXECUTE -->
         
         <DockPanel Grid.Row="2" Dock="Bottom" Margin="0,10,0,0" >
-            <Button  MinWidth="120" Content="{local:Loc MainWindow.ExecuteTasks}" Click="ExecuteTasks_Click" HorizontalAlignment="Right" />
+            <Button  MinWidth="120" Content="{local:Loc MainWindow.ExecuteTasks}" Click="ExecuteTasks_Click" HorizontalAlignment="Right" HorizontalContentAlignment="Center" />
         </DockPanel>
     </Grid>
 </Window>

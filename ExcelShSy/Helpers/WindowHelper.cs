@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 
-namespace ExcelShSy.Core;
+namespace ExcelShSy.Core.Helpers;
 
 /// <summary>
 /// Provides helper methods for working with application windows in Avalonia.

@@ -11,6 +11,7 @@ using ExcelShSy.Infrastructure.Services.Common;
 using ExcelShSy.Infrastructure.Services.Logger;
 using ExcelShSy.Infrastructure.Services.Operations;
 using ExcelShSy.Infrastructure.Services.Storage;
+using ExcelShSy.LocalDataBaseModule;
 using ExcelShSy.LocalDataBaseModule.Data;
 using ExcelShSy.LocalDataBaseModule.Persistance;
 using ExcelShSy.LocalDataBaseModule.Services;
@@ -70,7 +71,6 @@ namespace ExcelShSy.Tests
             services.AddScoped<IFetchPriceListProduct, FetchProductPriceList>();
             services.AddScoped<IFetchMarketProduct, MarketProductImporter>();
 
-
             #region DataBase
 
             services.AddScoped<IDatabaseUpdateManager, SqliteUpdateManager>();
@@ -104,7 +104,7 @@ namespace ExcelShSy.Tests
             services.AddTransient<IExcelFileFactory, ExcelFileFactory>();
             services.AddTransient<IExcelPageFactory, ExcelPageFactory>();
             services.AddTransient<IOperationTaskFactory, OperationTaskFactory>();
-            services.AddTransient<IDataBaseViewerFactory, DataBaseViewerFactory>();
+            services.AddTransient<IWindowFactory<DataBaseViewer>, DataBaseViewerFactory>();
             services.AddTransient<ICheckConnectionFactory, CheckConnectionFactory>();
             services.AddTransient<IUpdateManagerFactory, UpdateManagerFactory>();
 

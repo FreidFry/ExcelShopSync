@@ -36,17 +36,14 @@ namespace ExcelShSy.Infrastructure.Services
         public async Task Execute()
         {
             var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "missing.txt");
-            _fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
-            _writer = new StreamWriter(_fileStream, leaveOpen: true);
+            using FileStream fs = new(filePath, FileMode.Create, FileAccess.Write);
+            using StreamWriter wr = new StreamWriter(fs, leaveOpen: true);
             foreach (var file in fileStorage.Target)
             {
-                _writer.WriteLine(CenterText(file.FileName));
+                wr.WriteLine(CenterText(file.FileName));
                 _shopName = file.ShopName;
                 ProcessFile(file);
             }
-            _writer.Flush();
-            _writer.Dispose();
-            _fileStream.Dispose();
         }
 
         /// <summary>

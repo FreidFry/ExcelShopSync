@@ -13,17 +13,20 @@ namespace ExcelShSy.Infrastructure.Extensions
         /// <param name="textBlockName">The text block identifier.</param>
         /// <param name="pathList">The list of file paths.</param>
         public static void SetLastPath(string textBlockName, List<string> pathList)
-        {
-            if (pathList.IsNullOrEmpty()) return;
-            
+        {            
             var fileName = GetCleanFileName(pathList);
-                
-            if (pathList.Count == 1)
-                UpdateTextBlockEvents.UpdateText(textBlockName, fileName);
-            else
+            switch (pathList.Count)
             {
-                var normalizedFileName = $"[+ {pathList.Count - 1}] {fileName}";
-                UpdateTextBlockEvents.UpdateText(textBlockName, normalizedFileName);
+                case 0:
+                    UpdateTextBlockEvents.UpdateText(textBlockName, string.Empty);
+                    break;
+                case 1:
+                    UpdateTextBlockEvents.UpdateText(textBlockName, fileName);
+                    break;
+                default:
+                    var normalizedFileName = $"[+ {pathList.Count - 1}] {fileName}";
+                    UpdateTextBlockEvents.UpdateText(textBlockName, normalizedFileName);
+                    break;
             }
         }
 
@@ -32,6 +35,6 @@ namespace ExcelShSy.Infrastructure.Extensions
         /// </summary>
         /// <param name="pathList">The list of file paths.</param>
         /// <returns>The normalized file name.</returns>
-        private static string GetCleanFileName(List<string> pathList) => Path.GetFileNameWithoutExtension(pathList.Last());
+        private static string? GetCleanFileName(List<string> pathList) => Path.GetFileNameWithoutExtension(pathList.LastOrDefault());
     }
 }

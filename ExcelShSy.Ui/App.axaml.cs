@@ -38,7 +38,7 @@ namespace ExcelShSy.Ui
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                var culture = new CultureInfo(_appSettings.Language);
+                var culture = new CultureInfo(_appSettings.LanguageCode);
                 _localizationManager.SetCulture(culture);
                 
                 // Создание главного окна

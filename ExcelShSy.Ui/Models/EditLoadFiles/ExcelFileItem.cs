@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using ExcelShSy.Ui.ModelView;
+using System.ComponentModel;
 
 namespace ExcelShSy.Ui.Models.EditLoadFiles
 {
@@ -51,7 +52,8 @@ namespace ExcelShSy.Ui.Models.EditLoadFiles
         }
 
         #endregion
-        
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         public ExcelFileItem(string path)
         {
             Name = Path.GetFileNameWithoutExtension(path);
@@ -62,10 +64,13 @@ namespace ExcelShSy.Ui.Models.EditLoadFiles
         public ExcelFileItem()
         { }
 #endif
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-        
+
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged(string name) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        public AsyncRelayCommands ShowInfoCommand { get; set; }
     }
 }
