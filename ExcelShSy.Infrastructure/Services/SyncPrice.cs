@@ -13,7 +13,7 @@ namespace ExcelShSy.Infrastructure.Services
     /// <summary>
     /// Synchronizes product prices into target Excel files using fetched product data.
     /// </summary>
-    [Task(nameof(ProductProcessingOptions.ShouldSyncPrices))]
+    [Task(nameof(ProductProcessingOptions.ShouldSyncPrices), 0)]
     public class SyncPrice(IProductStorage dataProduct, IFileStorage fileStorage, IDatabaseSearcher databaseSearcher, ILocalizationService localizationService)
         : IExecuteOperation
     {

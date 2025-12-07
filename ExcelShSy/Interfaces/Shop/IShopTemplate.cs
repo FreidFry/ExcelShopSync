@@ -13,7 +13,7 @@
         /// <summary>
         /// Gets or sets headers that could not be mapped to known product fields.
         /// </summary>
-        List<string> UnmappedHeaders { get; set; }
+        HashSet<string?> UnmappedHeaders { get; set; }
 
         /// <summary>
         /// Gets or sets the mapping of availability values to their standardized representation.

@@ -7,11 +7,16 @@ using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Tests
 {
-    public class MessageTest : IMessages<IMsBox<ButtonResult>>, IMessageCustom<IMsBox<string>, MessageBoxCustomParams>
+    public class MessageTest : IMessagesService<IMsBox<ButtonResult>>, IMessagesCustomService<IMsBox<string>, MessageBoxCustomParams>
     {
         public IMsBox<string> GetMessageBoxCustom(MessageBoxCustomParams CustomParams)
         {
             return new TestMsBox();
+        }
+
+        public IMsBox<string> GetMessageBoxCustom(string title, string message, string[] buttons, MyIcon icon = MyIcon.None)
+        {
+            throw new NotImplementedException();
         }
 
         public IMsBox<ButtonResult> GetMessageBoxStandard(string title, string message)

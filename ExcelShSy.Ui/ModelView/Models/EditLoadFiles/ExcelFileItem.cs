@@ -1,7 +1,6 @@
-﻿using ExcelShSy.Ui.ModelView;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
-namespace ExcelShSy.Ui.Models.EditLoadFiles
+namespace ExcelShSy.Ui.ModelView.Models.EditLoadFiles
 {
     public class ExcelFileItem : INotifyPropertyChanged
     {

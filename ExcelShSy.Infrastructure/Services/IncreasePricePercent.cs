@@ -13,7 +13,7 @@ namespace ExcelShSy.Infrastructure.Services
     /// <summary>
     /// Increases prices in target Excel files by the configured percentage.
     /// </summary>
-    [Task(nameof(ProductProcessingOptions.ShouldIncreasePrices))]
+    [Task(nameof(ProductProcessingOptions.ShouldIncreasePrices), 6)]
     public class IncreasePricePercent(IFileStorage fileStorage, ILocalizationService localizationService)
         : IExecuteOperation
     {

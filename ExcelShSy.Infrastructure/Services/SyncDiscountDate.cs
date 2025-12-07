@@ -14,7 +14,7 @@ namespace ExcelShSy.Infrastructure.Services
     /// <summary>
     /// Synchronizes discount start and end dates into target Excel files using stored product data.
     /// </summary>
-    [Task(nameof(ProductProcessingOptions.ShouldSyncDiscountDate))]
+    [Task(nameof(ProductProcessingOptions.ShouldSyncDiscountDate), 4)]
     public class SyncDiscountDate(
         IProductStorage dataProduct,
         IFileStorage fileStorage,

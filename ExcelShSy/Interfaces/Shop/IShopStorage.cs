@@ -64,6 +64,6 @@
         /// </summary>
         /// <param name="path">The path to inspect.</param>
         /// <returns><c>true</c> when the file does not exist; otherwise, <c>false</c>.</returns>
-        bool IsFileNotExist(string path);
+        bool IsFileExist(string path);
     }
 }

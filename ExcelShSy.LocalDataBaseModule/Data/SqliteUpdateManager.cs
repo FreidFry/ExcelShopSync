@@ -9,7 +9,7 @@ using Timer = System.Timers.Timer;
 
 namespace ExcelShSy.LocalDataBaseModule.Data;
 
-public class SqliteUpdateManager(ISqliteDbContext dbContext, IMessages<IMsBox<ButtonResult>> messages) : IDatabaseUpdateManager
+public class SqliteUpdateManager(ISqliteDbContext dbContext, IMessagesService<IMsBox<ButtonResult>> messages) : IDatabaseUpdateManager
 {
     private readonly IDbCommandWrapper _cmd = dbContext.CreateCommand();
     private readonly object _lock = new();

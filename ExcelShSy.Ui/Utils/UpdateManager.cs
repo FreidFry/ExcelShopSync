@@ -9,7 +9,7 @@ using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Ui.Utils;
 
-public class UpdateManager(ILocalizationService localizationService, IAppSettings appSettings, ILogger logger, IMessages<IMsBox<ButtonResult>> messages)
+public class UpdateManager(ILocalizationService localizationService, IAppSettings appSettings, ILogger logger, IMessagesService<IMsBox<ButtonResult>> messages)
 {
     private string? GitVersion;
 

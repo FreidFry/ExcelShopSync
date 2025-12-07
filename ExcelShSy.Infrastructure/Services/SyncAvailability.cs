@@ -14,7 +14,7 @@ namespace ExcelShSy.Infrastructure.Services
     /// <summary>
     /// Synchronizes product availability values into target Excel files and maps them using shop-specific rules.
     /// </summary>
-    [Task(nameof(ProductProcessingOptions.ShouldSyncAvailability))]
+    [Task(nameof(ProductProcessingOptions.ShouldSyncAvailability), 2)]
     public class SyncAvailability(
         IProductStorage dataProduct,
         IFileStorage fileStorage,

@@ -12,7 +12,7 @@ namespace ExcelShSy.Infrastructure.Factories
     /// <summary>
     /// Creates <see cref="IExcelFile"/> instances and infers metadata such as shop and language.
     /// </summary>
-    public class ExcelFileFactory(IMessages<IMsBox<ButtonResult>> messages, IExcelPageFactory excelPageFactory, IShopStorage shopStorage)
+    public class ExcelFileFactory(IMessagesService<IMsBox<ButtonResult>> messages, IExcelPageFactory excelPageFactory, IShopStorage shopStorage)
         : IExcelFileFactory
     {
         /// <inheritdoc />

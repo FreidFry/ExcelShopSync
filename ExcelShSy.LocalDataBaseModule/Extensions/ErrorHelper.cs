@@ -5,7 +5,7 @@ using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.LocalDataBaseModule.Extensions;
 
-public class ErrorHelper(IMessages<IMsBox<ButtonResult>> messages)
+public class ErrorHelper(IMessagesService<IMsBox<ButtonResult>> messages)
 {
     public void ShowError(string message)
     {

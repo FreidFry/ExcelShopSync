@@ -51,7 +51,7 @@ public class SqliteDbContext : ISqliteDbContext, IDisposable
         command.ExecuteNonQuery();
     }
 
-    public void RemoveColumn(string table, string column)
+    public void DropColumn(string table, string column)
     {
         var sql = $"UPDATE \"{table}\" SET \"{column}\" = NULL";
         using var command = _connection.CreateCommand();

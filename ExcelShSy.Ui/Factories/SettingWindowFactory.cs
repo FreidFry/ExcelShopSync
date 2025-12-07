@@ -10,7 +10,8 @@ namespace ExcelShSy.Ui.Factories
         IServiceProvider serviceProvider,
         ILocalizationManager localizationManager,
         IAppSettings appSettings,
-        ILogger logger)
+        ILogger logger,
+        IWindowProvider windowProvider)
         : IWindowFactory<SettingWindow>
     {
         public SettingWindow Create()
@@ -19,8 +20,8 @@ namespace ExcelShSy.Ui.Factories
                 serviceProvider,
                 localizationManager,
                 appSettings,
-                logger);
-            SettingWindow window = new(model);
+                logger, windowProvider);
+            SettingWindow window = new(model, windowProvider);
             model.SetStorageProvider(window.StorageProvider);
 
             return window;

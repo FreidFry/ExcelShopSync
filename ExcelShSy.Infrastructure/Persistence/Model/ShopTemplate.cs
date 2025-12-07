@@ -13,7 +13,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         private string _name;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-        private List<string>? _unmappedHeaders;
+        private HashSet<string> _unmappedHeaders = [];
         private Dictionary<string, string?>? _availabilityMap;
         private string? _dataFormat;
         private string? _article;
@@ -37,12 +37,22 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
         }
 
         /// <inheritdoc />
-        public List<string> UnmappedHeaders { get => _unmappedHeaders ??= [];
+        public HashSet<string?> UnmappedHeaders
+        {
+            get => _unmappedHeaders!;
             set
             {
-                _unmappedHeaders = value;
+                if (value is null)
+                    value = [];
+                else
+                {
+                    value.RemoveWhere(v => v is null);
+                    _unmappedHeaders = value!;
+                }
+
                 OnPropertyChanged();
-            } }
+            }
+        }
 
         /// <inheritdoc />
         public Dictionary<string, string?> AvailabilityMap
@@ -62,7 +72,9 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
         }
 
         /// <inheritdoc />
-        public string? DataFormat { get => _dataFormat;
+        public string? DataFormat
+        {
+            get => _dataFormat;
             set
             {
                 if (value != null) _dataFormat = value;
@@ -164,7 +176,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
             return new ShopTemplate
             {
                 Name = this.Name,
-                UnmappedHeaders = [..this.UnmappedHeaders],
+                UnmappedHeaders = [.. this.UnmappedHeaders],
                 AvailabilityMap = new Dictionary<string, string?>(this.AvailabilityMap),
                 DataFormat = this.DataFormat,
                 Article = this.Article,
@@ -177,7 +189,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
                 DiscountDateEnd = this.DiscountDateEnd
             };
         }
-        
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>

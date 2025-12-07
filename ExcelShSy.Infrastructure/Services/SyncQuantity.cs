@@ -13,7 +13,7 @@ namespace ExcelShSy.Infrastructure.Services
     /// <summary>
     /// Synchronizes product quantities into target Excel files using previously fetched data.
     /// </summary>
-    [Task(nameof(ProductProcessingOptions.ShouldSyncQuantities))]
+    [Task(nameof(ProductProcessingOptions.ShouldSyncQuantities), 2)]
     public class SyncQuantity(IProductStorage dataProduct, IFileStorage fileStorage, IDatabaseSearcher databaseSearcher, ILocalizationService localizationService)
         : IExecuteOperation
     {

@@ -4,7 +4,7 @@ using ExcelShSy.Core.Enums;
 
 namespace ExcelShSy.Core.Interfaces.Common
 {
-    public interface IMessages<T>
+    public interface IMessagesService<T>
     {
         T GetMessageBoxStandard(string title, string message);
         T GetMessageBoxStandard(string title, string message, MyButtonEnum buttons);

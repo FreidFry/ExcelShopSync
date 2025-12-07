@@ -49,7 +49,7 @@ public interface ISqliteDbContext
     /// </summary>
     /// <param name="table">The table that contains the column.</param>
     /// <param name="column">The column name to remove.</param>
-    void RemoveColumn(string table, string column);
+    void DropColumn(string table, string column);
 
     /// <summary>
     /// Creates a new column using the provided column name.

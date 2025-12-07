@@ -1,5 +1,4 @@
-﻿using ExcelShSy.Core.Helpers;
-using ExcelShSy.Core.Interfaces.Common;
+﻿using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Ui.Interfaces;
@@ -15,12 +14,12 @@ namespace ExcelShSy.Ui.Factories
         IFileProvider fileProvider,
         IExcelFileFactory excelFileFactory,
         ILocalizationService localizationService,
-        IMessages<IMsBox<ButtonResult>> messages)
+        IMessagesService<IMsBox<ButtonResult>> messages)
         : IEditLoadFilesWindowFactory
     {
         public EditLoadFilesWindow Create()
         {
-            var model = new EditLoadFilesModel(
+            var model = new EditLoadFilesViewModel(
                 fileManager,
                 fileProvider,
                 excelFileFactory,

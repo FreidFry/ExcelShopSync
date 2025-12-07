@@ -51,5 +51,19 @@ namespace ExcelShSy.Infrastructure.Extensions
             }
         }
 
+        public static void AddOperationTask(this List<IExecuteOperation> tasksToRun, List<string> parent, OperationTaskFactory taskFactory)
+        {
+            foreach (var taskName in parent)
+            {
+                try
+                {
+                    var task = taskFactory.CreateTask(taskName);
+                    if (task != null) tasksToRun.Add(task);
+                }
+                catch
+                { }
+            }
+        }
+
     }
 }

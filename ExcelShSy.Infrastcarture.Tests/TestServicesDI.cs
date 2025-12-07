@@ -110,8 +110,8 @@ namespace ExcelShSy.Tests
 
             services.AddScoped<IShopTemplateFactory, ShopTemplateFactory>();
 
-            services.AddTransient<IMessages<IMsBox<ButtonResult>>, MessageTest>();
-            services.AddTransient<IMessageCustom<IMsBox<string>, MessageBoxCustomParams>, MessageTest>();
+            services.AddTransient<IMessagesService<IMsBox<ButtonResult>>, MessageTest>();
+            services.AddTransient<IMessagesCustomService<IMsBox<string>, MessageBoxCustomParams>, MessageTest>();
 
             #endregion
         }

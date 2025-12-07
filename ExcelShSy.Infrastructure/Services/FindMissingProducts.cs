@@ -12,7 +12,7 @@ namespace ExcelShSy.Infrastructure.Services
     /// <summary>
     /// Generates a report listing target products that are missing from the fetched data set.
     /// </summary>
-    [Task(nameof(ProductProcessingOptions.ShouldFindMissingProducts))]
+    [Task(nameof(ProductProcessingOptions.ShouldFindMissingProducts), 7)]
     public class FindMissingProducts(IProductStorage dataProduct, IFileStorage fileStorage, IDatabaseSearcher searcher, ILocalizationService localizationService)
         : IExecuteOperation
     {
@@ -36,14 +36,16 @@ namespace ExcelShSy.Infrastructure.Services
         public async Task Execute()
         {
             var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "missing.txt");
-            using FileStream fs = new(filePath, FileMode.Create, FileAccess.Write);
-            using StreamWriter wr = new StreamWriter(fs, leaveOpen: true);
+            _fileStream = new(filePath, FileMode.Create, FileAccess.Write);
+            _writer = new(_fileStream, leaveOpen: true);
             foreach (var file in fileStorage.Target)
             {
-                wr.WriteLine(CenterText(file.FileName));
+                _writer.WriteLine(CenterText(file.FileName));
                 _shopName = file.ShopName;
                 ProcessFile(file);
             }
+            _writer.Dispose();
+            _fileStream.Dispose();
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using ExcelShSy.Core.Helpers;
 using ExcelShSy.Core.Interfaces;
 using ExcelShSy.Core.Interfaces.Common;
 using ExcelShSy.Core.Interfaces.ViewModels;
+using ExcelShSy.Ui.Interfaces;
 using ExcelShSy.Ui.ModelView.Base;
 using ExcelShSy.Ui.Windows;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,14 +19,16 @@ namespace ExcelShSy.Ui.ModelView.View
         private readonly IAppSettings _newSettings;
         private readonly ILogger _logger;
         private IStorageProvider? _storageProvider;
+        private readonly IWindowProvider _windowProvider;
 
-        public SettingViewModel(IServiceProvider serviceProvider, ILocalizationManager localizationManager, IAppSettings settings, ILogger logger, IStorageProvider? storageProvider = null)
+        public SettingViewModel(IServiceProvider serviceProvider, ILocalizationManager localizationManager, IAppSettings settings, ILogger logger, IWindowProvider windowProvider, IStorageProvider? storageProvider = null)
         {
             _settings = settings;
             _serviceProvider = serviceProvider;
             _localizationManager = localizationManager;
-            _storageProvider = storageProvider;
+            _windowProvider = windowProvider;
             _logger = logger;
+            _storageProvider = storageProvider;
 
             _newSettings = serviceProvider.GetRequiredService<IConfigurationManager>().Load();
 
@@ -147,7 +150,11 @@ namespace ExcelShSy.Ui.ModelView.View
         public async Task OpenShopManagerAsync()
         {
             var shopManagerWindow = _serviceProvider.GetRequiredService<ShopManagerWindow>();
-            shopManagerWindow.ShowDialog(WindowHelper.GetActiveWindow()!);
+            var windowProvider = _windowProvider.GetActiveWindow();
+            if (windowProvider != null)
+                await shopManagerWindow.ShowDialog(windowProvider);
+            else
+                shopManagerWindow.Show();
         }
 
         public AsyncRelayCommands ApplyCommand { get; }

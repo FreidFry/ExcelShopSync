@@ -3,29 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:ExcelShSy.Ui.ModelView.View"
         mc:Ignorable="d"
         xmlns:local="clr-namespace:ExcelShSy.Localization;assembly=ExcelShSy.Localization"
+        x:DataType="vm:MainViewModel"
         Title="ExcelShSy"
         MinHeight="300" MinWidth="400"
         SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
 
     <Grid RowDefinitions="Auto, *, Auto" Margin="10">
+
         <!-- DOCK PANEL -->
-        
         <DockPanel Height="20" Margin="-10">
             <Menu DockPanel.Dock="Top">
-                <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Setting}" Click="SettingsWindowOpen_Click" />
-                <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.About}">
-                    <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.AboutApp}" Click="AboutWindowOpen_Click" />
-                    <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Guid}" Click="GuideWindowOpen_Click" />
-                    <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.CheckUpdates}" Click="CheckForUpdates_Click" />
+                <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Setting}" Command="{Binding ShowSettingsCommand}" />
+                <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.About}" >
+                    <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.AboutApp}" Command="{Binding ShowAboutCommand}" />
+                    <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Guid}" Command="{Binding ShowGuideCommand}" />
+                    <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.CheckUpdates}" Command="{Binding CheckForUpdatesCommand}" />
                 </MenuItem>
-                <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Database}" Click="OpenDbManager_Click"/>
+                <MenuItem VerticalAlignment="Center" Header="{local:Loc MainWindow.Database}" Command="{Binding ShowDbManagerCommand}" />
             </Menu>
         </DockPanel>
         
         <!-- GRID -->
-        
         <Grid Grid.Row="1" RowDefinitions="Auto,Auto,*,Auto">
             
             <!-- FILE SELECTOR -->
@@ -41,41 +42,39 @@
                 </Grid.RowDefinitions>
                 
                 <!-- GET FILES -->
-                <Button Grid.Row="0" Grid.Column="0" Content="{local:Loc MainWindow.GetTargetFile}" HorizontalAlignment="Stretch" Padding="5,5" Click="GetTargetFile_Click" />
-                <Button Grid.Row="1" Grid.Column="0" Content="{local:Loc MainWindow.GetSourceFile}" HorizontalAlignment="Stretch" Padding="5,5" Click="GetSourceFile_Click" />
+                <Button Grid.Row="0" Grid.Column="0" Content="{local:Loc MainWindow.GetTargetFile}" HorizontalAlignment="Stretch" Padding="5,5" Command="{Binding GetTargetFilesCommand}" />
+                <Button Grid.Row="1" Grid.Column="0" Content="{local:Loc MainWindow.GetSourceFile}" HorizontalAlignment="Stretch" Padding="5,5" Command="{Binding GetSourceFilesCommand}" />
                 
-                <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Content="{local:Loc MainWindow.EditFiles}" Margin="10 15" Padding="10" Click="ShowEditLoadFiles_Click" VerticalAlignment="Stretch" VerticalContentAlignment="Center" />
+                <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Content="{local:Loc MainWindow.EditFiles}" Margin="10 15" Padding="10" VerticalAlignment="Stretch" Command="{Binding ShowEditLoadFilesCommand}" VerticalContentAlignment="Center" />
                 
                 <TextBlock Grid.Row="0" Grid.Column="2" x:Name="TargetLastFile" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
                 <TextBlock Grid.Row="1" Grid.Column="2" x:Name="SourceLastFile" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
             </Grid>
             
             <!-- TASKS -->
-            
             <Border Grid.Row="2" Padding="3" x:Name="TasksContainer" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin=" 5,0,0,0">
                     <StackPanel>
                         <StackPanel Margin="0, 2.5" Orientation="Horizontal" >
-                            <CheckBox Content="{local:Loc MainWindow.SyncPrice}"            Tag="ShouldSyncPrices"     Click="CheckBox_Click" VerticalAlignment="Center" />
-                            <CheckBox Content="{local:Loc MainWindow.RoundUp}"              Tag="ShouldRoundPrices"    Click="CheckBox_Click" VerticalAlignment="Center" Margin="5 0" />
-                            <CheckBox Content="{local:Loc MainWindow.IncreasePricePercent}" Tag="ShouldIncreasePrices" Click="CheckBox_Click" VerticalAlignment="Center" />
+                            <CheckBox Content="{local:Loc MainWindow.SyncPrice}"            Tag="ShouldSyncPrices"      VerticalAlignment="Center" Command="{Binding CheckBoxChanged}" CommandParameter="{Binding, RelativeSource={RelativeSource Self}}" />
+                            <CheckBox Content="{local:Loc MainWindow.RoundUp}"              Tag="ShouldRoundPrices"     VerticalAlignment="Center" Command="{Binding CheckBoxChanged}" CommandParameter="{Binding, RelativeSource={RelativeSource Self}}" Margin="5 0" />
+                            <CheckBox Content="{local:Loc MainWindow.IncreasePricePercent}" Tag="ShouldIncreasePrices"  VerticalAlignment="Center" Command="{Binding CheckBoxChanged}" CommandParameter="{Binding, RelativeSource={RelativeSource Self}}" />
                             <TextBox TextWrapping="Wrap" Width="50" Name="IncreasePercentTextBox" TextChanged="ChangeIncreasePercent_TextChanged" VerticalAlignment="Center" Margin="5 0" />
                         </StackPanel>
 
-                        <CheckBox Margin="0 2.5" Content="{local:Loc MainWindow.SyncAvailability}" Tag="ShouldSyncAvailability"    Click="CheckBox_Click" VerticalAlignment="Center" />
-                        <CheckBox Margin="0 2.5" Content="{local:Loc MainWindow.SyncQuantity}"     Tag="ShouldSyncQuantities"      Click="CheckBox_Click" VerticalAlignment="Center" />
-                        <CheckBox Margin="0 2.5" Content="{local:Loc MainWindow.SyncDiscount}"     Tag="ShouldSyncDiscounts"       Click="CheckBox_Click" VerticalAlignment="Center" />
-                        <CheckBox Margin="0 2.5" Content="{local:Loc MainWindow.DiscountDate}"     Tag="ShouldSyncDiscountDate"    Click="CheckBox_Click" VerticalAlignment="Center" />
-                        <CheckBox Margin="0 2.5" Content="{local:Loc MainWindow.FindMissing}"      Tag="ShouldFindMissingProducts" Click="CheckBox_Click" VerticalAlignment="Center" />
+                        <CheckBox Margin="0 2.5" Content="{local:Loc MainWindow.SyncAvailability}" Tag="ShouldSyncAvailability"     VerticalAlignment="Center" Command="{Binding CheckBoxChanged}" CommandParameter="{Binding, RelativeSource={RelativeSource Self}}" />
+                        <CheckBox Margin="0 2.5" Content="{local:Loc MainWindow.SyncQuantity}"     Tag="ShouldSyncQuantities"       VerticalAlignment="Center" Command="{Binding CheckBoxChanged}" CommandParameter="{Binding, RelativeSource={RelativeSource Self}}" />
+                        <CheckBox Margin="0 2.5" Content="{local:Loc MainWindow.SyncDiscount}"     Tag="ShouldSyncDiscounts"        VerticalAlignment="Center" Command="{Binding CheckBoxChanged}" CommandParameter="{Binding, RelativeSource={RelativeSource Self}}" />
+                        <CheckBox Margin="0 2.5" Content="{local:Loc MainWindow.DiscountDate}"     Tag="ShouldSyncDiscountDate"     VerticalAlignment="Center" Command="{Binding CheckBoxChanged}" CommandParameter="{Binding, RelativeSource={RelativeSource Self}}" />
+                        <CheckBox Margin="0 2.5" Content="{local:Loc MainWindow.FindMissing}"      Tag="ShouldFindMissingProducts"  VerticalAlignment="Center" Command="{Binding CheckBoxChanged}" CommandParameter="{Binding, RelativeSource={RelativeSource Self}}" />
                     </StackPanel>
                 </ScrollViewer>
             </Border>
         </Grid>
         
         <!-- EXECUTE -->
-        
-        <DockPanel Grid.Row="2" Dock="Bottom" Margin="0,10,0,0" >
-            <Button  MinWidth="120" Content="{local:Loc MainWindow.ExecuteTasks}" Click="ExecuteTasks_Click" HorizontalAlignment="Right" HorizontalContentAlignment="Center" />
+        <DockPanel Grid.Row="2" Margin="0,10,0,0" >
+            <Button  MinWidth="120" Content="{local:Loc MainWindow.ExecuteTasks}" HorizontalAlignment="Right" Command="{Binding ExecuteTasksCommand}" HorizontalContentAlignment="Center" />
         </DockPanel>
     </Grid>
 </Window>

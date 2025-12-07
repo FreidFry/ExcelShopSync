@@ -11,7 +11,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
     /// <summary>
     /// Provides helper methods for loading Excel files and prompting the user for file selections.
     /// </summary>
-    public class FileProvider(IExcelFileFactory excelFileFactory, IMessages<IMsBox<ButtonResult>> messages) : IFileProvider
+    public class FileProvider(IExcelFileFactory excelFileFactory, IMessagesService<IMsBox<ButtonResult>> messages) : IFileProvider
     {
         /// <inheritdoc />
         public List<IExcelFile> FetchExcelFile(List<string> paths)

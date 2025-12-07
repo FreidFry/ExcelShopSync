@@ -12,7 +12,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
     /// </summary>
     public class ExcelFile : IExcelFile
     {
-        private readonly IMessages<IMsBox<ButtonResult>> _messages;
+        private readonly IMessagesService<IMsBox<ButtonResult>> _messages;
         /// <inheritdoc />
         public string FileLocation { get; set; }
         /// <inheritdoc />
@@ -26,7 +26,7 @@ namespace ExcelShSy.Infrastructure.Persistence.Model
         /// <inheritdoc />
         public List<IExcelSheet>? SheetList { get; set; }
 
-        public ExcelFile(IMessages<IMsBox<ButtonResult>> messages, string path)
+        public ExcelFile(IMessagesService<IMsBox<ButtonResult>> messages, string path)
         {
             _messages = messages;
             FileLocation = path;

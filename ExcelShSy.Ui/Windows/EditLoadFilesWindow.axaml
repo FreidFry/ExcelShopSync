@@ -7,7 +7,7 @@
         xmlns:enum="clr-namespace:ExcelShSy.Core.Enums;assembly=ExcelShSy.Core"
         xmlns:loc="clr-namespace:ExcelShSy.Localization;assembly=ExcelShSy.Localization"
         xmlns:vm="clr-namespace:ExcelShSy.Ui.ModelView.View"
-        x:DataType="vm:EditLoadFilesModel"
+        x:DataType="vm:EditLoadFilesViewModel"
         Title="{loc:Loc EditLoadFilesWindow.Title}" SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen"
         MinWidth="250" MinHeight="400" MaxHeight="400" Width="300" MaxWidth="300">

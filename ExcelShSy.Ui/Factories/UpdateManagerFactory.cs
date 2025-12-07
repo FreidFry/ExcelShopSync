@@ -6,7 +6,7 @@ using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Ui.Factories;
 
-public class UpdateManagerFactory(ILocalizationService localizationService, IAppSettings appSettings, ILogger logger, IMessages<IMsBox<ButtonResult>> messages) : IUpdateManagerFactory
+public class UpdateManagerFactory(ILocalizationService localizationService, IAppSettings appSettings, ILogger logger, IMessagesService<IMsBox<ButtonResult>> messages) : IUpdateManagerFactory
 {
     public UpdateManager Create() => new(localizationService, appSettings, logger, messages);
 }

@@ -1,4 +1,5 @@
 ﻿using ExcelShSy.Core.Interfaces.Common;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace ExcelShSy.Infrastructure.Services.Logger
@@ -44,9 +45,9 @@ namespace ExcelShSy.Infrastructure.Services.Logger
         }
 
         /// <inheritdoc />
-        public void Log(string message)
+        public void Log(string message, string? pref = null)
         {
-            var logEntry = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}";
+            var logEntry = $"{pref} [{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}";
 
             try
             {
@@ -54,14 +55,19 @@ namespace ExcelShSy.Infrastructure.Services.Logger
             }
             catch (Exception ex)
             {
-                Console.WriteLine(@"Ошибка при записи в лог: " + ex.Message);
+                Console.WriteLine("Ошибка при записи в лог: " + ex.Message);
             }
         }
 
-        public void LogError(string message) => Log("ERROR: " + message);
+
+        public void LogError(string message,
+            [CallerMemberName] string member = "",
+            [CallerFilePath] string file = "") => Log("ERROR: " + message, $"{Path.GetFileNameWithoutExtension(file)}.{member}");
 
         public void LogInfo(string message) => Log("INFO: " + message);
 
-        public void LogWarning(string message) => Log("WARNING: " + message);
+        public void LogWarning(string message,
+            [CallerMemberName] string member = "",
+            [CallerFilePath] string file = "") => Log("WARNING: " + message, $"{Path.GetFileNameWithoutExtension(file)}.{member}");
     }
 }

@@ -3,10 +3,11 @@ using ExcelShSy.Core.Interfaces.Common;
 using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
+using MsBox.Avalonia.Models;
 
 namespace ExcelShSy.Infrastructure.Services.Common
 {
-    public class Messages : IMessages<IMsBox<ButtonResult>>, IMessageCustom<IMsBox<string>, MessageBoxCustomParams>
+    public class Messages : IMessagesService<IMsBox<ButtonResult>>, IMessagesCustomService<IMsBox<string>, MessageBoxCustomParams>
     {
         public IMsBox<ButtonResult> GetMessageBoxStandard(string title, string message)
         {
@@ -26,45 +27,49 @@ namespace ExcelShSy.Infrastructure.Services.Common
                 .GetMessageBoxStandard(title, message, MapButton(buttons), MapIcon(icon));
         }
 
+
         public IMsBox<string> GetMessageBoxCustom(MessageBoxCustomParams CustomParams)
         {
             return MsBox.Avalonia.MessageBoxManager.GetMessageBoxCustom(CustomParams);
         }
 
-        #region MAPS
-
-        private ButtonEnum MapButton(MyButtonEnum b)
+        public IMsBox<string> GetMessageBoxCustom(string title, string message, string[] buttons, MyIcon icon = MyIcon.None)
         {
-            switch (b)
+            var customParams = new MessageBoxCustomParams
             {
-                case MyButtonEnum.Ok:
-                    return ButtonEnum.Ok;
-                case MyButtonEnum.OkCancel:
-                    return ButtonEnum.OkCancel;
-                case MyButtonEnum.YesNo:
-                    return ButtonEnum.YesNo;
-                case MyButtonEnum.YesNoCancel:
-                    return ButtonEnum.YesNoCancel;
-                default:
-                    return ButtonEnum.Ok;
-            }
+                ButtonDefinitions = buttons.Select(b => new ButtonDefinition() { Name = b }),
+                ContentTitle = title,
+                InputParams = new InputParams(),
+                ContentMessage = message,
+                Icon = MapIcon(icon),
+            };
+            return MsBox.Avalonia.MessageBoxManager.GetMessageBoxCustom(customParams);
         }
 
-        private Icon MapIcon(MyIcon i)
+        #region MAPS
+
+        private static ButtonEnum MapButton(MyButtonEnum b)
         {
-            switch (i)
+            return b switch
             {
-                case MyIcon.None:
-                    return Icon.None;
-                case MyIcon.Warning:
-                    return Icon.Warning;
-                case MyIcon.Error:
-                    return Icon.Error;
-                case MyIcon.Question:
-                    return Icon.Question;
-                default:
-                    return Icon.None;
-            }
+                MyButtonEnum.Ok => ButtonEnum.Ok,
+                MyButtonEnum.OkCancel => ButtonEnum.OkCancel,
+                MyButtonEnum.YesNo => ButtonEnum.YesNo,
+                MyButtonEnum.YesNoCancel => ButtonEnum.YesNoCancel,
+                _ => ButtonEnum.Ok,
+            };
+        }
+
+        private static Icon MapIcon(MyIcon i)
+        {
+            return i switch
+            {
+                MyIcon.None => Icon.None,
+                MyIcon.Warning => Icon.Warning,
+                MyIcon.Error => Icon.Error,
+                MyIcon.Question => Icon.Question,
+                _ => Icon.None,
+            };
         }
         #endregion
     }

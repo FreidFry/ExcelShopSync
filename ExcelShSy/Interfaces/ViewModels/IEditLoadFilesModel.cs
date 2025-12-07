@@ -1,7 +1,13 @@
-﻿namespace ExcelShSy.Core.Interfaces.ViewModels
+﻿using ExcelShSy.Core.Enums;
+
+namespace ExcelShSy.Core.Interfaces.ViewModels
 {
     public interface IEditLoadFilesModel
     {
-        Task ShowInfoFromPath(string tag);
+        Task ApplyAsync();
+        Task ShowInfoFromPath(string path);
+        Task AddFile(FileTagEnum tag);
+        Task RemoveFile(FileTagEnum tag);
+        Task Cancel();
     }
 }

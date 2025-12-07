@@ -11,8 +11,8 @@ namespace ExcelShSy.Infrastructure.Services
     /// <summary>
     /// Saves updated Excel packages, optionally creating new files to preserve originals.
     /// </summary>
-    [Task("SavePackages")]
-    public class SavePackages(IFileStorage fileStorage, IAppSettings appSettings, ILocalizationService localizationService, IMessages<IMsBox<ButtonResult>> messages) : IExecuteOperation
+    [Task("SavePackages",5)]
+    public class SavePackages(IFileStorage fileStorage, IAppSettings appSettings, ILocalizationService localizationService, IMessagesService<IMsBox<ButtonResult>> messages) : IExecuteOperation
     {
         /// <summary>
         /// Gets the list of errors that occurred during save operations.

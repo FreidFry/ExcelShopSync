@@ -55,7 +55,7 @@ namespace ExcelShSy.Infrastructure.Services.Operations
 
                 if (isHeader)
                 {
-                    Logger.LogInfo($"In {row} row headers");
+                    Logger.Log($"In {row} row headers");
                     continue;
                 }
                 if (article != 0)

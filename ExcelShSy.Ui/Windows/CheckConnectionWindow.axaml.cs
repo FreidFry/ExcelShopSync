@@ -17,7 +17,7 @@ public partial class CheckConnectionWindow : Window
 
     private readonly ILocalizationService _localizationService;
     private readonly ILogger _logger;
-    private readonly IMessages<IMsBox<ButtonResult>> _messages;
+    private readonly IMessagesService<IMsBox<ButtonResult>> _messages;
 #if DESIGNER
 
     public CheckConnectionWindow()
@@ -26,7 +26,7 @@ public partial class CheckConnectionWindow : Window
     }
 #endif
     
-    public CheckConnectionWindow(ILocalizationService localizationService, ILogger logger, IMessages<IMsBox<ButtonResult>> messages)
+    public CheckConnectionWindow(ILocalizationService localizationService, ILogger logger, IMessagesService<IMsBox<ButtonResult>> messages)
     {
         InitializeComponent();
         

@@ -13,7 +13,7 @@ namespace ExcelShSy.Infrastructure.Services
     /// <summary>
     /// Synchronizes product discount values into target Excel files.
     /// </summary>
-    [Task(nameof(ProductProcessingOptions.ShouldSyncDiscounts))]
+    [Task(nameof(ProductProcessingOptions.ShouldSyncDiscounts), 3)]
     public class SyncDiscount(IProductStorage dataProduct, IFileStorage fileStorage, IDatabaseSearcher databaseSearcher, ILocalizationService localizationService)
         : IExecuteOperation
     {

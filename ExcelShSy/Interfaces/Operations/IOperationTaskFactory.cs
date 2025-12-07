@@ -19,6 +19,7 @@ namespace ExcelShSy.Core.Interfaces.Operations
         /// </summary>
         /// <param name="parent">The UI container that holds the task selection controls.</param>
         Task ExecuteOperations(Visual parent);
+        Task ExecuteOperations(List<string> tasks);
 
         /// <summary>
         /// Checks whether the user has enabled at least one operation within the provided container.
@@ -26,5 +27,6 @@ namespace ExcelShSy.Core.Interfaces.Operations
         /// <param name="parent">The UI container that holds the task selection controls.</param>
         /// <returns><c>true</c> if any operation is selected; otherwise, <c>false</c>.</returns>
         bool HasCheckedCheckbox(Visual parent);
+        bool HasCheckedCheckbox(int count);
     }
 }

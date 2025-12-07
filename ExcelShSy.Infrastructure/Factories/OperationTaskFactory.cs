@@ -21,11 +21,11 @@ namespace ExcelShSy.Infrastructure.Factories
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILocalizationService _localizationService;
-        private readonly IMessages<IMsBox<ButtonResult>> _messages;
+        private readonly IMessagesService<IMsBox<ButtonResult>> _messages;
         private readonly ILogger _logger;
         private readonly Dictionary<string, Type> _tasksMap;
 
-        public OperationTaskFactory(IServiceProvider services, ILocalizationService localizationService, ILogger logger, IMessages<IMsBox<ButtonResult>> messages)
+        public OperationTaskFactory(IServiceProvider services, ILocalizationService localizationService, ILogger logger, IMessagesService<IMsBox<ButtonResult>> messages)
         {
             _serviceProvider = services;
             _localizationService = localizationService;
@@ -35,11 +35,12 @@ namespace ExcelShSy.Infrastructure.Factories
             var allTasks = _serviceProvider.GetServices<IExecuteOperation>();
 
             _tasksMap = allTasks
-                .Select(t => t.GetType())
-                .Where(t => t.GetCustomAttribute<TaskAttribute>() != null)
+                .Select(t => new { Type = t.GetType(), Attr = t.GetType().GetCustomAttribute<TaskAttribute>() })
+                .Where(x => x.Attr != null)
+                .OrderByDescending(x => x.Attr!.Order)
                 .ToDictionary(
-                    t => t.GetCustomAttribute<TaskAttribute>()!.Name,
-                    t => t);
+                    x => x.Attr!.Name,
+                    x => x.Type);
         }
 
         /// <inheritdoc />
@@ -95,6 +96,44 @@ namespace ExcelShSy.Infrastructure.Factories
             }
         }
 
+        public async Task ExecuteOperations(List<string> tasks)
+        {
+            HashSet<string> errors = [];
+
+            List<IExecuteOperation> tasksToRun = [];
+            tasksToRun.AddOperationTask(tasks, this);
+            _logger.LogInfo("Executes: " + string.Join(", ", tasksToRun.Select(t => t.GetType().Name)));
+            var saveTask = CreateTask("SavePackages");
+            if (saveTask != null)
+                tasksToRun.Add(saveTask);
+            foreach (var task in tasksToRun)
+            {
+                _logger.LogInfo($"Start {task.GetType().Name}");
+                await task.Execute();
+                if (task.Errors.Count != 0)
+                    foreach (var error in task.Errors)
+                        errors.Add(error);
+
+                _logger.LogInfo($"Finish {task.GetType().Name}");
+            }
+
+            if (errors.Count == 0)
+            {
+                _logger.LogInfo("Finish without errors.");
+                var title = _localizationService.GetMessageString("Finish");
+                var msg = _localizationService.GetMessageString("FinishText");
+                await _messages.GetMessageBoxStandard(title, msg).ShowAsync();
+            }
+            else
+            {
+                _logger.LogInfo("Finish with errors:");
+                var title = _localizationService.GetMessageString("FinishWithProblems");
+                var msg = _localizationService.GetMessageString("FinishWithProblemsText");
+                foreach (var error in errors) _logger.LogWarning(error);
+                await _messages.GetMessageBoxStandard(title, $"{msg}\n" + string.Join("\n", errors)).ShowAsync();
+            }
+        }
+
         /// <inheritdoc />
         public bool HasCheckedCheckbox(Visual parent)
         {
@@ -110,5 +149,9 @@ namespace ExcelShSy.Infrastructure.Factories
             return false;
         }
 
+        public bool HasCheckedCheckbox(int count)
+        {
+            return count > 0;
+        }
     }
 }

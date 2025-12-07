@@ -5,29 +5,35 @@ using ExcelShSy.Core.Interfaces.Storage;
 using ExcelShSy.Core.Interfaces.ViewModels;
 using ExcelShSy.Event;
 using ExcelShSy.Infrastructure.Extensions;
-using ExcelShSy.Ui.Models.EditLoadFiles;
 using ExcelShSy.Ui.ModelView.Base;
+using ExcelShSy.Ui.ModelView.Models.EditLoadFiles;
 using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Enums;
 using System.Collections.ObjectModel;
 
 namespace ExcelShSy.Ui.ModelView.View
 {
-    public class EditLoadFilesModel : ViewModelBase, IEditLoadFilesModel
+    public class EditLoadFilesViewModel : ViewModelBase, IEditLoadFilesModel
     {
+        #region Dependency Injections
+
         private readonly IFileManager _fileManager;
         private readonly IFileProvider _fileProvider;
         private readonly IExcelFileFactory _excelFileFactory;
         private readonly ILocalizationService _localizationService;
-        private readonly IMessages<IMsBox<ButtonResult>> _messages;
+        private readonly IMessagesService<IMsBox<ButtonResult>> _messages;
 
-        public EditLoadFilesModel(IFileManager fileManager, IFileProvider fileProvider, IExcelFileFactory fileFactory, ILocalizationService localizationService, IMessages<IMsBox<ButtonResult>> messages)
+        #endregion
+
+        public EditLoadFilesViewModel(IFileManager fileManager, IFileProvider fileProvider, IExcelFileFactory fileFactory, ILocalizationService localizationService, IMessagesService<IMsBox<ButtonResult>> messages)
         {
             _fileManager = fileManager;
             _fileProvider = fileProvider;
             _excelFileFactory = fileFactory;
             _localizationService = localizationService;
             _messages = messages;
+
+            #region Initialize Commands
 
             ApplyAsyncCommand = new AsyncRelayCommands(async _ => await ApplyAsync());
             ShowInfoCommand = new AsyncRelayCommands(async path =>
@@ -45,8 +51,9 @@ namespace ExcelShSy.Ui.ModelView.View
                 if (e is not FileTagEnum tag) return;
                 await RemoveFile(tag);
             });
-
             CancelCommand = new AsyncRelayCommands(async _ => await Cancel());
+
+            #endregion
 
             LoadFiles(TargetFiles, _fileManager.TargetPaths, ShowInfoCommand);
             LoadFiles(SourceFiles, _fileManager.SourcePaths, ShowInfoCommand);
@@ -59,6 +66,8 @@ namespace ExcelShSy.Ui.ModelView.View
 
         #endregion
 
+        #region Initialize
+
         private static void LoadFiles(ObservableCollection<ExcelFileItem> observableCollection, IEnumerable<string> list, AsyncRelayCommands showInfoCommand)
         {
             foreach (var filePath in list)
@@ -69,33 +78,13 @@ namespace ExcelShSy.Ui.ModelView.View
             }
         }
 
-        private async Task AddItems(ObservableCollection<ExcelFileItem> items)
-        {
-            var sources = await _fileProvider.PickExcelFilePaths();
-            if (sources.IsNullOrEmpty()) return;
-            foreach (var file in sources.Where(file => items.All(item => item.FilePath != file)))
-                items.Add(new ExcelFileItem(file));
-        }
-
-        private async Task<bool> CreateMessageBoxYesNoWarning(string message, string windowName)
-        {
-            var msBox = _messages.GetMessageBoxStandard(windowName, message, Core.Enums.MyButtonEnum.YesNo, Core.Enums.MyIcon.Warning);
-            var result = await msBox.ShowAsync();
-            return result == ButtonResult.No;
-        }
-
-        private static async Task RemoveItems(ObservableCollection<ExcelFileItem> items)
-        {
-            var remove = items.Where(i => i.IsSelectedToRemove).ToList();
-            foreach (var file in remove)
-                items.Remove(file);
-        }
+        #endregion
 
         #region Relay Commands
 
         public AsyncRelayCommands ApplyAsyncCommand { get; }
 
-        private async Task ApplyAsync()
+        public async Task ApplyAsync()
         {
             var targetList = TargetFiles.Select(i => i.FilePath).ToList();
             var sourceList = SourceFiles.Select(i => i.FilePath).ToList();
@@ -125,7 +114,7 @@ namespace ExcelShSy.Ui.ModelView.View
         }
 
         public AsyncRelayCommands AddFileCommand { get; }
-        private async Task AddFile(FileTagEnum tag)
+        public async Task AddFile(FileTagEnum tag)
         {
             switch (tag)
             {
@@ -139,7 +128,7 @@ namespace ExcelShSy.Ui.ModelView.View
         }
 
         public AsyncRelayCommands RemoveFileCommand { get; }
-        private async Task RemoveFile(FileTagEnum tag)
+        public async Task RemoveFile(FileTagEnum tag)
         {
             var message = _localizationService.GetString("EditLoadFilesWindow", "DeleteWarning_");
             var title = _localizationService.GetString("EditLoadFilesWindow", "DeleteWarningTitle_");
@@ -158,7 +147,7 @@ namespace ExcelShSy.Ui.ModelView.View
 
         public AsyncRelayCommands CancelCommand { get; }
 
-        private async Task Cancel()
+        public async Task Cancel()
         {
             var message = _localizationService.GetString("EditLoadFilesWindow", "CloseWarning_");
             var title = _localizationService.GetString("EditLoadFilesWindow", "CloseWarningTitle_");
@@ -166,5 +155,27 @@ namespace ExcelShSy.Ui.ModelView.View
         }
 
         #endregion
+
+        private async Task AddItems(ObservableCollection<ExcelFileItem> items)
+        {
+            var sources = await _fileProvider.PickExcelFilePaths();
+            if (sources.IsNullOrEmpty()) return;
+            foreach (var file in sources.Where(file => items.All(item => item.FilePath != file)))
+                items.Add(new ExcelFileItem(file));
+        }
+
+        private static async Task RemoveItems(ObservableCollection<ExcelFileItem> items)
+        {
+            var remove = items.Where(i => i.IsSelectedToRemove).ToList();
+            foreach (var file in remove)
+                items.Remove(file);
+        }
+
+        private async Task<bool> CreateMessageBoxYesNoWarning(string message, string windowName)
+        {
+            var msBox = _messages.GetMessageBoxStandard(windowName, message, MyButtonEnum.YesNo, MyIcon.Warning);
+            var result = await msBox.ShowAsync();
+            return result == ButtonResult.No;
+        }
     }
 }

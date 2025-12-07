@@ -6,7 +6,7 @@ using MsBox.Avalonia.Enums;
 
 namespace ExcelShSy.Ui.Factories;
 
-public class CheckConnectionFactory(ILocalizationService localizationService, ILogger logger, IMessages<IMsBox<ButtonResult>> messages) : ICheckConnectionFactory
+public class CheckConnectionFactory(ILocalizationService localizationService, ILogger logger, IMessagesService<IMsBox<ButtonResult>> messages) : ICheckConnectionFactory
 {
     public CheckConnectionWindow Create() => new(localizationService, logger, messages);
     

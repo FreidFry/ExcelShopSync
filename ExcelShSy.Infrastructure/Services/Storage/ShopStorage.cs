@@ -23,14 +23,14 @@ namespace ExcelShSy.Infrastructure.Services.Storage
         private readonly IShopTemplateFactory _shopFactory;
         private readonly IColumnMappingStorage _columnMappingStorage;
         private readonly ILocalizationService _localizationService;
-        private readonly IMessages<IMsBox<ButtonResult>> _messages;
+        private readonly IMessagesService<IMsBox<ButtonResult>> _messages;
 
         /// <summary>
         /// Gets or sets the list of loaded shop templates.
         /// </summary>
         public List<IShopTemplate> Shops { get; set; }
         
-        public ShopStorage(IShopTemplateFactory shopFactory, IColumnMappingStorage columnMapping, ILocalizationService localizationService, IMessages<IMsBox<ButtonResult>> messages)
+        public ShopStorage(IShopTemplateFactory shopFactory, IColumnMappingStorage columnMapping, ILocalizationService localizationService, IMessagesService<IMsBox<ButtonResult>> messages)
         {
             _shopFactory = shopFactory;
             _columnMappingStorage = columnMapping;
@@ -103,7 +103,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
             }
 
             var renamedPath = Path.Combine(_directoryPath, $"{newName}.json");
-            if (IsFileNotExist(renamedPath)) return;
+            if (IsFileExist(renamedPath)) return;
             File.Move(path, renamedPath);
             var serializer = CreateJsonSerializer();
             var shop = FetchShopTemplate(renamedPath, serializer);
@@ -118,7 +118,7 @@ namespace ExcelShSy.Infrastructure.Services.Storage
         /// </summary>
         /// <param name="path">The absolute path or shop name.</param>
         /// <returns><c>true</c> if the file exists or the name conflicts; otherwise, <c>false</c>.</returns>
-        public bool IsFileNotExist(string path)
+        public bool IsFileExist(string path)
         {
             if (!path.EndsWith(".json"))
                 path = Path.Combine(_directoryPath, $"{path}.json");

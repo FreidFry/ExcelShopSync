@@ -5,6 +5,7 @@ using ExcelShSy.Core.Interfaces.Excel;
 using ExcelShSy.Core.Interfaces.Operations;
 using ExcelShSy.Core.Interfaces.Shop;
 using ExcelShSy.Core.Interfaces.Storage;
+using ExcelShSy.Core.Interfaces.ViewModels;
 using ExcelShSy.Infrastructure.Factories;
 using ExcelShSy.Infrastructure.Persistence.Model;
 using ExcelShSy.Infrastructure.Services;
@@ -21,6 +22,8 @@ using ExcelShSy.Localization;
 using ExcelShSy.Settings.Properties;
 using ExcelShSy.Ui.Factories;
 using ExcelShSy.Ui.Interfaces;
+using ExcelShSy.Ui.ModelView.View;
+using ExcelShSy.Ui.Services;
 using ExcelShSy.Ui.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using MsBox.Avalonia.Base;
@@ -50,6 +53,7 @@ namespace ExcelShSy.Ui.AppConfigs
             
             services.AddSingleton<IColumnMappingStorage, ColumnMappingStorage>();
             services.AddSingleton<ILocalizationService, LocalizationService>();
+            services.AddSingleton<IWindowProvider, WindowProvider>();
             
             services.AddSingleton<IDataBaseInitializer, DbCreateManager>();
             
@@ -73,6 +77,7 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddScoped<IGetProductManager, ProductImporterSelector>();
             services.AddScoped<IFetchPriceListProduct, FetchProductPriceList>();
             services.AddScoped<IFetchMarketProduct, MarketProductImporter>();
+            services.AddScoped<IDialogService, DialogService>();
 
 
             #region DataBase
@@ -117,9 +122,11 @@ namespace ExcelShSy.Ui.AppConfigs
             
             services.AddScoped<IShopTemplateFactory, ShopTemplateFactory>();
 
-            services.AddTransient<IMessages<IMsBox<ButtonResult>>, Messages>();
-            services.AddTransient<IMessageCustom<IMsBox<string>, MessageBoxCustomParams>, Messages>();
+            services.AddTransient<IMessagesService<IMsBox<ButtonResult>>, Messages>();
+            services.AddTransient<IMessagesCustomService<IMsBox<string>, MessageBoxCustomParams>, Messages>();
             #endregion
+            services.AddTransient<IShopManagerViewModel, ShopManagerViewModel>();
+            services.AddTransient<IMainViewModel, MainViewModel>();
 
             #region UI
             services.AddTransient<ILocalizationManager, LocalizationManager>();
@@ -129,6 +136,7 @@ namespace ExcelShSy.Ui.AppConfigs
             services.AddTransient<ShopManagerWindow>();
             services.AddTransient<DataBaseViewer>();
             #endregion
+
         }
     }
 }
