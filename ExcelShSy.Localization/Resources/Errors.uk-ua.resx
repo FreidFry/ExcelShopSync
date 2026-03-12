@@ -1,0 +1,62 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="NoFetchShops" xml:space="preserve">
+        <value>Відсутні завантажені магазини!</value>
+    </data>
+    <data name="CloseWarning" xml:space="preserve">
+        <value>Будь ласка, закрийте вікно!</value>
+    </data>
+    <data name="CloseWarningText" xml:space="preserve">
+        <value>Будь ласка, закрийте {0}!</value>
+    </data>
+    <data name="ShopNotFound" xml:space="preserve">
+        <value>Магазин {0} не найден. Хочете додати його?</value>
+    </data>
+    <data name="NoShopFile" xml:space="preserve">
+        <value>Файл магазину не знайдено</value>
+    </data>
+    <data name="NoShopFileText" xml:space="preserve">
+        <value>Файл цього магазину не знайдено</value>
+    </data>
+    <data name="ShopExistText" xml:space="preserve">
+        <value>Магазин з такою назвою вже існує.</value>
+    </data>
+    <data name="ShopExist" xml:space="preserve">
+        <value>Конфлікт імені магазину</value>
+    </data>
+    <data name="NetworkErrorTitle" xml:space="preserve">
+        <value>Помилка мережі</value>
+    </data>
+    <data name="NetworkErrorText" xml:space="preserve">
+        <value>Сталася помилка мережі. Перевірте підключення до інтернету та спробуйте ще раз.</value>
+    </data>
+    <data name="UnknownErrorTitle" xml:space="preserve">
+        <value>Невідома помилка</value>
+    </data>
+    <data name="UnknownErrorText" xml:space="preserve">
+        <value>Сталася непередбачена помилка. Спробуйте ще раз або зверніться до розробника, якщо проблема не зникне.</value>
+    </data>
+    <data name="UnsupportedOSUpdateTitle" xml:space="preserve">
+        <value>Оновлення не підтримується</value>
+    </data>
+    <data name="UnsupportedOSUpdateText" xml:space="preserve">
+        <value>Ваша версія операційної системи не підтримується для цього оновлення. Будь ласка, оновіть ОС або зверніться до розробника.</value>
+    </data>
+    <data name="ErrorNoSheets" xml:space="preserve">
+        <value>У файлі "{0}" відсутні листи.</value>
+    </data>
+    <data name="ErrorNoShopName" xml:space="preserve">
+        <value>Для магазину з файлу "{0}" не знайдено відповідний шаблон. Будь ласка, перевірте вміст файлу або створіть шаблон.</value>
+    </data>
+</root>
